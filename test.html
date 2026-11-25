@@ -3923,17 +3923,20 @@ document.head.insertAdjacentHTML('beforeend',`<style id="thG">
 document.body.insertAdjacentHTML('beforeend',`<div class="rpop" id="rrun"><div class="rcb">${xBtn('rrunX')}<h3>坐騎探險</h3><div id="rrunB"></div></div></div>`);
 $('rrunX').onclick=()=>{rClose('rrun');R.on=false;A.S&&A.S.tap&&A.S.tap()};
 
-const R={on:false,phase:'idle',t:0,y:0,vy:0,lives:3,inv:0,world:0,obs:[],items:[],spawn:1,got:0,coins:0,ings:{},hit:0,doneAt:0,sum:[]};
+const R={buf:0,coy:0,hold:false,on:false,phase:'idle',t:0,y:0,vy:0,lives:3,inv:0,world:0,obs:[],items:[],spawn:1,got:0,coins:0,ings:{},hit:0,doneAt:0,sum:[]};
 const view=()=>{const p=RS();const m=mult();
   $('rrunB').innerHTML=`<canvas id="rrunC" width="${MW}" height="${MH}"></canvas><div class="cst" id="rrunM"></div><button class="mb" id="rrunGo"></button><button class="xr" id="rrunXr" hidden>✕</button>`;
-  $('rrunC').addEventListener('pointerdown',e=>{e.preventDefault();jump()});
+  const cv=$('rrunC'),go=$('rrunGo');cv.addEventListener('pointerdown',e=>{e.preventDefault();press()});['pointerup','pointercancel','pointerleave'].forEach(ev=>{cv.addEventListener(ev,release);go.addEventListener(ev,release)});
+  go.addEventListener('pointerdown',e=>{e.preventDefault();press()});go.addEventListener('contextmenu',e=>e.preventDefault());
   txt()};
 const txt=()=>{const m=$('rrunM'),b=$('rrunGo'),x=$('rrunXr');if(!m||!b)return;const mu=mult();
-  if(R.phase==='idle'){m.textContent=`點畫面或按「跳」跳過石頭，撿金幣和食材。25 秒、3 顆心。${mu>1?`坐騎加成 ×${mu.toFixed(1)}`:''}`;b.hidden=false;b.textContent='出發';x.hidden=true}
+  if(R.phase==='idle'){m.textContent=`點畫面或按住「跳」（按越久跳越高）。25 秒、3 顆心。${mu>1?`坐騎加成 ×${mu.toFixed(1)}`:'還沒騎坐騎：到「坐騎寵物」商店買一隻並騎上去，會有加成。'}`;b.hidden=false;b.textContent='出發';x.hidden=true}
   else if(R.phase==='play'){m.textContent=`收集 ${R.got} 個　心 ${R.lives}　還剩 ${Math.max(0,DUR-R.t).toFixed(0)} 秒`;b.hidden=false;b.textContent='跳';x.hidden=true}
   else{m.textContent=R.sum.join('　');b.hidden=true;x.hidden=false;x.disabled=performance.now()<R.doneAt;if(x.disabled)setTimeout(()=>{const xx=$('rrunXr');if(xx)xx.disabled=false},820)}};
-function jump(){if(!R.on||R.phase!=='play')return;if(R.y<=0.5){R.vy=430;A.S&&A.S.tap&&A.S.tap()}}
-const start=()=>{Object.assign(R,{phase:'play',t:0,y:0,vy:0,lives:3,inv:0,world:0,obs:[],items:[],spawn:.8,got:0,coins:0,ings:{},hit:0});txt()};
+function press(){if(!R.on)return;if(R.phase==='idle'){start();return}if(R.phase==='play'){R.buf=.14;R.hold=true}}
+function release(){R.hold=false}
+function jump(){press()}
+const start=()=>{Object.assign(R,{phase:'play',t:0,y:0,vy:0,lives:3,inv:0,world:0,obs:[],items:[],spawn:1.2,buf:0,coy:0,hold:false,got:0,coins:0,ings:{},hit:0});txt()};
 const finish=()=>{const p=RS();R.phase='done';R.doneAt=performance.now()+800;const m=mult();
   const coin=Math.round(R.coins*5*m);p.shard=(p.shard||0)+coin;const q=ST9();Object.entries(R.ings).forEach(([k,v])=>{q.ing[k]=(q.ing[k]||0)+v;q.cook.got+=v});
   p.run.n++;p.run.items+=R.got;p.run.best=Math.max(p.run.best||0,R.got);save();try{updWallet&&updWallet()}catch(e){}
@@ -3941,15 +3944,16 @@ const finish=()=>{const p=RS();R.phase='done';R.doneAt=performance.now()+800;con
   R.sum=[`收集 ${R.got} 個`,`倫幣 +${coin}`,il?`食材：${il}`:'沒有撿到食材'];A.S&&(R.got>0?A.S.pickup&&A.S.pickup():A.S.miss&&A.S.miss());txt()};
 const ST9=()=>{const p=P();p.ing=p.ing||{herb:0,meat:0,honey:0,mush:0,chili:0};p.cook=p.cook||{n:0,pn:0,got:0};return p};
 const step=dt=>{if(!R.on||R.phase!=='play')return;R.t+=dt;const sp=150+R.t*5;R.world+=sp*dt;
-  R.vy-=1150*dt;R.y+=R.vy*dt;if(R.y<=0){R.y=0;R.vy=0}
+  R.coy=R.y<=0.5?.09:Math.max(0,R.coy-dt);R.buf=Math.max(0,R.buf-dt);if(R.buf>0&&R.coy>0){R.vy=500;R.buf=0;R.coy=0;A.S&&A.S.tap&&A.S.tap()}
+  R.vy-=(R.vy>0&&!R.hold?3600:1500)*dt;R.y+=R.vy*dt;if(R.y<=0){R.y=0;if(R.vy<0)R.vy=0}
   R.inv=Math.max(0,R.inv-dt);
-  R.spawn-=dt;if(R.spawn<=0){R.spawn=.7+Math.random()*.8;const r=Math.random();
+  R.spawn-=dt;if(R.spawn<=0){R.spawn=.85+Math.random()*.8;const r=Math.random();
     if(r<.45)R.obs.push({x:MW+20,w:16+(Math.random()*8|0),h:14+(Math.random()*12|0)});
     else if(r<.8)R.items.push({x:MW+20,y:Math.random()<.5?0:48+Math.random()*30,k:'coin'});
     else R.items.push({x:MW+20,y:Math.random()<.5?0:48+Math.random()*30,k:ING[Math.random()*5|0][0]})}
   R.obs.forEach(o=>o.x-=sp*dt);R.items.forEach(o=>o.x-=sp*dt);R.obs=R.obs.filter(o=>o.x>-30);R.items=R.items.filter(o=>o.x>-30);
-  const px=60,pw=24,ph=36;
-  R.obs.forEach(o=>{if(!o.h2&&R.inv<=0&&px+pw>o.x&&px<o.x+o.w&&R.y<o.h){R.lives--;R.inv=1.1;o.h2=1;A.S&&A.S.miss&&A.S.miss()}});
+  const px=63,pw=18,ph=34;
+  R.obs.forEach(o=>{if(!o.h2&&R.inv<=0&&px+pw>o.x+2&&px<o.x+o.w-2&&R.y<o.h-3){R.lives--;R.inv=1.1;o.h2=1;A.S&&A.S.miss&&A.S.miss()}});
   R.items=R.items.filter(it=>{const hit=px+pw>it.x&&px<it.x+14&&R.y+ph>it.y&&R.y<it.y+14;if(hit){R.got++;if(it.k==='coin')R.coins++;else R.ings[it.k]=(R.ings[it.k]||0)+1;A.S&&A.S.pickup&&A.S.pickup();return false}return true});
   if(R.t>=DUR||R.lives<=0)finish();else if(Math.floor(R.t)!==Math.floor(R.t-dt))txt()};
 let hero=null;
@@ -3961,13 +3965,14 @@ const draw=t=>{const c=$('rrunC');if(!c)return;const g=c.getContext('2d');g.imag
   R.items.forEach(it=>{const y=GY-it.y-14;if(it.k==='coin'){g.fillStyle='#ffd56a';g.beginPath();g.arc(it.x+7,y+7,7,0,7);g.fill();g.fillStyle='#c98a12';g.fillRect(it.x+5,y+4,4,6)}else{const col=ING.find(x=>x[0]===it.k)[2];g.fillStyle=col;g.beginPath();g.arc(it.x+7,y+7,7,0,7);g.fill();g.fillStyle='#fff8';g.fillRect(it.x+4,y+3,3,3)}});
   if(!hero&&window.lunAvCanvas){try{hero=window.lunAvCanvas(2,0)}catch(e){}}
   const px=60,py=GY-R.y;g.fillStyle='#0004';g.beginPath();g.ellipse(px+12,GY+2,14,4,0,0,7);g.fill();
-  if(!(R.inv>0&&Math.floor(t/90)%2)){if(hero)g.drawImage(hero,px-10,py-48,56,62);else{g.fillStyle='#e0243a';g.fillRect(px,py-36,24,36)}}
+  const rc=(typeof riderFrame==='function')?riderFrame(t):null;
+  if(!(R.inv>0&&Math.floor(t/90)%2)){if(rc){const sc=Math.min(1.7,70/rc.height),w=rc.width*sc,h=rc.height*sc;g.drawImage(rc,px+9-w/2,py-h+3,w,h)}else if(hero)g.drawImage(hero,px-10,py-48,56,62);else{g.fillStyle='#e0243a';g.fillRect(px,py-36,24,36)}}
   g.font='16px sans-serif';g.textAlign='left';g.fillStyle='#ff6a8a';g.fillText('♥'.repeat(Math.max(0,R.lives)),8,20);g.fillStyle='#fff';g.font='13px sans-serif';g.textAlign='right';g.fillText('收集 '+R.got,MW-8,20);
   if(R.phase==='idle'){g.fillStyle='#0008';g.fillRect(0,0,MW,MH);g.fillStyle='#fff';g.font='bold 18px sans-serif';g.textAlign='center';g.fillText('準備好就按「出發」',160,100)}
   if(R.phase==='done'){g.fillStyle='rgba(8,4,16,.88)';g.fillRect(0,0,MW,MH);g.textAlign='center';g.fillStyle='#e8c566';g.font='bold 24px sans-serif';g.fillText(R.lives>0?'探險完成':'探險結束',160,60);g.fillStyle='#fff';g.font='16px sans-serif';R.sum.forEach((s,i)=>g.fillText(s,160,98+i*26))}};
 let raf=0,lt=0;
 const loop=t=>{const dt=Math.min(.05,(t-lt)/1000||0);lt=t;step(dt);if(R.on&&$('rrun').classList.contains('on')){draw(t);raf=requestAnimationFrame(loop)}else raf=0};
-$('rrun').addEventListener('click',e=>{if(e.target.closest('#rrunGo')){if(R.phase==='idle')start();else if(R.phase==='play')jump()}
+$('rrun').addEventListener('click',e=>{if(e.target.closest('#rrunGo')){if(R.phase==='idle')start()}
   else if(e.target.closest('#rrunXr')){if(R.phase==='done'&&performance.now()>=R.doneAt){R.phase='idle';R.on=true;txt()}}});
 window.lunRunOpen=()=>{if(!P())return;Object.assign(R,{on:true,phase:'idle',obs:[],items:[],lives:3,got:0,y:0,vy:0});hero=null;view();rOpen('rrun');if(!raf){lt=performance.now();raf=requestAnimationFrame(loop)}};
 window.lunRun={step,jump,start,state:()=>({...R,obs:R.obs.length,items:R.items.length})};
