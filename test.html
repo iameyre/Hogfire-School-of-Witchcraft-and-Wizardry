@@ -2444,7 +2444,7 @@ $('rhMap').onclick=()=>{A.init();openMap()};$('rhWard').onclick=()=>{A.init();op
 
 /* ---------- 堆疊式選單 ---------- */
 const NAVI={adv:'<path d="M4 20 20 4M14 4h6v6M4 14l6 6"/>',char:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>',gacha:'<circle cx="12" cy="12" r="8"/><path d="M4 12h16"/><circle cx="12" cy="12" r="2"/>',shop:'<path d="M4 9h16l-1 11H5L4 9zM8 9V7a4 4 0 0 1 8 0v2"/>',more:'<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>'};
-const NAV=[['adv','冒險',[['goal','三天大目標'],['home','主畫面'],['map','世界地圖'],['task','每日任務'],['fort','參拜']]],['char','角色',[['ward','更衣間'],['tal','天賦樹'],['shrine','轉職聖殿'],['ach','成長']]],['gacha','扭蛋',[['card','抽卡'],['look','抽外觀'],['eq','抽裝備']]],['shop','商城',[['shop','商店'],['dex','倫寶閣'],['log','紀錄']]],['more','更多',[['info','說明'],['get','東西怎麼拿'],['call','客服倫員'],['code','存檔代碼']]]];
+const NAV=[['adv','冒險',[['goal','三天大目標'],['home','主畫面'],['map','世界地圖'],['task','每日任務'],['fort','參拜'],['pet','小狐狸'],['claw','夾娃娃機']]],['char','角色',[['ward','更衣間'],['tal','天賦樹'],['shrine','轉職聖殿'],['ach','成長']]],['gacha','扭蛋',[['card','抽卡'],['look','抽外觀'],['eq','抽裝備']]],['shop','商城',[['shop','商店'],['dex','倫寶閣'],['log','紀錄']]],['more','更多',[['info','說明'],['get','東西怎麼拿'],['call','客服倫員'],['code','存檔代碼']]]];
 $('rnav').innerHTML=NAV.map(([k,n])=>`<button data-n="${k}"><svg viewBox="0 0 24 24">${NAVI[k]}</svg><span>${n}</span>${k==='adv'?'<i class="rb" id="rnB" hidden></i>':''}</button>`).join('');
 let subOpen=null;
 const closeSub=()=>{subOpen=null;$('rsub').classList.remove('on');$('rshade').classList.remove('on');document.querySelectorAll('#rnav>button').forEach(b=>b.classList.remove('open'))};
@@ -2461,7 +2461,7 @@ const rAct=a=>{if(kbusy&&a!=='card'){rToast('抽卡中，等一下。<button cla
   const lk=subLock(a);if(lk){rToast(a==='bank'?'倫生銀行下次更新開放，先鎖起來。':`${({tal:'天賦樹',shop:'商店',shrine:'轉職聖殿'})[a]} ${lk} 開放。現在 Lv${LV()}。`,1);A.S.kPoot();if(homeOn)return;return}
   const f=({home:rHome,map:openMap,task:()=>{goPanel('task');setNavOn('adv')},fort:()=>{window.lunFortOpen&&window.lunFortOpen()},ward:()=>{openChar()},tal:()=>{goPanel('tal');setNavOn('char')},shrine:()=>openShrine(),ach:()=>{goPanel('ach');setNavOn('char')},
     card:goDraw,look:()=>openGach('look'),eq:()=>openGach('eq'),shop:()=>{goPanel('shop');setNavOn('shop')},dex:()=>{goPanel('dex');setNavOn('shop')},log:()=>{goPanel('log');setNavOn('shop')},
-    info:()=>$('kinfo').classList.add('on'),get:()=>openGet(),call:()=>openCall(),code:()=>window.lunCodeOpen&&window.lunCodeOpen(),goal:()=>window.lunGoalOpen&&window.lunGoalOpen()})[a];if(f)f()};
+    info:()=>$('kinfo').classList.add('on'),get:()=>openGet(),call:()=>openCall(),code:()=>window.lunCodeOpen&&window.lunCodeOpen(),goal:()=>window.lunGoalOpen&&window.lunGoalOpen(),pet:()=>window.lunPetOpen&&window.lunPetOpen(),claw:()=>window.lunClawOpen&&window.lunClawOpen()})[a];if(f)f()};
 const updNavBadge=()=>{const b=$('rnB');if(b)b.hidden=!(typeof todoN==='function'&&(todoN()||miniLeft()))};
 
 /* ---------- 世界地圖 ---------- */
@@ -3459,7 +3459,7 @@ document.addEventListener('click',async e=>{
 const prayN=p=>{const t=p.pray&&p.pray.tot;return t&&typeof t==='object'?Object.keys(t).reduce((a,k)=>k==='don'?a:a+(+t[k]||0),0):(+t||0)};
 const GOALS=[
  {n:'抽卡日常',d:'12/1～12/3',ms:[['抽卡累計 30 張',p=>(p.st&&p.st.pulls)||0,30],['對一次發票',p=>invs().some(v=>v.ck)?1:0,1],['參拜 3 次',prayN,3]],rw:{w:12,s:150}},
- {n:'打怪',d:'12/4～12/6',ms:[['擊敗怪物 40 隻',p=>p.kills||0,40],['打倒倫倫村的倫凍王',p=>(rp().clear&&rp().clear.village)?1:0,1],['等級到 Lv5',p=>p.lv||1,5]],rw:{w:15,s:200}},{n:'寵物與夾娃娃機',d:'12/7～12/9'},{n:'料理與製藥',d:'12/10～12/12'},
+ {n:'打怪',d:'12/4～12/6',ms:[['擊敗怪物 40 隻',p=>p.kills||0,40],['打倒倫倫村的倫凍王',p=>(rp().clear&&rp().clear.village)?1:0,1],['等級到 Lv5',p=>p.lv||1,5]],rw:{w:15,s:200}},{n:'寵物與夾娃娃機',d:'12/7～12/9',ms:[['孵出小狐狸',p=>(p.fox&&p.fox.hatched)?1:0,1],['餵食小狐狸 10 次',p=>(p.fox&&p.fox.fed)||0,10],['小狐狸進化',p=>(p.fox&&p.fox.form&&p.fox.form!=='kit')?1:0,1],['夾娃娃機玩 3 次',p=>(p.claw&&p.claw.n)||0,3]],rw:{w:18,s:250}},{n:'料理與製藥',d:'12/10～12/12'},
  {n:'坐騎探險',d:'12/13～12/15'},{n:'卡片對戰',d:'12/16～12/18'},{n:'學堂與小屋',d:'12/19～12/20'}];
 const gCal=p=>Math.max(1,Math.round((Date.parse(today())-Date.parse(p.gd[0]))/864e5)+1);
 const gInfo=()=>{const p=P();p.gd=p.gd||[];const t=today();if(!p.gd.includes(t)){p.gd.push(t);save()}p.goal=p.goal||{c:{}};
@@ -3589,6 +3589,147 @@ document.head.insertAdjacentHTML('beforeend',`<style id="thD">
 .kpl b{font-size:20px}
 </style>`);
 window.lunAvCanvas=(s,fr)=>avCanvas(ensureAv().eq,s||1,fr||0);
+
+/* ===== v19.0（2026-11-26）：小狐狸寵物（孵蛋、餵食、進化、跟隨）＋夾娃娃機（G3） =====
+   存檔：p.fox={has,hatched,form,eggK,fed,hot,sun}、p.claw={n}。
+   孵蛋：拿到蛋之後再擊敗 10 隻怪就能孵化。餵食花倫幣。進化：餵食 ≥12 且辣椒或陽光果 ≥6，多的那一種決定火焰型／日光型。冰型永遠封印（梗）。
+   夾娃娃機：每次 10 倫幣；獎品有倫幣、倫性、小狐狸蛋。入口：冒險選單「小狐狸」「夾娃娃機」。 */
+(()=>{
+const N=26,OUT='#2a1424';
+const mk=()=>Array.from({length:N},()=>Array(N).fill(null));
+const px=(G,x,y,c)=>{x=Math.round(x)+2;y=Math.round(y)+1;if(x>=0&&y>=0&&x<N&&y<N)G[y][x]=c};
+const rect=(G,x,y,w,h,c)=>{for(let j=0;j<h;j++)for(let i=0;i<w;i++)px(G,x+i,y+j,c)};
+const ell=(G,cx,cy,rx,ry,c)=>{for(let y=Math.floor(cy-ry);y<=Math.ceil(cy+ry);y++)for(let x=Math.floor(cx-rx);x<=Math.ceil(cx+rx);x++){const dx=(x-cx)/rx,dy=(y-cy)/ry;if(dx*dx+dy*dy<=1)px(G,x,y,c)}};
+const tri=(G,a,b,c2,col)=>{const mnx=Math.min(a[0],b[0],c2[0]),mxx=Math.max(a[0],b[0],c2[0]),mny=Math.min(a[1],b[1],c2[1]),mxy=Math.max(a[1],b[1],c2[1]);
+  const s=(p,q,r)=>(p[0]-r[0])*(q[1]-r[1])-(q[0]-r[0])*(p[1]-r[1]);
+  for(let y=mny;y<=mxy;y++)for(let x=mnx;x<=mxx;x++){const p=[x,y],d1=s(p,a,b),d2=s(p,b,c2),d3=s(p,c2,a);const ng=d1<0||d2<0||d3<0,ps=d1>0||d2>0||d3>0;if(!(ng&&ps))px(G,x,y,col)}};
+const outline=G=>{const O=[];for(let y=0;y<N;y++)for(let x=0;x<N;x++){if(G[y][x])continue;for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const X=x+dx,Y=y+dy;if(X>=0&&Y>=0&&X<N&&Y<N&&G[Y][X]&&G[Y][X]!==OUT){O.push([x,y]);break}}}O.forEach(([x,y])=>G[y][x]=OUT)};
+const FORMS={
+ kit:{name:'小狐狸（幼體）',body:'#c98a4a',shade:'#a56a30',belly:'#f5e2c0',tip:'#f5e2c0',tails:1,fluff:true,ear:'#e8a0a0'},
+ fire:{name:'火焰型',body:'#e2602a',shade:'#b8401a',belly:'#ffd9a0',tip:'#ffd56a',tails:3,fire:true,ear:'#ffb08a'},
+ sun:{name:'日光型',body:'#e8b84a',shade:'#c08a20',belly:'#fff2c0',tip:'#fff7d8',tails:2,sun:true,ear:'#ffd9a0'}};
+const drawFox=(f,t,blink)=>{const C=FORMS[f]||FORMS.kit,G=mk();const oy=Math.round(Math.sin(t/420));
+  if(C.sun){const cx=16,cy=9+oy;for(let k=0;k<12;k++){const a=t/1400+k*Math.PI/6;for(let r=7;r<=9;r++)px(G,cx+Math.cos(a)*r,cy+Math.sin(a)*r,k%2?'#ffe27a':'#fff2c0')}}
+  for(let k=0;k<C.tails;k++){const ang=(C.tails===1?0:(k-(C.tails-1)/2)*.55),base=[7,15+oy],L=5.5;
+    for(let s=0;s<=L;s+=.6){const a=Math.PI+ang*(.4+s/L)+Math.sin(t/300+k)*.18*(s/L);const x=base[0]+Math.cos(a)*s-1.2,y=base[1]+Math.sin(a)*s*.8-s*.35;ell(G,x,y,2.1-s/L*.8,1.8-s/L*.6,s>L-1.6?C.tip:C.body)}
+    if(C.fire){const a=Math.PI+ang*1.4,x=base[0]+Math.cos(a)*L-1.4,y=base[1]+Math.sin(a)*L*.8-L*.35,fl=Math.floor(t/120+k)%2;px(G,x-1,y-2-fl,'#ff7a1a');px(G,x-1,y-3-fl,'#ffd56a');px(G,x,y-2,'#ff4a1a');px(G,x-2,y-2,'#ff4a1a')}}
+  ell(G,11,16+oy,6,3.6,C.body);ell(G,10,17+oy,4.6,2,C.shade);ell(G,14,16.5+oy,2.8,2.6,C.belly);
+  rect(G,8,19+oy,2,3,C.shade);rect(G,13,19+oy,2,3,C.body);rect(G,10,19+oy,2,3,C.shade);rect(G,15,19+oy,2,3,C.body);
+  ell(G,16,10+oy,4.2,3.8,C.body);ell(G,19.5,11+oy,2.4,1.6,C.belly);
+  tri(G,[13,6+oy],[14,1+oy],[16.5,5+oy],C.body);tri(G,[16,5+oy],[19,1+oy],[20,6+oy],C.body);px(G,14,3+oy,C.ear);px(G,14,4+oy,C.ear);px(G,18,3+oy,C.ear);px(G,18,4+oy,C.ear);
+  if(C.fluff){for(let i=0;i<6;i++){px(G,12+i,13+oy+(i%2),C.belly);px(G,12+i,14+oy,C.belly)}px(G,11,14+oy,C.belly);px(G,18,14+oy,C.belly)}
+  if(blink){px(G,17,9+oy,OUT);px(G,18,9+oy,OUT)}else{px(G,17,9+oy,OUT);px(G,17,10+oy,OUT);px(G,18,9+oy,'#fff')}
+  px(G,21,10+oy,OUT);
+  if(C.sun){px(G,16,6+oy,'#fff7d8');px(G,16,7+oy,'#ffb02a');px(G,15,6+oy,'#ffd56a');px(G,17,6+oy,'#ffd56a')}
+  if(C.fire){px(G,16,6+oy,'#ff4a1a');px(G,16,5+oy,'#ffd56a')}
+  outline(G);return G};
+const paintFox=(cv,f,t,sc)=>{const g=cv.getContext('2d');cv.width=N*sc;cv.height=N*sc;g.imageSmoothingEnabled=false;const G=drawFox(f,t,Math.floor(t/100)%32===0);
+  for(let y=0;y<N;y++)for(let x=0;x<N;x++)if(G[y][x]){g.fillStyle=G[y][x];g.fillRect(x*sc,y*sc,sc,sc)}};
+const paintEgg=(cv,t,ready)=>{const sc=7,g=cv.getContext('2d');cv.width=N*sc;cv.height=N*sc;g.imageSmoothingEnabled=false;g.save();g.translate(cv.width/2,cv.height*.6);if(ready)g.rotate(Math.sin(t/80)*.14);
+  const shape=(grow,col,spot)=>{for(let y=-9-grow;y<=9+grow;y++){const w=Math.round((7+grow)*Math.sqrt(Math.max(0,1-(y/(9.5+grow))**2))*(y>0?1:.82));for(let x=-w;x<=w;x++){g.fillStyle=spot&&(x*3+y*5)%11===0&&y>-4?'#c98a4a':col;g.fillRect(x*sc,y*sc,sc,sc)}}};
+  shape(1,OUT,false);shape(0,'#f5e9d0',true);g.fillStyle='#fff';g.fillRect(-4*sc,-6*sc,sc*2,sc*2);g.restore()};
+
+/* ---------- 存檔 ---------- */
+const FX=()=>{const p=P();p.fox=p.fox||{has:0,hatched:0,form:'kit',eggK:0,fed:0,hot:0,sun:0};return p.fox};
+const eggReady=()=>{const p=P(),f=FX();return f.has&&!f.hatched&&(p.kills||0)-f.eggK>=10};
+const FOODS=[['n','普通飼料',5,0,0],['h','火辣辣的辣椒',20,1,0],['s','陽光果',20,0,1]];
+
+/* ---------- 樣式與視窗 ---------- */
+document.head.insertAdjacentHTML('beforeend',`<style id="thE">
+#rpet .rcb,#rclaw .rcb{position:relative;width:min(94vw,380px);max-height:96dvh;overflow-y:auto;padding:16px 14px 14px;text-align:center}
+#rpet h3,#rclaw h3{margin:0 0 6px;font:400 18px var(--A);letter-spacing:.3em;color:#fff;text-indent:.3em}
+#rpet p,#rclaw p{margin:6px 4px;font-size:14px;line-height:1.7;color:#e3dcf2;text-align:start}
+#rpet canvas.pf{width:176px;height:176px;image-rendering:pixelated;background:radial-gradient(closest-side,color-mix(in srgb,var(--glow) 80%,transparent),transparent),#0b0714;border:1px solid color-mix(in srgb,var(--trim) 60%,transparent)}
+.mb{display:block;width:100%;margin-top:8px;padding:12px 8px;min-height:48px;border:0;border-radius:0;color:#fff;font:400 16px var(--A);letter-spacing:.2em;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px);background:linear-gradient(180deg,color-mix(in srgb,var(--a1) 82%,#fff),var(--a1) 42%,var(--a3));box-shadow:inset 0 1px 0 #fffa,inset 0 -3px 0 #0007,inset 0 0 0 2px color-mix(in srgb,var(--trim) 75%,transparent);text-shadow:0 1px 0 #000b}
+.mb small{display:block;font-size:12px;letter-spacing:.05em;opacity:.9}
+.mb:disabled{background:#ffffff18;box-shadow:inset 0 0 0 1px #ffffff22;color:#9a9da6;text-shadow:none}
+.mb.sec{background:linear-gradient(180deg,#2c1a48,#10081c);color:var(--a2)}
+.pbar{height:8px;margin:2px 0 6px;background:#0008;border:1px solid color-mix(in srgb,var(--trim) 55%,#000)}.pbar u{display:block;height:100%;background:linear-gradient(90deg,var(--a2),var(--a1))}
+.pgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}.pgrid .mb{margin-top:0;font-size:14px;letter-spacing:.05em;padding:10px 2px}
+.pice{margin-top:8px;padding:8px 10px;border:1px dashed #8ec9e8;color:#bfe4f8;font-size:13px;line-height:1.7;text-align:start}
+#rclaw canvas{display:block;margin:0 auto;width:100%;max-width:340px;height:auto;image-rendering:pixelated;border:1px solid color-mix(in srgb,var(--trim) 60%,transparent)}
+.rfox{position:absolute;pointer-events:none;image-rendering:pixelated}
+</style>`);
+document.body.insertAdjacentHTML('beforeend',`<div class="rpop" id="rpet"><div class="rcb">${xBtn('rpetX')}<h3>小狐狸</h3><canvas class="pf" id="rpetC"></canvas><div id="rpetB"></div></div></div>
+<div class="rpop" id="rclaw"><div class="rcb">${xBtn('rclawX')}<h3>夾娃娃機</h3><canvas id="rclC" width="320" height="300"></canvas><div id="rclM"></div></div></div>`);
+$('rpetX').onclick=()=>{rClose('rpet');A.S&&A.S.tap&&A.S.tap()};
+$('rclawX').onclick=()=>{rClose('rclaw');cl.st='idle';A.S&&A.S.tap&&A.S.tap()};
+
+/* ---------- 小狐狸畫面 ---------- */
+const petRender=()=>{const p=P(),f=FX();let h='';
+  if(!f.has){h=`<p>你還沒有小狐狸蛋。到「夾娃娃機」夾夾看，或先領一顆新手蛋。</p><button class="mb" data-pa="egg">領取新手蛋<small>免費，只能領一次</small></button>`}
+  else if(!f.hatched){const k=Math.min(10,(p.kills||0)-f.eggK);h=`<p>這顆蛋正在等你。出門打怪，擊敗 10 隻怪就會孵化。</p><div class="pbar"><u style="width:${k*10}%"></u></div><p class="gls" style="text-align:center">孵化進度 ${k} / 10</p><button class="mb" data-pa="hatch"${eggReady()?'':' disabled'}>孵化</button>`}
+  else{const t=f.fed,hot=f.hot,sun=f.sun,evo=f.form!=='kit';
+    h=`<p style="text-align:center;margin-top:6px"><b>${FORMS[f.form].name}</b>・已餵食 ${t} 次</p>`;
+    if(!evo){h+=`<p>餵食 12 次後，看你多餵哪一種特別的食物，決定牠變成什麼樣子。</p><div class="pbar"><u style="width:${Math.min(100,t/12*100)}%"></u></div><p class="gls" style="text-align:center;margin-top:0">餵食 ${Math.min(t,12)} / 12　辣椒 ${hot}　陽光果 ${sun}（有一種到 6 個）</p>`}
+    else h+=`<p style="text-align:center">已經進化了。倫幣少量加成，牠會跟在你旁邊。</p>`;
+    h+=`<div class="pgrid">${FOODS.map(([k,n,c])=>`<button class="mb" data-pf="${k}">${n}<small>${c} 倫幣</small></button>`).join('')}</div>
+    <div class="pice">冰型：封印中。倫最討厭冰型，所以牠被凍在冰塊裡，只能看，永遠孵不出來。</div>`}
+  $('rpetB').innerHTML=h};
+const petAct=a=>{const p=P(),f=FX();
+  if(a==='egg'&&!f.has){f.has=1;f.eggK=p.kills||0;save();A.S&&A.S.pickup&&A.S.pickup();rToast('拿到小狐狸蛋！出門打 10 隻怪就會孵化。')}
+  else if(a==='hatch'&&eggReady()){f.hatched=1;f.form='kit';save();A.S&&A.S.pickup&&A.S.pickup();rToast('孵出來了！是一隻小狐狸。');mainFox()}
+  petRender()};
+const feed=k=>{const p=P(),f=FX(),fd=FOODS.find(x=>x[0]===k);if(!fd)return;if((p.shard||0)<fd[2]){rToast('倫幣不夠。');A.S&&A.S.miss&&A.S.miss();return}
+  p.shard-=fd[2];f.fed++;f.hot+=fd[3];f.sun+=fd[4];let ev=false;
+  if(f.form==='kit'&&f.fed>=12&&(f.hot>=6||f.sun>=6)){f.form=f.hot>=f.sun?'fire':'sun';ev=true}
+  save();A.S&&A.S.pickup&&A.S.pickup();rToast(ev?`進化了！變成${FORMS[f.form].name}。`:'吃得很開心。');try{updWallet&&updWallet()}catch(e){}petRender()};
+$('rpet').addEventListener('click',e=>{const a=e.target.closest('button[data-pa]');if(a){petAct(a.dataset.pa);return}const b=e.target.closest('button[data-pf]');if(b&&FX().hatched)feed(b.dataset.pf)});
+window.lunPetOpen=()=>{if(!P())return;petRender();rOpen('rpet')};
+let petRaf=0;const petLoop=t=>{const on=$('rpet').classList.contains('on');const c=$('rpetC'),f=FX();
+  if(on&&c){if(f.hatched)paintFox(c,f.form,t,7);else if(f.has)paintEgg(c,t,eggReady());else{c.width=182;c.height=182}}
+  const h=document.querySelector('.rhome.on'),m=$('rfoxM');if(m){m.style.display=(h&&FX().hatched)?'block':'none';if(h&&FX().hatched){paintFox(m,FX().form,t,3);m.style.transform='scaleX(-1)'}}
+  petRaf=requestAnimationFrame(petLoop)};
+function mainFox(){let m=$('rfoxM');if(m)return;const sc=$('rhcv');if(!sc||!sc.parentElement)return;m=document.createElement('canvas');m.id='rfoxM';m.className='rfox';m.style.cssText='left:calc(50% - 138px);bottom:34px;width:84px;height:84px;display:none';sc.parentElement.appendChild(m)}
+mainFox();requestAnimationFrame(petLoop);
+
+/* ---------- 夾娃娃機 ---------- */
+const PR={c30:{n:'小錢袋',c:'#e8c060',t:'30幣'},c80:{n:'大錢袋',c:'#ffd56a',t:'80幣'},w3:{n:'倫性',c:'#a02aff',t:'+3'},egg:{n:'狐狸蛋',c:'#f5e9d0',t:'蛋'},doll:{n:'倫娃娃',c:'#e0243a',t:'5幣'}};
+const cl={st:'idle',x:40,dir:1,y:46,slots:[],hold:null,last:0,msg:'按「開始」投幣（10 倫幣）'};
+const shuffle=()=>{const f=FX();const pool=['c30','c30','c80','w3',(!f.has&&!f.hatched&&Math.random()<.4)?'egg':'doll'];for(let i=pool.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[pool[i],pool[j]]=[pool[j],pool[i]]}cl.slots=pool};
+const SX=i=>40+i*60;
+const clawDraw=t=>{const c=$('rclC'),g=c.getContext('2d');g.imageSmoothingEnabled=false;
+  g.fillStyle='#120a1e';g.fillRect(0,0,320,300);g.fillStyle='#1d1030';g.fillRect(0,262,320,38);g.fillStyle='#3a2a58';g.fillRect(0,262,320,3);
+  g.fillStyle='#d9b56a';g.fillRect(0,34,320,4);
+  cl.slots.forEach((k,i)=>{if(k==null)return;const o=PR[k],x=SX(i);g.fillStyle='#000';g.fillRect(x-17,236,34,26);g.fillStyle=o.c;
+    if(k==='egg'){g.beginPath();g.ellipse(x,246,12,16,0,0,7);g.fill()}else if(k==='w3'){g.beginPath();for(let a=0;a<6;a++){g.lineTo(x+14*Math.cos(a*Math.PI/3),248+14*Math.sin(a*Math.PI/3))}g.fill()}else if(k==='doll'){g.fillRect(x-10,240,20,22);g.fillStyle='#fff';g.fillRect(x-6,244,4,4);g.fillRect(x+2,244,4,4)}else{g.beginPath();g.arc(x,250,12,0,7);g.fill();g.fillStyle='#8a6a22';g.fillRect(x-4,234,8,6)}
+    g.fillStyle='#fff';g.font='11px sans-serif';g.textAlign='center';g.fillText(o.t,x,276);});
+  // 爪子
+  const x=cl.x,y=cl.y;g.fillStyle='#8a8d96';g.fillRect(x-1,38,2,y-38);g.fillStyle='#e4e8f0';g.fillRect(x-9,y,18,6);
+  const open=(cl.st==='drop')?10:5;g.fillStyle='#cfd2d8';g.fillRect(x-9-open+5,y+6,3,14);g.fillRect(x+6+open-5,y+6,3,14);
+  if(cl.hold){const o=PR[cl.hold];g.fillStyle=o.c;g.beginPath();g.arc(x,y+26,11,0,7);g.fill()}
+  g.fillStyle='#d9b56a';g.font='13px sans-serif';g.textAlign='left';};
+let clRaf=0,clT=0;
+const clStep=dt=>{if(cl.st==='sweep'){cl.x+=cl.dir*150*dt;if(cl.x>290){cl.x=290;cl.dir=-1}if(cl.x<30){cl.x=30;cl.dir=1}}
+  else if(cl.st==='drop'){cl.y+=210*dt;if(cl.y>=214){cl.y=214;resolve()}}
+  else if(cl.st==='rise'){cl.y-=190*dt;if(cl.y<=46){cl.y=46;finish()}}};
+window.lunClawStep=clStep;
+const clawLoop=t=>{const dt=Math.min(.05,(t-clT)/1000||0);clT=t;clStep(dt);
+  if($('rclaw').classList.contains('on')){clawDraw(t);clRaf=requestAnimationFrame(clawLoop)}else clRaf=0};
+const btns=()=>{$('rclM').innerHTML=`<p class="gls" style="text-align:center">${cl.msg}</p><button class="mb" data-cl="go"${(cl.st==='idle'||cl.st==='sweep')?'':' disabled'}>${cl.st==='sweep'?'夾！':'開始（10 倫幣）'}</button>`};
+const resolve=()=>{cl.st='rise';let hit=-1;cl.slots.forEach((k,i)=>{if(k!=null&&Math.abs(cl.x-SX(i))<=24)hit=i});
+  if(hit>=0&&Math.random()<.72){cl.hold=cl.slots[hit];cl.slots[hit]=null;cl.got=cl.hold;A.S&&A.S.pickup&&A.S.pickup()}else{cl.hold=null;cl.got=null;A.S&&A.S.miss&&A.S.miss()}btns()};
+const finish=()=>{const p=P(),k=cl.got;cl.st='idle';cl.hold=null;
+  if(k){const o=PR[k];if(k==='c30')p.shard=(p.shard||0)+30;else if(k==='c80')p.shard=(p.shard||0)+80;else if(k==='w3')p.wallet=(p.wallet||0)+3;else if(k==='doll')p.shard=(p.shard||0)+5;else if(k==='egg'){const f=FX();if(!f.has){f.has=1;f.eggK=p.kills||0}else p.shard=(p.shard||0)+30}
+    cl.msg=`夾到了：${o.n}！`;save();try{updWallet&&updWallet()}catch(e){}}
+  else cl.msg='差一點，掉下去了。再試一次？';
+  shuffle();btns()};
+const startGo=()=>{const p=P();if(cl.st==='idle'){if((p.shard||0)<10){rToast('倫幣不夠，要 10 倫幣。');A.S&&A.S.miss&&A.S.miss();return}p.shard-=10;p.claw=p.claw||{n:0};p.claw.n++;save();try{updWallet&&updWallet()}catch(e){}cl.st='sweep';cl.msg='對準獎品，按「夾！」';A.S&&A.S.tap&&A.S.tap();btns()}
+  else if(cl.st==='sweep'){cl.st='drop';cl.msg='……';A.S&&A.S.tap&&A.S.tap();btns()}};
+$('rclaw').addEventListener('click',e=>{if(e.target.closest('button[data-cl]'))startGo()});
+window.lunClawOpen=()=>{if(!P())return;cl.st='idle';cl.y=46;cl.hold=null;cl.msg='按「開始」投幣（10 倫幣）';shuffle();btns();rOpen('rclaw');if(!clRaf){clT=performance.now();clRaf=requestAnimationFrame(clawLoop)}};
+
+/* 孵出小狐狸後，打怪倫幣 +10%（接在參拜的金幣加成上） */
+const oc=window.lunFortCoin;window.lunFortCoin=()=>(oc?oc():1)*(P()&&P().fox&&P().fox.hatched?1.1:1);
+/* ---------- DEV ---------- */
+$('kdTop').insertAdjacentHTML('beforeend','<button id="kdP1">⑯ 小狐狸（打開）</button><button id="kdP2">⑰ 夾娃娃機（打開）</button><button id="kdP3">⑱ 直接給蛋並孵化</button><button id="kdP4">⑲ 假裝第 7 天且 G3 任務完成</button><button id="kdP5">⑳ 蛋＋打怪 10 隻（可孵化）</button>');
+const dvp=(id,fn)=>{$(id).onclick=()=>{if(!P()||!started){devNote('先按上面的「用測試玩家直接進入卡池」。');return}devClose();fn()}};
+dvp('kdP1',()=>window.lunPetOpen());dvp('kdP2',()=>window.lunClawOpen());
+dvp('kdP3',()=>{const f=FX();f.has=1;f.hatched=1;f.form='kit';f.fed=0;f.hot=0;f.sun=0;save();mainFox();window.lunPetOpen()});
+dvp('kdP5',()=>{const p=P(),f=FX();f.has=1;f.hatched=0;f.eggK=p.kills||0;p.kills=(p.kills||0)+10;save();window.lunPetOpen()});
+dvp('kdP4',()=>{const p=P(),d=new Date();p.gd=[];for(let i=0;i<7;i++){const x=new Date(d-(6-i)*864e5);p.gd.push(x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0'))}
+  p.goal={c:{0:1,1:1}};const f=FX();f.has=1;f.hatched=1;f.form='fire';f.fed=12;f.hot=8;f.sun=0;p.claw={n:3};save();mainFox();window.lunGoalOpen&&window.lunGoalOpen()});
+})();
 
 }
 </script>
