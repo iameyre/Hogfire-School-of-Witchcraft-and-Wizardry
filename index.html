@@ -2442,7 +2442,7 @@ $('rhMap').onclick=()=>{A.init();openMap()};$('rhWard').onclick=()=>{A.init();op
 
 /* ---------- 堆疊式選單 ---------- */
 const NAVI={adv:'<path d="M4 20 20 4M14 4h6v6M4 14l6 6"/>',char:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>',gacha:'<circle cx="12" cy="12" r="8"/><path d="M4 12h16"/><circle cx="12" cy="12" r="2"/>',shop:'<path d="M4 9h16l-1 11H5L4 9zM8 9V7a4 4 0 0 1 8 0v2"/>',more:'<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>'};
-const NAV=[['adv','冒險',[['goal','三天大目標'],['home','主畫面'],['map','世界地圖'],['task','每日任務'],['fort','參拜'],['pet','小狐狸'],['claw','夾娃娃機']]],['char','角色',[['ward','更衣間'],['tal','天賦樹'],['shrine','轉職聖殿'],['ach','成長']]],['gacha','扭蛋',[['card','抽卡'],['look','抽外觀'],['eq','抽裝備']]],['shop','商城',[['shop','商店'],['dex','倫寶閣'],['log','紀錄'],['cook','料理製藥']]],['more','更多',[['info','說明'],['get','東西怎麼拿'],['call','客服倫員'],['code','存檔代碼']]]];
+const NAV=[['adv','冒險',[['goal','三天大目標'],['home','主畫面'],['map','世界地圖'],['task','每日任務'],['fort','參拜'],['pet','小狐狸'],['claw','夾娃娃機']]],['char','角色',[['ward','更衣間'],['tal','天賦樹'],['shrine','轉職聖殿'],['ach','成長']]],['gacha','扭蛋',[['card','抽卡'],['look','抽外觀'],['eq','抽裝備']]],['shop','商城',[['shop','商店'],['dex','倫寶閣'],['log','紀錄'],['cook','料理製藥'],['run','坐騎探險']]],['more','更多',[['info','說明'],['get','東西怎麼拿'],['call','客服倫員'],['code','存檔代碼']]]];
 $('rnav').innerHTML=NAV.map(([k,n])=>`<button data-n="${k}"><svg viewBox="0 0 24 24">${NAVI[k]}</svg><span>${n}</span>${k==='adv'?'<i class="rb" id="rnB" hidden></i>':''}</button>`).join('');
 let subOpen=null;
 const closeSub=()=>{subOpen=null;$('rsub').classList.remove('on');$('rshade').classList.remove('on');document.querySelectorAll('#rnav>button').forEach(b=>b.classList.remove('open'))};
@@ -2459,7 +2459,7 @@ const rAct=a=>{if(kbusy&&a!=='card'){rToast('抽卡中，等一下。<button cla
   const lk=subLock(a);if(lk){rToast(a==='bank'?'倫生銀行下次更新開放，先鎖起來。':`${({tal:'天賦樹',shop:'商店',shrine:'轉職聖殿'})[a]} ${lk} 開放。現在 Lv${LV()}。`,1);A.S.kPoot();if(homeOn)return;return}
   const f=({home:rHome,map:openMap,task:()=>{goPanel('task');setNavOn('adv')},fort:()=>{window.lunFortOpen&&window.lunFortOpen()},ward:()=>{openChar()},tal:()=>{goPanel('tal');setNavOn('char')},shrine:()=>openShrine(),ach:()=>{goPanel('ach');setNavOn('char')},
     card:goDraw,look:()=>openGach('look'),eq:()=>openGach('eq'),shop:()=>{goPanel('shop');setNavOn('shop')},dex:()=>{goPanel('dex');setNavOn('shop')},log:()=>{goPanel('log');setNavOn('shop')},
-    info:()=>$('kinfo').classList.add('on'),get:()=>openGet(),call:()=>openCall(),code:()=>window.lunCodeOpen&&window.lunCodeOpen(),goal:()=>window.lunGoalOpen&&window.lunGoalOpen(),pet:()=>window.lunPetOpen&&window.lunPetOpen(),claw:()=>window.lunClawOpen&&window.lunClawOpen(),cook:()=>window.lunCookOpen&&window.lunCookOpen()})[a];if(f)f()};
+    info:()=>$('kinfo').classList.add('on'),get:()=>openGet(),call:()=>openCall(),code:()=>window.lunCodeOpen&&window.lunCodeOpen(),goal:()=>window.lunGoalOpen&&window.lunGoalOpen(),pet:()=>window.lunPetOpen&&window.lunPetOpen(),claw:()=>window.lunClawOpen&&window.lunClawOpen(),cook:()=>window.lunCookOpen&&window.lunCookOpen(),run:()=>window.lunRunOpen&&window.lunRunOpen()})[a];if(f)f()};
 const updNavBadge=()=>{const b=$('rnB');if(b)b.hidden=!(typeof todoN==='function'&&(todoN()||miniLeft()))};
 
 /* ---------- 世界地圖 ---------- */
@@ -3458,7 +3458,7 @@ const prayN=p=>{const t=p.pray&&p.pray.tot;return t&&typeof t==='object'?Object.
 const GOALS=[
  {n:'抽卡日常',d:'12/1～12/3',ms:[['抽卡累計 30 張',p=>(p.st&&p.st.pulls)||0,30],['對一次發票',p=>invs().some(v=>v.ck)?1:0,1],['參拜 3 次',prayN,3]],rw:{w:12,s:150}},
  {n:'打怪',d:'12/4～12/6',ms:[['擊敗怪物 40 隻',p=>p.kills||0,40],['打倒倫倫村的倫凍王',p=>(rp().clear&&rp().clear.village)?1:0,1],['等級到 Lv5',p=>p.lv||1,5]],rw:{w:15,s:200}},{n:'寵物與夾娃娃機',d:'12/7～12/9',ms:[['孵出小狐狸',p=>(p.fox&&p.fox.hatched)?1:0,1],['餵食小狐狸 10 次',p=>(p.fox&&p.fox.fed)||0,10],['小狐狸進化',p=>(p.fox&&p.fox.form&&p.fox.form!=='kit')?1:0,1],['夾娃娃機玩 3 次',p=>(p.claw&&p.claw.n)||0,3]],rw:{w:18,s:250}},{n:'料理與製藥',d:'12/10～12/12',ms:[['做出 3 道料理',p=>(p.cook&&p.cook.n)||0,3],['製作 2 瓶藥',p=>(p.cook&&p.cook.pn)||0,2],['收集食材 15 個',p=>(p.cook&&p.cook.got)||0,15]],rw:{w:20,s:300}},
- {n:'坐騎探險',d:'12/13～12/15'},{n:'卡片對戰',d:'12/16～12/18'},{n:'學堂與小屋',d:'12/19～12/20'}];
+ {n:'坐騎探險',d:'12/13～12/15',ms:[['完成 3 次探險',p=>(p.run&&p.run.n)||0,3],['探險中收集 30 個物品',p=>(p.run&&p.run.items)||0,30],['單次探險收集 8 個',p=>(p.run&&p.run.best)||0,8]],rw:{w:22,s:350}},{n:'卡片對戰',d:'12/16～12/18'},{n:'學堂與小屋',d:'12/19～12/20'}];
 const gCal=p=>Math.max(1,Math.round((Date.parse(today())-Date.parse(p.gd[0]))/864e5)+1);
 const gInfo=()=>{const p=P();p.gd=p.gd||[];const t=today();if(!p.gd.includes(t)){p.gd.push(t);save()}p.goal=p.goal||{c:{}};
   const n=p.gd.length;return{p,n,cur:Math.min(7,Math.ceil(n/3)),late:gCal(p)-n>=1}};
@@ -3709,7 +3709,7 @@ function mainFox(){let m=$('rfoxM');if(m)return;const sc=$('rhcv');if(!sc||!sc.p
 mainFox();requestAnimationFrame(petLoop);
 {const go=document.querySelector('.rhgo');if(go&&!$('rhgo2')){go.insertAdjacentHTML('afterend','<div class="rhgo" id="rhgo2"><button class="rq" data-q9="pet">小狐狸</button><button class="rq" data-q9="claw">夾娃娃機</button><button class="rq" data-q9="cook">料理製藥</button></div>');
   document.head.insertAdjacentHTML('beforeend','<style>#rhgo2 .rq{min-height:44px!important;font-size:15px!important;letter-spacing:.08em!important}#rhgo2{margin-top:-4px}</style>');
-  $('rhgo2').addEventListener('click',e=>{const b=e.target.closest('button[data-q9]');if(!b)return;A.S&&A.S.tap&&A.S.tap();const k=b.dataset.q9;if(k==='pet')window.lunPetOpen&&window.lunPetOpen();else if(k==='claw')window.lunClawOpen&&window.lunClawOpen();else window.lunCookOpen&&window.lunCookOpen()})}}
+  $('rhgo2').addEventListener('click',e=>{const b=e.target.closest('button[data-q9]');if(!b)return;A.S&&A.S.tap&&A.S.tap();const k=b.dataset.q9;if(k==='pet')window.lunPetOpen&&window.lunPetOpen();else if(k==='claw')window.lunClawOpen&&window.lunClawOpen();else if(k==='cook')window.lunCookOpen&&window.lunCookOpen();else window.lunRunOpen&&window.lunRunOpen()})}}
 
 /* ---------- 夾娃娃機 ---------- */
 const PR={c30:{n:'小錢袋',c:'#e8c060',t:'30幣'},c80:{n:'大錢袋',c:'#ffd56a',t:'80幣'},w3:{n:'倫性',c:'#a02aff',t:'+3'},egg:{n:'狐狸蛋',c:'#f5e9d0',t:'蛋'},doll:{n:'倫娃娃',c:'#e0243a',t:'5幣'}};
@@ -3820,6 +3820,7 @@ document.head.insertAdjacentHTML('beforeend',`<style id="thF">
 .crow>div{flex:1;min-width:0}.crow b{display:block;font:400 15px var(--A);color:#fff;letter-spacing:.1em}.crow small{display:block;font-size:12px;color:#cfc6e6;line-height:1.5}
 .crow button{flex:none;min-width:72px;padding:8px 6px;border:0;color:#fff;font:400 14px var(--A);letter-spacing:.1em;background:linear-gradient(90deg,var(--a1),var(--a3));box-shadow:0 0 10px color-mix(in srgb,var(--a1) 55%,transparent)}
 .crow button:disabled{background:#ffffff14;box-shadow:none;color:#888}
+.xr2{display:block;margin:10px 0 0 auto;width:64px;height:48px;border:1px solid var(--a2);background:#08040f;color:var(--a2);font:400 22px var(--A)}.xr2:disabled{opacity:.35}
 .cst{margin:4px 0 6px;padding:6px 8px;border:1px dashed color-mix(in srgb,var(--a2) 60%,transparent);color:var(--a2);font-size:13px;text-align:center}
 </style>`);
 document.body.insertAdjacentHTML('beforeend',`<div class="rpop" id="rcook"><div class="rcb">${xBtn('rcookX')}<h3>料理製藥</h3><div id="rcookB"></div></div></div>`);
@@ -3833,11 +3834,12 @@ const render=()=>{const p=ST();
   if(tab==='cook')body=meal+'<p style="text-align:center">做的時候要玩小遊戲，表現越好，效果越強。</p>'+COOK.map(([k,n,r,d])=>`<div class="crow"><div><b>${n}</b><small>${d}</small><small>需要：${need(r)}</small></div><button data-c="${k}"${can(r)?'':' disabled'}>料理</button></div>`).join('');
   else if(tab==='pot')body=pots+'<p style="text-align:center">做的時候要玩小遊戲，表現越好，做出越多瓶。</p>'+POTS.map(([k,n,r,q,d])=>`<div class="crow"><div><b>${n}</b><small>${d}</small><small>需要：${need(r)}</small></div><button data-p="${k}"${can(r)?'':' disabled'}>製藥</button></div>`).join('');
   else body=`<p>食材也會從打怪掉落（Boss 一定掉 3 個）。不夠的話，這裡每個 ${BUY} 倫幣。目前有 ${p.shard||0} 倫幣。</p>`+ING.map(([k,n])=>`<div class="crow"><div><b>${n}</b><small>${BUY} 倫幣 / 個</small></div><button data-b="${k}"${(p.shard||0)>=BUY?'':' disabled'}>買 1 個</button></div>`).join('');
-  $('rcookB').innerHTML=inv+`<div class="ctab"><button data-t="cook" class="${tab==='cook'?'on':''}">料理</button><button data-t="pot" class="${tab==='pot'?'on':''}">製藥</button><button data-t="buy" class="${tab==='buy'?'on':''}">市場</button></div>`+body};
+  $('rcookB').innerHTML=inv+`<div class="ctab"><button data-t="cook" class="${tab==='cook'?'on':''}">料理</button><button data-t="pot" class="${tab==='pot'?'on':''}">製藥</button></div>`+body};
 $('rcook').addEventListener('click',e=>{const p=ST();
   const t=e.target.closest('button[data-t]');if(t){tab=t.dataset.t;A.S&&A.S.tap&&A.S.tap();render();return}
   const c=e.target.closest('button[data-c]');if(c){const d=COOK.find(x=>x[0]===c.dataset.c);if(d&&can(d[2])){take(d[2]);save();mgStart('cook',d)}return}
   const q=e.target.closest('button[data-p]');if(q){const d=POTS.find(x=>x[0]===q.dataset.p);if(d&&can(d[2])){take(d[2]);save();mgStart('pot',d)}return}
+  if(e.target.closest('#rminiXr')){if(mg.phase==='done'&&performance.now()>=mg.doneAt){mg.on=false;render()}return}
   if(e.target.closest('#rminiB')){mgBtn();return}
   const b=e.target.closest('button[data-b]');if(b){if((p.shard||0)>=BUY){p.shard-=BUY;p.ing[b.dataset.b]=(p.ing[b.dataset.b]||0)+1;p.cook.got++;save();try{updWallet&&updWallet()}catch(x){}A.S&&A.S.tap&&A.S.tap();render()}else{rToast('倫幣不夠。');A.S&&A.S.miss&&A.S.miss()}}});
 window.lunCookOpen=()=>{if(!P())return;render();rOpen('rcook')};
@@ -3847,20 +3849,21 @@ window.lunCookOpen=()=>{if(!P())return;render();rOpen('rcook')};
 const MW=320,MH=210,STAR=['失敗','普通','美味','完美'];
 const mg={on:false,kind:'',d:null,phase:'play',round:0,hits:0,pos:0,dir:1,spd:1,zone:[.4,.6],wait:0,flip:0,hold:false,temp:.15,inband:0,time:0,stars:0,bub:[]};
 const mgCol=()=>mg.kind==='pot'?'#e0405a':(mg.d?({soup:'#d9b8f0',bbq:'#e0605a',tea:'#ffcf4a',spicy:'#ff6a2a'})[mg.d[0]]:'#ffd56a')||'#ffd56a';
-const mgView=()=>{$('rcookB').innerHTML=`<canvas id="rminiC" width="${MW}" height="${MH}" style="display:block;margin:0 auto;width:100%;max-width:340px;image-rendering:pixelated;border:1px solid color-mix(in srgb,var(--trim) 60%,transparent);touch-action:none"></canvas><div class="cst" id="rminiM"></div><button class="mb" id="rminiB" style="touch-action:none;user-select:none;-webkit-user-select:none"></button>`;
+const mgView=()=>{$('rcookB').innerHTML=`<canvas id="rminiC" width="${MW}" height="${MH}" style="display:block;margin:0 auto;width:100%;max-width:340px;image-rendering:pixelated;border:1px solid color-mix(in srgb,var(--trim) 60%,transparent);touch-action:none"></canvas><div class="cst" id="rminiM"></div><button class="mb" id="rminiB" style="touch-action:none;user-select:none;-webkit-user-select:none"></button><button class="xr2" id="rminiXr" hidden>✕</button>`;
   const b=$('rminiB');const dn=e=>{if(mg.kind==='pot'&&mg.phase==='play'){mg.hold=true;e.preventDefault()}},up=()=>{mg.hold=false};
   b.addEventListener('pointerdown',dn);b.addEventListener('pointerup',up);b.addEventListener('pointerleave',up);b.addEventListener('pointercancel',up);b.addEventListener('contextmenu',e=>e.preventDefault());mgText()};
 const mgText=()=>{const m=$('rminiM'),b=$('rminiB');if(!m||!b)return;
-  if(mg.phase==='done'){m.textContent=mg.msg;b.textContent='回到清單';return}
+  if(mg.phase==='done'){m.textContent=mg.msg;b.hidden=true;const x=$('rminiXr');if(x){x.hidden=false;x.disabled=performance.now()<mg.doneAt;if(x.disabled)setTimeout(()=>{const xx=$('rminiXr');if(xx)xx.disabled=false},820)}return}
+  const x0=$('rminiXr');if(x0)x0.hidden=true;b.hidden=false;
   if(mg.kind==='cook'){m.textContent=`第 ${Math.min(3,mg.round+1)} / 3 次　成功 ${mg.hits} 次　指針進入綠色區按「翻！」`;b.textContent='翻！'}
   else{m.textContent=`按住加熱，溫度停在右邊綠色帶（還剩 ${Math.max(0,9-mg.time).toFixed(0)} 秒）`;b.textContent='按住加熱'}};
 function mgStart(kind,d){Object.assign(mg,{on:true,kind,d,phase:'play',round:0,hits:0,hold:false,temp:.15,inband:0,time:0,stars:0,bub:[],flip:0,wait:0});if(kind==='cook')mgRound();mgView();if(!mgRaf){mgT=performance.now();mgRaf=requestAnimationFrame(mgLoop)}}
 function mgRound(){mg.spd=.55+mg.round*.2;const w=.42-mg.round*.05,c=.28+Math.random()*.44;mg.zone=[c-w/2,c+w/2];mg.pos=0;mg.dir=1}
-const mgFinish=stars=>{const p=ST(),d=mg.d;mg.stars=stars;mg.phase='done';
+const mgFinish=stars=>{const p=ST(),d=mg.d;mg.stars=stars;mg.phase='done';mg.doneAt=performance.now()+800;
   if(mg.kind==='cook'){if(stars>0){p.meal={k:d[0],n:[0,3,4,5][stars],q:stars};p.cook.n++;mg.msg=`${STAR[stars]}！${d[1]}做好了，接下來 ${[0,3,4,5][stars]} 場有效${stars===3?'，效果更強':''}。`;mg.sum=[d[1],`接下來 ${[0,3,4,5][stars]} 場有效`,stars===3?'效果比平常更強':d[3]];A.S&&A.S.pickup&&A.S.pickup()}else{mg.msg='燒焦了……食材浪費了。';mg.sum=['沒有一次翻到','食材浪費了'];A.S&&A.S.miss&&A.S.miss()}}
   else{if(stars>0){const n=d[3]+(stars-1);p.pot.heal=(p.pot.heal||0)+n;p.cook.pn++;mg.msg=`${STAR[stars]}！做出 ${n} 瓶${d[1]}。`;mg.n=n;mg.sum=[`${d[1]} × ${n} 瓶`,`達標 ${mg.inband.toFixed(1)} 秒`];A.S&&A.S.pickup&&A.S.pickup()}else{mg.msg='火候不對，藥壞掉了……';mg.n=0;mg.sum=['藥壞掉了',`達標只有 ${mg.inband.toFixed(1)} 秒`];A.S&&A.S.miss&&A.S.miss()}}
   save();mgText()};
-function mgBtn(){if(mg.phase==='done'){mg.on=false;render();return}
+function mgBtn(){if(mg.phase==='done')return;
   if(mg.kind==='cook'&&mg.phase==='play'){const hit=mg.pos>=mg.zone[0]-.03&&mg.pos<=mg.zone[1]+.03;if(hit){mg.hits++;A.S&&A.S.pickup&&A.S.pickup()}else A.S&&A.S.miss&&A.S.miss();mg.flip=.6;mg.round++;mg.phase='wait';mg.wait=.7;mgText()}}
 const mgStep=dt=>{if(!mg.on)return;
   if(mg.kind==='cook'){if(mg.phase==='play'){mg.pos+=mg.dir*mg.spd*dt;if(mg.pos>=1){mg.pos=1;mg.dir=-1}if(mg.pos<=0){mg.pos=0;mg.dir=1}}
@@ -3898,6 +3901,86 @@ dvk('kdK1',()=>window.lunCookOpen());
 dvk('kdK2',()=>{const p=ST();ING.forEach(([k])=>p.ing[k]=(p.ing[k]||0)+10);save();window.lunCookOpen()});
 dvk('kdK3',()=>{const p=ST(),d=new Date();p.gd=[];for(let i=0;i<10;i++){const x=new Date(d-(9-i)*864e5);p.gd.push(x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0'))}
   p.goal={c:{0:1,1:1,2:1}};p.cook={n:3,pn:2,got:15};save();window.lunGoalOpen&&window.lunGoalOpen()});
+})();
+
+/* ===== v21.0（2026-11-26）：坐騎探險（G5）＝跑酷小遊戲 =====
+   倫在一條路上自動往前跑，點畫面或按「跳」跳過石頭、碰到金幣與食材。25 秒，3 顆心。
+   獎勵：每個金幣 5 倫幣（有騎乘坐騎時乘上移速加成）、食材直接進料理的庫存。存檔 p.run={n,items,best}。
+   入口：商城 → 坐騎探險、主畫面快捷列。結果畫面的關閉叉叉和遊戲按鈕位置不同，而且 0.8 秒後才能按。 */
+(()=>{
+const MW=320,MH=210,GY=168,DUR=25;
+const ING=[['herb','草藥','#6fd36f'],['meat','肉','#e0605a'],['honey','蜂蜜','#ffcf4a'],['mush','蘑菇','#d9b8f0'],['chili','辣椒','#ff6a2a']];
+const RS=()=>{const p=P();p.run=p.run||{n:0,items:0,best:0};return p};
+const mult=()=>{try{return typeof mountSpd==='function'?Math.max(1,mountSpd()):1}catch(e){return 1}};
+document.head.insertAdjacentHTML('beforeend',`<style id="thG">
+#rrun .rcb{position:relative;width:min(94vw,380px);max-height:96dvh;overflow-y:auto;padding:16px 14px 14px;text-align:center}
+#rrun h3{margin:0 0 6px;font:400 18px var(--A);letter-spacing:.3em;color:#fff;text-indent:.3em}
+#rrun canvas{display:block;margin:0 auto;width:100%;max-width:340px;image-rendering:pixelated;border:1px solid color-mix(in srgb,var(--trim) 60%,transparent);touch-action:none}
+#rrun .cst{margin:6px 0;padding:6px 8px;border:1px dashed color-mix(in srgb,var(--a2) 60%,transparent);color:var(--a2);font-size:13px}
+#rrun .xr{display:block;margin:10px 0 0 auto;width:64px;height:48px;border:1px solid var(--a2);background:#08040f;color:var(--a2);font:400 22px var(--A);clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px)}
+#rrun .xr:disabled{opacity:.35}
+</style>`);
+document.body.insertAdjacentHTML('beforeend',`<div class="rpop" id="rrun"><div class="rcb">${xBtn('rrunX')}<h3>坐騎探險</h3><div id="rrunB"></div></div></div>`);
+$('rrunX').onclick=()=>{rClose('rrun');R.on=false;A.S&&A.S.tap&&A.S.tap()};
+
+const R={on:false,phase:'idle',t:0,y:0,vy:0,lives:3,inv:0,world:0,obs:[],items:[],spawn:1,got:0,coins:0,ings:{},hit:0,doneAt:0,sum:[]};
+const view=()=>{const p=RS();const m=mult();
+  $('rrunB').innerHTML=`<canvas id="rrunC" width="${MW}" height="${MH}"></canvas><div class="cst" id="rrunM"></div><button class="mb" id="rrunGo"></button><button class="xr" id="rrunXr" hidden>✕</button>`;
+  $('rrunC').addEventListener('pointerdown',e=>{e.preventDefault();jump()});
+  txt()};
+const txt=()=>{const m=$('rrunM'),b=$('rrunGo'),x=$('rrunXr');if(!m||!b)return;const mu=mult();
+  if(R.phase==='idle'){m.textContent=`點畫面或按「跳」跳過石頭，撿金幣和食材。25 秒、3 顆心。${mu>1?`坐騎加成 ×${mu.toFixed(1)}`:''}`;b.hidden=false;b.textContent='出發';x.hidden=true}
+  else if(R.phase==='play'){m.textContent=`收集 ${R.got} 個　心 ${R.lives}　還剩 ${Math.max(0,DUR-R.t).toFixed(0)} 秒`;b.hidden=false;b.textContent='跳';x.hidden=true}
+  else{m.textContent=R.sum.join('　');b.hidden=true;x.hidden=false;x.disabled=performance.now()<R.doneAt;if(x.disabled)setTimeout(()=>{const xx=$('rrunXr');if(xx)xx.disabled=false},820)}};
+function jump(){if(!R.on||R.phase!=='play')return;if(R.y<=0.5){R.vy=430;A.S&&A.S.tap&&A.S.tap()}}
+const start=()=>{Object.assign(R,{phase:'play',t:0,y:0,vy:0,lives:3,inv:0,world:0,obs:[],items:[],spawn:.8,got:0,coins:0,ings:{},hit:0});txt()};
+const finish=()=>{const p=RS();R.phase='done';R.doneAt=performance.now()+800;const m=mult();
+  const coin=Math.round(R.coins*5*m);p.shard=(p.shard||0)+coin;const q=ST9();Object.entries(R.ings).forEach(([k,v])=>{q.ing[k]=(q.ing[k]||0)+v;q.cook.got+=v});
+  p.run.n++;p.run.items+=R.got;p.run.best=Math.max(p.run.best||0,R.got);save();try{updWallet&&updWallet()}catch(e){}
+  const il=Object.entries(R.ings).map(([k,v])=>`${ING.find(x=>x[0]===k)[1]}×${v}`).join(' ');
+  R.sum=[`收集 ${R.got} 個`,`倫幣 +${coin}`,il?`食材：${il}`:'沒有撿到食材'];A.S&&(R.got>0?A.S.pickup&&A.S.pickup():A.S.miss&&A.S.miss());txt()};
+const ST9=()=>{const p=P();p.ing=p.ing||{herb:0,meat:0,honey:0,mush:0,chili:0};p.cook=p.cook||{n:0,pn:0,got:0};return p};
+const step=dt=>{if(!R.on||R.phase!=='play')return;R.t+=dt;const sp=150+R.t*5;R.world+=sp*dt;
+  R.vy-=1150*dt;R.y+=R.vy*dt;if(R.y<=0){R.y=0;R.vy=0}
+  R.inv=Math.max(0,R.inv-dt);
+  R.spawn-=dt;if(R.spawn<=0){R.spawn=.7+Math.random()*.8;const r=Math.random();
+    if(r<.45)R.obs.push({x:MW+20,w:16+(Math.random()*8|0),h:14+(Math.random()*12|0)});
+    else if(r<.8)R.items.push({x:MW+20,y:Math.random()<.5?0:48+Math.random()*30,k:'coin'});
+    else R.items.push({x:MW+20,y:Math.random()<.5?0:48+Math.random()*30,k:ING[Math.random()*5|0][0]})}
+  R.obs.forEach(o=>o.x-=sp*dt);R.items.forEach(o=>o.x-=sp*dt);R.obs=R.obs.filter(o=>o.x>-30);R.items=R.items.filter(o=>o.x>-30);
+  const px=60,pw=24,ph=36;
+  R.obs.forEach(o=>{if(!o.h2&&R.inv<=0&&px+pw>o.x&&px<o.x+o.w&&R.y<o.h){R.lives--;R.inv=1.1;o.h2=1;A.S&&A.S.miss&&A.S.miss()}});
+  R.items=R.items.filter(it=>{const hit=px+pw>it.x&&px<it.x+14&&R.y+ph>it.y&&R.y<it.y+14;if(hit){R.got++;if(it.k==='coin')R.coins++;else R.ings[it.k]=(R.ings[it.k]||0)+1;A.S&&A.S.pickup&&A.S.pickup();return false}return true});
+  if(R.t>=DUR||R.lives<=0)finish();else if(Math.floor(R.t)!==Math.floor(R.t-dt))txt()};
+let hero=null;
+const draw=t=>{const c=$('rrunC');if(!c)return;const g=c.getContext('2d');g.imageSmoothingEnabled=false;
+  const sg=g.createLinearGradient(0,0,0,GY);sg.addColorStop(0,'#2a1450');sg.addColorStop(1,'#e0508a');g.fillStyle=sg;g.fillRect(0,0,MW,GY);
+  g.fillStyle='#3a1d5e';const off=-(R.world*.25%160);for(let i=0;i<4;i++){const x=off+i*160;g.beginPath();g.moveTo(x,GY);g.lineTo(x+60,GY-70);g.lineTo(x+120,GY);g.fill()}
+  g.fillStyle='#1d3a3a';g.fillRect(0,GY,MW,MH-GY);g.fillStyle='#2f6a5a';for(let i=0;i<10;i++){const x=((i*40-(R.world%40))+320)%320;g.fillRect(x,GY,22,3)}
+  R.obs.forEach(o=>{g.fillStyle='#7a7d88';g.fillRect(o.x,GY-o.h,o.w,o.h);g.fillStyle='#a8abb6';g.fillRect(o.x,GY-o.h,o.w,3)});
+  R.items.forEach(it=>{const y=GY-it.y-14;if(it.k==='coin'){g.fillStyle='#ffd56a';g.beginPath();g.arc(it.x+7,y+7,7,0,7);g.fill();g.fillStyle='#c98a12';g.fillRect(it.x+5,y+4,4,6)}else{const col=ING.find(x=>x[0]===it.k)[2];g.fillStyle=col;g.beginPath();g.arc(it.x+7,y+7,7,0,7);g.fill();g.fillStyle='#fff8';g.fillRect(it.x+4,y+3,3,3)}});
+  if(!hero&&window.lunAvCanvas){try{hero=window.lunAvCanvas(2,0)}catch(e){}}
+  const px=60,py=GY-R.y;g.fillStyle='#0004';g.beginPath();g.ellipse(px+12,GY+2,14,4,0,0,7);g.fill();
+  if(!(R.inv>0&&Math.floor(t/90)%2)){if(hero)g.drawImage(hero,px-10,py-48,56,62);else{g.fillStyle='#e0243a';g.fillRect(px,py-36,24,36)}}
+  g.font='16px sans-serif';g.textAlign='left';g.fillStyle='#ff6a8a';g.fillText('♥'.repeat(Math.max(0,R.lives)),8,20);g.fillStyle='#fff';g.font='13px sans-serif';g.textAlign='right';g.fillText('收集 '+R.got,MW-8,20);
+  if(R.phase==='idle'){g.fillStyle='#0008';g.fillRect(0,0,MW,MH);g.fillStyle='#fff';g.font='bold 18px sans-serif';g.textAlign='center';g.fillText('準備好就按「出發」',160,100)}
+  if(R.phase==='done'){g.fillStyle='rgba(8,4,16,.88)';g.fillRect(0,0,MW,MH);g.textAlign='center';g.fillStyle='#e8c566';g.font='bold 24px sans-serif';g.fillText(R.lives>0?'探險完成':'探險結束',160,60);g.fillStyle='#fff';g.font='16px sans-serif';R.sum.forEach((s,i)=>g.fillText(s,160,98+i*26))}};
+let raf=0,lt=0;
+const loop=t=>{const dt=Math.min(.05,(t-lt)/1000||0);lt=t;step(dt);if(R.on&&$('rrun').classList.contains('on')){draw(t);raf=requestAnimationFrame(loop)}else raf=0};
+$('rrun').addEventListener('click',e=>{if(e.target.closest('#rrunGo')){if(R.phase==='idle')start();else if(R.phase==='play')jump()}
+  else if(e.target.closest('#rrunXr')){if(R.phase==='done'&&performance.now()>=R.doneAt){R.phase='idle';R.on=true;txt()}}});
+window.lunRunOpen=()=>{if(!P())return;Object.assign(R,{on:true,phase:'idle',obs:[],items:[],lives:3,got:0,y:0,vy:0});hero=null;view();rOpen('rrun');if(!raf){lt=performance.now();raf=requestAnimationFrame(loop)}};
+window.lunRun={step,jump,start,state:()=>({...R,obs:R.obs.length,items:R.items.length})};
+
+/* 主畫面快捷列加第 4 顆 */
+{const r=$('rhgo2');if(r&&!r.querySelector('[data-q9="run"]')){r.insertAdjacentHTML('beforeend','<button class="rq" data-q9="run">坐騎探險</button>');document.head.insertAdjacentHTML('beforeend','<style>#rhgo2 .rq{font-size:14px!important;letter-spacing:.02em!important;padding:0 2px!important}</style>')}}
+
+/* DEV */
+$('kdTop').insertAdjacentHTML('beforeend','<button id="kdR1">㉔ 坐騎探險（打開）</button><button id="kdR2">㉕ 假裝第 13 天且 G5 完成</button>');
+const dvr=(id,fn)=>{$(id).onclick=()=>{if(!P()||!started){devNote('先按上面的「用測試玩家直接進入卡池」。');return}devClose();fn()}};
+dvr('kdR1',()=>window.lunRunOpen());
+dvr('kdR2',()=>{const p=P(),d=new Date();p.gd=[];for(let i=0;i<13;i++){const x=new Date(d-(12-i)*864e5);p.gd.push(x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0'))}
+  p.goal={c:{0:1,1:1,2:1,3:1}};p.run={n:3,items:30,best:8};save();window.lunGoalOpen&&window.lunGoalOpen()});
 })();
 
 }
