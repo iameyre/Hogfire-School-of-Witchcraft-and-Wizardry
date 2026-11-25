@@ -85,17 +85,17 @@ const cards=document.getElementById('cards');
 Object.keys(FORMS).forEach(k=>{const F=FORMS[k];cards.insertAdjacentHTML('beforeend',`<div class="card"><div class="row"><canvas class="cv" data-f="${k}"></canvas><div class="tx"><b>${F.name}</b><small>${F.sub}</small><p>${F.desc}</p></div></div></div>`)});
 const walk=document.getElementById('walk');
 const LUN=new Image();LUN.src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAfCAYAAAD0ma06AAAB+0lEQVR4AeyVvyvEcRjHHzdIsjBJcmYGNoliE5mMFJKMssjfYLOTMjAq5cdKMdgY2E+S6RgkGXCvc8/Xx3Ofz+f7vZLp5OX5+X7efF13Ofnnr7rhnz/w+iONPtKe9v5PiC6ZYU2PlOMurW2vAvTM3WCZyZCDwHEXrj4Vm2syzSGK4Rr59vgF6BPZBeoQUUPEHFLxSE+XgNY2Hr99CKCzM62DhoisGaKz2ztCFbsPTUkvZho0TNSVBCOolFVhpuOtqudreA3tX4fw/GSP4EVnaqrRt+w1tIt6UKM7157GmBm6VEM9xDJQu9BT6GseiqmGCHsHZwXIfTAD38z2MhnOd3cLWLHWzEDrWMxkyIHViyNCEDtfmWoTXnxWkMlwdX5JZPPgl7awfpjUvnkyNEmq4fD4tMhY5zeOOL82+VNV5uXdUndutLRfir7vVENEvQOLhCjuzs7pfXA31ZBPA9SFvgWJwY7ukodINUTIeyMR8k/XhDJu7u6Uh4EfqYY3l1u/pIXWvqR2c5p2l57Fa3j7eNWgj8f936j49P1FQGuNuot2Y78o3NGZRq8hQ5YRkltGG1sEbJ8aDVqgtgQNWUQEE005yV9vlyF3cfvsAtoQUUNXNDS+LECPo0BOD8izkMmQ48/FVwFyPUxOD8i1H4uZDDnAQSB3oQduL5Z/AQAA//8vLOSrAAAABklEQVQDAI+B8T9YbkF1AAAAAElFTkSuQmCC";
-const lc=document.createElement('canvas');lc.style.cssText='width:112px;height:124px;image-rendering:pixelated';walk.appendChild(lc);
-const fc=document.createElement('canvas');fc.style.cssText='width:120px;height:120px';walk.appendChild(fc);
+const lc=document.createElement('canvas');lc.style.cssText='width:100px;height:111px;image-rendering:pixelated';walk.appendChild(lc);
+const fc=document.createElement('canvas');fc.style.cssText='width:84px;height:84px';walk.appendChild(fc);
 let cur='kit';
 function loop(t){document.querySelectorAll('.cv').forEach(c=>paint(c,c.dataset.f,t,(Math.floor(t/100)%32)===0,S));
  // 走路
- const W=walk.clientWidth,per=9000,p=(t%per)/per,dirR=p<.5,u=dirR?p*2:(1-p)*2,x=20+u*(W-170);
+ const W=walk.clientWidth,per=9000,p=(t%per)/per,dirR=p<.5,u=dirR?p*2:(1-p)*2,x=110+u*(W-300);
  const bobY=Math.abs(Math.sin(t/160))*3;
  lc.width=28;lc.height=31;const lg=lc.getContext('2d');lg.imageSmoothingEnabled=false;lg.clearRect(0,0,28,31);lg.save();if(!dirR){lg.translate(28,0);lg.scale(-1,1)}if(LUN.complete)lg.drawImage(LUN,0,0);lg.restore();
- lc.style.left=(x+ (dirR?0:34))+'px';lc.style.bottom=(14+bobY)+'px';
+ lc.style.left=x+'px';lc.style.bottom=(14+bobY)+'px';
  paint(fc,cur,t,(Math.floor(t/100)%32)===0,5);
- fc.style.transform=dirR?'none':'scaleX(-1)';fc.style.left=(x+(dirR?-40:70))+'px';fc.style.bottom=(14+Math.abs(Math.sin(t/200+1))*2)+'px';
+ fc.style.transform=dirR?'none':'scaleX(-1)';fc.style.left=(dirR?x-92:x+106)+'px';fc.style.bottom=(14+Math.abs(Math.sin(t/200+1))*2)+'px';
  requestAnimationFrame(loop)}
 requestAnimationFrame(loop);
 const pk=document.getElementById('pick');const OP=[['kit','幼體'],['fire','火焰型'],['sun','日光型'],['ice','冰型（封印）']];
