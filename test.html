@@ -1113,7 +1113,6 @@ body:has(.rpop.on,.rmap.on,.rbat.on,.rcave.on,.rprint.on) .rmoney{opacity:0;poin
     <section class="isec"><h4>抽法</h4><p>每個秘境有自己的招牌抽法，也可以點「抽法」換成別的：戳戳樂（記住閃光的格子戳下去）、扭蛋機（轉把手，發光扭蛋轉到出口時放手）、刮刮樂（刮開銀漆，三個倫連線最好）、釣魚（浮標一沉就點，再狂點收線）、倫生大富翁（擲骰子走棋盤，停在哪格看那格）。</p><div class="istyle"><div><b>倫間仙境・翻牌</b><p>三張牌背洗一洗，你挑一張翻開。光會先亮在其中一張，盯著它。</p></div><div><b>瘋火地獄・蓄力</b><p>按住按鈕蓄力，越到後面衝越快。紅區最好，白線是火。</p></div><div><b>哪有賭狗天天輸・拉霸</b><p>三輪轉起來，按三次停。停到越多個「倫」越好，三個就是 JACKPOT。</p></div></div></section>
     <section class="isec"><h4>好倫還是壞倫</h4><p>每次選秘境都要選一次。誠實的人，運氣比較差；承認自己是壞倫的，好卡比較多。</p></section>
     <section class="isec"><h4>特別卡</h4><p>只在倫間仙境出現，Lv5 以後才會開始藏在牌裡，一般抽不到。翻牌時，偶爾有一張牌背會先亮光，洗完牌要挑中它；蓄力時，蓄力條上會出現光，要在光上放開。</p><p>光一共有四種顏色，一道接一道解鎖，進度寫在畫面上方，下次再玩也會保留。</p><p>傳說中只有一張的那張，住在瘋火地獄，要抽到第五張以後才有機會。翻牌時它是一閃而過的火種，蓄力時它是那條白線。</p></section>
-    <section class="isec"><h4>骰子與職業</h4><p>開戶時擲的骰子，會悄悄影響三件事：卡池的運氣、你能選哪些職業、開戶能拿到多少倫性。</p><p>每個職業都有一點小能力，選了就不能換。</p></section>
     <section class="isec"><h4>每日任務與小遊戲</h4><p>有時候抽著抽著會跳出突發任務，當天做完有額外獎勵。任務頁下面還有小遊戲，每天各玩一次：倫與雅問答、猜正牌（Lv2）、投資倫股（Lv3）、甄嬛傳考題（Lv4）。</p><p>每天三個，其中一個一定是打怪。每個只能做一次，沒解完就是沒解完。</p></section>
     <section class="isec"><h4>商店</h4><p>商倫會賣一些加成道具，每天有一樣特價。道具買了馬上生效，抽卡畫面右上角會顯示身上的加成。</p></section><section class="isec"><h4>天賦樹</h4><p>Lv2 開放，每升一級送 2 點天賦點，Lv10 剛好點滿。從中間的倫心開始，往外一顆一顆點亮，只能點跟已點亮相鄰的。三條路各通往一個秘境，最外面的核心天賦很強，但都有代價，Lv8 才能點。</p></section><section class="isec"><h4>倫生地圖</h4><p>按抽卡畫面左上角的秘境名稱（或「選秘境，開抽」）打開地圖。地圖上有三大秘境、轉職聖殿（Lv3）、更衣間。看不懂東西怎麼拿，按地圖上的「東西怎麼拿？」或頂欄的倫性。</p></section><section class="isec"><h4>轉職</h4><p>數值＝擲骰子的底子＋裝備。數值夠了就能到轉職聖殿轉職，一轉 20 倫幣；Lv7 開放二轉，60 倫幣，要先是對應的一轉職業。</p></section><section class="isec"><h4>角色與換裝</h4><p>地圖上的更衣間，或點左上角自己的名字，打開角色。可以選造型（倫、雅、狗哥），在頭、手、身、背四個位置換裝。裝備會加數值，外觀純好看，都在商店買（Lv3 起）。</p><p>力量：每 3 點每抽多 1 倫幣。敏捷：光和火種亮得久一點。智力：洗牌、蓄力、拉霸變慢。幸運：SSR 多一點。</p></section><section class="isec"><h4>倫生小劇場</h4><p>Lv5、Lv10 各開放一集點陣小短片，在「成長」分頁花倫性觀看，看過就能免費重看。</p></section><section class="isec"><h4>成就</h4><p>倫寶閣收藏到一定數量，就會解鎖稱號。收得越多，稱號越響亮。</p></section>
     <section class="isec"><h4>倫寶閣</h4><p>抽過的卡都會收進去。沒抽到的，只看得到影子。</p></section>
@@ -1533,7 +1532,7 @@ let rollN=0;
 const rollStats=()=>{rollN++;if(rollN%3===0||Math.random()<.12){const pats=[[13,4,4,4],[12,5,4,4],[11,6,4,4],[7,6,6,6]];const p=pats[Math.floor(Math.random()*pats.length)].slice();for(let i=p.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[p[i],p[j]]=[p[j],p[i]]}return p}const s=[4,4,4,4];for(let k=0;k<9;){const i=Math.floor(Math.random()*4);if(s[i]<13){s[i]++;k++}}return s};
 const VERD=s=>{const mx=Math.max(...s),mn=Math.min(...s);if(mx>=12)return'這組很極端。';if(mx-mn<=1)return'這組很平均。';if(s[3]>=9)return'看起來運氣不錯。';if(s[3]<=4)return'幸運有點低……';return'普普通通的一組。'};
 const showStats=s=>{$('mkS').innerHTML=s.map((v,i)=>`<div class="srow"><span>${SN[i]}</span><i><b style="width:${v?v/13*100:0}%"></b></i></div>`).join('')};
-const openMake=()=>new Promise(r=>{const m=$('kmake');let st=null,jb='',rolling=false;$('mkA').hidden=false;$('mkB').hidden=true;$('mkOk').disabled=true;$('mkRoll').textContent='擲骰子';$('mkV').textContent='';showStats([0,0,0,0]);buildCube($('d1'));buildCube($('d2'));m.classList.add('on');
+const openMakeOld=()=>new Promise(r=>{const m=$('kmake');let st=null,jb='',rolling=false;$('mkA').hidden=false;$('mkB').hidden=true;$('mkOk').disabled=true;$('mkRoll').textContent='擲骰子';$('mkV').textContent='';showStats([0,0,0,0]);buildCube($('d1'));buildCube($('d2'));m.classList.add('on');
   $('mkRoll').onclick=async()=>{if(rolling)return;rolling=true;A.init();$('mkOk').disabled=true;$('mkV').textContent='';const a=1+Math.floor(Math.random()*6),b=1+Math.floor(Math.random()*6);throwCube($('d1'),a);throwCube($('d2'),b);A.S.dice();
     for(let f=0;f<9;f++){showStats(rollStats.call?[4+Math.random()*9|0,4+Math.random()*9|0,4+Math.random()*9|0,4+Math.random()*9|0]:0);await sleep(90);if(f%3===0)A.S.dice()}
     st=rollStats();showStats(st);$('mkV').textContent=VERD(st);A.S.kUnveil();rolling=false;$('mkOk').disabled=false;$('mkRoll').textContent='再擲一次'};
@@ -1542,6 +1541,7 @@ const openMake=()=>new Promise(r=>{const m=$('kmake');let st=null,jb='',rolling=
     $('mkJ').querySelectorAll('button:not([disabled])').forEach(b=>b.onclick=()=>{jb=b.dataset.j;$('mkJ').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));$('mkGo').disabled=false;$('mkGo').textContent='成為'+JOBS.find(j=>j.id===jb).n})};
   $('mkBack').onclick=()=>{$('mkA').hidden=false;$('mkB').hidden=true};
   $('mkGo').onclick=()=>{if(!jb)return;m.classList.remove('on');A.S.kSP();r({stats:st,job:jb})}});
+const openMake=()=>Promise.resolve({stats:[6,6,6,7],job:'novice'});
 /* 排行榜 */
 const TITLES=['毫無倫性','如入無倫之境','倫不可貌相','倫模倫樣','路倫甲'];
 const BOARDS=[['spent','花最多倫性'],['black','手最黑'],['lucky','最幸運'],['dex','收藏最多']];
@@ -2157,7 +2157,7 @@ const GETS=[['倫性（拿來抽卡）',['開戶禮：看擲骰子，大約 10 �
  ['天賦點',['每升一級 +2，Lv10 剛好點滿整棵樹']],
  ['卡片',['每張卡只住在一個秘境，倫寶閣裡沒收到的卡會寫它住哪','特別卡：Lv5 以後，在倫間仙境追著光抽','火：只在瘋火地獄，第 6 抽以後追白線或火種（天賦燎原提早到第 4 抽）','家人卡：倫間仙境']],
  ['裝備與外觀',['商店的「裝備」「外觀」分頁，Lv3 起，每件要幾級寫在商品上','買了在更衣間（地圖上，或點左上角自己的名字）換']],
- ['職業',['開戶時依擲骰子選','之後到地圖上的轉職聖殿轉職：一轉 20 倫幣，二轉 60 倫幣（Lv7）','條件看數值，數值＝骰子底子＋裝備']],
+
  ['加成道具',['商店「道具」分頁：幸運餅乾、指南針、沙漏、十連升級券、加班任務單、洗點水']],
  ['倫生小劇場',['「成長」分頁：第 1 集 Lv5、3 倫性；第 2 集 Lv10、5 倫性；看過就能重看']]];
 const openGet=()=>{$('kgetB').innerHTML=GETS.map(([h,l])=>`<section class="isec"><h4>${h}</h4><ul>${l.map(x=>`<li>${x}</li>`).join('')}</ul></section>`).join('');$('ktopup').classList.remove('on');$('kget').classList.add('on');A.S.bell()};
@@ -2446,7 +2446,7 @@ $('rhMap').onclick=()=>{A.init();openMap()};$('rhGoal').onclick=()=>{A.init();rA
 /* ---------- 堆疊式選單 ---------- */
 const NAVI={adv:'<path d="M4 20 20 4M14 4h6v6M4 14l6 6"/>',char:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>',gacha:'<circle cx="12" cy="12" r="8"/><path d="M4 12h16"/><circle cx="12" cy="12" r="2"/>',shop:'<path d="M4 9h16l-1 11H5L4 9zM8 9V7a4 4 0 0 1 8 0v2"/>',more:'<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>'};
 NAVI.home=NAVI.char;NAVI.play=NAVI.gacha;NAVI.day='<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>';
-const NAV=[['adv','冒險',[['map','世界地圖'],['shrine','轉職聖殿'],['school','學堂']]],['play','玩樂',[['pet','小狐狸'],['claw','夾娃娃機'],['cook','料理製藥'],['run','坐騎探險'],['cbt','卡片配對'],['card','抽卡'],['look','抽外觀'],['eq','抽裝備']]],['home','主頁',[['home','主畫面'],['ward','更衣間'],['house','小屋']]],['day','每日',[['goal','三天大目標'],['task','每日任務'],['fort','參拜']]],['more','更多',[['tal','天賦樹'],['ach','成長'],['shop','商店'],['dex','倫寶閣'],['log','紀錄'],['info','說明'],['get','東西怎麼拿'],['call','客服倫員'],['code','存檔代碼']]]];
+const NAV=[['adv','冒險',[['map','世界地圖'],['school','學堂']]],['play','玩樂',[['pet','小狐狸'],['claw','夾娃娃機'],['run','坐騎探險'],['cbt','卡片配對'],['card','抽卡'],['look','抽外觀'],['eq','抽裝備']]],['home','主頁',[['home','主畫面'],['ward','更衣間'],['house','小屋']]],['day','每日',[['goal','三天大目標'],['task','每日任務'],['fort','參拜']]],['more','更多',[['tal','天賦樹'],['ach','成長'],['shop','商店'],['dex','倫寶閣'],['log','紀錄'],['info','說明'],['get','東西怎麼拿'],['call','客服倫員'],['code','存檔代碼']]]];
 $('rnav').innerHTML=NAV.map(([k,n])=>`<button data-n="${k}"><svg viewBox="0 0 24 24">${NAVI[k]}</svg><span>${n}</span>${k==='day'?'<i class="rb" id="rnB" hidden></i>':''}</button>`).join('');
 let subOpen=null;
 const closeSub=()=>{subOpen=null;$('rsub').classList.remove('on');$('rshade').classList.remove('on');document.querySelectorAll('#rnav>button').forEach(b=>b.classList.remove('open'))};
@@ -2489,7 +2489,7 @@ const drawMapBg=(g,W,H,t)=>{if(RLM!=='human'){drawRealmBg(g,W,H,t);return}g.fill
   // 山頂洞（右下角的小山）
   const cx=W*.9,cy=H*.9;g.fillStyle='#7a6a5a';g.beginPath();g.moveTo(cx-14,cy+6);g.lineTo(cx,cy-12);g.lineTo(cx+14,cy+6);g.fill();g.fillStyle='#1a1010';g.fillRect(cx-3,cy,6,6);
   // 聖殿
-  const sx=W*.5,sy=H*.62;g.fillStyle='#fff6d8';g.fillRect(sx-7,sy-6,14,8);g.fillStyle='#ffd56a';g.fillRect(sx-9,sy-9,18,3)};
+  };
 const mapIcon=(a)=>({village:'⌂',sky:'☁',forest:'♣',dog:'⚄',hell:'▲',peak:'♛'})[a.id];
 const rlmBtns=()=>{const B=(to,t)=>'<button class="pbtn rtrv" data-to="'+to+'">'+t+'</button>';
   return '<div class="rtrvw">'+(RLM==='sky'?B('human','下凡'):RLM==='hell'?B('human','爬回人間'):B('sky','飛升仙境')+B('hell','墜入地獄'))+B('home','回主畫面')+'</div>'};
@@ -2513,10 +2513,10 @@ const rlmFx=(to,done)=>{const from=RLM,up=(to==='sky'),dn=(from==='sky'&&to==='h
     if(t>.9&&!swapped){swapped=true;RLM=to;done()}
     if(t>1.9){clearInterval(iv);o.style.opacity='0';setTimeout(()=>o.remove(),500)}},33)};
 $('rmN').addEventListener('click',e=>{const b=e.target.closest('.rtrv');if(!b)return;A.init();if(b.dataset.to==='home'){rClose('rmap');rHome();return}rlmFx(b.dataset.to,()=>openMap())});
-const openMap=()=>{['rrare','rtry','rgach'].forEach(rClose);if(kbusy){rToast('抽卡中，等一下。<button class="rtub" onclick="rUnstick()">卡住了？解除</button>');return}closeSub();const m=$('rmap');rOpen('rmap');setNavOn('adv');$('rsh').classList.remove('on');
+const openMap=()=>{['rrare','rtry','rgach'].forEach(rClose);if(kbusy){rToast('抽卡中，等一下。<button class="rtub" onclick="rUnstick()">卡住了？解除</button>');return}closeSub();const m=$('rmap');rOpen('rmap');setNavOn('adv');if(RLM!=='human'){const pp=P();pp.rv=pp.rv||{};if(!pp.rv[RLM]){pp.rv[RLM]=1;save()}}$('rsh').classList.remove('on');
   const cv=$('rmcv'),W=Math.round(innerWidth/2),H=Math.round(innerHeight/2),g=pxCanvas(cv,W,H);
   $('rmN').innerHTML=RL().map(a=>{const ok=areaOK(a),cl=rp().clear[a.id];return `<button class="rnode${ok?'':' lk'}" data-a="${a.id}" style="left:${RPOS[a.id][0]*100}%;top:${RPOS[a.id][1]*100}%"><canvas class="pix" width="16" height="16" style="width:34px;height:34px"></canvas><b>${cl?'★ ':''}${a.n}</b><small>${ok?`Lv${a.L[0]}～${a.L[1]}`:`Lv${a.lv} 開放`}</small></button>`}).join('')+
-    (RLM==='human'?`<button class="rnode${LV()<3?' lk':''}" data-a="shrine" style="left:50%;top:55%"><b>轉職聖殿</b><small>${LV()<3?'Lv3 開放':'轉職'}</small></button><button class="rnode cave" data-a="cave" style="left:90%;top:90%" aria-label="小山洞"></button>`:'')+rlmBtns();$('rmH3').textContent='倫生大地圖・'+REALM[RLM].n;
+    (RLM==='human'?`<button class="rnode cave" data-a="cave" style="left:90%;top:90%" aria-label="小山洞"></button>`:'')+rlmBtns();$('rmH3').textContent='倫生大地圖・'+REALM[RLM].n;
   $('rmN').querySelectorAll('.rnode canvas').forEach((c,i)=>{const a=RL()[i];if(a)drawMon(c,a.m[0])});
   cancelAnimationFrame(mapRaf);const t0=performance.now();const tk=t=>{if(!m.classList.contains('on'))return;drawMapBg(g,W,H,(t-t0)/1000);mapRaf=requestAnimationFrame(tk)};mapRaf=requestAnimationFrame(tk);SFX.open()};
 $('rmN').addEventListener('click',e=>{const b=e.target.closest('.rnode');if(!b)return;A.init();const id=b.dataset.a;SFX.click();
@@ -3493,12 +3493,12 @@ document.addEventListener('click',async e=>{
 const prayN=p=>{const t=p.pray&&p.pray.tot;return t&&typeof t==='object'?Object.keys(t).reduce((a,k)=>k==='don'?a:a+(+t[k]||0),0):(+t||0)};
 const GOALS=[
  {n:'抽卡日常',d:'12/1～12/3',ms:[['抽卡累計 30 張',p=>(p.st&&p.st.pulls)||0,30],['對一次發票',p=>invs().some(v=>v.ck)?1:0,1],['參拜 3 次',prayN,3]],rw:{w:12,s:150}},
- {n:'打怪',d:'12/4～12/6',ms:[['擊敗怪物 40 隻',p=>p.kills||0,40],['打倒倫倫村的倫凍王',p=>(rp().clear&&rp().clear.village)?1:0,1],['等級到 Lv5',p=>p.lv||1,5]],rw:{w:15,s:200}},{n:'寵物與夾娃娃機',d:'12/7～12/9',ms:[['孵出小狐狸',p=>(p.fox&&p.fox.hatched)?1:0,1],['餵食小狐狸 10 次',p=>(p.fox&&p.fox.fed)||0,10],['小狐狸進化',p=>(p.fox&&p.fox.form&&p.fox.form!=='kit')?1:0,1],['夾娃娃機玩 3 次',p=>(p.claw&&p.claw.n)||0,3]],rw:{w:18,s:250}},{n:'料理與製藥',d:'12/10～12/12',ms:[['做出 3 道料理',p=>(p.cook&&p.cook.n)||0,3],['製作 2 瓶藥',p=>(p.cook&&p.cook.pn)||0,2],['收集食材 15 個',p=>(p.cook&&p.cook.got)||0,15]],rw:{w:20,s:300}},
+ {n:'打怪',d:'12/4～12/6',ms:[['擊敗怪物 40 隻',p=>p.kills||0,40],['打倒倫倫村的倫凍王',p=>(rp().clear&&rp().clear.village)?1:0,1],['等級到 Lv5',p=>p.lv||1,5]],rw:{w:15,s:200}},{n:'寵物與夾娃娃機',d:'12/7～12/9',ms:[['孵出小狐狸',p=>(p.fox&&p.fox.hatched)?1:0,1],['餵食小狐狸 10 次',p=>(p.fox&&p.fox.fed)||0,10],['小狐狸進化',p=>(p.fox&&p.fox.form&&p.fox.form!=='kit')?1:0,1],['夾娃娃機玩 3 次',p=>(p.claw&&p.claw.n)||0,3]],rw:{w:18,s:250}},{n:'三界旅行',d:'12/10～12/12',ms:[['飛升到仙境一次',p=>(p.rv&&p.rv.sky)?1:0,1],['墜入地獄一次',p=>(p.rv&&p.rv.hell)?1:0,1],['區域尋寶 5 次',p=>(p.dig&&p.dig.n)||0,5]],rw:{w:20,s:300}},
  {n:'坐騎探險',d:'12/13～12/15',ms:[['完成 3 次探險',p=>(p.run&&p.run.n)||0,3],['探險中收集 30 個物品',p=>(p.run&&p.run.items)||0,30],['單次探險收集 8 個',p=>(p.run&&p.run.best)||0,8]],rw:{w:22,s:350}},{n:'卡片配對',d:'12/16～12/18',ms:[['完成 3 局倫牌配對',p=>(p.mt&&p.mt.w)||0,3],['一局連擊 3 次以上',p=>(p.mt&&p.mt.combo>=3)?1:0,1],['40 秒內全部配對',p=>(p.mt&&p.mt.clear)?1:0,1]],rw:{w:25,s:400}},{n:'學堂與小屋',d:'12/19～12/20',ms:[['看完開場短片',p=>(p.g7&&p.g7.intro)?1:0,1],['通過 3 章倫語小考',p=>(p.g7&&p.g7.q)||0,3],['小屋擺 3 件家具',p=>p.g7&&p.g7.house?Object.keys(p.g7.house).filter(k=>p.g7.house[k]).length:0,3]],rw:{w:30,s:500}}];
 const gCal=p=>Math.max(1,Math.round((Date.parse(today())-Date.parse(p.gd[0]))/864e5)+1);
 const gInfo=()=>{const p=P();p.gd=p.gd||[];const t=today();if(!p.gd.includes(t)){p.gd.push(t);save()}p.goal=p.goal||{c:{}};
   const n=p.gd.length;return{p,n,cur:Math.min(7,Math.ceil(n/3)),late:gCal(p)-n>=1}};
-const GLINK=[['card','inv','fort'],['map','map','map'],['pet','pet','pet','claw'],['cook','cook','map'],['run','run','run'],['cbt','cbt','cbt'],['school','school','house']];
+const GLINK=[['card','inv','fort'],['map','map','map'],['pet','pet','pet','claw'],['map','map','map'],['run','run','run'],['cbt','cbt','cbt'],['school','school','house']];
 const gForce=(p,i)=>!!(p.goal&&p.goal.f&&p.goal.f[i]);
 const gVal=(m,p,i)=>gForce(p,i)?m[2]:m[1](p);
 const gDone=(g,p)=>g.ms&&(gForce(p,GOALS.indexOf(g))||g.ms.every(m=>m[1](p)>=m[2]));
