@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>倫生・小狐狸寵物預覽</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;background:#06030b;color:#f6f0ff;-webkit-text-size-adjust:100%}
+body{font:16px/1.7 "Noto Serif TC","Songti TC",serif;padding:16px 14px 60px;max-width:440px;margin:0 auto}
+h1{font:700 18px/1.4 "Noto Serif TC",serif;letter-spacing:.2em;margin:4px 0;color:#d9dde6}
+.note{color:#b9bcc6;font:13px/1.7 system-ui,sans-serif;margin:0 0 14px}
+.card{position:relative;margin:0 0 14px;padding:12px;background:linear-gradient(180deg,#1a0d2e,#0a0512);border:1px solid #d9b56a88;clip-path:polygon(0 10px,10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px))}
+.row{display:flex;gap:12px;align-items:center}
+.cv{flex:none;width:176px;height:176px;background:radial-gradient(closest-side,#3a1a6a88,transparent),#0b0714;image-rendering:pixelated;border:1px solid #ffffff1a}
+.tx b{display:block;font:700 17px "Noto Serif TC",serif;color:#fff;letter-spacing:.1em}
+.tx small{display:block;color:#d9b56a;font:12px system-ui,sans-serif;margin:2px 0 6px}
+.tx p{margin:0;font:13px/1.7 system-ui,sans-serif;color:#d2c9e8}
+.walk{position:relative;height:150px;overflow:hidden;background:linear-gradient(180deg,#2a1450,#6a2a8a 60%,#1d1030);border:1px solid #d9b56a88;margin:0 0 14px}
+.walk canvas{position:absolute;bottom:14px;image-rendering:pixelated}
+.cap{font:700 14px system-ui,sans-serif;color:#d9b56a;margin:18px 2px 8px}
+.pick{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.pick button{padding:10px 14px;border:1px solid #ffffff44;background:#ffffff0c;color:#fff;font:700 14px system-ui,sans-serif;border-radius:8px}
+.pick button.on{border-color:#ff3d9a;background:#ff3d9a33}
+.foot{position:fixed;left:0;right:0;bottom:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:#050407f2;border-top:1px solid #ffffff22;font:14px system-ui,sans-serif;text-align:center}
+.foot button{margin-top:6px;width:100%;padding:11px;border-radius:10px;border:1px solid #ff3d9a;background:#ff3d9a33;color:#fff;font:700 15px system-ui,sans-serif}
+</style>
+</head>
+<body>
+<h1>小狐狸寵物預覽</h1>
+<p class="note">原創小狐狸，會依照養法進化成 4 種型態（幼體、火焰型、日光型、冰型）。不是寶可夢，只是「毛茸茸脖子、多條尾巴、額頭有記號」這些你喜歡的感覺。都是動態的：呼吸、搖尾、眨眼。最下面有跟在倫旁邊走的預覽。</p>
+<div id="cards"></div>
+<div class="cap">跟在倫旁邊（走路預覽）</div>
+<div class="walk" id="walk"></div>
+<div class="cap">你的選擇</div>
+<div class="pick" id="pick"></div>
+<div class="foot"><span id="sum">還沒選</span><button id="copy">複製我的意見</button></div>
+<script>
+const N=26,S=7;
+const OUT='#2a1424';
+function mk(){return Array.from({length:N},()=>Array(N).fill(null))}
+function px(G,x,y,c){x=Math.round(x)+2;y=Math.round(y)+1;if(x>=0&&y>=0&&x<N&&y<N)G[y][x]=c}
+function rect(G,x,y,w,h,c){for(let j=0;j<h;j++)for(let i=0;i<w;i++)px(G,x+i,y+j,c)}
+function ell(G,cx,cy,rx,ry,c){for(let y=Math.floor(cy-ry);y<=Math.ceil(cy+ry);y++)for(let x=Math.floor(cx-rx);x<=Math.ceil(cx+rx);x++){const dx=(x-cx)/rx,dy=(y-cy)/ry;if(dx*dx+dy*dy<=1)px(G,x,y,c)}}
+function tri(G,a,b,c2,col){const minx=Math.min(a[0],b[0],c2[0]),maxx=Math.max(a[0],b[0],c2[0]),miny=Math.min(a[1],b[1],c2[1]),maxy=Math.max(a[1],b[1],c2[1]);
+ const s=(p,q,r)=>(p[0]-r[0])*(q[1]-r[1])-(q[0]-r[0])*(p[1]-r[1]);
+ for(let y=miny;y<=maxy;y++)for(let x=minx;x<=maxx;x++){const p=[x,y],d1=s(p,a,b),d2=s(p,b,c2),d3=s(p,c2,a);const neg=d1<0||d2<0||d3<0,pos=d1>0||d2>0||d3>0;if(!(neg&&pos))px(G,x,y,col)}}
+function outline(G){const O=[];for(let y=0;y<N;y++)for(let x=0;x<N;x++){if(G[y][x])continue;for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const X=x+dx,Y=y+dy;if(X>=0&&Y>=0&&X<N&&Y<N&&G[Y][X]&&G[Y][X]!==OUT){O.push([x,y]);break}}}O.forEach(([x,y])=>G[y][x]=OUT)}
+/* 型態設定 */
+const FORMS={
+ kit:{name:'小狐狸（幼體）',sub:'剛孵出來，脖子毛茸茸',desc:'預設型態。每天陪它走路、餵普通飼料就會慢慢長大，之後看你怎麼養決定變成哪一型。',body:'#c98a4a',shade:'#a56a30',belly:'#f5e2c0',tip:'#f5e2c0',tails:1,fluff:true,ear:'#e8a0a0'},
+ fire:{name:'火焰型',sub:'三條尾巴，尾尖燒著小火',desc:'多餵「火辣辣的食物」、常帶去瘋火地獄，就會變成火焰型。尾巴會越長越多條。',body:'#e2602a',shade:'#b8401a',belly:'#ffd9a0',tip:'#ffd56a',tails:3,fire:true,ear:'#ffb08a'},
+ sun:{name:'日光型',sub:'額頭一顆小太陽，背後有光環',desc:'多在白天、倫間仙境陪牠，就會變成日光型。牠出場時身後會有一圈旋轉的光芒。',body:'#e8b84a',shade:'#c08a20',belly:'#fff2c0',tip:'#fff7d8',tails:2,sun:true,ear:'#ffd9a0'},
+ ice:{name:'冰型（封印中）',sub:'被凍在冰塊裡，一臉不爽',desc:'倫最不喜歡的型態，所以是梗：牠永遠被封印在冰塊裡，只能看，孵不出來，也不會跟在你身邊。',body:'#8ec9e8',shade:'#5a9ac0',belly:'#e8f6ff',tip:'#ffffff',tails:1,ice:true,ear:'#cfeaff'}
+};
+function draw(f,t,blink,tailScale){const C=FORMS[f],G=mk();const bob=Math.round(Math.sin(t/420)*1);const sw=Math.sin(t/300);
+ const oy=bob;
+ // 光環（日光型，在最底層）
+ if(C.sun){const cx=16,cy=9+oy;for(let k=0;k<12;k++){const a=t/1400+k*Math.PI/6;for(let r=7;r<=9;r++){px(G,cx+Math.cos(a)*r,cy+Math.sin(a)*r,k%2?'#ffe27a':'#fff2c0')}}}
+ // 尾巴
+ for(let k=0;k<C.tails;k++){const ang=(C.tails===1?0:(k-(C.tails-1)/2)*0.55);const base=[7,15+oy];const L=5.5;
+  for(let s=0;s<=L;s+=.6){const a=Math.PI+ang*(.4+s/L)+Math.sin(t/300+k)*.18*(s/L)*tailScale;const x=base[0]+Math.cos(a)*s-1.2,y=base[1]+Math.sin(a)*s*.8-s*.35;ell(G,x,y,2.1-s/L*0.8,1.8-s/L*.6,s>L-1.6?C.tip:C.body)}
+  if(C.fire){const a=Math.PI+ang*1.4;const x=base[0]+Math.cos(a)*L-1.4,y=base[1]+Math.sin(a)*L*.8-L*.35;const fl=Math.floor(t/120+k)%2;px(G,x-1,y-2-fl,'#ff7a1a');px(G,x-1,y-3-fl,'#ffd56a');px(G,x,y-2,'#ff4a1a');px(G,x-2,y-2,'#ff4a1a')}}
+ // 身體、胸、腿
+ ell(G,11,16+oy,6,3.6,C.body);ell(G,10,17+oy,4.6,2,C.shade);ell(G,14,16.5+oy,2.8,2.6,C.belly);
+ rect(G,8,19+oy,2,3-oy+oy,C.shade);rect(G,13,19+oy,2,3,C.body);rect(G,10,19+oy,2,3,C.shade);rect(G,15,19+oy,2,3,C.body);
+ // 頭
+ ell(G,16,10+oy,4.2,3.8,C.body);ell(G,19.5,11+oy,2.4,1.6,C.belly);
+ // 耳朵
+ tri(G,[13,6+oy],[14,1+oy],[16.5,5+oy],C.body);tri(G,[16,5+oy],[19,1+oy],[20,6+oy],C.body);px(G,14,3+oy,C.ear);px(G,14,4+oy,C.ear);px(G,18,3+oy,C.ear);px(G,18,4+oy,C.ear);
+ // 脖子毛（幼體）
+ if(C.fluff){for(let i=0;i<6;i++){px(G,12+i,13+oy+(i%2),C.belly);px(G,12+i,14+oy,C.belly)}px(G,11,14+oy,C.belly);px(G,18,14+oy,C.belly)}
+ // 臉
+ const eyeC=C.ice?'#2a1424':'#2a1424';
+ if(blink){px(G,17,9+oy,eyeC);px(G,18,9+oy,eyeC)}else{px(G,17,9+oy,eyeC);px(G,17,10+oy,eyeC);px(G,18,9+oy,'#ffffff')}
+ px(G,21,10+oy,'#2a1424');
+ if(C.ice){px(G,16,7+oy,eyeC);px(G,17,7+oy,eyeC);px(G,18,8+oy,eyeC)} // 皺眉
+ if(C.sun){px(G,16,6+oy,'#fff7d8');px(G,16,7+oy,'#ffb02a');px(G,15,6+oy,'#ffd56a');px(G,17,6+oy,'#ffd56a')}
+ if(C.fire){px(G,16,6+oy,'#ff4a1a');px(G,16,5+oy,'#ffd56a')}
+ outline(G);return G}
+function paint(cv,f,t,blink,scale){const g=cv.getContext('2d');cv.width=N*scale;cv.height=N*scale;g.imageSmoothingEnabled=false;const G=draw(f,t,blink,1);
+ for(let y=0;y<N;y++)for(let x=0;x<N;x++){if(G[y][x]){g.fillStyle=G[y][x];g.fillRect(x*scale,y*scale,scale,scale)}}
+ if(f==='ice'){const gl=.22+.06*Math.sin(t/500);g.fillStyle='rgba(170,225,255,'+(gl+.18)+')';g.fillRect(5*scale,7*scale,19*scale,17*scale);g.strokeStyle='rgba(255,255,255,.85)';g.lineWidth=scale*.6;g.strokeRect(5*scale,7*scale,19*scale,17*scale);g.fillStyle='rgba(255,255,255,.7)';g.fillRect(7*scale,9*scale,scale*2,scale*6);g.fillRect(7*scale,16*scale,scale*2,scale);for(let k=0;k<5;k++){const sx=(2+((t/90+k*37)%20));g.fillRect(sx*scale,((t/200+k*5)%22)*scale,scale*.7,scale*.7)}}}
+const cards=document.getElementById('cards');
+Object.keys(FORMS).forEach(k=>{const F=FORMS[k];cards.insertAdjacentHTML('beforeend',`<div class="card"><div class="row"><canvas class="cv" data-f="${k}"></canvas><div class="tx"><b>${F.name}</b><small>${F.sub}</small><p>${F.desc}</p></div></div></div>`)});
+const walk=document.getElementById('walk');
+const LUN=new Image();LUN.src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAfCAYAAAD0ma06AAAB+0lEQVR4AeyVvyvEcRjHHzdIsjBJcmYGNoliE5mMFJKMssjfYLOTMjAq5cdKMdgY2E+S6RgkGXCvc8/Xx3Ofz+f7vZLp5OX5+X7efF13Ofnnr7rhnz/w+iONPtKe9v5PiC6ZYU2PlOMurW2vAvTM3WCZyZCDwHEXrj4Vm2syzSGK4Rr59vgF6BPZBeoQUUPEHFLxSE+XgNY2Hr99CKCzM62DhoisGaKz2ztCFbsPTUkvZho0TNSVBCOolFVhpuOtqudreA3tX4fw/GSP4EVnaqrRt+w1tIt6UKM7157GmBm6VEM9xDJQu9BT6GseiqmGCHsHZwXIfTAD38z2MhnOd3cLWLHWzEDrWMxkyIHViyNCEDtfmWoTXnxWkMlwdX5JZPPgl7awfpjUvnkyNEmq4fD4tMhY5zeOOL82+VNV5uXdUndutLRfir7vVENEvQOLhCjuzs7pfXA31ZBPA9SFvgWJwY7ukodINUTIeyMR8k/XhDJu7u6Uh4EfqYY3l1u/pIXWvqR2c5p2l57Fa3j7eNWgj8f936j49P1FQGuNuot2Y78o3NGZRq8hQ5YRkltGG1sEbJ8aDVqgtgQNWUQEE005yV9vlyF3cfvsAtoQUUNXNDS+LECPo0BOD8izkMmQ48/FVwFyPUxOD8i1H4uZDDnAQSB3oQduL5Z/AQAA//8vLOSrAAAABklEQVQDAI+B8T9YbkF1AAAAAElFTkSuQmCC";
+const lc=document.createElement('canvas');lc.style.cssText='width:112px;height:124px;image-rendering:pixelated';walk.appendChild(lc);
+const fc=document.createElement('canvas');fc.style.cssText='width:120px;height:120px';walk.appendChild(fc);
+let cur='kit';
+function loop(t){document.querySelectorAll('.cv').forEach(c=>paint(c,c.dataset.f,t,(Math.floor(t/100)%32)===0,S));
+ // 走路
+ const W=walk.clientWidth,per=9000,p=(t%per)/per,dirR=p<.5,u=dirR?p*2:(1-p)*2,x=20+u*(W-170);
+ const bobY=Math.abs(Math.sin(t/160))*3;
+ lc.width=28;lc.height=31;const lg=lc.getContext('2d');lg.imageSmoothingEnabled=false;lg.clearRect(0,0,28,31);lg.save();if(!dirR){lg.translate(28,0);lg.scale(-1,1)}if(LUN.complete)lg.drawImage(LUN,0,0);lg.restore();
+ lc.style.left=(x+ (dirR?0:34))+'px';lc.style.bottom=(14+bobY)+'px';
+ paint(fc,cur,t,(Math.floor(t/100)%32)===0,5);
+ fc.style.transform=dirR?'none':'scaleX(-1)';fc.style.left=(x+(dirR?-40:70))+'px';fc.style.bottom=(14+Math.abs(Math.sin(t/200+1))*2)+'px';
+ requestAnimationFrame(loop)}
+requestAnimationFrame(loop);
+const pk=document.getElementById('pick');const OP=[['kit','幼體'],['fire','火焰型'],['sun','日光型'],['ice','冰型（封印）']];
+let like=new Set();try{like=new Set(JSON.parse(localStorage.getItem('lunpets')||'[]'))}catch(e){}
+OP.forEach(([k,n])=>{const b=document.createElement('button');b.dataset.k=k;b.textContent=n+' OK';pk.appendChild(b)});
+const sync=()=>{pk.querySelectorAll('button').forEach(b=>b.classList.toggle('on',like.has(b.dataset.k)));document.getElementById('sum').textContent='OK 的型態：'+(like.size?[...like].map(k=>OP.find(o=>o[0]===k)[1]).join('、'):'還沒選');try{localStorage.setItem('lunpets',JSON.stringify([...like]))}catch(e){}};
+pk.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const k=b.dataset.k;like.has(k)?like.delete(k):like.add(k);cur=like.has(k)?k:cur;sync()});sync();
+document.getElementById('copy').onclick=async()=>{const t='小狐狸預覽：'+document.getElementById('sum').textContent;let ok=false;try{await navigator.clipboard.writeText(t);ok=true}catch(e){}document.getElementById('copy').textContent=ok?'已複製，貼給我':t};
+</script>
+</body>
+</html>
