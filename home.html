@@ -14,6 +14,9 @@ body[data-t="2"]{--a1:#e0102e;--a2:#e4e8f0;--a3:#8a0a1c;--trim:#b9c0cf;--bg:#070
 body[data-t="3"]{--a1:#1fb7d8;--a2:#7ff8ec;--a3:#2455d8;--trim:#e3bd62;--bg:#030a12;--glow:#0a3a5a;--s1:#06203a;--s2:#0e4a6a;--s3:#2a9ab0;--tx2:#c6dbe6}
 body[data-t="4"]{--a1:#7dff6a;--a2:#c58bff;--a3:#2aa84a;--trim:#c8e04a;--bg:#050a06;--glow:#1a4a1a;--s1:#0a2210;--s2:#1e5a2a;--s3:#7ac84a;--btx:#06200a;--tx2:#cfe6cf}
 body[data-t="5"]{--a1:#ff7a1a;--a2:#ffd56a;--a3:#d8261a;--trim:#ffd56a;--bg:#0a0503;--glow:#6a2a0a;--s1:#2a0a05;--s2:#8a2a0a;--s3:#ff9a2a;--tx2:#ead8c6}
+body[data-t="7"]{--a1:#7a5ad8;--a2:#e8c566;--a3:#2c2a8a;--trim:#e0b84a;--bg:#080626;--glow:#2a1f7a;--s1:#140f48;--s2:#3a2a8a;--s3:#7a86c8;--tx2:#d8d4f0}
+body[data-t="8"]{--a1:#d8284a;--a2:#efe2cc;--a3:#8a0e2a;--trim:#e8c566;--bg:#14050a;--glow:#5a0a1e;--s1:#2a0a14;--s2:#8a1a3a;--s3:#d4a0ae;--tx2:#f0dede}
+body[data-t="9"]{--a1:#e0608a;--a2:#f3dcd0;--a3:#8a1a56;--trim:#e8c566;--bg:#16051a;--glow:#5a1448;--s1:#2a0a28;--s2:#6a1a58;--s3:#d48ab0;--tx2:#f0dcec}
 body[data-t="6"]{--a1:#6aa8ff;--a2:#e6f2ff;--a3:#5a4dff;--trim:#c9d6ee;--bg:#05070d;--glow:#1a2a5a;--s1:#0a1430;--s2:#2a4a8a;--s3:#9ac0ff;--tx2:#cdd6ea}
 *{box-sizing:border-box}
 html,body{margin:0;background:#000;color:var(--tx);-webkit-text-size-adjust:100%}
@@ -157,10 +160,10 @@ body[data-ts="3"] .big{color:transparent;-webkit-text-fill-color:transparent;bac
   <div><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>更多</div></div>
 </div>
 <script>
-const PAL=[['1','霓虹祖安（洋紅＋青）','#ff3d9a'],['2','FIRESTARTER 紅銀','#e0102e'],['3','海克斯青金','#1fb7d8'],['5','烈焰橘金','#ff7a1a'],['6','冰晶銀藍','#6aa8ff']];
+const PAL=[['1','霓虹祖安（洋紅＋青）','#ff3d9a'],['2','FIRESTARTER 紅銀','#e0102e'],['3','海克斯青金','#1fb7d8'],['5','烈焰橘金','#ff7a1a'],['6','冰晶銀藍','#6aa8ff'],['7','紫金（靛紫＋金）','#7a5ad8'],['8','緋紅奶油＋金','#d8284a'],['9','梅紫粉＋金','#e0608a']];
 const pb=document.getElementById('pb');
 PAL.forEach(([k,n,c])=>{const b=document.createElement('button');b.dataset.k=k;b.innerHTML=`<i style="background:${c}"></i>${k} ${n}`;pb.appendChild(b)});
-const ROT=['1','2','3','5','6'];let cur='1';
+const ROT=['7','8','9','1','2','3','5','6'];let cur='1';
 try{let i=+(localStorage.getItem('lunrot')||-1);i=(i+1)%ROT.length;localStorage.setItem('lunrot',i);cur=ROT[i]}catch(e){}
 const set=(k,manual)=>{cur=k;document.body.dataset.t=k;pb.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.k===k));upd(manual)};
 const TS=[['1','標題 A 金屬刻字＋掃光'],['2','標題 B 火焰燃燒＋火星'],['3','標題 C 全像掃描線']];

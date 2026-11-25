@@ -3503,6 +3503,9 @@ html[data-pal="2"]{--a1:#e0102e;--a2:#e4e8f0;--a3:#8a0a1c;--trim:#b9c0cf;--tbg:#
 html[data-pal="3"]{--a1:#1fb7d8;--a2:#7ff8ec;--a3:#2455d8;--trim:#e3bd62;--tbg:#030a12;--glow:#0a3a5a;--tx2:#c6dbe6}
 html[data-pal="5"]{--a1:#ff7a1a;--a2:#ffd56a;--a3:#d8261a;--trim:#ffd56a;--tbg:#0a0503;--glow:#6a2a0a;--tx2:#ead8c6}
 html[data-pal="6"]{--a1:#6aa8ff;--a2:#e6f2ff;--a3:#5a4dff;--trim:#c9d6ee;--tbg:#05070d;--glow:#1a2a5a;--tx2:#cdd6ea}
+html[data-pal="7"]{--a1:#7a5ad8;--a2:#e8c566;--a3:#2c2a8a;--trim:#e0b84a;--tbg:#080626;--glow:#2a1f7a;--tx2:#d8d4f0}
+html[data-pal="8"]{--a1:#d8284a;--a2:#efe2cc;--a3:#8a0e2a;--trim:#e8c566;--tbg:#14050a;--glow:#5a0a1e;--tx2:#f0dede}
+html[data-pal="9"]{--a1:#e0608a;--a2:#f3dcd0;--a3:#8a1a56;--trim:#e8c566;--tbg:#16051a;--glow:#5a1448;--tx2:#f0dcec}
 .rpop>div,.rbox{background:linear-gradient(180deg,color-mix(in srgb,var(--glow) 45%,#0a0512),#08040f)!important;border:1px solid color-mix(in srgb,var(--trim) 80%,transparent)!important;border-radius:0!important;clip-path:polygon(0 12px,12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px));box-shadow:inset 0 0 0 3px #08040f,inset 0 0 0 4px color-mix(in srgb,var(--a2) 35%,transparent)!important}
 .rpop h3,.rbox h3,#rmisc h3{color:#fff!important;font-weight:400;letter-spacing:.3em;text-shadow:0 0 12px color-mix(in srgb,var(--a1) 80%,transparent)}
 .rpop .rx{border-color:var(--a2)!important;color:var(--a2)!important;background:#08040f!important;border-radius:0!important}
@@ -3551,10 +3554,10 @@ html[data-ts="3"] #cover .cv-t{color:transparent!important;-webkit-text-fill-col
 </style>`);
 const lunPick=(key,list)=>{let last=null;try{last=localStorage.getItem(key)}catch(e){}let p;do{p=list[Math.random()*list.length|0]}while(p===last&&list.length>1);try{localStorage.setItem(key,p)}catch(e){}return p};
 window.lunThemeSet=(pal,ts)=>{if(pal)document.documentElement.dataset.pal=pal;if(ts)document.documentElement.dataset.ts=ts};
-window.lunThemeSet(lunPick('lunpal',['1','2','3','5','6']),lunPick('lunts',['1','2','3']));
+window.lunThemeSet(lunPick('lunpal',['1','2','3','5','6','7','8','9']),lunPick('lunts',['1','2','3']));
 {const t=document.querySelector('#cover .cv-t');if(t&&!t.querySelector('.cvem')){const d=document.createElement('div');d.className='cvem';for(let i=0;i<16;i++){const e=document.createElement('i');e.style.left=(Math.random()*100)+'%';e.style.setProperty('--dx',(Math.random()*30-15)+'px');e.style.animationDelay=(-Math.random()*2.6)+'s';e.style.animationDuration=(1.8+Math.random()*1.6)+'s';d.appendChild(e)}t.appendChild(d)}}
 $('kdTop').insertAdjacentHTML('beforeend','<button id="kdT1">⑭ 換下一組配色（五組輪換）</button><button id="kdT2">⑮ 換下一個標題特效（封面）</button>');
-$('kdT1').onclick=()=>{const L=['1','2','3','5','6'],c=document.documentElement.dataset.pal||'1';window.lunThemeSet(L[(L.indexOf(c)+1)%L.length]);devNote('配色 '+document.documentElement.dataset.pal)};
+$('kdT1').onclick=()=>{const L=['1','2','3','5','6','7','8','9'],c=document.documentElement.dataset.pal||'1';window.lunThemeSet(L[(L.indexOf(c)+1)%L.length]);devNote('配色 '+document.documentElement.dataset.pal)};
 $('kdT2').onclick=()=>{const c=+(document.documentElement.dataset.ts||1);window.lunThemeSet(null,String(c%3+1));devNote('標題特效 '+document.documentElement.dataset.ts+'（回到封面才看得到）')};
 /* 進入畫面中央：符文圓環＋角色（有存檔玩家才顯示角色） */
 document.head.insertAdjacentHTML('beforeend',`<style id="thC">
@@ -3795,7 +3798,8 @@ window.lunIngDrop=m=>{const p=P();if(!p)return;ST();const boss=m&&m.boss,n=boss?
 
 /* 料理加成：接在參拜的三個加成函式上；每場戰鬥開始（lunFortHp 被呼叫）扣一場 */
 const MEAL=k=>({soup:{hp:1.2,coin:1,drop:1},bbq:{hp:1,coin:1.3,drop:1},tea:{hp:1,coin:1,drop:1.5},spicy:{hp:1.1,coin:1.15,drop:1.25}})[k]||{hp:1,coin:1,drop:1};
-const act=()=>{const p=P();return p&&p.meal&&p.meal.n>0?MEAL(p.meal.k):null};
+const MEALQ=(k,q)=>{const m=MEAL(k),sc=q===3?1.5:1,f=v=>1+(v-1)*sc;return{hp:f(m.hp),coin:f(m.coin),drop:f(m.drop)}};
+const act=()=>{const p=P();return p&&p.meal&&p.meal.n>0?MEALQ(p.meal.k,p.meal.q||1):null};
 const oHp=window.lunFortHp,oCoin=window.lunFortCoin,oDrop=window.lunFortDrop;
 window.lunFortHp=()=>{let v=oHp?oHp():1;const p=P();if(p){const m=act();if(m){v*=m.hp;p.meal.n--;if(p.meal.n<=0)p.meal=null;save()}
   const q=ST();const add=Math.min(3,q.pot.heal||0);if(add>0){q.pot.heal-=add;save();setTimeout(()=>{try{if(window.B&&window.B.pots!=null)window.B.pots+=add}catch(e){}},120)}}return v};
@@ -3826,16 +3830,63 @@ const render=()=>{const p=ST();
   const meal=p.meal&&p.meal.n>0?`<div class="cst">料理中：${COOK.find(x=>x[0]===p.meal.k)[1]}（還有 ${p.meal.n} 場）</div>`:`<div class="cst">現在沒有料理加成</div>`;
   const pots=`<div class="cst" style="margin-top:0">藥瓶庫存：補血藥 ${p.pot.heal||0} 瓶（每場戰鬥最多帶 3 瓶）</div>`;
   let body='';
-  if(tab==='cook')body=meal+COOK.map(([k,n,r,d])=>`<div class="crow"><div><b>${n}</b><small>${d}</small><small>需要：${need(r)}</small></div><button data-c="${k}"${can(r)?'':' disabled'}>料理</button></div>`).join('');
-  else if(tab==='pot')body=pots+POTS.map(([k,n,r,q,d])=>`<div class="crow"><div><b>${n}</b><small>${d}</small><small>需要：${need(r)}</small></div><button data-p="${k}"${can(r)?'':' disabled'}>製藥</button></div>`).join('');
+  if(tab==='cook')body=meal+'<p style="text-align:center">做的時候要玩小遊戲，表現越好，效果越強。</p>'+COOK.map(([k,n,r,d])=>`<div class="crow"><div><b>${n}</b><small>${d}</small><small>需要：${need(r)}</small></div><button data-c="${k}"${can(r)?'':' disabled'}>料理</button></div>`).join('');
+  else if(tab==='pot')body=pots+'<p style="text-align:center">做的時候要玩小遊戲，表現越好，做出越多瓶。</p>'+POTS.map(([k,n,r,q,d])=>`<div class="crow"><div><b>${n}</b><small>${d}</small><small>需要：${need(r)}</small></div><button data-p="${k}"${can(r)?'':' disabled'}>製藥</button></div>`).join('');
   else body=`<p>食材也會從打怪掉落（Boss 一定掉 3 個）。不夠的話，這裡每個 ${BUY} 倫幣。目前有 ${p.shard||0} 倫幣。</p>`+ING.map(([k,n])=>`<div class="crow"><div><b>${n}</b><small>${BUY} 倫幣 / 個</small></div><button data-b="${k}"${(p.shard||0)>=BUY?'':' disabled'}>買 1 個</button></div>`).join('');
   $('rcookB').innerHTML=inv+`<div class="ctab"><button data-t="cook" class="${tab==='cook'?'on':''}">料理</button><button data-t="pot" class="${tab==='pot'?'on':''}">製藥</button><button data-t="buy" class="${tab==='buy'?'on':''}">市場</button></div>`+body};
 $('rcook').addEventListener('click',e=>{const p=ST();
   const t=e.target.closest('button[data-t]');if(t){tab=t.dataset.t;A.S&&A.S.tap&&A.S.tap();render();return}
-  const c=e.target.closest('button[data-c]');if(c){const d=COOK.find(x=>x[0]===c.dataset.c);if(d&&can(d[2])){take(d[2]);p.meal={k:d[0],n:3};p.cook.n++;save();A.S&&A.S.pickup&&A.S.pickup();rToast(`做好了：${d[1]}（接下來 3 場有效）`);render()}return}
-  const q=e.target.closest('button[data-p]');if(q){const d=POTS.find(x=>x[0]===q.dataset.p);if(d&&can(d[2])){take(d[2]);p.pot.heal=(p.pot.heal||0)+d[3];p.cook.pn++;save();A.S&&A.S.pickup&&A.S.pickup();rToast(`做好了：${d[1]}`);render()}return}
+  const c=e.target.closest('button[data-c]');if(c){const d=COOK.find(x=>x[0]===c.dataset.c);if(d&&can(d[2])){take(d[2]);save();mgStart('cook',d)}return}
+  const q=e.target.closest('button[data-p]');if(q){const d=POTS.find(x=>x[0]===q.dataset.p);if(d&&can(d[2])){take(d[2]);save();mgStart('pot',d)}return}
+  if(e.target.closest('#rminiB')){mgBtn();return}
   const b=e.target.closest('button[data-b]');if(b){if((p.shard||0)>=BUY){p.shard-=BUY;p.ing[b.dataset.b]=(p.ing[b.dataset.b]||0)+1;p.cook.got++;save();try{updWallet&&updWallet()}catch(x){}A.S&&A.S.tap&&A.S.tap();render()}else{rToast('倫幣不夠。');A.S&&A.S.miss&&A.S.miss()}}});
 window.lunCookOpen=()=>{if(!P())return;render();rOpen('rcook')};
+
+
+/* ---------- 小遊戲：料理「火候」、製藥「調藥」 ---------- */
+const MW=320,MH=210,STAR=['失敗','普通','美味','完美'];
+const mg={on:false,kind:'',d:null,phase:'play',round:0,hits:0,pos:0,dir:1,spd:1,zone:[.4,.6],wait:0,flip:0,hold:false,temp:.15,inband:0,time:0,stars:0,bub:[]};
+const mgCol=()=>mg.kind==='pot'?'#e0405a':(mg.d?({soup:'#d9b8f0',bbq:'#e0605a',tea:'#ffcf4a',spicy:'#ff6a2a'})[mg.d[0]]:'#ffd56a')||'#ffd56a';
+const mgView=()=>{$('rcookB').innerHTML=`<canvas id="rminiC" width="${MW}" height="${MH}" style="display:block;margin:0 auto;width:100%;max-width:340px;image-rendering:pixelated;border:1px solid color-mix(in srgb,var(--trim) 60%,transparent);touch-action:none"></canvas><div class="cst" id="rminiM"></div><button class="mb" id="rminiB" style="touch-action:none;user-select:none;-webkit-user-select:none"></button>`;
+  const b=$('rminiB');const dn=e=>{if(mg.kind==='pot'&&mg.phase==='play'){mg.hold=true;e.preventDefault()}},up=()=>{mg.hold=false};
+  b.addEventListener('pointerdown',dn);b.addEventListener('pointerup',up);b.addEventListener('pointerleave',up);b.addEventListener('pointercancel',up);b.addEventListener('contextmenu',e=>e.preventDefault());mgText()};
+const mgText=()=>{const m=$('rminiM'),b=$('rminiB');if(!m||!b)return;
+  if(mg.phase==='done'){m.textContent=mg.msg;b.textContent='回到清單';return}
+  if(mg.kind==='cook'){m.textContent=`第 ${Math.min(3,mg.round+1)} / 3 次　成功 ${mg.hits} 次　指針進入綠色區按「翻！」`;b.textContent='翻！'}
+  else{m.textContent=`按住加熱，讓溫度停在綠色帶裡（時間 ${Math.max(0,9-mg.time).toFixed(0)} 秒）`;b.textContent='按住加熱'}};
+function mgStart(kind,d){Object.assign(mg,{on:true,kind,d,phase:'play',round:0,hits:0,hold:false,temp:.15,inband:0,time:0,stars:0,bub:[],flip:0,wait:0});if(kind==='cook')mgRound();mgView();if(!mgRaf){mgT=performance.now();mgRaf=requestAnimationFrame(mgLoop)}}
+function mgRound(){mg.spd=.9+mg.round*.45;const w=.28-mg.round*.05,c=.25+Math.random()*.5;mg.zone=[c-w/2,c+w/2];mg.pos=0;mg.dir=1}
+const mgFinish=stars=>{const p=ST(),d=mg.d;mg.stars=stars;mg.phase='done';
+  if(mg.kind==='cook'){if(stars>0){p.meal={k:d[0],n:[0,3,4,5][stars],q:stars};p.cook.n++;mg.msg=`${STAR[stars]}！${d[1]}做好了，接下來 ${[0,3,4,5][stars]} 場有效${stars===3?'，效果更強':''}。`;A.S&&A.S.pickup&&A.S.pickup()}else{mg.msg='燒焦了……食材浪費了。';A.S&&A.S.miss&&A.S.miss()}}
+  else{if(stars>0){const n=d[3]+(stars-1);p.pot.heal=(p.pot.heal||0)+n;p.cook.pn++;mg.msg=`${STAR[stars]}！做出 ${n} 瓶${d[1]}。`;A.S&&A.S.pickup&&A.S.pickup()}else{mg.msg='火候不對，藥壞掉了……';A.S&&A.S.miss&&A.S.miss()}}
+  save();mgText()};
+function mgBtn(){if(mg.phase==='done'){mg.on=false;render();return}
+  if(mg.kind==='cook'&&mg.phase==='play'){const hit=mg.pos>=mg.zone[0]&&mg.pos<=mg.zone[1];if(hit){mg.hits++;A.S&&A.S.pickup&&A.S.pickup()}else A.S&&A.S.miss&&A.S.miss();mg.flip=.6;mg.round++;mg.phase='wait';mg.wait=.7;mgText()}}
+const mgStep=dt=>{if(!mg.on)return;
+  if(mg.kind==='cook'){if(mg.phase==='play'){mg.pos+=mg.dir*mg.spd*dt;if(mg.pos>=1){mg.pos=1;mg.dir=-1}if(mg.pos<=0){mg.pos=0;mg.dir=1}}
+    else if(mg.phase==='wait'){mg.flip=Math.max(0,mg.flip-dt);mg.wait-=dt;if(mg.wait<=0){if(mg.round>=3)mgFinish(mg.hits);else{mgRound();mg.phase='play';mgText()}}}}
+  else if(mg.phase==='play'){mg.temp=Math.max(0,Math.min(1,mg.temp+(mg.hold?.55:-.3)*dt));mg.time+=dt;if(mg.temp>=.55&&mg.temp<=.75)mg.inband+=dt;
+    if(mg.temp>0.3&&Math.random()<dt*10)mg.bub.push({x:110+Math.random()*100,y:150,v:30+Math.random()*50});mg.bub=mg.bub.filter(b=>(b.y-=b.v*dt)>70);
+    if(Math.floor(mg.time)!==Math.floor(mg.time-dt))mgText();
+    if(mg.time>=9)mgFinish(mg.inband<1.5?0:mg.inband<3?1:mg.inband<4.5?2:3)}};
+const mgDraw=t=>{const c=$('rminiC');if(!c)return;const g=c.getContext('2d');g.imageSmoothingEnabled=false;
+  g.fillStyle='#120a1e';g.fillRect(0,0,MW,MH);g.fillStyle='#1d1030';g.fillRect(0,150,MW,60);
+  const fl=(x,w,h)=>{for(let i=0;i<5;i++){const hh=h*(.6+.4*Math.sin(t/110+i*1.7+x));g.fillStyle=i%2?'#ffb02a':'#ff6a2a';g.fillRect(x+i*w/5,150-hh,w/5-2,hh)}};
+  if(mg.kind==='cook'){fl(100,120,26);
+    g.fillStyle='#3a3d48';g.beginPath();g.ellipse(160,118,72,14,0,0,7);g.fill();g.fillStyle='#1d1f27';g.beginPath();g.ellipse(160,114,66,10,0,0,7);g.fill();g.fillStyle='#3a3d48';g.fillRect(228,114,56,8);
+    const fy=mg.flip>0?(112-80*Math.sin(Math.PI*(1-mg.flip/.6))):106;g.fillStyle=mgCol();g.beginPath();g.arc(160,fy,13,0,7);g.fill();g.fillStyle='#0006';g.fillRect(154,fy-4,3,3);g.fillRect(163,fy-4,3,3);
+    g.fillStyle='#000';g.fillRect(30,170,260,20);g.fillStyle='#2f7a3a';g.fillRect(30+mg.zone[0]*260,170,(mg.zone[1]-mg.zone[0])*260,20);g.fillStyle='#fff';g.fillRect(30+mg.pos*260-2,164,4,32);
+    g.fillStyle='#e8c566';g.font='14px sans-serif';g.textAlign='left';let st='';for(let i=0;i<3;i++)st+=i<mg.hits?'★':'☆';g.fillText(st,12,24)}
+  else{fl(120,80,14+mg.temp*40);
+    g.fillStyle='#2a2d36';g.beginPath();g.ellipse(160,118,64,50,0,0,Math.PI);g.fill();g.fillRect(96,100,128,18);
+    const col=mgCol();g.fillStyle=col;g.beginPath();g.ellipse(160,104,56,8,0,0,7);g.fill();
+    mg.bub.forEach(b=>{g.fillStyle='#ffffffcc';g.fillRect(b.x,b.y,4,4)});
+    g.fillStyle='#000';g.fillRect(262,20,26,170);g.fillStyle='#2f7a3a';g.fillRect(262,20+170*(1-.75),26,170*.2);g.fillStyle='#fff';g.fillRect(258,20+170*(1-mg.temp)-2,34,4);
+    g.fillStyle='#000';g.fillRect(20,16,200,8);g.fillStyle='#e8c566';g.fillRect(20,16,200*Math.min(1,mg.time/9),8);
+    g.fillStyle='#fff';g.font='12px sans-serif';g.textAlign='left';g.fillText('達標 '+mg.inband.toFixed(1)+' 秒',20,40)}};
+let mgRaf=0,mgT=0;
+const mgLoop=t=>{const dt=Math.min(.05,(t-mgT)/1000||0);mgT=t;mgStep(dt);if(mg.on&&$('rcook').classList.contains('on')){mgDraw(t);mgRaf=requestAnimationFrame(mgLoop)}else mgRaf=0};
+window.lunMini={step:mgStep,btn:mgBtn,hold:v=>{mg.hold=v},state:()=>({...mg,bub:undefined})};
 
 /* ---------- DEV ---------- */
 $('kdTop').insertAdjacentHTML('beforeend','<button id="kdK1">㉑ 料理製藥（打開）</button><button id="kdK2">㉒ 食材各 +10</button><button id="kdK3">㉓ 假裝第 10 天且 G4 完成</button>');
