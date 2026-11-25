@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>倫生・祥雲色感預覽</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;background:#07050c;color:#f6f0ff;-webkit-text-size-adjust:100%}
+body{font:16px/1.7 "Noto Serif TC","Songti TC",serif;padding:14px 12px 120px;max-width:440px;margin:0 auto}
+h1{font:700 18px/1.4 "Noto Serif TC",serif;letter-spacing:.2em;margin:4px 0;color:#e6d9b8}
+.note{color:#b9bcc6;font:13px/1.7 system-ui,sans-serif;margin:0 0 12px}
+.lab{display:flex;justify-content:space-between;align-items:center;margin:20px 2px 8px;font:700 14px system-ui,sans-serif;color:#e0b84a}
+.lab button{padding:9px 16px;border-radius:8px;border:1px solid #ffffff44;background:#ffffff0c;color:#fff;font:700 13px system-ui,sans-serif}
+.lab button.on{border-color:#e0b84a;background:#e0b84a33}
+.ph{position:relative;width:100%;aspect-ratio:9/15;overflow:hidden;border-radius:14px;border:1px solid #ffffff22}
+.ph canvas{position:absolute;inset:0;width:100%;height:100%}
+.ui{position:absolute;inset:0;padding:16px 14px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;color:#fff;text-shadow:0 1px 3px #000a}
+.top small{display:block;font-size:12px;color:var(--gd);letter-spacing:.2em}.top b{font:700 20px "Noto Serif TC",serif;letter-spacing:.1em}
+.chip{padding:4px 12px;border:1px solid var(--gd);background:var(--pn);font:700 15px "Noto Serif TC",serif;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%)}
+.pnl{position:absolute;left:14px;right:14px;background:var(--pn);border:1px solid var(--gd);clip-path:polygon(0 10px,10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px));padding:12px 14px;box-shadow:inset 0 0 0 3px var(--pn),inset 0 0 0 4px color-mix(in srgb,var(--gd) 55%,transparent)}
+.pnl h3{margin:0 0 6px;font:700 17px "Noto Serif TC",serif;letter-spacing:.3em;text-align:center;color:#fff}
+.row{display:flex;justify-content:space-between;font-size:15px;padding:3px 0;border-bottom:1px solid #ffffff1a;color:var(--tx)}.row b{color:#fff}
+.btn{display:block;width:100%;margin-top:0;padding:13px;border:0;font:700 19px "Noto Serif TC",serif;letter-spacing:.4em;text-indent:.4em;color:#fff;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);background:linear-gradient(180deg,var(--b1),var(--b2));box-shadow:inset 0 1px 0 #fffa,inset 0 -3px 0 #0006,inset 0 0 0 2px var(--gd);text-shadow:0 1px 0 #000a}
+.foot{position:fixed;left:0;right:0;bottom:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:#050407f2;border-top:1px solid #ffffff22;font:14px system-ui,sans-serif;text-align:center}
+.foot button{margin-top:6px;width:100%;padding:11px;border-radius:10px;border:1px solid #e0b84a;background:#e0b84a33;color:#fff;font:700 15px system-ui,sans-serif}
+</style>
+</head>
+<body>
+<h1>祥雲色感預覽</h1>
+<p class="note">參考你給的雲紋圖：深色底、一圈一圈的雲紋、金色細線、局部金箔。這是用程式畫出來的簡化版，沒有那種水彩質感，但色感和線條感可以接近。三種配色各一張主畫面樣品，之後會變成整個遊戲的背景與配色。</p>
+<div id="root"></div>
+<div class="foot"><span id="sum">還沒選</span><button id="copy">複製我的選擇</button></div>
+<script>
+const PALS=[
+ {k:'A',n:'A 紫金祥雲（靛藍紫＋金箔）',g1:'#1e1560',g2:'#4a1f86',mot:['#3a2a8a','#5a2a9a','#17104a'],cl:['#7f8bc6','#2c3380','#9aa6dc','#4a56a8','#2c3380','#7f8bc6','#3a46a0'],line:'#e8c566',foil:'#d9b04a',
+  css:{pn:'#150f3ae6',gd:'#e0b84a',tx:'#e6e0ff',b1:'#7a5ad8',b2:'#2c2a8a'}},
+ {k:'B',n:'B 緋紅奶油（玫瑰灰底＋緋紅＋金線）',g1:'#b07a8a',g2:'#d4a0ae',mot:['#c98a98','#a8687a','#e0b8c0'],cl:['#b5143a','#efe2cc','#8a5a7a','#d83a5a','#efe2cc','#b5143a'],line:'#c9a24a',foil:'#e8c566',
+  css:{pn:'#3a0a1ee8',gd:'#e8c566',tx:'#f6e8e8',b1:'#d8284a',b2:'#8a0e2a'}},
+ {k:'C',n:'C 梅紫粉雲（深梅紫＋粉＋奶油）',g1:'#3a0a30',g2:'#5a1448',mot:['#6a1a58','#2e0828','#80306a'],cl:['#e0608a','#eadccd','#b284ac','#b51c5a','#e0608a','#eadccd'],line:'#e8c566',foil:'#e0b84a',
+  css:{pn:'#2a0a24e8',gd:'#e8c566',tx:'#f6e6f0',b1:'#e0608a',b2:'#8a1a56'}}];
+const rng=s=>()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296};
+function paint(cv,pal,seed){const W=cv.width=540,H=cv.height=900,g=cv.getContext('2d'),r=rng(seed);
+ const gr=g.createLinearGradient(0,0,W,H);gr.addColorStop(0,pal.g1);gr.addColorStop(1,pal.g2);g.fillStyle=gr;g.fillRect(0,0,W,H);
+ for(let i=0;i<260;i++){g.fillStyle=pal.mot[r()*3|0]+'28';g.beginPath();g.arc(r()*W,r()*H,20+r()*70,0,7);g.fill()}
+ const clouds=[];for(let i=0;i<16;i++){const R=50+r()*80,cx=r()*W,cy=r()*H;const k=7+(r()*5|0),cs=[];for(let j=0;j<k;j++){const a=r()*6.283,d=R*(.1+r()*.9);cs.push([cx+Math.cos(a)*d,cy+Math.sin(a)*d*.62,R*(.3+r()*.32)])}cs.sort((p,q)=>p[1]-q[1]);clouds.push({cy,cs,col:pal.cl[r()*pal.cl.length|0]})}
+ clouds.sort((a,b)=>a.cy-b.cy);
+ clouds.forEach(c=>{c.cs.forEach(([x,y,rad])=>{
+   const rg=g.createRadialGradient(x-rad*.3,y-rad*.35,rad*.1,x,y,rad);rg.addColorStop(0,c.col);rg.addColorStop(1,c.col+'dd');g.fillStyle=rg;g.beginPath();g.arc(x,y,rad,0,7);g.fill();
+   g.lineWidth=1;g.strokeStyle=pal.line;g.globalAlpha=.55;{const T=rad>26?13:8,ph=r()*6.283;g.beginPath();for(let t=.4;t<=T*6.283;t+=.12){const q=rad*.93*t/(T*6.283);const X=x+Math.cos(t+ph)*q,Y=y+Math.sin(t+ph)*q;t<.5?g.moveTo(X,Y):g.lineTo(X,Y)}g.stroke()}
+   g.globalAlpha=.95;g.lineWidth=1.7;g.beginPath();g.arc(x,y,rad,0,7);g.stroke();g.globalAlpha=1})});
+ // 金箔
+ for(let i=0;i<9;i++){const x=r()*W,y=r()*H,rad=14+r()*40;g.fillStyle=pal.foil;g.globalAlpha=.75;g.beginPath();for(let a=0;a<6.3;a+=.5){const rr=rad*(.6+r()*.5);g.lineTo(x+Math.cos(a)*rr,y+Math.sin(a)*rr*.7)}g.fill();g.globalAlpha=1}
+ for(let i=0;i<5000;i++){g.fillStyle=r()<.5?'rgba(255,255,255,.05)':'rgba(0,0,0,.07)';g.fillRect(r()*W,r()*H,1.5,1.5)}
+ // 邊緣暗角
+ const v=g.createRadialGradient(W/2,H/2,H*.3,W/2,H/2,H*.75);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,'rgba(0,0,0,.45)');g.fillStyle=v;g.fillRect(0,0,W,H)}
+const root=document.getElementById('root');let S=null;try{S=localStorage.getItem('luncloud')}catch(e){}
+PALS.forEach((p,i)=>{const c=p.css;root.insertAdjacentHTML('beforeend',`<div class="lab"><span>${p.n}</span><button data-k="${p.k}">選這個</button></div>
+<div class="ph" style="--pn:${c.pn};--gd:${c.gd};--tx:${c.tx};--b1:${c.b1};--b2:${c.b2}"><canvas data-i="${i}"></canvas>
+ <div class="ui"><div class="top"><div><small>LV30 ・ 初心者</small><b>測試倫</b></div><span class="chip">100萬　倫幣</span></div>
+ <div class="pnl" style="top:46%"><h3>能力值</h3><div class="row">HP<b>662</b></div><div class="row">攻擊<b>114</b></div><div class="row">防禦<b>30</b></div></div>
+ <div class="pnl" style="top:76%;padding:0;background:none;border:0;box-shadow:none;clip-path:none"><button class="btn">出發冒險</button></div></div></div>`)});
+document.querySelectorAll('canvas[data-i]').forEach(cv=>paint(cv,PALS[+cv.dataset.i],11+ +cv.dataset.i*97));
+const upd=()=>{document.querySelectorAll('.lab button').forEach(b=>b.classList.toggle('on',b.dataset.k===S));document.getElementById('sum').textContent='我選：'+(S?S+' 風格':'還沒選');try{S&&localStorage.setItem('luncloud',S)}catch(e){}};
+root.addEventListener('click',e=>{const b=e.target.closest('button[data-k]');if(b){S=b.dataset.k;upd()}});
+document.getElementById('copy').onclick=async()=>{const t='祥雲色感選擇：'+(S||'未選');let ok=false;try{await navigator.clipboard.writeText(t);ok=true}catch(e){}document.getElementById('copy').textContent=ok?'已複製，貼給我':t};
+upd();
+</script>
+</body>
+</html>

@@ -3652,7 +3652,7 @@ const paintEgg=(cv,t,ready)=>{const sc=7,g=cv.getContext('2d');cv.width=N*sc;cv.
   shape(1,OUT,false);shape(0,'#f5e9d0',true);g.fillStyle='#fff';g.fillRect(-4*sc,-6*sc,sc*2,sc*2);g.restore()};
 
 /* ---------- 存檔 ---------- */
-const FX=()=>{const p=P();p.fox=p.fox||{has:0,hatched:0,form:'kit',eggK:0,fed:0,hot:0,sun:0};return p.fox};
+const FX=()=>{const p=P();if(!p)return{has:0,hatched:0,form:'kit',eggK:0,fed:0,hot:0,sun:0};p.fox=p.fox||{has:0,hatched:0,form:'kit',eggK:0,fed:0,hot:0,sun:0};return p.fox};
 const eggReady=()=>{const p=P(),f=FX();return f.has&&!f.hatched&&(p.kills||0)-f.eggK>=10};
 const FOODS=[['n','普通飼料',5,0,0],['h','火辣辣的辣椒',20,1,0],['s','陽光果',20,0,1]];
 
@@ -3698,12 +3698,15 @@ const feed=k=>{const p=P(),f=FX(),fd=FOODS.find(x=>x[0]===k);if(!fd)return;if((p
   save();A.S&&A.S.pickup&&A.S.pickup();rToast(ev?`進化了！變成${FORMS[f.form].name}。`:'吃得很開心。');try{updWallet&&updWallet()}catch(e){}petRender()};
 $('rpet').addEventListener('click',e=>{const a=e.target.closest('button[data-pa]');if(a){petAct(a.dataset.pa);return}const b=e.target.closest('button[data-pf]');if(b&&FX().hatched)feed(b.dataset.pf)});
 window.lunPetOpen=()=>{if(!P())return;petRender();rOpen('rpet')};
-let petRaf=0;const petLoop=t=>{const on=$('rpet').classList.contains('on');const c=$('rpetC'),f=FX();
+let petRaf=0;const petLoop=t=>{try{const on=$('rpet').classList.contains('on');const c=$('rpetC'),f=FX();
   if(on&&c){if(f.hatched)paintFox(c,f.form,t,7);else if(f.has)paintEgg(c,t,eggReady());else{c.width=182;c.height=182}}
-  const h=document.querySelector('.rhome.on'),m=$('rfoxM');if(m){m.style.display=(h&&FX().hatched)?'block':'none';if(h&&FX().hatched){paintFoxSide(m,FX().form,t,3)}}
+  const h=document.querySelector('.rhome.on'),m=$('rfoxM');if(m){const show=h&&f.has;m.style.display=show?'block':'none';if(show){if(f.hatched)paintFoxSide(m,f.form,t,3);else paintEgg(m,t,eggReady())}}}catch(e){}
   petRaf=requestAnimationFrame(petLoop)};
 function mainFox(){let m=$('rfoxM');if(m)return;const sc=$('rhcv');if(!sc||!sc.parentElement)return;m=document.createElement('canvas');m.id='rfoxM';m.className='rfox';m.style.cssText='left:calc(50% - 138px);bottom:34px;width:84px;height:84px;display:none';sc.parentElement.appendChild(m)}
 mainFox();requestAnimationFrame(petLoop);
+{const go=document.querySelector('.rhgo');if(go&&!$('rhgo2')){go.insertAdjacentHTML('afterend','<div class="rhgo" id="rhgo2"><button class="rq" data-q9="pet">小狐狸</button><button class="rq" data-q9="claw">夾娃娃機</button><button class="rq" data-q9="cook">料理製藥</button></div>');
+  document.head.insertAdjacentHTML('beforeend','<style>#rhgo2 .rq{min-height:44px!important;font-size:15px!important;letter-spacing:.08em!important}#rhgo2{margin-top:-4px}</style>');
+  $('rhgo2').addEventListener('click',e=>{const b=e.target.closest('button[data-q9]');if(!b)return;A.S&&A.S.tap&&A.S.tap();const k=b.dataset.q9;if(k==='pet')window.lunPetOpen&&window.lunPetOpen();else if(k==='claw')window.lunClawOpen&&window.lunClawOpen();else window.lunCookOpen&&window.lunCookOpen()})}}
 
 /* ---------- 夾娃娃機 ---------- */
 const PR={c30:{n:'小錢袋',c:'#e8c060',t:'30幣'},c80:{n:'大錢袋',c:'#ffd56a',t:'80幣'},w3:{n:'倫性',c:'#a02aff',t:'+3'},egg:{n:'狐狸蛋',c:'#f5e9d0',t:'蛋'},doll:{n:'倫娃娃',c:'#e0243a',t:'5幣'}};
