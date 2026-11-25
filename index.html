@@ -852,6 +852,7 @@ body[data-land=dog] #kgo{border-color:rgba(255,211,74,.85);background:linear-gra
 /* 共用彈窗與右上角叉叉 */
 .rpop{position:fixed;inset:0;z-index:40;display:grid;place-items:center;background:rgba(0,0,0,.84);opacity:0;pointer-events:none;transition:opacity .3s;padding:16px}
 .rpop.on{opacity:1;pointer-events:auto}
+body:has(.rpop.on,.rmap.on,.rbat.on,.rcave.on,.rprint.on) .rmoney{opacity:0;pointer-events:none}
 .rbox{position:relative;width:min(94vw,390px);max-height:88vh;overflow-y:auto;padding:22px 16px 16px;border:1px solid rgba(255,213,106,.45);background:rgba(12,10,16,.98);border-radius:6px;text-align:center}
 .rbox h3{margin:0 0 4px;font:400 18px var(--A);letter-spacing:.25em;color:#fff}
 .rbox .rsm{margin:0 0 12px;font-size:12px;color:#9a9da6;line-height:1.7}
@@ -1186,7 +1187,7 @@ const A=(()=>{let ctx=null,master=null,rev=null,on=true,nbuf=null;
     rng:()=>{for(let k=0;k<2;k++){tone(440,.4,'sine',.07,k*.5,null,.01);tone(480,.4,'sine',.07,k*.5,null,.01)}},
     pickup:()=>{tone(m(76),.15,'sine',.08);tone(m(83),.25,'sine',.08,.12)},
     hang:()=>{tone(m(71),.15,'sine',.08);tone(m(64),.3,'sine',.08,.12)},
-    dice:()=>{for(let i=0;i<5;i++){noise(.05,.3,2400,i*.06,'bandpass');tone(500+Math.random()*300,.05,'triangle',.06,i*.06)}},
+    dice:()=>{for(let i=0;i<4;i++){noise(.04,.08,2000,i*.07,'bandpass');tone(450+Math.random()*200,.04,'triangle',.025,i*.07)}},
     gbB:()=>tone(1320,.025,'square',.022),
     gbHit:()=>{noise(.15,.28,1600,0,'bandpass');tone(220,.14,'square',.05,0,90)},
     gbWin:()=>[0,4,7,12].forEach((n,i)=>tone(m(72+n),.16,'square',.04,i*.11)),
@@ -1545,7 +1546,7 @@ const SUPPORT_URL='https://youtube.com/shorts/dhQOn7TdHSs?si=yHufajPbrThATXYK';
 let callRun=0;
 const openCall=async()=>{const run=++callRun,c=$('kcall'),st=$('kcSt'),v=$('kcVid'),vd=$('kcV');v.hidden=true;vd.hidden=true;c.classList.remove('vid');c.classList.add('on','ring');st.innerHTML='<span>撥號中……</span>';A.init();
   let cfg=null;const look=(async()=>{try{const db=window.claude&&window.claude.use&&await window.claude.use('db');if(db){const s=await db.doc('config/site').get();if(s.exists)cfg=s.data()}}catch(e){}})();
-  for(let i=0;i<3;i++){if(run!==callRun)return;st.innerHTML=`<span class="kdu">${'嘟'.repeat(i+1)}</span><span class="kbad">倫很壞</span>`;A.S.rng();await sleep(1900)}await look;
+  for(let i=0;i<3;i++){if(run!==callRun)return;st.innerHTML=`<span class="kdu">${'嘟'.repeat(i+1)}</span><span class="kbad">倫很壞</span>`;A.S.rng();await sleep(1900)}await look;if(!cfg)cfg={video:'local',url:'kefu.mp4'};
   if(run!==callRun)return;
   if(!devCall&&LV()<5){c.classList.remove('ring');A.S.miss();st.innerHTML=`<span>您撥的電話</span><span>要 Lv5 才能接通。</span><span class="cvh">${P()?'你現在是 Lv'+LV()+'。':'先進卡池升級再來。'}</span>`;return}
   const got=P()?Object.keys(P().dex).length:0;let mode=devCall||(Math.random()<.06+.44*got/DEXN?'ok':Math.random()<.5?'busy':'no');devCall=null;
