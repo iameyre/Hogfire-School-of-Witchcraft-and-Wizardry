@@ -1228,9 +1228,22 @@ const rflush=async()=>{if(!remote||rBusy||!rDirty)return;rBusy=true;rDirty=false
 const SCORE={N:0,R:1,SR:2,SP:2.5,SSR:3,CHAMP:3.5,IDOL:4,GOLD:4,ORNG:4.5,SSSR:5,ULT:5};
 const entry=(n,p)=>({name:n,job:p.job||'',fr:!!p.friend,spent:(p.st&&p.st.spent)||0,pulls:(p.st&&p.st.pulls)||0,score:(p.st&&p.st.score)||0,dex:Object.keys(p.dex||{}).length,t:Date.now()});
 const pushBoard=()=>{};
-const initRemote=async()=>{try{const cl=window.claude;if(!cl||!cl.use)return;const [db,u]=await Promise.all([cl.use('db'),cl.use('user')]);if(!db||!u)return;const uid=await u.id();if(!uid)return;const ref=db.doc('data/users/'+uid+'/state');const s=await ref.get();
+
+const SBU='https://shjmavdzrwhfifjogrys.supabase.co',SBK='sb_publishable_vxZ6BhDcfj7fCPduOl8vsg_qsiQsRbt',SBS='lun-sb';
+let sbInfo='尚未連線';
+const sbH=t=>({apikey:SBK,'Content-Type':'application/json',Authorization:'Bearer '+(t||SBK)});
+const sbKeep=j=>{const s={at:j.access_token,rt:j.refresh_token,exp:j.expires_at||Math.floor(Date.now()/1000+(j.expires_in||3600)),uid:j.user.id};try{localStorage.setItem(SBS,JSON.stringify(s))}catch(e){}return s};
+const sbSess=async()=>{let s=null;try{s=JSON.parse(localStorage.getItem(SBS))}catch(e){}
+  if(s&&s.exp>Date.now()/1000+60)return s;
+  if(s&&s.rt){const r=await fetch(SBU+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:sbH(),body:JSON.stringify({refresh_token:s.rt})});if(r.ok)return sbKeep(await r.json());if(r.status<400||r.status>=500)throw new Error('sb refresh '+r.status)}
+  const r=await fetch(SBU+'/auth/v1/signup',{method:'POST',headers:sbH(),body:'{}'});if(!r.ok)throw new Error('sb signup '+r.status);return sbKeep(await r.json())};
+const sbAdapter=async()=>{const s=await sbSess();
+  const ref={get:async()=>{const t=(await sbSess()).at;const r=await fetch(SBU+'/rest/v1/game_saves?user_id=eq.'+s.uid+'&select=state',{headers:sbH(t)});if(!r.ok)throw new Error('sb get '+r.status);const a=await r.json();const st=a[0]&&a[0].state;return{exists:!!st,data:()=>st}},
+    set:async d=>{const t=(await sbSess()).at;const r=await fetch(SBU+'/rest/v1/game_saves',{method:'POST',headers:{...sbH(t),Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({user_id:s.uid,state:d,updated_at:new Date().toISOString()})});if(!r.ok){sbInfo='存檔失敗 '+r.status;throw {code:'unavailable'}}sbInfo='雲端存檔 OK '+new Date().toLocaleTimeString()}};
+  sbInfo='已登入匿名帳號';return{uid:s.uid,ref}};
+const initRemote=async()=>{try{const cl=window.claude;let db=null,uid,ref,sb=false;if(!cl||!cl.use){const a=await sbAdapter();uid=a.uid;ref=a.ref;sb=true}else{const [d0,u]=await Promise.all([cl.use('db'),cl.use('user')]);if(!d0||!u)return;db=d0;uid=await u.id();if(!uid)return;ref=db.doc('data/users/'+uid+'/state')}const s=await ref.get();
   if(s.exists){const d=s.data();if(d&&d.players&&Object.keys(d.players).length){const loc=DB;DB=JSON.parse(JSON.stringify(d));for(const k in loc.players)if(!DB.players[k])DB.players[k]=loc.players[k];try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(e){}}}
-  remote={db,uid,ref,board:true};await ref.set(JSON.parse(JSON.stringify(DB)))}catch(e){remote=null}};
+  remote={db,uid,ref,board:!sb};await ref.set(JSON.parse(JSON.stringify(DB)))}catch(e){remote=null;if(typeof sbInfo!=='undefined')sbInfo='連線失敗：'+(e&&e.message||e)}};
 let remoteP=null;const ensureRemote=()=>remoteP||(remoteP=Promise.race([initRemote(),new Promise(r=>setTimeout(r,5000))]));
 const newPlayer=(o={})=>{const w=o.stats?startW(o.stats,o.job):10;return{v8:1,v9:1,exp:0,lv:1,pd:[],shard:0,tal:{c:1},buff:{},land:'',wallet:w,pool:0,log:[{t:Date.now(),x:'開戶禮',d:w}],dex:{},col:{},days:[],tasks:{},seen:false,job:o.job||'',stats:o.stats||null,st:{spent:0,pulls:0,score:0}}};
 const P=()=>DB.players[DB.cur];
@@ -3277,7 +3290,7 @@ $('kdev').addEventListener('click',e=>{const b=e.target.closest('button[data-d="
 /* ---------- DEV：搜尋＋本次值得測試（放最上面） ---------- */
 document.head.insertAdjacentHTML('beforeend',`<style>#kdQ{width:100%;box-sizing:border-box;margin:10px 0 0;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,213,106,.5);background:#1a1418;color:#fff;font-size:15px}#kdNew button{border-color:rgba(255,213,106,.55)!important}#kdNewH,#kdTopH{color:#ffd56a!important}#kdTop button{border-color:#ff8a5a!important;font-weight:700}.kdhide{display:none!important}#kdNoHit{color:#aaa;font-size:13px;margin:8px 0}</style>`);
 (()=>{const kdi=$('kdev').querySelector('.kdi'),first=kdi.querySelector('h4');
-  first.insertAdjacentHTML('beforebegin',`<input id="kdQ" type="search" placeholder="搜尋 DEV 功能，例如：發票、坐騎、強化" autocomplete="off"><p id="kdNoHit" class="kdhide">找不到，換個字試試。</p><h4 id="kdTopH">本次值得測試（11/25 參拜擴充）</h4><div class="kdg" id="kdTop"><button data-f="open">① 打開參拜（寺廟、教堂分頁）</button><button data-f="reset">② 重置今天，全部可以再拜</button><button data-f="all">③ 全部拜滿（看四種小好運）</button><button data-t="call">⑤ （上次）① 客服必接通（機器倫影片直向放大，不用 Lv5）</button></div><h4 id="kdNewH">之前的待測（v16.1～v16.2）</h4><div class="kdg" id="kdNew">
+  first.insertAdjacentHTML('beforebegin',`<input id="kdQ" type="search" placeholder="搜尋 DEV 功能，例如：發票、坐騎、強化" autocomplete="off"><p id="kdNoHit" class="kdhide">找不到，換個字試試。</p><h4 id="kdTopH">本次值得測試（11/25 雲端存檔＋參拜）</h4><div class="kdg" id="kdTop"><button data-f="open">① 打開參拜（寺廟、教堂分頁）</button><button data-f="reset">② 重置今天，全部可以再拜</button><button data-f="all">③ 全部拜滿（看四種小好運）</button><button data-t="call">⑤ （上次）① 客服必接通（機器倫影片直向放大，不用 Lv5）</button></div><h4 id="kdNewH">之前的待測（v16.1～v16.2）</h4><div class="kdg" id="kdNew">
   <button data-q="ward">① 更衣間：頁籤、灰色、點圖放大</button><button data-q="cat">② 東西怎麼拿（全部目錄）</button>
   <button data-q="stat">③ 數值與強化</button><button data-q="shop">④ 商店：點圖放大、購買確認</button>
   <button data-q="lux">⑤ 精品館金色發票</button><button data-q="inv">⑥ 發票改整點開獎，直接去對獎</button>
@@ -3286,6 +3299,7 @@ document.head.insertAdjacentHTML('beforeend',`<style>#kdQ{width:100%;box-sizing:
   <button data-q="ride">⑪ 騎乘倫總覽（三款＋換裝）</button><button data-q="mtAll">⑫ 坐騎寵物全部拿到</button>
   <button data-q="fox">⑬ 騎九尾狐回主畫面</button><button data-q="phx">⑭ 騎地獄火鳳凰回主畫面</button>
   <button data-q="mts">⑮ 坐騎寵物商店（沒有的變灰）</button><button data-q="bat">⑯ 騎著去倫倫村打怪</button></div>`);
+  $('kdTop').insertAdjacentHTML('beforeend','<button id="kdSb">⑥ 雲端存檔狀態（Supabase 匿名帳號）</button>');$('kdSb').onclick=async()=>{await ensureRemote();rToast(remote?('雲端存檔：'+sbInfo):('沒有連上雲端，存本機。'+sbInfo))};
   const go=(n,a)=>{devClose();const nb=document.querySelector(`#rnav>button[data-n="${n}"]`);nb&&nb.click();setTimeout(()=>{const b=document.querySelector(`#rsub button[data-a="${a}"]`);b&&b.click()},60)};
   const fire=d=>{const b=[...$('kdev').querySelectorAll(`button[data-d="${d}"]`)].pop();b&&b.click()};
   $('kdNew').addEventListener('click',e=>{const b=e.target.closest('button[data-q]');if(!b)return;if(!P()||!started){devNote('先按上面的「用測試玩家直接進入卡池」。');return}const q=b.dataset.q;
