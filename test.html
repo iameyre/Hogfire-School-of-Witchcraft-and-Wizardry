@@ -1022,6 +1022,7 @@ body:has(.rpop.on,.rmap.on,.rbat.on,.rcave.on,.rprint.on) .rmoney{opacity:0;poin
 #pgal .pg{display:flex;flex-wrap:wrap;gap:8px}#pgal figure{margin:0;padding:6px;border:1px solid rgba(255,255,255,.1);border-radius:6px;background:rgba(255,255,255,.03);text-align:center}#pgal figcaption{font-size:11px;color:#ccc;margin-top:2px;max-width:140px}
 #rpX{top:calc(var(--st) + 58px)}#rtry{z-index:45}#rbuy{z-index:50}
 #klvD{max-height:38vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+#rhgo2{display:none!important}#rhgo3 .rq{flex:1;font-size:14px!important;letter-spacing:.02em!important;padding:0 2px!important;white-space:nowrap}#rsub{max-height:62vh;overflow-y:auto}
 </style>
 </head>
 <body>
@@ -2364,6 +2365,7 @@ let rDevAll=false,rGod=false;
 $('s-main').insertAdjacentHTML('beforeend',`
 <div class="rhome" id="rhome"><div style="position:relative"><canvas class="rhcv pix" id="rhcv"></canvas><div class="rhpl"><b id="rhN"></b><small id="rhJ"></small></div><span class="rhloc" id="rhLoc">倫倫村・倫的家</span></div>
  <div class="rhbody"><div class="rhgo"><button class="pbtn" id="rhMap">出發冒險</button><button class="rq" id="rhWard">更衣間</button></div>
+ <div class="rhgo" id="rhgo3"><button class="rq" id="rhGoal">三天大目標</button><button class="rq" id="rhTask">每日任務</button><button class="rq" id="rhHouse">小屋</button></div>
  <div class="rst" id="rhSt"></div><div class="rwp"><canvas class="pix" id="rhW" width="52" height="58"></canvas><p id="rhWT"></p></div><p class="rhtips" id="rhTip"></p></div></div>
 <div class="rshade" id="rshade"></div><div class="rsub" id="rsub"></div>
 <nav class="rnav" id="rnav"></nav>`);
@@ -2428,7 +2430,7 @@ const renderHome=()=>{const p=P();if(!p)return;const S=rStats();
   cancelAnimationFrame(homeRaf);const t0=performance.now();
   let lastF=0;const tk=t=>{if(!homeOn)return;const tt=(t-t0)/1000;if(lzxOn()&&t-lastF>120){lastF=t;fr[0]=avCanvas(eq,1,0);fr[1]=avCanvas(eq,1,1)}const gy=drawScene(g,W,H,homeArea(),tt);const rf=mountOn()&&riderFrame(tt),im=rf||fr[(tt*2|0)%2],bob=Math.round(Math.sin(tt*3)*1.2),s=rf?Math.min(2,Math.floor((gy-6)/im.height*4)/4):2;drawPet(g,W/2-im.width*s/2-14,gy+1,tt,2);
     g.fillStyle='rgba(0,0,0,.25)';g.fillRect(W/2-18,gy-2,36,3);g.drawImage(im,W/2-im.width*s/2,gy-im.height*s+2+bob,im.width*s,im.height*s);homeRaf=requestAnimationFrame(tk)};homeRaf=requestAnimationFrame(tk)};
-const rHome=()=>{if(kbusy){rToast('抽卡中，等一下。<button class="rtub" onclick="rUnstick()">卡住了？解除</button>');return}closeSub();['rmap','rgach','rres'].forEach(rClose);showTab('draw');$('s-main').classList.add('rh');$('rhome').classList.add('on');homeOn=true;renderHome();setNavOn('adv');giveStarter()};
+const rHome=()=>{if(kbusy){rToast('抽卡中，等一下。<button class="rtub" onclick="rUnstick()">卡住了？解除</button>');return}closeSub();['rmap','rgach','rres'].forEach(rClose);showTab('draw');$('s-main').classList.add('rh');$('rhome').classList.add('on');homeOn=true;renderHome();setNavOn('home');giveStarter()};
 const leaveHome=()=>{homeOn=false;cancelAnimationFrame(homeRaf);$('rhome').classList.remove('on');$('s-main').classList.remove('rh')};
 const goDraw=()=>{if(kbusy)return;closeSub();leaveHome();showTab('draw');setNavOn('gacha');if(!seated)rToast('按下方「選秘境，開抽」，或上面的秘境名稱。')};
 const goPanel=t=>{if(kbusy){rToast('抽卡中，等一下。<button class="rtub" onclick="rUnstick()">卡住了？解除</button>');return}closeSub();const need={shop:3,tal:2}[t];if(need&&LV()<need){rToast(`${t==='shop'?'商店':'天賦樹'} Lv${need} 開放。`,1);A.S.kPoot();return}leaveHome();showTab(t)};
@@ -2439,15 +2441,16 @@ const giveStarter=()=>{const p=P();if(!p||!rp().look)return;const j=p.job||'novi
   $('rgfT').innerHTML=`你選了<b style="color:#fff">${JOBS.find(x=>x.id===j).n}</b>，送你一把<b style="color:#ffd56a">${it.n}</b>。${had?'（你本來就有，幫你裝備上了）':''}<br>攻擊 +${WPN[id].atk}・攻擊方式：${WPN[id].n}`;
   setTimeout(()=>{rOpen('rgift');SFX.open()},300)};
 $('rgfGo').onclick=()=>{rClose('rgift');if(homeOn)renderHome()};
-$('rhMap').onclick=()=>{A.init();openMap()};$('rhWard').onclick=()=>{A.init();openChar()};$('rgfX').onclick=()=>{rClose('rgift');if(homeOn)renderHome()};
+$('rhMap').onclick=()=>{A.init();openMap()};$('rhGoal').onclick=()=>{A.init();rAct('goal')};$('rhTask').onclick=()=>{A.init();rAct('task')};$('rhHouse').onclick=()=>{A.init();rAct('house')};$('rhWard').onclick=()=>{A.init();openChar()};$('rgfX').onclick=()=>{rClose('rgift');if(homeOn)renderHome()};
 
 /* ---------- 堆疊式選單 ---------- */
 const NAVI={adv:'<path d="M4 20 20 4M14 4h6v6M4 14l6 6"/>',char:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>',gacha:'<circle cx="12" cy="12" r="8"/><path d="M4 12h16"/><circle cx="12" cy="12" r="2"/>',shop:'<path d="M4 9h16l-1 11H5L4 9zM8 9V7a4 4 0 0 1 8 0v2"/>',more:'<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>'};
-const NAV=[['adv','冒險',[['goal','三天大目標'],['home','主畫面'],['map','世界地圖'],['task','每日任務'],['fort','參拜'],['pet','小狐狸'],['claw','夾娃娃機']]],['char','角色',[['ward','更衣間'],['tal','天賦樹'],['shrine','轉職聖殿'],['ach','成長'],['school','學堂'],['house','小屋']]],['gacha','扭蛋',[['card','抽卡'],['look','抽外觀'],['eq','抽裝備']]],['shop','商城',[['shop','商店'],['dex','倫寶閣'],['log','紀錄'],['cook','料理製藥'],['run','坐騎探險'],['cbt','卡片配對']]],['more','更多',[['info','說明'],['get','東西怎麼拿'],['call','客服倫員'],['code','存檔代碼']]]];
-$('rnav').innerHTML=NAV.map(([k,n])=>`<button data-n="${k}"><svg viewBox="0 0 24 24">${NAVI[k]}</svg><span>${n}</span>${k==='adv'?'<i class="rb" id="rnB" hidden></i>':''}</button>`).join('');
+NAVI.home=NAVI.char;NAVI.play=NAVI.gacha;NAVI.day='<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>';
+const NAV=[['home','主頁',[['home','主畫面'],['ward','更衣間'],['house','小屋']]],['adv','冒險',[['map','世界地圖'],['shrine','轉職聖殿'],['school','學堂']]],['play','玩樂',[['pet','小狐狸'],['claw','夾娃娃機'],['cook','料理製藥'],['run','坐騎探險'],['cbt','卡片配對'],['card','抽卡'],['look','抽外觀'],['eq','抽裝備']]],['day','每日',[['goal','三天大目標'],['task','每日任務'],['fort','參拜']]],['more','更多',[['tal','天賦樹'],['ach','成長'],['shop','商店'],['dex','倫寶閣'],['log','紀錄'],['info','說明'],['get','東西怎麼拿'],['call','客服倫員'],['code','存檔代碼']]]];
+$('rnav').innerHTML=NAV.map(([k,n])=>`<button data-n="${k}"><svg viewBox="0 0 24 24">${NAVI[k]}</svg><span>${n}</span>${k==='day'?'<i class="rb" id="rnB" hidden></i>':''}</button>`).join('');
 let subOpen=null;
 const closeSub=()=>{subOpen=null;$('rsub').classList.remove('on');$('rshade').classList.remove('on');document.querySelectorAll('#rnav>button').forEach(b=>b.classList.remove('open'))};
-const setNavOn=k=>document.querySelectorAll('#rnav>button').forEach(b=>b.classList.toggle('on',b.dataset.n===k));
+const setNavOn=k=>{k=({char:'more',shop:'more',gacha:'play'})[k]||k;document.querySelectorAll('#rnav>button').forEach(b=>b.classList.toggle('on',b.dataset.n===k))};
 const subLock=a=>({tal:LV()<2?'Lv2':'',shop:LV()<3?'Lv3':'',shrine:LV()<3?'Lv3':'',bank:'下次更新'})[a]||'';
 const openSub=k=>{if(subOpen===k){closeSub();return}const g=NAV.find(x=>x[0]===k),btn=document.querySelector(`#rnav>button[data-n="${k}"]`),sb=$('rsub');
   sb.innerHTML=g[2].map(([a,n])=>{const lk=subLock(a);return `<button data-a="${a}"${lk?' class="lk"':''}>${n}${lk?'・'+lk:''}</button>`}).join('');
@@ -2458,7 +2461,7 @@ $('rshade').addEventListener('click',closeSub);
 $('rsub').addEventListener('click',e=>{const b=e.target.closest('button[data-a]');if(!b)return;const a=b.dataset.a;A.init();SFX.click();closeSub();rAct(a)});
 const rAct=a=>{if(kbusy&&a!=='card'){rToast('抽卡中，等一下。<button class="rtub" onclick="rUnstick()">卡住了？解除</button>');return}
   const lk=subLock(a);if(lk){rToast(a==='bank'?'倫生銀行下次更新開放，先鎖起來。':`${({tal:'天賦樹',shop:'商店',shrine:'轉職聖殿'})[a]} ${lk} 開放。現在 Lv${LV()}。`,1);A.S.kPoot();if(homeOn)return;return}
-  const f=({home:rHome,map:openMap,task:()=>{goPanel('task');setNavOn('adv')},fort:()=>{window.lunFortOpen&&window.lunFortOpen()},ward:()=>{openChar()},tal:()=>{goPanel('tal');setNavOn('char')},shrine:()=>openShrine(),ach:()=>{goPanel('ach');setNavOn('char')},
+  const f=({home:rHome,map:openMap,task:()=>{goPanel('task');setNavOn('day')},fort:()=>{window.lunFortOpen&&window.lunFortOpen()},ward:()=>{openChar()},tal:()=>{goPanel('tal');setNavOn('char')},shrine:()=>openShrine(),ach:()=>{goPanel('ach');setNavOn('char')},
     card:goDraw,look:()=>openGach('look'),eq:()=>openGach('eq'),shop:()=>{goPanel('shop');setNavOn('shop')},dex:()=>{goPanel('dex');setNavOn('shop')},log:()=>{goPanel('log');setNavOn('shop')},
     info:()=>$('kinfo').classList.add('on'),get:()=>openGet(),call:()=>openCall(),code:()=>window.lunCodeOpen&&window.lunCodeOpen(),goal:()=>window.lunGoalOpen&&window.lunGoalOpen(),pet:()=>window.lunPetOpen&&window.lunPetOpen(),claw:()=>window.lunClawOpen&&window.lunClawOpen(),cook:()=>window.lunCookOpen&&window.lunCookOpen(),run:()=>window.lunRunOpen&&window.lunRunOpen(),cbt:()=>window.lunCardOpen&&window.lunCardOpen(),school:()=>window.lunSchoolOpen&&window.lunSchoolOpen(),house:()=>window.lunHouseOpen&&window.lunHouseOpen()})[a];if(f)f()};
 const updNavBadge=()=>{const b=$('rnB');if(b)b.hidden=!(typeof todoN==='function'&&(todoN()||miniLeft()))};
@@ -2812,7 +2815,7 @@ const P2lock=on=>document.querySelectorAll('#rbkP button,#rbkB .rbkt button').fo
 $('rbkX').onclick=()=>rClose('rbank');
 
 /* ---------- 選單、商店掛勾 ---------- */
-NAV.find(x=>x[0]==='shop')[2].push(['inv','發票對獎'],['bank','倫生銀行']);
+NAV.find(x=>x[0]==='more')[2].push(['inv','發票對獎'],['bank','倫生銀行']);
 $('rsub').addEventListener('click',e=>{const b=e.target.closest('button[data-a]');if(!b)return;if(b.dataset.a==='inv')openInv();},true);
 (()=>{const g=$('kdev').querySelector('[data-d="r_home"]').parentElement;g.insertAdjacentHTML('beforeend',`<button data-d="r_wallet">右上角錢包（看）</button><button data-d="r_print">印一張發票（小票機）</button><button data-d="r_inv">發票對獎</button><button data-d="r_invDraw">讓所有發票可以對獎</button><button data-d="r_invWin">印一張會中獎的發票</button><button data-d="r_bank">倫生銀行（已鎖，DEV 可看）</button><button data-d="r_bankDay">銀行過一天（算利息）</button><button data-d="r_sueReset">今天可以再告一次</button><button data-d="r_coin">倫幣 +200</button><button data-d="r_look">選倫的樣子</button>${GIVERS.map(g=>`<button data-d="r_gv_${g[0]}">送卡：${g[1]}</button>`).join('')}<button data-d="r_gv_c0">送卡：鼠和芳芳</button><button data-d="r_gv_c1">送卡：金達和文英</button>${[0,1,2,3,4,5].map(i=>`<button data-d="r_bgm_${i}">打王音樂：${AREAS[i].n}</button>`).join('')}<button data-d="r_bgmStop">停止音樂</button><button data-d="r_unstick">解除抽卡中卡住</button>`)})();
 $('kdev').addEventListener('click',e=>{const b=e.target.closest('button[data-d^="r_"]');if(!b||!P()||!started)return;const k=b.dataset.d.slice(2),p=P();
@@ -2948,7 +2951,7 @@ $('rraX').onclick=()=>rClose('rrare');
 $('rmN').addEventListener('click',e=>{const b=e.target.closest('.rnode');if(!b)return;const id=b.dataset.a,sh=started&&P()?rr():{},ids=Object.keys(sh).filter(k=>sh[k]===id);if(!ids.length||!AOF(id))return;
   setTimeout(()=>{if(!areaOK(AOF(id)))return;const bt=document.createElement('button');bt.className='rq rpick';bt.textContent=`取貨（${ids.length} 件）`;$('rshB').prepend(bt);
     bt.onclick=()=>{const av=ensureAv();ids.forEach(k=>{av.own[k]=1;delete sh[k]});save();SFX.win();rToast(`取貨完成：${ids.map(k=>GEAR.find(x=>x.id===k).n).join('、')}。去更衣間穿上吧！`);bt.remove()}},0)});
-NAV.find(x=>x[0]==='shop')[2].splice(1,0,['rare','倫生精品館']);
+NAV.find(x=>x[0]==='more')[2].push(['rare','倫生精品館']);
 $('rsub').addEventListener('click',e=>{const b=e.target.closest('button[data-a]');if(b&&b.dataset.a==='rare')openRare()},true);
 (()=>{const g=$('kdev').querySelector('[data-d="r_home"]').parentElement;g.insertAdjacentHTML('beforeend','<button data-d="r_rare">倫生精品館</button><button data-d="r_rareShip">精品全部變成待取貨</button><button data-d="r_rareReset">精品館重置</button>')})();
 $('kdev').addEventListener('click',e=>{const b=e.target.closest('button[data-d^="r_rare"]');if(!b||!P()||!started)return;const k=b.dataset.d;devClose();
@@ -2995,7 +2998,7 @@ const renderEnh=()=>{const p=P(),av=ensureAv(),L=GEAR.filter(g=>g.t==='eq'&&av.o
     else{const drop=l>=5&&Math.random()<.5;if(drop)enh()[g.id]=l-1;fx.className='renfx bad';fx.textContent=drop?`失敗…掉到 +${l-1}`:'失敗了，再試一次';SFX.lose()}
     save();await sleep(1100);enBusy=false;renderEnh();if(homeOn)renderHome()}};
 $('renX').onclick=()=>rClose('renh');
-NAV.find(x=>x[0]==='char')[2].splice(1,0,['enh','裝備強化']);
+NAV.find(x=>x[0]==='more')[2].push(['enh','裝備強化']);
 $('rsub').addEventListener('click',e=>{const b=e.target.closest('button[data-a]');if(b&&b.dataset.a==='enh')openEnh()},true);
 (()=>{const g=$('kdev').querySelector('[data-d="r_home"]').parentElement;g.insertAdjacentHTML('beforeend','<button data-d="r_stone">強化石 +50</button><button data-d="r_enhOpen">裝備強化</button><button data-d="r_enhReset">強化全部歸零</button>')})();
 $('kdev').addEventListener('click',e=>{const b=e.target.closest('button[data-d="r_stone"],button[data-d="r_enhOpen"],button[data-d="r_enhReset"]');if(!b||!P()||!started)return;const k=b.dataset.d;
@@ -3125,7 +3128,7 @@ const renderMts=()=>{const r=rm(),p=P(),list=mtTab==='m'?MOUNTS:PETS,own=mtTab==
     mtRaf=requestAnimationFrame(tk)};mtRaf=requestAnimationFrame(tk)};
 $('rmtT').addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(!b)return;mtTab=b.dataset.k;SFX.click();renderMts()});
 $('rmtX').onclick=()=>rClose('rmts');
-NAV.find(x=>x[0]==='shop')[2].splice(2,0,['mts','坐騎寵物']);
+NAV.find(x=>x[0]==='more')[2].push(['mts','坐騎寵物']);
 $('rsub').addEventListener('click',e=>{const b=e.target.closest('button[data-a]');if(b&&b.dataset.a==='mts')openMts()},true);
 /* 稀有坐騎掉落 */
 const rareMountDrop=a=>{const r=rm();
@@ -3179,7 +3182,7 @@ const renderSkl=()=>{const j=P().job||'novice',s=skl();$('rskS').innerHTML=`${JO
   $('rskL').innerHTML=SKDEF(j).map(d=>{const lv=s[d.k]||0,lk=LV()<d.lv&&!rDevAll;return `<div class="rski${lk?' lk':''}"><canvas class="pix rskic" width="14" height="14" data-ic="${d.k}"></canvas><span><b>${d.n} <em>Lv${lv}/10</em></b><small>${lk?`Lv${d.lv} 解鎖。`:''}${d.d}</small></span><button data-k="${d.k}"${lk||lv>=10||spLeft()<1?' disabled':''}>+1</button></div>`}).join('');
   $('rskL').querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{if(spLeft()<1)return;s[b.dataset.k]=(s[b.dataset.k]||0)+1;save();SFX.lvup();renderSkl();if(homeOn)renderHome()})};
 $('rskX').onclick=()=>rClose('rskl');
-NAV.find(x=>x[0]==='char')[2].splice(1,0,['skl','技能']);
+NAV.find(x=>x[0]==='more')[2].push(['skl','技能']);
 $('rsub').addEventListener('click',e=>{const b=e.target.closest('button[data-a]');if(b&&b.dataset.a==='skl')openSkl()},true);
 /* 大絕 */
 let ultCd=0;
@@ -3280,7 +3283,7 @@ new MutationObserver(()=>{$('rmtL').querySelectorAll('.rri').forEach(r=>{const n
 const fillStat=()=>{const p=P();if(!p)return;$('renSt').innerHTML=`<p class="avjob">職業：<b>${jobName()}</b>（轉職到地圖上的轉職聖殿）</p><div class="avss">`+STN.map((n,i)=>{const b=p.stats?p.stats[i]:5,gv=gearSt(i);return `<div class="avst"><b>${n}</b><span class="bar"><i style="width:${Math.min(100,b/14*100)}%"></i></span><em>${gv?'+'+gv:''}</em><small>${STD[i]}</small></div>`}).join('')+'</div><p class="rsm" style="margin:8px 0 0">下面是裝備強化。</p>'};
 const openStat=()=>{openEnh();fillStat()};
 $('rsub').addEventListener('click',e=>{const b=e.target.closest('button[data-a="enh"]');if(b)setTimeout(fillStat,0)},true);
-{const L=NAV.find(x=>x[0]==='char')[2],ord=['ward','enh','skl','tal','shrine','ach'];L.forEach(x=>{if(x[0]==='enh')x[1]='數值與強化'});L.sort((a,b)=>(ord.indexOf(a[0])+99)%99-(ord.indexOf(b[0])+99)%99)}
+{const L=NAV.find(x=>x[0]==='more')[2],ord=['tal','skl','enh','ach','shop','rare','mts','dex','inv','bank','log','info','get','call','code','rep'];L.forEach(x=>{if(x[0]==='enh')x[1]='數值與強化'});L.sort((a,b)=>{const i=ord.indexOf(a[0]),j=ord.indexOf(b[0]);return (i<0?99:i)-(j<0?99:j)})}
 {const st=SHOP.find(x=>x.id==='stone');if(st)st.d='裝備強化用。去「角色 → 數值與強化」使用。'}
 
 /* ---------- 東西怎麼拿：全部道具目錄 ---------- */
