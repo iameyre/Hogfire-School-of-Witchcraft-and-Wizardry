@@ -3853,22 +3853,22 @@ const mgView=()=>{$('rcookB').innerHTML=`<canvas id="rminiC" width="${MW}" heigh
 const mgText=()=>{const m=$('rminiM'),b=$('rminiB');if(!m||!b)return;
   if(mg.phase==='done'){m.textContent=mg.msg;b.textContent='回到清單';return}
   if(mg.kind==='cook'){m.textContent=`第 ${Math.min(3,mg.round+1)} / 3 次　成功 ${mg.hits} 次　指針進入綠色區按「翻！」`;b.textContent='翻！'}
-  else{m.textContent=`按住加熱，讓溫度停在綠色帶裡（時間 ${Math.max(0,9-mg.time).toFixed(0)} 秒）`;b.textContent='按住加熱'}};
+  else{m.textContent=`按住加熱，溫度停在右邊綠色帶（還剩 ${Math.max(0,9-mg.time).toFixed(0)} 秒）`;b.textContent='按住加熱'}};
 function mgStart(kind,d){Object.assign(mg,{on:true,kind,d,phase:'play',round:0,hits:0,hold:false,temp:.15,inband:0,time:0,stars:0,bub:[],flip:0,wait:0});if(kind==='cook')mgRound();mgView();if(!mgRaf){mgT=performance.now();mgRaf=requestAnimationFrame(mgLoop)}}
-function mgRound(){mg.spd=.9+mg.round*.45;const w=.28-mg.round*.05,c=.25+Math.random()*.5;mg.zone=[c-w/2,c+w/2];mg.pos=0;mg.dir=1}
+function mgRound(){mg.spd=.55+mg.round*.2;const w=.42-mg.round*.05,c=.28+Math.random()*.44;mg.zone=[c-w/2,c+w/2];mg.pos=0;mg.dir=1}
 const mgFinish=stars=>{const p=ST(),d=mg.d;mg.stars=stars;mg.phase='done';
-  if(mg.kind==='cook'){if(stars>0){p.meal={k:d[0],n:[0,3,4,5][stars],q:stars};p.cook.n++;mg.msg=`${STAR[stars]}！${d[1]}做好了，接下來 ${[0,3,4,5][stars]} 場有效${stars===3?'，效果更強':''}。`;A.S&&A.S.pickup&&A.S.pickup()}else{mg.msg='燒焦了……食材浪費了。';A.S&&A.S.miss&&A.S.miss()}}
-  else{if(stars>0){const n=d[3]+(stars-1);p.pot.heal=(p.pot.heal||0)+n;p.cook.pn++;mg.msg=`${STAR[stars]}！做出 ${n} 瓶${d[1]}。`;A.S&&A.S.pickup&&A.S.pickup()}else{mg.msg='火候不對，藥壞掉了……';A.S&&A.S.miss&&A.S.miss()}}
+  if(mg.kind==='cook'){if(stars>0){p.meal={k:d[0],n:[0,3,4,5][stars],q:stars};p.cook.n++;mg.msg=`${STAR[stars]}！${d[1]}做好了，接下來 ${[0,3,4,5][stars]} 場有效${stars===3?'，效果更強':''}。`;mg.sum=[d[1],`接下來 ${[0,3,4,5][stars]} 場有效`,stars===3?'效果比平常更強':d[3]];A.S&&A.S.pickup&&A.S.pickup()}else{mg.msg='燒焦了……食材浪費了。';mg.sum=['沒有一次翻到','食材浪費了'];A.S&&A.S.miss&&A.S.miss()}}
+  else{if(stars>0){const n=d[3]+(stars-1);p.pot.heal=(p.pot.heal||0)+n;p.cook.pn++;mg.msg=`${STAR[stars]}！做出 ${n} 瓶${d[1]}。`;mg.n=n;mg.sum=[`${d[1]} × ${n} 瓶`,`達標 ${mg.inband.toFixed(1)} 秒`];A.S&&A.S.pickup&&A.S.pickup()}else{mg.msg='火候不對，藥壞掉了……';mg.n=0;mg.sum=['藥壞掉了',`達標只有 ${mg.inband.toFixed(1)} 秒`];A.S&&A.S.miss&&A.S.miss()}}
   save();mgText()};
 function mgBtn(){if(mg.phase==='done'){mg.on=false;render();return}
-  if(mg.kind==='cook'&&mg.phase==='play'){const hit=mg.pos>=mg.zone[0]&&mg.pos<=mg.zone[1];if(hit){mg.hits++;A.S&&A.S.pickup&&A.S.pickup()}else A.S&&A.S.miss&&A.S.miss();mg.flip=.6;mg.round++;mg.phase='wait';mg.wait=.7;mgText()}}
+  if(mg.kind==='cook'&&mg.phase==='play'){const hit=mg.pos>=mg.zone[0]-.03&&mg.pos<=mg.zone[1]+.03;if(hit){mg.hits++;A.S&&A.S.pickup&&A.S.pickup()}else A.S&&A.S.miss&&A.S.miss();mg.flip=.6;mg.round++;mg.phase='wait';mg.wait=.7;mgText()}}
 const mgStep=dt=>{if(!mg.on)return;
   if(mg.kind==='cook'){if(mg.phase==='play'){mg.pos+=mg.dir*mg.spd*dt;if(mg.pos>=1){mg.pos=1;mg.dir=-1}if(mg.pos<=0){mg.pos=0;mg.dir=1}}
     else if(mg.phase==='wait'){mg.flip=Math.max(0,mg.flip-dt);mg.wait-=dt;if(mg.wait<=0){if(mg.round>=3)mgFinish(mg.hits);else{mgRound();mg.phase='play';mgText()}}}}
-  else if(mg.phase==='play'){mg.temp=Math.max(0,Math.min(1,mg.temp+(mg.hold?.55:-.3)*dt));mg.time+=dt;if(mg.temp>=.55&&mg.temp<=.75)mg.inband+=dt;
+  else if(mg.phase==='play'){mg.temp=Math.max(0,Math.min(1,mg.temp+(mg.hold?.5:-.22)*dt));mg.time+=dt;if(mg.temp>=.5&&mg.temp<=.8)mg.inband+=dt;
     if(mg.temp>0.3&&Math.random()<dt*10)mg.bub.push({x:110+Math.random()*100,y:150,v:30+Math.random()*50});mg.bub=mg.bub.filter(b=>(b.y-=b.v*dt)>70);
     if(Math.floor(mg.time)!==Math.floor(mg.time-dt))mgText();
-    if(mg.time>=9)mgFinish(mg.inband<1.5?0:mg.inband<3?1:mg.inband<4.5?2:3)}};
+    if(mg.time>=9)mgFinish(mg.inband<1.2?0:mg.inband<2.8?1:mg.inband<4.2?2:3)}};
 const mgDraw=t=>{const c=$('rminiC');if(!c)return;const g=c.getContext('2d');g.imageSmoothingEnabled=false;
   g.fillStyle='#120a1e';g.fillRect(0,0,MW,MH);g.fillStyle='#1d1030';g.fillRect(0,150,MW,60);
   const fl=(x,w,h)=>{for(let i=0;i<5;i++){const hh=h*(.6+.4*Math.sin(t/110+i*1.7+x));g.fillStyle=i%2?'#ffb02a':'#ff6a2a';g.fillRect(x+i*w/5,150-hh,w/5-2,hh)}};
@@ -3876,14 +3876,17 @@ const mgDraw=t=>{const c=$('rminiC');if(!c)return;const g=c.getContext('2d');g.i
     g.fillStyle='#3a3d48';g.beginPath();g.ellipse(160,118,72,14,0,0,7);g.fill();g.fillStyle='#1d1f27';g.beginPath();g.ellipse(160,114,66,10,0,0,7);g.fill();g.fillStyle='#3a3d48';g.fillRect(228,114,56,8);
     const fy=mg.flip>0?(112-80*Math.sin(Math.PI*(1-mg.flip/.6))):106;g.fillStyle=mgCol();g.beginPath();g.arc(160,fy,13,0,7);g.fill();g.fillStyle='#0006';g.fillRect(154,fy-4,3,3);g.fillRect(163,fy-4,3,3);
     g.fillStyle='#000';g.fillRect(30,170,260,20);g.fillStyle='#2f7a3a';g.fillRect(30+mg.zone[0]*260,170,(mg.zone[1]-mg.zone[0])*260,20);g.fillStyle='#fff';g.fillRect(30+mg.pos*260-2,164,4,32);
-    g.fillStyle='#e8c566';g.font='14px sans-serif';g.textAlign='left';let st='';for(let i=0;i<3;i++)st+=i<mg.hits?'★':'☆';g.fillText(st,12,24)}
+    g.fillStyle='#e8c566';g.font='18px sans-serif';g.textAlign='left';let st='';for(let i=0;i<3;i++)st+=i<mg.hits?'★':'☆';g.fillText(st,12,26);g.font='12px sans-serif';g.fillStyle='#cfc6e6';g.fillText('成功 '+mg.hits+' / 3',12,44)}
   else{fl(120,80,14+mg.temp*40);
     g.fillStyle='#2a2d36';g.beginPath();g.ellipse(160,118,64,50,0,0,Math.PI);g.fill();g.fillRect(96,100,128,18);
     const col=mgCol();g.fillStyle=col;g.beginPath();g.ellipse(160,104,56,8,0,0,7);g.fill();
     mg.bub.forEach(b=>{g.fillStyle='#ffffffcc';g.fillRect(b.x,b.y,4,4)});
-    g.fillStyle='#000';g.fillRect(262,20,26,170);g.fillStyle='#2f7a3a';g.fillRect(262,20+170*(1-.75),26,170*.2);g.fillStyle='#fff';g.fillRect(258,20+170*(1-mg.temp)-2,34,4);
+    g.fillStyle='#000';g.fillRect(262,20,26,170);g.fillStyle='#2f7a3a';g.fillRect(262,20+170*(1-.8),26,170*.3);g.fillStyle='#fff';g.fillRect(258,20+170*(1-mg.temp)-2,34,4);
     g.fillStyle='#000';g.fillRect(20,16,200,8);g.fillStyle='#e8c566';g.fillRect(20,16,200*Math.min(1,mg.time/9),8);
-    g.fillStyle='#fff';g.font='12px sans-serif';g.textAlign='left';g.fillText('達標 '+mg.inband.toFixed(1)+' 秒',20,40)}};
+    const ib=mg.temp>=.5&&mg.temp<=.8;g.textAlign='left';g.font='bold 13px sans-serif';g.fillStyle=ib?'#7dff9a':'#fff';g.fillText(ib?'達標中！':'溫度不對',20,42);g.font='22px sans-serif';g.fillStyle='#e8c566';g.fillText((mg.inband>=1.2?'★':'☆')+(mg.inband>=2.8?'★':'☆')+(mg.inband>=4.2?'★':'☆'),20,70);g.font='11px sans-serif';g.fillStyle='#cfc6e6';g.fillText('達標 '+mg.inband.toFixed(1)+' 秒（1.2／2.8／4.2 秒各一星）',20,86)}
+  if(mg.phase==='done')mgOverlay(g)};
+const mgOverlay=g=>{g.fillStyle='rgba(8,4,16,.88)';g.fillRect(0,0,MW,MH);g.textAlign='center';g.fillStyle='#e8c566';g.font='46px sans-serif';g.fillText('★'.repeat(mg.stars)+'☆'.repeat(3-mg.stars),160,70);g.fillStyle='#fff';g.font='bold 22px sans-serif';g.fillText(STAR[mg.stars],160,106);g.font='15px sans-serif';g.fillStyle='#e3dcf2';(mg.sum||[]).forEach((t,i)=>g.fillText(t,160,134+i*22));
+  if(mg.kind==='pot'&&mg.n>0){for(let i=0;i<mg.n;i++){const x=160+(i-(mg.n-1)/2)*30;g.fillStyle='#e0405a';g.fillRect(x-7,170,14,18);g.fillStyle='#cfd2d8';g.fillRect(x-4,164,8,6)}}};
 let mgRaf=0,mgT=0;
 const mgLoop=t=>{const dt=Math.min(.05,(t-mgT)/1000||0);mgT=t;mgStep(dt);if(mg.on&&$('rcook').classList.contains('on')){mgDraw(t);mgRaf=requestAnimationFrame(mgLoop)}else mgRaf=0};
 window.lunMini={step:mgStep,btn:mgBtn,hold:v=>{mg.hold=v},state:()=>({...mg,bub:undefined})};
