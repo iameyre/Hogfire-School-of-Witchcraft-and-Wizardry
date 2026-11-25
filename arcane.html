@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>倫生・視窗風格預覽</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Oswald:wght@500;700&family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;background:#050407;color:#f2f2f4;-webkit-text-size-adjust:100%}
+body{font:15px/1.7 "Noto Serif TC",serif;padding:16px 14px calc(110px + env(safe-area-inset-bottom))}
+h1{font:700 18px "Cinzel","Noto Serif TC",serif;letter-spacing:.3em;margin:4px 0;color:#d9dde6}
+.top{color:#9a9da6;font-size:13px;margin:0 0 16px;font-family:system-ui,sans-serif}
+.lab{display:flex;justify-content:space-between;align-items:center;margin:22px 2px 8px;font:700 14px system-ui,sans-serif;color:#ffd56a}
+.lab button{padding:9px 16px;border-radius:8px;border:1px solid #ffffff44;background:#ffffff0c;color:#fff;font:700 13px system-ui,sans-serif}
+.lab button.on{border-color:#e0102e;background:#e0102e44}
+.stage{position:relative;padding:22px 12px;border-radius:14px;background:#0a0710 url() center;overflow:hidden}
+.stage::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 60% at 50% -10%,var(--spot),transparent 60%);pointer-events:none}
+.pop{position:relative;margin:0 auto;max-width:380px;padding:18px 14px 14px;text-align:center}
+.pop h3{margin:0;font:700 19px "Cinzel","Noto Serif TC",serif;letter-spacing:.35em;text-indent:.35em}
+.pop h3 small{display:block;font:500 11px "Cinzel",serif;letter-spacing:.4em;margin-top:2px;opacity:.75}
+.day{font-size:12.5px;margin:8px 0 10px;opacity:.9}
+.g{position:relative;text-align:start;padding:10px 12px;margin-top:8px}
+.g b{font:700 14px "Noto Serif TC",serif;letter-spacing:.1em}.g small{font-size:11px;margin-inline-start:6px;opacity:.7}.g em{float:right;font-style:normal;font-size:11px}
+.m{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;margin-top:7px}
+.m i{font:700 12px "Oswald",sans-serif;font-style:normal;letter-spacing:.06em}
+.bar{height:5px;margin-top:3px;background:#ffffff14;overflow:hidden}.bar u{display:block;height:100%}
+.btn{display:block;width:100%;margin-top:12px;padding:11px;font:700 14px "Noto Serif TC",serif;letter-spacing:.2em;color:#fff;border:0}
+.dim{opacity:.45}
+.x{position:absolute;top:8px;right:8px;width:30px;height:30px;display:grid;place-items:center;font:700 14px sans-serif;color:#fff}
+
+/* A 皮爾托福・黃銅 */
+.A{--spot:#2ee6d622}
+.A .pop{background:linear-gradient(180deg,#1b1812,#0e0c08);border:2px solid #9b7a34;border-radius:6px;box-shadow:0 0 0 2px #0e0c08,0 0 0 3px #c9a24a66,0 10px 30px #000,inset 0 0 40px #000}
+.A .pop::before,.A .pop::after{content:"";position:absolute;width:18px;height:18px;border:2px solid #e3bd62;pointer-events:none}
+.A .pop::before{left:-7px;top:-7px;border-right:0;border-bottom:0;border-radius:6px 0 0 0}
+.A .pop::after{right:-7px;bottom:-7px;border-left:0;border-top:0;border-radius:0 0 6px 0}
+.A h3{color:#e8c46a;text-shadow:0 0 14px #c9a24a55}.A h3 small{color:#2ee6d6}
+.A .day{color:#cdb98a}
+.A .g{border:1px solid #6d5626;background:linear-gradient(180deg,#2a2213aa,#14100a);border-radius:3px}
+.A .g.cur{border-color:#e3bd62;box-shadow:inset 0 0 14px #c9a24a22,0 0 10px #2ee6d622}
+.A .g b{color:#f1dca0}.A .g em{color:#2ee6d6}
+.A .m{color:#d6c9a8}.A .m i{color:#e8c46a}
+.A .bar{border-radius:0;background:#00000088;border:1px solid #6d5626}.A .bar u{background:linear-gradient(90deg,#8a6a22,#e8c46a)}
+.A .btn{background:linear-gradient(180deg,#e3bd62,#8a6a22);color:#1a1208;border-radius:3px;box-shadow:inset 0 1px 0 #fff6,0 2px 0 #4a3810,0 0 14px #c9a24a44}
+.A .x{color:#e8c46a}
+
+/* B 祖安・霓虹 */
+.B{--spot:#ff3d9a26}
+.B .pop{background:linear-gradient(180deg,#150a22,#08040f);border:1px solid #ff3d9a;clip-path:polygon(0 12px,12px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%);box-shadow:0 0 22px #ff3d9a55;filter:drop-shadow(0 0 8px #2ee6d655)}
+.B h3{color:#fff;text-shadow:2px 0 #ff3d9a,-2px 0 #2ee6d6}.B h3 small{color:#2ee6d6}
+.B .day{color:#e3b8ff}
+.B .g{border:1px solid #ffffff22;border-left:3px solid #ff3d9a;background:#ffffff08}
+.B .g.cur{border-color:#2ee6d6;border-left-color:#ff3d9a;background:#2ee6d60f}
+.B .g b{color:#fff}.B .g em{color:#ff3d9a}
+.B .m{color:#e6dcff}.B .m i{color:#2ee6d6}
+.B .bar u{background:linear-gradient(90deg,#ff3d9a,#2ee6d6)}
+.B .btn{background:linear-gradient(90deg,#ff3d9a,#a02aff);clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);box-shadow:0 0 18px #ff3d9a77}
+.B .x{color:#ff3d9a}
+
+/* C FIRESTARTER × 奧術（推薦） */
+.C{--spot:#e0102e30}
+.C .pop{background:linear-gradient(180deg,#120609,#050204);border:1px solid #e0102e99;clip-path:polygon(0 14px,14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px));box-shadow:0 0 30px #e0102e44}
+.C .pop::before{content:"";position:absolute;inset:5px;border:1px solid #d9b56a88;clip-path:polygon(0 12px,12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px));pointer-events:none}
+.C h3{background:linear-gradient(180deg,#fff,#aab0bd);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 10px #e0102e88)}.C h3 small{color:#e0102e;-webkit-text-fill-color:#e0102e}
+.C .day{color:#c9ccd6}
+.C .g{border:1px solid #ffffff1f;background:linear-gradient(90deg,#e0102e14,#ffffff05)}
+.C .g.cur{border-color:#e0102e;box-shadow:0 0 14px #e0102e33}
+.C .g b{color:#fff}.C .g em{color:#d9b56a}
+.C .m{color:#d3d6de}.C .m i{color:#d9b56a}
+.C .bar u{background:linear-gradient(90deg,#e0102e,#ff6a7a)}
+.C .btn{background:linear-gradient(180deg,#e0102e,#8a0a1c);clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px);box-shadow:0 0 18px #e0102e88;border-top:1px solid #ff9aa6}
+.C .x{color:#c9ccd6}
+.foot{position:fixed;left:0;right:0;bottom:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:#050407f2;border-top:1px solid #ffffff1f;font:14px system-ui,sans-serif}
+.foot button{width:100%;margin-top:8px;padding:12px;border-radius:10px;border:1px solid #e0102e;background:#e0102e33;color:#fff;font:700 15px system-ui,sans-serif}
+</style>
+</head>
+<body>
+<h1>WINDOW STYLE</h1>
+<p class="top">同一個「三天大目標」視窗，三種風格。每個下面有「選這個」。也可以說「A 的框＋C 的顏色」這類組合。</p>
+<div id="root"></div>
+<div class="foot"><span id="sum">還沒選</span><button id="copy">複製我的選擇</button></div>
+<script>
+const V=[['A','A　奧術・皮爾托福（黃銅金屬框＋海克斯青光）'],['B','B　奧術・祖安（霓虹洋紅＋青，斜切角）'],['C','C　FIRESTARTER × 奧術（黑底紅銀＋金色細框，推薦）']];
+const tpl=k=>`<div class="stage ${k}"><div class="pop"><div class="x">✕</div>
+<h3>三天大目標<small>THREE-DAY GOALS</small></h3>
+<div class="day">今天是你的第 4 天・現在是第 2 個大目標</div>
+<div class="g"><b>G1 抽卡日常</b><small>12/1～12/3</small><em>已完成</em></div>
+<div class="g cur"><b>G2 打怪</b><small>12/4～12/6</small><em>進行中</em>
+ <div class="m"><span>擊敗怪物 40 隻</span><i>26 / 40</i></div><div class="bar"><u style="width:65%"></u></div>
+ <div class="m"><span>打倒倫倫村的倫凍王</span><i>✓</i></div><div class="bar"><u style="width:100%"></u></div>
+ <div class="m"><span>等級到 Lv5</span><i>3 / 5</i></div><div class="bar"><u style="width:60%"></u></div>
+ <button class="btn">領取獎勵　倫性 15・倫幣 200</button></div>
+<div class="g dim"><b>G3 寵物與夾娃娃機</b><small>12/7～12/9</small><em>還沒到</em></div>
+<div class="g dim"><b>G4 料理與製藥</b><small>12/10～12/12</small><em>還沒到</em></div>
+</div></div>`;
+let S=null;try{S=localStorage.getItem('lunstyle')}catch(e){}
+const R=document.getElementById('root');
+V.forEach(([k,n])=>{R.insertAdjacentHTML('beforeend',`<div class="lab"><span>${n}</span><button data-k="${k}">選這個</button></div>${tpl(k)}`)});
+const upd=()=>{document.querySelectorAll('.lab button').forEach(b=>b.classList.toggle('on',b.dataset.k===S));document.getElementById('sum').textContent='我選：'+(S?S+' 風格':'還沒選');try{S&&localStorage.setItem('lunstyle',S)}catch(e){}};
+R.addEventListener('click',e=>{const b=e.target.closest('button[data-k]');if(b){S=b.dataset.k;upd()}});
+document.getElementById('copy').onclick=async()=>{const t='視窗風格選擇：'+(S||'未選');let ok=false;try{await navigator.clipboard.writeText(t);ok=true}catch(e){}document.getElementById('copy').textContent=ok?'已複製，貼給我':t};
+upd();
+</script>
+</body>
+</html>

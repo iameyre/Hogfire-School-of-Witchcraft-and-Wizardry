@@ -59,12 +59,12 @@ let T=null,B=null;try{const s=JSON.parse(localStorage.getItem('lunfont')||'{}');
 const L=document.getElementById('list');
 F.forEach(([n,name,fam,w])=>{const c=document.createElement('div');c.className='card';c.dataset.n=n;
  c.innerHTML=`<div class="hd"><span><b>${n}</b>　${name}</span></div>
- <div style="font-family:${fam};font-weight:${w}">
+ <div class="smp">
  <p class="s1">三天大目標</p>
  <p class="s2">G2 打怪　12/4～12/6</p>
  <p class="s3">擊敗怪物 40 隻，打倒倫倫村的倫凍王。領取獎勵（倫性 15、倫幣 200）。進度看玩了幾天，不看日期，漏玩不會被丟下。</p>
  <p class="s4">7/30　0/1　LV 30　1234</p></div>
- <div class="btns"><button data-r="t">標題用這個</button><button data-r="b" class="bb">內文用這個</button></div>`;L.appendChild(c)});
+ <div class="btns"><button data-r="t">標題用這個</button><button data-r="b" class="bb">內文用這個</button></div>`;const sm=c.querySelector(".smp");sm.style.fontFamily=fam;sm.style.fontWeight=w;L.appendChild(c)});
 const nm=n=>{const f=F.find(x=>x[0]===n);return f?n+' '+f[1].split('（')[0]:'未選'};
 const upd=()=>{document.querySelectorAll('.card').forEach(c=>{const n=+c.dataset.n;c.classList.toggle('t',n===T);c.classList.toggle('b',n===B);c.querySelector('[data-r=t]').classList.toggle('on',n===T);c.querySelector('[data-r=b]').classList.toggle('on',n===B);c.querySelector('[data-r=b]').classList.toggle('bb',true)});
  document.getElementById('sum').textContent='標題：'+nm(T)+'　內文：'+nm(B);try{localStorage.setItem('lunfont',JSON.stringify({t:T,b:B}))}catch(e){}};
