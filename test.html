@@ -2520,7 +2520,7 @@ const spawnMon=boss=>{const a=B.a,k=boss?a.boss:a.m[Math.random()<.5?0:1],L=boss
   B.mons.push(m);if(boss){B.boss=m;bossBgm(AREAS.indexOf(B.a));$('rbBoss').classList.add('on');$('rbBN').textContent=`王・${a.bn}・Lv${L}`;bmsg('BOSS',1500);SFX.boom()}};
 const dmgMon=(m,base,forceCrit)=>{if(m.dead)return;const S=B.S,cr=forceCrit||Math.random()*100<S.crit;let d=Math.round(base*(.88+Math.random()*.24)*(cr?1.8:1));m.hp-=d;m.hit=.12;m.kb=(m.x>B.pl.x?1:-1)*(m.boss?20:60);
   B.txt.push({x:m.x,y:m.y-m.h-4,s:String(d),c:cr?'#ffd56a':'#fff',t:0,big:cr});cr?SFX.crit():SFX.hit();if(m.hp<=0)killMon(m)};
-const killMon=m=>{m.dead=.4;SFX.die();const L=m.L,ex=Math.round((4+L*3)*(m.boss?10:1));B.exp+=ex;let sh=Math.random()<(m.boss?1:.35)?(m.boss?10+L:1+Math.floor(Math.random()*3)):0;if(sh&&petOn())sh=Math.ceil(sh*1.1);if(sh&&window.lunFortCoin)sh=Math.ceil(sh*window.lunFortCoin());B.sh+=sh;
+const killMon=m=>{m.dead=.4;try{const q=P();q.kills=(q.kills||0)+1}catch(x){}SFX.die();const L=m.L,ex=Math.round((4+L*3)*(m.boss?10:1));B.exp+=ex;let sh=Math.random()<(m.boss?1:.35)?(m.boss?10+L:1+Math.floor(Math.random()*3)):0;if(sh&&petOn())sh=Math.ceil(sh*1.1);if(sh&&window.lunFortCoin)sh=Math.ceil(sh*window.lunFortCoin());B.sh+=sh;
   B.txt.push({x:m.x,y:m.y-m.h-12,s:`+${ex} EXP`,c:'#9cf',t:0});if(sh){B.txt.push({x:m.x,y:m.y-m.h-20,s:`+${sh} 幣`,c:'#ffd56a',t:0});setTimeout(SFX.coin,120)}
   if(Math.random()<Math.min(.95,(m.boss?.6:.04)*(window.lunFortDrop?window.lunFortDrop():1))){const av=ensureAv(),c=GEAR.filter(x=>x.t==='eq'&&!x.ltd&&!x.gc&&!x.rare&&!av.own[x.id]&&!B.drops.includes(x.id)&&x.lv<=B.lvNow+2);if(c.length){const it=c[Math.floor(Math.random()*c.length)];B.drops.push(it.id);B.txt.push({x:m.x,y:m.y-m.h-28,s:'掉寶！'+it.n,c:'#ff8ad8',t:0,big:1})}}
   if(!m.boss){B.kills++;rp().kills=(rp().kills||0)+1}else B.bossDone=true;
@@ -3458,7 +3458,7 @@ document.addEventListener('click',async e=>{
 /* ---------- 三天大目標 ---------- */
 const GOALS=[
  {n:'抽卡日常',d:'12/1～12/3',ms:[['抽卡累計 30 張',p=>(p.st&&p.st.pulls)||0,30],['對一次發票',p=>invs().some(v=>v.ck)?1:0,1],['參拜 3 次',p=>(p.pray&&p.pray.tot)||0,3]],rw:{w:12,s:150}},
- {n:'打怪',d:'12/4～12/6'},{n:'寵物與夾娃娃機',d:'12/7～12/9'},{n:'料理與製藥',d:'12/10～12/12'},
+ {n:'打怪',d:'12/4～12/6',ms:[['擊敗怪物 40 隻',p=>p.kills||0,40],['打倒倫倫村的倫凍王',p=>(rp().clear&&rp().clear.village)?1:0,1],['等級到 Lv5',p=>p.lv||1,5]],rw:{w:15,s:200}},{n:'寵物與夾娃娃機',d:'12/7～12/9'},{n:'料理與製藥',d:'12/10～12/12'},
  {n:'坐騎探險',d:'12/13～12/15'},{n:'卡片對戰',d:'12/16～12/18'},{n:'學堂與小屋',d:'12/19～12/20'}];
 const gCal=p=>Math.max(1,Math.round((Date.parse(today())-Date.parse(p.gd[0]))/864e5)+1);
 const gInfo=()=>{const p=P();p.gd=p.gd||[];const t=today();if(!p.gd.includes(t)){p.gd.push(t);save()}p.goal=p.goal||{c:{}};
@@ -3485,7 +3485,7 @@ setInterval(()=>{if(!started||!P()||document.querySelector('.rpop.on'))return;co
   if(today().slice(5)==='12-20'&&!p.bd){p.bd=1;save();rmShow('<h3>12/20</h3><p>倫，生日快樂！</p><p>不管大目標破到哪裡，今天先吃蛋糕。這個世界永遠幫你留一個座位。</p>')}},2000);
 
 /* ---------- DEV 按鈕 ---------- */
-$('kdTop').insertAdjacentHTML('beforeend','<button id="kdG1">⑦ 三天大目標（打開看）</button><button id="kdG2">⑧ 假裝第 4 天且漏玩（看獎勵加倍）</button><button id="kdG3">⑨ G1 三項全部完成</button><button id="kdG4">⑩ 預覽生日祝福與破關祝福</button><button id="kdG5">⑪ 看存檔代碼</button><button id="kdG6">⑫ 封面：用代碼找回（登出預覽）</button>');
+$('kdTop').insertAdjacentHTML('beforeend','<button id="kdG1">⑦ 三天大目標（打開看）</button><button id="kdG2">⑧ 假裝第 4 天且漏玩（看獎勵加倍）</button><button id="kdG3">⑨ G1 三項全部完成</button><button id="kdG4">⑩ 預覽生日祝福與破關祝福</button><button id="kdG5">⑪ 看存檔代碼</button><button id="kdG6">⑫ 封面：用代碼找回（登出預覽）</button><button id="kdG7">⑬ 假裝第 4 天且 G2 三項完成</button>');
 const dv=(id,f)=>{$(id).onclick=()=>{if(!P()||!started){devNote('先按上面的「用測試玩家直接進入卡池」。');return}devClose();f()}};
 dv('kdG1',gOpen);
 dv('kdG2',()=>{const p=P(),d=new Date();p.gd=[];for(let i=0;i<2;i++){const x=new Date(d-(8-i)*864e5);p.gd.push(x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0'))}p.goal={c:{}};save();gOpen()});
@@ -3493,6 +3493,7 @@ dv('kdG3',()=>{const p=P();p.st=p.st||{};p.st.pulls=Math.max(30,p.st.pulls||0);p
 dv('kdG4',()=>rmShow('<h3>12/20</h3><p>倫，生日快樂！</p><p>不管大目標破到哪裡，今天先吃蛋糕。這個世界永遠幫你留一個座位。</p><p class="rgs">（破關祝福：提前破關，所以提前說生日快樂）</p>'));
 dv('kdG5',()=>rcShow(false));
 $('kdG6').onclick=()=>{devClose();rcEnter()};
+dv('kdG7',()=>{const p=P(),d=new Date();p.gd=[];for(let i=0;i<4;i++){const x=new Date(d-(3-i)*864e5);p.gd.push(x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0'))}p.goal={c:{0:1}};p.kills=Math.max(40,p.kills||0);rp().clear=rp().clear||{};rp().clear.village=1;p.lv=Math.max(5,p.lv||1);save();gOpen()});
 
 }
 </script>
