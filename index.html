@@ -14,7 +14,7 @@
    PICTURE: 全螢幕紅煙粒子＋聚光，翻牌、洗牌、卡面登場都是動態圖形
    COLOUR and TYPE: 黑底、紅 #e0102e、銀白；Cinzel／Bodoni Moda＋仙人掌古典宋
    LAYOUT: 手機直式，上方玩家列、中間舞台、下方操作區與分頁列 */
-:root{color-scheme:dark;--red:#b3261e;--kr:#e0102e;--A:"Cactus Classical Serif","Noto Serif TC",serif;--D:"Cinzel",serif;--sb:max(10px,env(safe-area-inset-bottom));--st:max(10px,env(safe-area-inset-top))}
+:root{color-scheme:dark;--red:#b3261e;--kr:#e0102e;--A:"Cactus Classical Serif","Noto Serif TC","Songti TC","STSong","Noto Serif CJK TC",serif;--D:"Cinzel",serif;--sb:max(10px,env(safe-area-inset-bottom));--st:max(10px,env(safe-area-inset-top))}
 *{box-sizing:border-box;min-width:0}
 [hidden]{display:none!important}
 html,body{margin:0;height:100%}
@@ -3426,12 +3426,12 @@ document.head.insertAdjacentHTML('beforeend',`<style>
 #rmisc input{width:100%;box-sizing:border-box;padding:12px;border-radius:8px;border:1px solid #ffffff44;background:#ffffff0c;color:#fff;font:700 18px monospace;letter-spacing:.12em;text-align:center;text-transform:uppercase}
 #rmisc .rcbtn{display:block;width:100%;margin-top:10px;padding:11px;border-radius:8px;border:1px solid #ffd56a;background:linear-gradient(180deg,#ffd56a33,transparent);color:#fff;font:400 15px var(--A);letter-spacing:.2em}
 #rmisc .rcbtn:disabled{border-color:#555;background:#ffffff0a;color:#888}
-.rgc{margin-top:8px;padding:9px 10px;border:1px solid #ffffff1c;border-radius:9px;background:#ffffff08;text-align:start}
-.rgc.cur{border-color:#ffd56a88;background:#ffd56a10}.rgc.dim{opacity:.5}
-.rgc b{font:400 14px var(--A);letter-spacing:.12em;color:#fff}.rgc small{color:#9a9da6;font-size:11px;margin-inline-start:6px}
-.rgc em{float:right;font-style:normal;font-size:11px;color:#ffd56a}
-.rgm{display:flex;justify-content:space-between;font-size:12.5px;color:#cfd2d8;margin-top:5px}.rgm i{font-style:normal;color:#ffd56a}.rgm.ok{color:#8fd68f}.rgm.ok i{color:#8fd68f}
-.rgs{font-size:12px;color:#ffd56a;margin:2px 0 0;text-align:center}
+.glc{margin-top:8px;padding:9px 10px;border:1px solid #ffffff1c;border-radius:9px;background:#ffffff08;text-align:start}
+.glc.cur{border-color:#ffd56a88;background:#ffd56a10}.glc.dim{opacity:.5}
+.glc b{font:400 14px var(--A);letter-spacing:.12em;color:#fff}.glc small{color:#9a9da6;font-size:11px;margin-inline-start:6px}
+.glc em{float:right;font-style:normal;font-size:11px;color:#ffd56a}
+.glm{display:flex;justify-content:space-between;font-size:12.5px;color:#cfd2d8;margin-top:5px}.glm i{font-style:normal;color:#ffd56a}.glm.ok{color:#8fd68f}.glm.ok i{color:#8fd68f}
+.gls{font-size:12px;color:#ffd56a;margin:2px 0 0;text-align:center}
 </style>`);
 document.body.insertAdjacentHTML('beforeend',`<div class="rpop" id="rmisc"><div class="rcb">${xBtn('rmiscX')}<div id="rmBody"></div></div></div>`);
 $('rmiscX').onclick=()=>{rClose('rmisc');A.S&&A.S.tap&&A.S.tap()};
@@ -3441,7 +3441,7 @@ const rmShow=h=>{$('rmBody').innerHTML=h;rOpen('rmisc')};
 const rcShow=first=>{const c=typeof sbCode!=='undefined'?sbCode:'';
   rmShow(c?`<h3>存檔代碼</h3><div class="rcv" id="rcV">${c}</div><button class="rcbtn" id="rcCopy">複製代碼</button>${first?'<p>這是你專屬的存檔代碼，請現在就抄下來或截圖。</p>':''}<p>換手機、換瀏覽器、清除瀏覽器資料之後，在封面按「用存檔代碼找回存檔」，輸入這組代碼就能接著玩。</p><p>代碼等於你的存檔，請記好，不要給別人。之後也能在「更多 → 存檔代碼」再看一次。</p>`
    :`<h3>存檔代碼</h3><p>目前沒有連上雲端，所以還沒有代碼。請連上網路，重新打開遊戲再試。</p>`)};
-const rcEnter=()=>{rmShow(`<h3>找回存檔</h3><p>輸入你的 12 碼存檔代碼（有沒有橫線都可以）。</p><input id="rcIn" maxlength="14" autocomplete="off" autocapitalize="characters" placeholder="XXXX-XXXX-XXXX"><button class="rcbtn" id="rcOk">找回</button><p id="rcMsg" class="rgs"></p>`)};
+const rcEnter=()=>{rmShow(`<h3>找回存檔</h3><p>輸入你的 12 碼存檔代碼（有沒有橫線都可以）。</p><input id="rcIn" maxlength="14" autocomplete="off" autocapitalize="characters" placeholder="XXXX-XXXX-XXXX"><button class="rcbtn" id="rcOk">找回</button><p id="rcMsg" class="gls"></p>`)};
 window.lunCodeOpen=()=>rcShow(false);
 document.addEventListener('click',async e=>{
   if(e.target.closest('#cvCode')){A.init();rcEnter();return}
@@ -3456,8 +3456,9 @@ document.addEventListener('click',async e=>{
 });
 
 /* ---------- 三天大目標 ---------- */
+const prayN=p=>{const t=p.pray&&p.pray.tot;return t&&typeof t==='object'?Object.keys(t).reduce((a,k)=>k==='don'?a:a+(+t[k]||0),0):(+t||0)};
 const GOALS=[
- {n:'抽卡日常',d:'12/1～12/3',ms:[['抽卡累計 30 張',p=>(p.st&&p.st.pulls)||0,30],['對一次發票',p=>invs().some(v=>v.ck)?1:0,1],['參拜 3 次',p=>(p.pray&&p.pray.tot)||0,3]],rw:{w:12,s:150}},
+ {n:'抽卡日常',d:'12/1～12/3',ms:[['抽卡累計 30 張',p=>(p.st&&p.st.pulls)||0,30],['對一次發票',p=>invs().some(v=>v.ck)?1:0,1],['參拜 3 次',prayN,3]],rw:{w:12,s:150}},
  {n:'打怪',d:'12/4～12/6',ms:[['擊敗怪物 40 隻',p=>p.kills||0,40],['打倒倫倫村的倫凍王',p=>(rp().clear&&rp().clear.village)?1:0,1],['等級到 Lv5',p=>p.lv||1,5]],rw:{w:15,s:200}},{n:'寵物與夾娃娃機',d:'12/7～12/9'},{n:'料理與製藥',d:'12/10～12/12'},
  {n:'坐騎探險',d:'12/13～12/15'},{n:'卡片對戰',d:'12/16～12/18'},{n:'學堂與小屋',d:'12/19～12/20'}];
 const gCal=p=>Math.max(1,Math.round((Date.parse(today())-Date.parse(p.gd[0]))/864e5)+1);
@@ -3465,13 +3466,13 @@ const gInfo=()=>{const p=P();p.gd=p.gd||[];const t=today();if(!p.gd.includes(t))
   const n=p.gd.length;return{p,n,cur:Math.min(7,Math.ceil(n/3)),late:gCal(p)-n>=1}};
 const gDone=(g,p)=>g.ms&&g.ms.every(m=>m[1](p)>=m[2]);
 const gOpen=()=>{const{p,n,cur,late}=gInfo();
-  let h=`<h3>三天大目標</h3><p class="rgs">今天是你的第 ${n} 天・現在是第 ${cur} 個大目標${late?'<br>你有幾天沒來，領獎勵加倍！':''}</p>`;
+  let h=`<h3>三天大目標</h3><p class="gls">今天是你的第 ${n} 天・現在是第 ${cur} 個大目標${late?'<br>你有幾天沒來，領獎勵加倍！':''}</p>`;
   GOALS.forEach((g,i)=>{const open=i+1<=cur,claimed=p.goal.c[i],ready=!!g.ms;
-    h+=`<div class="rgc${i+1===cur?' cur':''}${!open?' dim':''}"><b>G${i+1} ${g.n}</b><small>${g.d}</small><em>${claimed?'已完成':!open?'還沒到':!ready?'準備中':gDone(g,p)?'可領獎':'進行中'}</em>`;
-    if(open&&ready&&!claimed){g.ms.forEach(m=>{const v=Math.min(m[1](p),m[2]);h+=`<div class="rgm${v>=m[2]?' ok':''}"><span>${m[0]}</span><i>${v>=m[2]?'✓':v+'/'+m[2]}</i></div>`});
+    h+=`<div class="glc${i+1===cur?' cur':''}${!open?' dim':''}"><b>G${i+1} ${g.n}</b><small>${g.d}</small><em>${claimed?'已完成':!open?'還沒到':!ready?'準備中':gDone(g,p)?'可領獎':'進行中'}</em>`;
+    if(open&&ready&&!claimed){g.ms.forEach(m=>{const v=Math.min(m[1](p),m[2]);h+=`<div class="glm${v>=m[2]?' ok':''}"><span>${m[0]}</span><i>${v>=m[2]?'✓':v+'/'+m[2]}</i></div>`});
       h+=`<button class="rcbtn" data-gc="${i}"${gDone(g,p)?'':' disabled'}>領取獎勵（倫性 ${g.rw.w*(late?2:1)}、倫幣 ${g.rw.s*(late?2:1)}）</button>`}
     h+='</div>'});
-  h+='<p class="rgs">進度看「玩了幾天」，不看日期，漏玩不會被丟下。</p>';rmShow(h)};
+  h+='<p class="gls">進度看「玩了幾天」，不看日期，漏玩不會被丟下。</p>';rmShow(h)};
 window.lunGoalOpen=gOpen;
 document.addEventListener('click',e=>{const b=e.target.closest('#rmisc button[data-gc]');if(!b)return;const i=+b.dataset.gc,{p,late}=gInfo(),g=GOALS[i];
   if(!g.ms||p.goal.c[i]||!gDone(g,p))return;p.goal.c[i]=1;const k=late?2:1;p.wallet=(p.wallet||0)+g.rw.w*k;p.shard=(p.shard||0)+g.rw.s*k;save();A.S&&A.S.pickup&&A.S.pickup();
@@ -3489,8 +3490,8 @@ $('kdTop').insertAdjacentHTML('beforeend','<button id="kdG1">⑦ 三天大目標
 const dv=(id,f)=>{$(id).onclick=()=>{if(!P()||!started){devNote('先按上面的「用測試玩家直接進入卡池」。');return}devClose();f()}};
 dv('kdG1',gOpen);
 dv('kdG2',()=>{const p=P(),d=new Date();p.gd=[];for(let i=0;i<2;i++){const x=new Date(d-(8-i)*864e5);p.gd.push(x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0'))}p.goal={c:{}};save();gOpen()});
-dv('kdG3',()=>{const p=P();p.st=p.st||{};p.st.pulls=Math.max(30,p.st.pulls||0);p.pray=p.pray||{};p.pray.tot=Math.max(3,p.pray.tot||0);const v=invs();if(!v.some(x=>x.ck))v.push({no:'00000000',d:today(),amt:1,ck:1,pz:-1,ts:0});save();gOpen()});
-dv('kdG4',()=>rmShow('<h3>12/20</h3><p>倫，生日快樂！</p><p>不管大目標破到哪裡，今天先吃蛋糕。這個世界永遠幫你留一個座位。</p><p class="rgs">（破關祝福：提前破關，所以提前說生日快樂）</p>'));
+dv('kdG3',()=>{const p=P();p.st=p.st||{};p.st.pulls=Math.max(30,p.st.pulls||0);p.pray=p.pray||{};if(typeof p.pray.tot!=='object'||!p.pray.tot)p.pray.tot={};p.pray.tot.t=Math.max(3,p.pray.tot.t||0);const v=invs();if(!v.some(x=>x.ck))v.push({no:'00000000',d:today(),amt:1,ck:1,pz:-1,ts:0});save();gOpen()});
+dv('kdG4',()=>rmShow('<h3>12/20</h3><p>倫，生日快樂！</p><p>不管大目標破到哪裡，今天先吃蛋糕。這個世界永遠幫你留一個座位。</p><p class="gls">（破關祝福：提前破關，所以提前說生日快樂）</p>'));
 dv('kdG5',()=>rcShow(false));
 $('kdG6').onclick=()=>{devClose();rcEnter()};
 dv('kdG7',()=>{const p=P(),d=new Date();p.gd=[];for(let i=0;i<4;i++){const x=new Date(d-(3-i)*864e5);p.gd.push(x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0'))}p.goal={c:{0:1}};p.kills=Math.max(40,p.kills||0);rp().clear=rp().clear||{};rp().clear.village=1;p.lv=Math.max(5,p.lv||1);save();gOpen()});
