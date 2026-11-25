@@ -3496,6 +3496,25 @@ dv('kdG5',()=>rcShow(false));
 $('kdG6').onclick=()=>{devClose();rcEnter()};
 dv('kdG7',()=>{const p=P(),d=new Date();p.gd=[];for(let i=0;i<4;i++){const x=new Date(d-(3-i)*864e5);p.gd.push(x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0'))}p.goal={c:{0:1}};p.kills=Math.max(40,p.kills||0);rp().clear=rp().clear||{};rp().clear.village=1;p.lv=Math.max(5,p.lv||1);save();gOpen()});
 
+/* ---------- 視窗主題 B（祖安霓虹）＋ 字體 DotGothic16（雲 11/25 選的，還要調） ---------- */
+document.head.insertAdjacentHTML('beforeend',`<style id="thB">
+:root{--A:"DotGothic16","Noto Sans TC","PingFang TC",sans-serif}
+body{letter-spacing:.02em}
+.rpop>div{background:linear-gradient(180deg,#150a22,#08040f)!important;border:1px solid #ff3d9a!important;border-radius:0!important;clip-path:polygon(0 12px,12px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%);box-shadow:inset 0 0 24px #ff3d9a22!important}
+.rpop h3,#rmisc h3{color:#fff!important;font-weight:400;text-shadow:2px 0 #ff3d9a,-2px 0 #2ee6d6;letter-spacing:.3em}
+.rpop .rx{border-color:#ff3d9a!important;color:#ff3d9a!important;background:#08040f!important;border-radius:0!important}
+.rpr{border-radius:0!important;border:1px solid #ffffff22!important;border-left:3px solid #ff3d9a!important;background:#ffffff08!important}
+.rpr button,#rmisc .rcbtn,.rptab button.on{border-radius:0!important;border:0!important;background:linear-gradient(90deg,#ff3d9a,#a02aff)!important;color:#fff!important;box-shadow:0 0 12px #ff3d9a66}
+.rpr button em{color:#fff!important;opacity:.85}
+.rpr.done button,.rpr button:disabled,#rmisc .rcbtn:disabled{background:#ffffff14!important;box-shadow:none;color:#888!important}
+.rptab button{border-radius:0!important}
+.glc{border-radius:0!important;border:1px solid #ffffff22!important;border-left:3px solid #ff3d9a!important;background:#ffffff08!important}
+.glc.cur{border-color:#2ee6d6!important;border-left-color:#ff3d9a!important;background:#2ee6d60f!important}
+.glc em,.gls,.rpw{color:#ff3d9a!important}.glm i{color:#2ee6d6!important}.glm.ok,.glm.ok i{color:#2ee6d6!important}
+#rmisc .rcv{border-color:#2ee6d6!important;color:#2ee6d6!important;border-radius:0!important}
+#rmisc input{border-radius:0!important;border-color:#ff3d9a88!important}
+</style>`);
+
 }
 </script>
 </body>
