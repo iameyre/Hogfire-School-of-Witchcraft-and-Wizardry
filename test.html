@@ -861,12 +861,12 @@ body:has(.rpop.on,.rmap.on,.rbat.on,.rcave.on,.rprint.on) .rmoney{opacity:0;poin
 .kib,.kchar .kib,.ktenbox{position:relative}
 .rxw{position:fixed!important;top:calc(var(--st) + 8px)!important;right:12px!important}
 /* 地圖 */
-.rmap{position:fixed;inset:0;z-index:30;background:#0d2a3a;opacity:0;pointer-events:none;transition:opacity .3s}
+.rmap{overflow:hidden;position:fixed;left:0;right:0;top:0;bottom:calc(var(--sb) + 63px);z-index:30;background:#0d2a3a;opacity:0;pointer-events:none;transition:opacity .3s}
 .rmap.on{opacity:1;pointer-events:auto}
 #rmcv{position:absolute;inset:0;width:100%;height:100%}
 .rmh{position:absolute;left:0;right:0;top:0;padding:calc(var(--st) + 10px) 60px 10px 16px;background:linear-gradient(rgba(0,0,0,.75),transparent);pointer-events:none}
 .rmh small{font:700 10px var(--D);letter-spacing:.3em;color:#ffd56a}.rmh h3{margin:2px 0 0;font:400 18px var(--A);letter-spacing:.25em;color:#fff}
-.rtrvw{position:absolute;left:0;right:0;bottom:calc(var(--sb) + 76px);display:flex;gap:10px;justify-content:center;padding:0 16px;pointer-events:none}.rtrv{width:auto!important;min-width:130px;padding:0 18px!important;letter-spacing:.2em!important;pointer-events:auto;font-family:DotGothic16,sans-serif!important}
+.rtrvw{position:absolute;left:0;right:0;bottom:14px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:0 16px;pointer-events:none}.rtrv{width:auto!important;min-width:130px;padding:0 18px!important;letter-spacing:.2em!important;pointer-events:auto;font-family:DotGothic16,sans-serif!important}
 .rnode{position:absolute;transform:translate(-50%,-50%);min-width:64px;padding:4px 6px;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:2px}
 .rnode b{padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.72);font:400 12px var(--A);letter-spacing:.08em;color:#fff;white-space:nowrap;border:1px solid rgba(255,213,106,.5)}
 .rnode small{font:700 10px var(--D);color:#ffd56a;text-shadow:0 1px 0 #000}
@@ -1022,7 +1022,7 @@ body:has(.rpop.on,.rmap.on,.rbat.on,.rcave.on,.rprint.on) .rmoney{opacity:0;poin
 #pgal .pg{display:flex;flex-wrap:wrap;gap:8px}#pgal figure{margin:0;padding:6px;border:1px solid rgba(255,255,255,.1);border-radius:6px;background:rgba(255,255,255,.03);text-align:center}#pgal figcaption{font-size:11px;color:#ccc;margin-top:2px;max-width:140px}
 #rpX{top:calc(var(--st) + 58px)}#rtry{z-index:45}#rbuy{z-index:50}
 #klvD{max-height:38vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
-#rhgo2{display:none!important}#rhgo3 .rq{flex:1;font-size:14px!important;letter-spacing:.02em!important;padding:0 2px!important;white-space:nowrap}#rsub{max-height:62vh;overflow-y:auto}
+#rhgo2,#rhome .rhgo{display:none!important}#rhToday{margin:0 0 12px;padding:10px 12px;border:1px solid rgba(255,213,106,.35);border-radius:6px;background:rgba(255,255,255,.04)}#rhToday h5{margin:0 0 6px;font:400 13px var(--A);letter-spacing:.3em;color:#ffd56a}.rtd{display:flex;justify-content:space-between;gap:8px;padding:7px 0;border-top:1px solid rgba(255,255,255,.08);font-size:14px;color:#fff;min-height:32px;align-items:center}.rtd.sub{padding-left:12px;font-size:13px;color:#cfd2d8}.rtd.ok b{color:#7be08a}.rtd b{font-weight:400;color:#ffd56a}#rhgo3 .rq{flex:1;font-size:14px!important;letter-spacing:.02em!important;padding:0 2px!important;white-space:nowrap}#rsub{max-height:62vh;overflow-y:auto}
 </style>
 </head>
 <body>
@@ -2425,7 +2425,7 @@ const renderHome=()=>{const p=P();if(!p)return;const S=rStats();
   $('rhSt').innerHTML=`<h5>能力值</h5><div>HP<b>${S.hp}</b></div><div>攻擊<b>${S.atk}</b></div><div>防禦<b>${S.def}</b></div><div>暴擊<b>${S.crit}%</b></div><div>移速<b>${S.spd}</b></div><div>攻速<b>${S.cd}s</b></div>`+['力量','敏捷','智力','幸運'].map((n,i)=>`<div>${n}<b>${S.s[i]}</b></div>`).join('')+`<div>天賦<b>${S.tn}</b></div><div>通關<b>${Object.keys(rp().clear).length}/6</b></div>`;
   const w=S.w,wc=$('rhW').getContext('2d');wc.clearRect(0,0,52,58);if(w.id){const it=GEAR.find(x=>x.id===w.id);drawAv(wc,LB(),{hand:w.id},0,0,2)}
   const sk=JSK[S.j];$('rhWT').innerHTML=`武器：<b>${w.id?GEAR.find(x=>x.id===w.id).n+enhTxt(w.id):'空手'}</b>（攻擊 +${w.atk}・${w.n}）<br>技能：<b>${sk[0]}</b>，${sk[1]}`;
-  const nx=AREAS.find(a=>!rp().clear[a.id]);$('rhTip').textContent=nx?(areaOK(nx)?`下一站：${nx.n}。打完 ${nx.k} 隻怪會出現王。`:`下一站：${nx.n}，Lv${nx.lv} 開放。`):'六個地區都通關了，你就是倫生巔峰。';
+  const nx=AREAS.find(a=>!rp().clear[a.id]);try{window.lunHomeCard&&window.lunHomeCard()}catch(e){}$('rhTip').textContent=nx?(areaOK(nx)?`下一站：${nx.n}。打完 ${nx.k} 隻怪會出現王。`:`下一站：${nx.n}，Lv${nx.lv} 開放。`):'六個地區都通關了，你就是倫生巔峰。';
   const cv=$('rhcv'),W=Math.round(cv.clientWidth/2)||195,H=150,g=pxCanvas(cv,W,H);const eq=ensureAv().eq;const fr=[avCanvas(eq,1,0),avCanvas(eq,1,1)];
   cancelAnimationFrame(homeRaf);const t0=performance.now();
   let lastF=0;const tk=t=>{if(!homeOn)return;const tt=(t-t0)/1000;if(lzxOn()&&t-lastF>120){lastF=t;fr[0]=avCanvas(eq,1,0);fr[1]=avCanvas(eq,1,1)}const gy=drawScene(g,W,H,homeArea(),tt);const rf=mountOn()&&riderFrame(tt),im=rf||fr[(tt*2|0)%2],bob=Math.round(Math.sin(tt*3)*1.2),s=rf?Math.min(2,Math.floor((gy-6)/im.height*4)/4):2;drawPet(g,W/2-im.width*s/2-14,gy+1,tt,2);
@@ -2446,7 +2446,7 @@ $('rhMap').onclick=()=>{A.init();openMap()};$('rhGoal').onclick=()=>{A.init();rA
 /* ---------- 堆疊式選單 ---------- */
 const NAVI={adv:'<path d="M4 20 20 4M14 4h6v6M4 14l6 6"/>',char:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>',gacha:'<circle cx="12" cy="12" r="8"/><path d="M4 12h16"/><circle cx="12" cy="12" r="2"/>',shop:'<path d="M4 9h16l-1 11H5L4 9zM8 9V7a4 4 0 0 1 8 0v2"/>',more:'<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>'};
 NAVI.home=NAVI.char;NAVI.play=NAVI.gacha;NAVI.day='<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>';
-const NAV=[['home','主頁',[['home','主畫面'],['ward','更衣間'],['house','小屋']]],['adv','冒險',[['map','世界地圖'],['shrine','轉職聖殿'],['school','學堂']]],['play','玩樂',[['pet','小狐狸'],['claw','夾娃娃機'],['cook','料理製藥'],['run','坐騎探險'],['cbt','卡片配對'],['card','抽卡'],['look','抽外觀'],['eq','抽裝備']]],['day','每日',[['goal','三天大目標'],['task','每日任務'],['fort','參拜']]],['more','更多',[['tal','天賦樹'],['ach','成長'],['shop','商店'],['dex','倫寶閣'],['log','紀錄'],['info','說明'],['get','東西怎麼拿'],['call','客服倫員'],['code','存檔代碼']]]];
+const NAV=[['adv','冒險',[['map','世界地圖'],['shrine','轉職聖殿'],['school','學堂']]],['play','玩樂',[['pet','小狐狸'],['claw','夾娃娃機'],['cook','料理製藥'],['run','坐騎探險'],['cbt','卡片配對'],['card','抽卡'],['look','抽外觀'],['eq','抽裝備']]],['home','主頁',[['home','主畫面'],['ward','更衣間'],['house','小屋']]],['day','每日',[['goal','三天大目標'],['task','每日任務'],['fort','參拜']]],['more','更多',[['tal','天賦樹'],['ach','成長'],['shop','商店'],['dex','倫寶閣'],['log','紀錄'],['info','說明'],['get','東西怎麼拿'],['call','客服倫員'],['code','存檔代碼']]]];
 $('rnav').innerHTML=NAV.map(([k,n])=>`<button data-n="${k}"><svg viewBox="0 0 24 24">${NAVI[k]}</svg><span>${n}</span>${k==='day'?'<i class="rb" id="rnB" hidden></i>':''}</button>`).join('');
 let subOpen=null;
 const closeSub=()=>{subOpen=null;$('rsub').classList.remove('on');$('rshade').classList.remove('on');document.querySelectorAll('#rnav>button').forEach(b=>b.classList.remove('open'))};
@@ -2458,7 +2458,7 @@ const openSub=k=>{if(subOpen===k){closeSub();return}const g=NAV.find(x=>x[0]===k
   document.querySelectorAll('#rnav>button').forEach(b=>b.classList.toggle('open',b===btn));void sb.offsetWidth;sb.classList.add('on');$('rshade').classList.add('on');subOpen=k;SFX.click()};
 $('rnav').addEventListener('click',e=>{const b=e.target.closest('button[data-n]');if(!b)return;A.init();openSub(b.dataset.n)});
 $('rshade').addEventListener('click',closeSub);
-$('rsub').addEventListener('click',e=>{const b=e.target.closest('button[data-a]');if(!b)return;const a=b.dataset.a;A.init();SFX.click();closeSub();rAct(a)});
+$('rsub').addEventListener('click',e=>{const b=e.target.closest('button[data-a]');if(!b)return;const a=b.dataset.a;A.init();SFX.click();closeSub();if(a!=='map')rClose('rmap');rAct(a)});
 const rAct=a=>{if(kbusy&&a!=='card'){rToast('抽卡中，等一下。<button class="rtub" onclick="rUnstick()">卡住了？解除</button>');return}
   const lk=subLock(a);if(lk){rToast(a==='bank'?'倫生銀行下次更新開放，先鎖起來。':`${({tal:'天賦樹',shop:'商店',shrine:'轉職聖殿'})[a]} ${lk} 開放。現在 Lv${LV()}。`,1);A.S.kPoot();if(homeOn)return;return}
   const f=({home:rHome,map:openMap,task:()=>{goPanel('task');setNavOn('day')},fort:()=>{window.lunFortOpen&&window.lunFortOpen()},ward:()=>{openChar()},tal:()=>{goPanel('tal');setNavOn('char')},shrine:()=>openShrine(),ach:()=>{goPanel('ach');setNavOn('char')},
@@ -2492,7 +2492,7 @@ const drawMapBg=(g,W,H,t)=>{if(RLM!=='human'){drawRealmBg(g,W,H,t);return}g.fill
   const sx=W*.5,sy=H*.62;g.fillStyle='#fff6d8';g.fillRect(sx-7,sy-6,14,8);g.fillStyle='#ffd56a';g.fillRect(sx-9,sy-9,18,3)};
 const mapIcon=(a)=>({village:'⌂',sky:'☁',forest:'♣',dog:'⚄',hell:'▲',peak:'♛'})[a.id];
 const rlmBtns=()=>{const B=(to,t)=>'<button class="pbtn rtrv" data-to="'+to+'">'+t+'</button>';
-  return '<div class="rtrvw">'+(RLM==='sky'?B('human','下凡'):RLM==='hell'?B('human','爬回人間'):B('sky','飛升仙境')+B('hell','墜入地獄'))+'</div>'};
+  return '<div class="rtrvw">'+(RLM==='sky'?B('human','下凡'):RLM==='hell'?B('human','爬回人間'):B('sky','飛升仙境')+B('hell','墜入地獄'))+B('home','回主畫面')+'</div>'};
 const rlmFx=(to,done)=>{const from=RLM,up=(to==='sky'),dn=(from==='sky'&&to==='human');
   const o=document.createElement('div');o.id='rlmFx';o.style.cssText='position:fixed;inset:0;z-index:300;pointer-events:all;background:'+(to==='hell'?'#200':to==='sky'||dn?'#fff':'#102');o.style.opacity='0';o.style.transition='opacity .45s';
   const cv=document.createElement('canvas');const W=Math.round(innerWidth/2),H=Math.round(innerHeight/2);cv.width=W;cv.height=H;cv.style.cssText='width:100%;height:100%;image-rendering:pixelated';o.appendChild(cv);document.body.appendChild(o);
@@ -2512,7 +2512,7 @@ const rlmFx=(to,done)=>{const from=RLM,up=(to==='sky'),dn=(from==='sky'&&to==='h
     g.fillStyle='#fff';g.font='14px DotGothic16,sans-serif';g.textAlign='center';g.fillText(dn?'下凡':up?'飛升':to==='hell'?'墜入地獄':'爬回人間',W/2,24);
     if(t>.9&&!swapped){swapped=true;RLM=to;done()}
     if(t>1.9){clearInterval(iv);o.style.opacity='0';setTimeout(()=>o.remove(),500)}},33)};
-$('rmN').addEventListener('click',e=>{const b=e.target.closest('.rtrv');if(!b)return;A.init();rlmFx(b.dataset.to,()=>openMap())});
+$('rmN').addEventListener('click',e=>{const b=e.target.closest('.rtrv');if(!b)return;A.init();if(b.dataset.to==='home'){rClose('rmap');rHome();return}rlmFx(b.dataset.to,()=>openMap())});
 const openMap=()=>{['rrare','rtry','rgach'].forEach(rClose);if(kbusy){rToast('抽卡中，等一下。<button class="rtub" onclick="rUnstick()">卡住了？解除</button>');return}closeSub();const m=$('rmap');rOpen('rmap');setNavOn('adv');$('rsh').classList.remove('on');
   const cv=$('rmcv'),W=Math.round(innerWidth/2),H=Math.round(innerHeight/2),g=pxCanvas(cv,W,H);
   $('rmN').innerHTML=RL().map(a=>{const ok=areaOK(a),cl=rp().clear[a.id];return `<button class="rnode${ok?'':' lk'}" data-a="${a.id}" style="left:${RPOS[a.id][0]*100}%;top:${RPOS[a.id][1]*100}%"><canvas class="pix" width="16" height="16" style="width:34px;height:34px"></canvas><b>${cl?'★ ':''}${a.n}</b><small>${ok?`Lv${a.L[0]}～${a.L[1]}`:`Lv${a.lv} 開放`}</small></button>`}).join('')+
@@ -3498,16 +3498,34 @@ const GOALS=[
 const gCal=p=>Math.max(1,Math.round((Date.parse(today())-Date.parse(p.gd[0]))/864e5)+1);
 const gInfo=()=>{const p=P();p.gd=p.gd||[];const t=today();if(!p.gd.includes(t)){p.gd.push(t);save()}p.goal=p.goal||{c:{}};
   const n=p.gd.length;return{p,n,cur:Math.min(7,Math.ceil(n/3)),late:gCal(p)-n>=1}};
-const gDone=(g,p)=>g.ms&&g.ms.every(m=>m[1](p)>=m[2]);
+const GLINK=[['card','inv','fort'],['map','map','map'],['pet','pet','pet','claw'],['cook','cook','map'],['run','run','run'],['cbt','cbt','cbt'],['school','school','house']];
+const gForce=(p,i)=>!!(p.goal&&p.goal.f&&p.goal.f[i]);
+const gVal=(m,p,i)=>gForce(p,i)?m[2]:m[1](p);
+const gDone=(g,p)=>g.ms&&(gForce(p,GOALS.indexOf(g))||g.ms.every(m=>m[1](p)>=m[2]));
 const gOpen=()=>{const{p,n,cur,late}=gInfo();
   let h=`<h3>三天大目標</h3><p class="gls">今天是你的第 ${n} 天・現在是第 ${cur} 個大目標${late?'<br>你有幾天沒來，領獎勵加倍！':''}</p>`;
   GOALS.forEach((g,i)=>{const open=i+1<=cur,claimed=p.goal.c[i],ready=!!g.ms;
     h+=`<div class="glc${i+1===cur?' cur':''}${!open?' dim':''}"><b>G${i+1} ${g.n}</b><small>${g.d}</small><em>${claimed?'已完成':!open?'還沒到':!ready?'準備中':gDone(g,p)?'可領獎':'進行中'}</em>`;
-    if(open&&ready&&!claimed){g.ms.forEach(m=>{const v=Math.min(m[1](p),m[2]);h+=`<div class="glm${v>=m[2]?' ok':''}"><span>${m[0]}</span><i>${v>=m[2]?'✓':v+'/'+m[2]}</i></div>`});
+    if(open&&ready&&!claimed){g.ms.forEach((m,mi)=>{const v=Math.min(gVal(m,p,i),m[2]);const lk=(GLINK[i]||[])[mi];h+=`<div class="glm${v>=m[2]?' ok':''}"><span${lk?` data-go="${lk}" style="text-decoration:underline;text-underline-offset:3px;cursor:pointer"`:''}>${m[0]}</span><i>${v>=m[2]?'✓':v+'/'+m[2]}</i></div>`});
       h+=`<button class="rcbtn" data-gc="${i}"${gDone(g,p)?'':' disabled'}>領取獎勵（倫性 ${g.rw.w*(late?2:1)}、倫幣 ${g.rw.s*(late?2:1)}）</button>`}
     h+='</div>'});
   h+='<p class="gls">進度看「玩了幾天」，不看日期，漏玩不會被丟下。</p>';rmShow(h)};
 window.lunGoalOpen=gOpen;
+document.addEventListener('click',e=>{const b=e.target.closest('#rmisc span[data-go],#rhToday [data-go]');if(!b)return;rClose('rmisc');try{rAct(b.dataset.go)}catch(x){}});
+window.lunHomeCard=()=>{try{const host=document.querySelector('#rhome .rhbody');if(!host)return;let c=document.getElementById('rhToday');if(!c){c=document.createElement('div');c.id='rhToday';host.insertBefore(c,host.firstChild)}
+  const {p,n,cur}=gInfo(),g=GOALS[cur-1],cl=p.goal.c[cur-1];let h='<h5>今日進度</h5>';
+  try{const t=dayTasks();if(taskOpen())h+='<div class="rtd" data-go="task"><span>每日任務</span><b>'+Object.keys(t.done).length+' / '+t.ids.length+'</b></div>'}catch(x){}
+  if(g&&g.ms){h+='<div class="rtd" data-go="goal"><span>大目標 G'+cur+' '+g.n+(cl?'（已領）':'')+'</span><b>第 '+n+' 天</b></div>';
+    if(!cl)g.ms.forEach((m,mi)=>{const v=Math.min(gVal(m,p,cur-1),m[2]),lk=(GLINK[cur-1]||[])[mi];h+='<div class="rtd sub'+(v>=m[2]?' ok':'')+'"'+(lk?' data-go="'+lk+'"':'')+'><span'+(lk?' style="text-decoration:underline;text-underline-offset:3px"':'')+'>'+m[0]+'</span><b>'+(v>=m[2]?'✓':v+'/'+m[2])+'</b></div>'})}
+  c.innerHTML=h}catch(x){}};
+window.lunFlowSim=()=>{const {p}=gInfo();let h='<h3>流程模擬（DEV）</h3><p>每個大目標：「看」直接進去那個玩法，「通關」把這關標成完成（可以領獎，不用真的玩）。</p>';
+  GOALS.forEach((g,i)=>{h+='<div class="glc"><b>G'+(i+1)+' '+g.n+'</b><small>'+(gForce(p,i)?'已標通關':p.goal.c[i]?'已領':'')+'</small>'+
+    '<div style="display:flex;gap:6px;margin-top:6px"><button class="rcbtn" style="margin:0" data-fs="look" data-i="'+i+'">看</button><button class="rcbtn" style="margin:0" data-fs="pass" data-i="'+i+'">通關</button></div></div>'});
+  h+='<button class="rcbtn" data-fs="reset">全部重設</button>';rmShow(h)};
+document.addEventListener('click',e=>{const b=e.target.closest('#rmisc button[data-fs]');if(!b)return;const {p}=gInfo(),i=+b.dataset.i;
+  if(b.dataset.fs==='look'){rClose('rmisc');try{rAct(((GLINK[i]||[])[0])||'goal')}catch(x){}return}
+  if(b.dataset.fs==='pass'){p.goal.f=p.goal.f||{};p.goal.f[i]=1;while(p.gd.length<3*i+1)p.gd.unshift('2026-01-'+String(p.gd.length+1).padStart(2,'0'));save();window.lunFlowSim();return}
+  if(b.dataset.fs==='reset'){p.goal.f={};p.goal.c={};save();window.lunFlowSim()}});
 document.addEventListener('click',e=>{const b=e.target.closest('#rmisc button[data-gc]');if(!b)return;const i=+b.dataset.gc,{p,late}=gInfo(),g=GOALS[i];
   if(!g.ms||p.goal.c[i]||!gDone(g,p))return;p.goal.c[i]=1;const k=late?2:1;p.wallet=(p.wallet||0)+g.rw.w*k;p.shard=(p.shard||0)+g.rw.s*k;save();A.S&&A.S.pickup&&A.S.pickup();
   rToast(`G${i+1} 完成！倫性 +${g.rw.w*k}、倫幣 +${g.rw.s*k}`);try{updWallet&&updWallet()}catch(x){}
@@ -4345,10 +4363,11 @@ setInterval(()=>{if($('rhouse').classList.contains('on'))hDraw()},60);
 /* ================= DEV：最上面每次只留這次要測的 ================= */
 {const top=$('kdTop');top.innerHTML='';
  const hd=$('kdTopH');if(hd)hd.textContent='本次值得測試（⓪探索尋寶、三界地圖、打字機音效變輕）';
- top.insertAdjacentHTML('beforeend','<button id="kdN1">① 坐騎探險：九尾狐</button><button id="kdN2">② 坐騎探險：地獄火鳳凰</button><button id="kdN3">③ 卡片配對（倫牌配對）</button><button id="kdN4">④ G7 開場短片（有聲音）</button><button id="kdN5">⑤ 學堂：倫語小考</button><button id="kdN6">⑥ 小屋（先給 500 倫幣）</button><button id="kdN7">⑦ 假裝第 19 天（看 G7 目標）</button><button id="kdN8">⑧ 給全部坐騎（測小屋放坐騎）</button><button id="kdN9">⑨ 三界地圖（全解鎖）</button>');
+ top.insertAdjacentHTML('beforeend','<button id="kdN1">① 坐騎探險：九尾狐</button><button id="kdN2">② 坐騎探險：地獄火鳳凰</button><button id="kdN3">③ 卡片配對（倫牌配對）</button><button id="kdN4">④ G7 開場短片（有聲音）</button><button id="kdN5">⑤ 學堂：倫語小考</button><button id="kdN6">⑥ 小屋（先給 500 倫幣）</button><button id="kdN7">⑦ 假裝第 19 天（看 G7 目標）</button><button id="kdN8">⑧ 給全部坐騎（測小屋放坐騎）</button><button id="kdN9">⑨ 三界地圖（全解鎖）</button><button id="kdN10">⑩ 流程模擬（每關可標通關）</button>');
  const dv=(id,fn)=>{$(id).onclick=()=>{if(!P()||!started){devNote('先按上面的「用測試玩家直接進入卡池」。');return}devClose();fn()}};
  dv('kdN1',()=>window.lunRunOpen('fox'));dv('kdN2',()=>window.lunRunOpen('phoenix'));dv('kdN3',()=>window.lunCardOpen());
  dv('kdN4',()=>window.lunIntroOpen());dv('kdN5',()=>window.lunSchoolOpen(true));
+ dv('kdN10',()=>window.lunFlowSim());
  dv('kdN9',()=>{rDevAll=true;RLM='human';openMap()});
  dv('kdN8',()=>{MOUNTS.forEach(m=>{rm().own[m.id]=1});save();window.lunHouseOpen()});
  dv('kdN6',()=>{const p=P();p.shard=(p.shard||0)+500;save();window.lunHouseOpen()});
