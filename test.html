@@ -22,7 +22,7 @@ body{background:#050505;color:#f2f2f4;font:17px/1.7 var(--A);overflow:hidden;-we
 button{font-family:inherit;-webkit-tap-highlight-color:transparent;cursor:pointer}
 button:focus-visible{outline:1px solid #fff;outline-offset:3px}
 .grain{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;opacity:.4;mix-blend-mode:overlay;z-index:30}
-.stage{position:fixed;inset:0;opacity:0;filter:blur(18px);pointer-events:none;transition:opacity 1.2s,filter 1.2s;z-index:5}
+.stage{position:fixed;inset:0;opacity:0;filter:blur(18px);pointer-events:none;transition:opacity .35s,filter .35s;z-index:5}
 .stage.on{opacity:1;filter:none;pointer-events:auto}
 .gbtn{position:relative;font:400 18px var(--A);letter-spacing:.5em;padding:14px 10px 14px 24px;min-height:52px;background:none;border:0;color:#fff}
 .gbtn::after{content:"";position:absolute;left:12%;right:12%;bottom:6px;height:1px;background:linear-gradient(90deg,transparent,var(--kr),transparent);animation:line 2.4s ease-in-out infinite}
@@ -63,7 +63,7 @@ button:focus-visible{outline:1px solid #fff;outline-offset:3px}
 .cv-who input,#ksetIn{width:100%;font:400 20px var(--A);letter-spacing:.2em;text-align:center;color:#fff;background:transparent;border:0;border-bottom:1px solid rgba(255,90,110,.7);padding:8px 0;outline:none;border-radius:0;user-select:text;-webkit-user-select:text}
 .cv-who p{margin:0;font-size:15px;letter-spacing:.2em;color:#fff}
 .cv-n{margin:14px 0 0;font-size:12px;letter-spacing:.16em;color:rgba(242,242,244,.45);animation:cvin 1s 2.2s both}
-#cover.out{opacity:0;filter:blur(14px);pointer-events:none}
+#cover.out{opacity:0;filter:none;pointer-events:none;transition:opacity .3s}
 
 #kfx{position:fixed;inset:0;width:100%;height:100%}
 .kspot{position:fixed;left:50%;top:-30%;width:150vw;height:120vh;transform:translateX(-50%);background:radial-gradient(ellipse 35% 60% at 50% 0,rgba(235,238,245,.10),transparent 70%);pointer-events:none}
@@ -866,6 +866,7 @@ body:has(.rpop.on,.rmap.on,.rbat.on,.rcave.on,.rprint.on) .rmoney{opacity:0;poin
 #rmcv{position:absolute;inset:0;width:100%;height:100%}
 .rmh{position:absolute;left:0;right:0;top:0;padding:calc(var(--st) + 10px) 60px 10px 16px;background:linear-gradient(rgba(0,0,0,.75),transparent);pointer-events:none}
 .rmh small{font:700 10px var(--D);letter-spacing:.3em;color:#ffd56a}.rmh h3{margin:2px 0 0;font:400 18px var(--A);letter-spacing:.25em;color:#fff}
+.rtrvw{position:absolute;left:0;right:0;bottom:calc(var(--sb) + 76px);display:flex;gap:10px;justify-content:center;padding:0 16px;pointer-events:none}.rtrv{width:auto!important;min-width:130px;padding:0 18px!important;letter-spacing:.2em!important;pointer-events:auto;font-family:DotGothic16,sans-serif!important}
 .rnode{position:absolute;transform:translate(-50%,-50%);min-width:64px;padding:4px 6px;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:2px}
 .rnode b{padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.72);font:400 12px var(--A);letter-spacing:.08em;color:#fff;white-space:nowrap;border:1px solid rgba(255,213,106,.5)}
 .rnode small{font:700 10px var(--D);color:#ffd56a;text-shadow:0 1px 0 #000}
@@ -1509,7 +1510,7 @@ const enterMain=()=>{const pp=P();migrate(pp);if(!pp.ach)pp.ach={};setTimeout(()
 const NEWS=[['2026.11.24','倫生卡池改名「倫生」，變成冒險了！倫會自己出門打怪，地圖、打王、Lv30 都有了。'],['2026.11.24','扭蛋中心開張：抽卡、抽外觀、抽裝備。選職業還送一把武器。'],['2026.11.24','聽說有人在地圖角落挖到一個山洞。'],['2026.11.23','新抽法四連發：扭蛋機、刮刮樂、釣魚、倫生大富翁。手會很忙。'],['2026.11.23','共同朋友卡多了四張。抽到的時候，狗哥會親自出場。'],['2026.11.23','倫生地圖開張。轉職聖殿不收香油錢，只收倫幣。'],['2026.11.23','新增二轉。劍聖、神射手、大法師、怪盜、海賊王，看你數值夠不夠。'],['2026.11.23','倫生小劇場開播。主演片酬：一把火。'],['2026.11.23','新增換裝。點自己的名字就能換，狗哥帽也有賣。'],['2026.11.23','土地升級成秘境，名字比較好聽，地價沒變。'],['2026.11.23','新增戳戳樂。光只閃一下，記性不好的請多戳幾次。'],['2026.11.23','瘋雲地獄改名瘋火地獄，火比較大。'],['2026.11.23','新增檢舉功能。檢舉一律駁回，但我們會看。'],['2026.11.23','新增甄嬛傳考題。翠果已就位。'],['2026.11.23','等級制度上線，最高 Lv10。五天剛好滿等，急也沒用。'],['2026.11.23','賭狗那塊改成拉霸。按三次停，倫越多越香。'],['2026.11.23','一抽終於等於一倫性了。財政部表示：之前那個不算。'],['2026.11.23','卡池分家成三大秘境。賭狗那塊最熱鬧，因為最常輸。'],['2026.11.23','商倫開店了。他說看看不用錢，但他會一直看著你。'],['2026.11.23','天賦樹種好了。施肥方式：一直抽。'],['2026.11.23','客服倫員終於接通了。不過他說他不方便回答。'],['2026.11.23','每日任務新增打怪。野生的急急怪出現了。'],['2026.11.23','開戶改成擲骰子，骰子會決定很多事，但不會告訴你決定了什麼。'],['2026.11.23','卡池瘦身成 80 張，不好笑的卡被倫吃掉了。'],['2026.11.23','單抽改成三張牌，扇形退休了。'],['2026.11.23','十連抽改成一張一張翻，大張的，看得清楚。'],['2026.11.23','倫寶閣重新裝潢，沒抽到的卡還是只看得到影子。'],['2026.11.23','蓄力條退休了。官方說法：倫手不足，按不動。']];
 $('newsT').innerHTML=(NEWS.map(([d,t])=>`<p><b>${d}</b>${t}</p>`).join('')).repeat(2);$('newsT').style.setProperty('--rd',NEWS.length*3.6+'s');
 let started=false;
-const start=()=>{if(started)return;started=true;A.init();A.S.open();$('cover').classList.add('out');setTimeout(()=>$('cover').remove(),1300);$('s-main').classList.add('on');setTimeout(enterMain,400)};
+const start=()=>{if(started)return;started=true;A.init();A.S.open();$('cover').classList.add('out');setTimeout(()=>$("cover").remove(),400);try{enterMain()}catch(e){console.error(e)}$('s-main').classList.add('on')};
 const renderWho=()=>{const w=$('who');const known=DB.cur&&DB.players[DB.cur];
   w.innerHTML=(known?`<p>歡迎回來，${esc(DB.cur)}</p><button class="pbtn" id="cvGo">開始冒險</button><button class="lbtn" id="cvNot">不是我</button>`:`<label for="cvName">你是何許倫也？</label><input id="cvName" maxlength="12" placeholder="輸入名字" autocomplete="off"><button class="pbtn" id="cvGo">開始冒險</button>`)+'<button class="lbtn" id="cvCode">用存檔代碼找回存檔</button><button class="lbtn cvcs" data-call>撥打客服倫員</button>';
   if(known)$('cvNot').onclick=()=>{DB.cur=null;save();renderWho()};
@@ -2367,7 +2368,7 @@ $('s-main').insertAdjacentHTML('beforeend',`
 <div class="rshade" id="rshade"></div><div class="rsub" id="rsub"></div>
 <nav class="rnav" id="rnav"></nav>`);
 document.body.insertAdjacentHTML('beforeend',`
-<div class="rmap" id="rmap"><canvas class="pix" id="rmcv"></canvas><div class="rmh"><small>WORLD MAP</small><h3>倫生大地圖</h3></div><div id="rmN"></div>${xBtn('rmapX').replace('class="rx"','class="rx rxw"')}
+<div class="rmap" id="rmap"><canvas class="pix" id="rmcv"></canvas><div class="rmh"><small>WORLD MAP</small><h3 id="rmH3">倫生大地圖</h3></div><div id="rmN"></div>${xBtn('rmapX').replace('class="rx"','class="rx rxw"')}
  <div class="rsheet" id="rsh">${xBtn('rshX')}<h4 id="rshN"></h4><p class="rlv" id="rshL"></p><p id="rshD"></p><div class="rmons" id="rshM"></div><div class="rbtns" id="rshB"></div></div></div>
 <div class="rbat" id="rbat"><canvas class="rbcv pix" id="rbcv"></canvas>
  <div class="rbhud"><div class="rbnm" id="rbN"></div><div class="rbar2"><i id="rbHp"></i></div><div class="rbar2 xp"><i id="rbXp"></i></div><div class="rk" id="rbK"></div></div>
@@ -2464,24 +2465,56 @@ const updNavBadge=()=>{const b=$('rnB');if(b)b.hidden=!(typeof todoN==='function
 
 /* ---------- 世界地圖 ---------- */
 let mapRaf=0,mapSel=null;
-const drawMapBg=(g,W,H,t)=>{g.fillStyle='#16506a';g.fillRect(0,0,W,H);
+let RLM='human';
+const REALM={sky:{n:'仙境',e:'HEAVEN',ids:['sky','peak']},human:{n:'人間',e:'MORTAL',ids:['village','forest']},hell:{n:'地獄',e:'HELL',ids:['hell','dog']}};
+const RPOS={village:[.30,.70],forest:[.68,.36],sky:[.32,.66],peak:[.66,.28],hell:[.32,.34],dog:[.68,.64]};
+const RL=()=>REALM[RLM].ids.map(AOF);
+const drawRealmBg=(g,W,H,t)=>{const sk=RLM==='sky';const c0=sk?[122,106,216]:[26,4,4],c1=sk?[255,230,245]:[160,42,16];
+  for(let y=0;y<H;y+=2){const k=y/H,m=sk?k:1-k;g.fillStyle='rgb('+c0.map((v,i)=>Math.round(v+(c1[i]-v)*(sk?k:k))).join(',')+')';g.fillRect(0,y,W,2)}
+  if(sk){g.fillStyle='rgba(255,255,255,.85)';for(let i=0;i<9;i++){const cx=((i*97+t*(6+i%3*3))%(W+80))-40,cy=H*(.1+((i*53)%80)/100);for(let k=0;k<4;k++)g.fillRect(Math.round(cx+k*9),Math.round(cy-(k%2)*3),16,6)}
+    g.fillStyle='#fff';for(let i=0;i<30;i++)if(((i*7+(t*2|0))%5)>1)g.fillRect((i*61)%W,(i*37)%(H*.5)|0,1,1)}
+  else{g.fillStyle='#ff7a20';for(let i=0;i<4;i++){const y0=H*(.55+i*.1);for(let x=0;x<W;x+=2)g.fillRect(x,Math.round(y0+Math.sin(x/14+t*1.5+i)*3),2,3)}
+    g.fillStyle='#ffd070';for(let i=0;i<24;i++){const x=(i*47)%W,y=H-((t*20+i*29)%H);g.fillRect(x,Math.round(y),1,2)}}};
+const drawMapBg=(g,W,H,t)=>{if(RLM!=='human'){drawRealmBg(g,W,H,t);return}g.fillStyle='#16506a';g.fillRect(0,0,W,H);
   g.fillStyle='rgba(255,255,255,.08)';for(let y=0;y<H;y+=6)for(let x=((y/6|0)%2)*6;x<W;x+=12)if(((x*13+y*7+(t*2|0))%5)===0)g.fillRect(x,y,3,1);
   // 陸地
   const land=(cx,cy,rx,ry,c)=>{g.fillStyle=c;for(let y=-ry;y<=ry;y+=2){const w=Math.round(rx*Math.sqrt(1-(y/ry)**2)+((y*31)%5));g.fillRect(Math.round(cx-w),Math.round(cy+y),w*2,2)}};
   land(W*.5,H*.52,W*.46,H*.42,'#d8c890');land(W*.5,H*.52,W*.43,H*.39,'#6ab05a');
-  land(W*.26,H*.80,W*.16,H*.08,'#8ad070');land(W*.70,H*.70,W*.15,H*.07,'#e8e0ff');land(W*.28,H*.55,W*.15,H*.08,'#2a6a30');land(W*.74,H*.44,W*.14,H*.07,'#7a3a6a');land(W*.30,H*.30,W*.15,H*.07,'#7a2010');land(W*.62,H*.16,W*.13,H*.06,'#9a9ab0');
+  land(W*.30,H*.72,W*.17,H*.09,'#8ad070');land(W*.68,H*.38,W*.17,H*.09,'#2a6a30');
   // 小路
-  g.fillStyle='#f0e0b0';const pts=AREAS.map(a=>[a.x*W,a.y*H]);for(let i=0;i<pts.length-1;i++){const[a,b]=[pts[i],pts[i+1]];for(let k=0;k<=1;k+=.04){g.fillRect(Math.round(a[0]+(b[0]-a[0])*k),Math.round(a[1]+(b[1]-a[1])*k),2,2)}}
+  g.fillStyle='#f0e0b0';const pts=RL().map(a=>[RPOS[a.id][0]*W,RPOS[a.id][1]*H]);for(let i=0;i<pts.length-1;i++){const[a,b]=[pts[i],pts[i+1]];for(let k=0;k<=1;k+=.04){g.fillRect(Math.round(a[0]+(b[0]-a[0])*k),Math.round(a[1]+(b[1]-a[1])*k),2,2)}}
   // 山頂洞（右下角的小山）
   const cx=W*.9,cy=H*.9;g.fillStyle='#7a6a5a';g.beginPath();g.moveTo(cx-14,cy+6);g.lineTo(cx,cy-12);g.lineTo(cx+14,cy+6);g.fill();g.fillStyle='#1a1010';g.fillRect(cx-3,cy,6,6);
   // 聖殿
   const sx=W*.5,sy=H*.62;g.fillStyle='#fff6d8';g.fillRect(sx-7,sy-6,14,8);g.fillStyle='#ffd56a';g.fillRect(sx-9,sy-9,18,3)};
 const mapIcon=(a)=>({village:'⌂',sky:'☁',forest:'♣',dog:'⚄',hell:'▲',peak:'♛'})[a.id];
+const rlmBtns=()=>{const B=(to,t)=>'<button class="pbtn rtrv" data-to="'+to+'">'+t+'</button>';
+  return '<div class="rtrvw">'+(RLM==='sky'?B('human','下凡'):RLM==='hell'?B('human','爬回人間'):B('sky','飛升仙境')+B('hell','墜入地獄'))+'</div>'};
+const rlmFx=(to,done)=>{const from=RLM,up=(to==='sky'),dn=(from==='sky'&&to==='human');
+  const o=document.createElement('div');o.id='rlmFx';o.style.cssText='position:fixed;inset:0;z-index:300;pointer-events:all;background:'+(to==='hell'?'#200':to==='sky'||dn?'#fff':'#102');o.style.opacity='0';o.style.transition='opacity .45s';
+  const cv=document.createElement('canvas');const W=Math.round(innerWidth/2),H=Math.round(innerHeight/2);cv.width=W;cv.height=H;cv.style.cssText='width:100%;height:100%;image-rendering:pixelated';o.appendChild(cv);document.body.appendChild(o);
+  const g=cv.getContext('2d');let av=null;try{av=window.lunAvCanvas&&window.lunAvCanvas(3,0)}catch(e){}
+  const P2=[];for(let i=0;i<70;i++)P2.push({x:Math.random()*W,y:Math.random()*H,v:20+Math.random()*50,s:1+Math.random()*2|0,c:Math.random()});
+  const t0=performance.now();let swapped=false;
+  const snd=()=>{try{if(to==='hell'){A.tone(180,.5,'sawtooth',.06,0,50)}else{[880,1175,1568,2093].forEach((f,i)=>A.tone(f,.25,'sine',.05,i*.1))}}catch(e){}};snd();
+  requestAnimationFrame(()=>{o.style.opacity='1'});
+  const col=to==='hell'?['#ff7a20','#ffd070','#a02a10']:['#fff','#ffe9a0','#cfe8ff'];
+  const iv=setInterval(()=>{const t=(performance.now()-t0)/1000;
+    g.fillStyle=to==='hell'?'#1a0404':'#bfe0ff';g.fillRect(0,0,W,H);
+    const gd=g.createLinearGradient(0,0,0,H);gd.addColorStop(0,to==='hell'?'#2a0606':(dn?'#ffffff':'#7a6ad8'));gd.addColorStop(1,to==='hell'?'#a02a10':(dn?'#8ad070':'#ffe6f5'));g.fillStyle=gd;g.fillRect(0,0,W,H);
+    P2.forEach(p=>{const dir=(to==='hell'||dn)?1:-1;p.y+=dir*p.v*(1/30)*(1+t);if(p.y>H)p.y=0;if(p.y<0)p.y=H;g.fillStyle=col[(p.c*3)|0];g.fillRect(Math.round(p.x),Math.round(p.y),p.s,p.s);if(to!=='hell'&&p.c>.7){g.fillRect(Math.round(p.x)-1,Math.round(p.y),p.s+2,1)}});
+    if(av){const k=Math.min(1,t/1.6),y=(to==='hell'||dn)?-av.height+k*(H*.55):H*.9-k*(H*.7),x=W/2-av.width/2+Math.sin(t*5)*6*(dn?1:.3);
+      if(dn){g.fillStyle='rgba(255,255,255,.6)';g.fillRect(Math.round(x-6),Math.round(y+av.height*.3),av.width+12,2);g.fillRect(Math.round(x-10),Math.round(y+av.height*.5),av.width+20,2)}
+      g.drawImage(av,Math.round(x),Math.round(y))}
+    g.fillStyle='#fff';g.font='14px DotGothic16,sans-serif';g.textAlign='center';g.fillText(dn?'下凡':up?'飛升':to==='hell'?'墜入地獄':'爬回人間',W/2,24);
+    if(t>.9&&!swapped){swapped=true;RLM=to;done()}
+    if(t>1.9){clearInterval(iv);o.style.opacity='0';setTimeout(()=>o.remove(),500)}},33)};
+$('rmN').addEventListener('click',e=>{const b=e.target.closest('.rtrv');if(!b)return;A.init();rlmFx(b.dataset.to,()=>openMap())});
 const openMap=()=>{['rrare','rtry','rgach'].forEach(rClose);if(kbusy){rToast('抽卡中，等一下。<button class="rtub" onclick="rUnstick()">卡住了？解除</button>');return}closeSub();const m=$('rmap');rOpen('rmap');setNavOn('adv');$('rsh').classList.remove('on');
   const cv=$('rmcv'),W=Math.round(innerWidth/2),H=Math.round(innerHeight/2),g=pxCanvas(cv,W,H);
-  $('rmN').innerHTML=AREAS.map(a=>{const ok=areaOK(a),cl=rp().clear[a.id];return `<button class="rnode${ok?'':' lk'}" data-a="${a.id}" style="left:${a.x*100}%;top:${a.y*100}%"><canvas class="pix" width="16" height="16" style="width:34px;height:34px"></canvas><b>${cl?'★ ':''}${a.n}</b><small>${ok?`Lv${a.L[0]}～${a.L[1]}`:`Lv${a.lv} 開放`}</small></button>`}).join('')+
-    `<button class="rnode${LV()<3?' lk':''}" data-a="shrine" style="left:50%;top:62%"><b>轉職聖殿</b><small>${LV()<3?'Lv3 開放':'轉職'}</small></button><button class="rnode cave" data-a="cave" style="left:90%;top:90%" aria-label="小山洞"></button>`;
-  $('rmN').querySelectorAll('.rnode canvas').forEach((c,i)=>drawMon(c,AREAS[i].m[0]));
+  $('rmN').innerHTML=RL().map(a=>{const ok=areaOK(a),cl=rp().clear[a.id];return `<button class="rnode${ok?'':' lk'}" data-a="${a.id}" style="left:${RPOS[a.id][0]*100}%;top:${RPOS[a.id][1]*100}%"><canvas class="pix" width="16" height="16" style="width:34px;height:34px"></canvas><b>${cl?'★ ':''}${a.n}</b><small>${ok?`Lv${a.L[0]}～${a.L[1]}`:`Lv${a.lv} 開放`}</small></button>`}).join('')+
+    (RLM==='human'?`<button class="rnode${LV()<3?' lk':''}" data-a="shrine" style="left:50%;top:55%"><b>轉職聖殿</b><small>${LV()<3?'Lv3 開放':'轉職'}</small></button><button class="rnode cave" data-a="cave" style="left:90%;top:90%" aria-label="小山洞"></button>`:'')+rlmBtns();$('rmH3').textContent='倫生大地圖・'+REALM[RLM].n;
+  $('rmN').querySelectorAll('.rnode canvas').forEach((c,i)=>{const a=RL()[i];if(a)drawMon(c,a.m[0])});
   cancelAnimationFrame(mapRaf);const t0=performance.now();const tk=t=>{if(!m.classList.contains('on'))return;drawMapBg(g,W,H,(t-t0)/1000);mapRaf=requestAnimationFrame(tk)};mapRaf=requestAnimationFrame(tk);SFX.open()};
 $('rmN').addEventListener('click',e=>{const b=e.target.closest('.rnode');if(!b)return;A.init();const id=b.dataset.a;SFX.click();
   if(id==='cave'){playCave('map');return}
@@ -4142,7 +4175,7 @@ const biome=(g,b,t,al)=>{g.globalAlpha=al;
   g.globalAlpha=1};
 const I={on:false,t:0,done:false,doneAt:0,lastC:0,lastSeg:-1,lastStep:-1,flags:{}};
 const LEN=18.5,SEG=2.9;
-const typeKey=sp=>{try{A.noise(.022,.16,sp?1500:3400,0,'highpass');A.tone(sp?120:170+Math.random()*40,.05,'square',sp?.035:.075);A.noise(.06,.05,800,.012,'lowpass')}catch(e){}};
+let _tkT=0;const typeKey=sp=>{try{const now=performance.now();if(now-_tkT<70)return;_tkT=now;const r=Math.random();A.noise(.012,sp?.07:.12,sp?1800:3000+r*500,0,'bandpass',.0004);A.tone(sp?110:170+r*25,.035,'sine',sp?.03:.05,.002)}catch(e){}};
 const bell=()=>{tone(2600,.7,'sine',.05);tone(3900,.5,'sine',.025,.01)};
 const carriage=()=>{noise(.2,.08,1700,0,'bandpass');tone(320,.16,'sawtooth',.02,0,140)};
 const typeSnd=n=>{if(n>0)typeKey()};
@@ -4213,13 +4246,12 @@ window.lunIntro={step:iStep,state:()=>({...I})};
 /* ================= 學堂 ================= */
 const CH=[
  {t:'第一章　倫的世界',q:[['倫的生日是哪一天？','12/20',['11/21','1/1','5/20']],['遊戲裡倫倫村的 Boss 是誰？','倫凍王',['稜鏡大精靈','賭狗之王','瘋火魔倫']],['倫最不喜歡下面哪一種小狐狸型態？','冰型',['火焰型','日光型','幼體']]]},
- {t:'第二章　雅的世界',q:[['雅的生日是 11/21，這天也是誰的生日？','伊布',['六尾','皮卡丘','卡比獸']],['雅最喜歡的電競選手是誰？','Faker',['hide in bush','fader','hello world']],['雅最喜歡的書是「＿語」，要填什麼？','倫語',['英語','日語','暗語']]]},
- {t:'第三章　又回到最初的起點',q:[['「我＿＿來的」，要填什麼？','世新',['台大','政大','師大']],['刀劍裡互相截圖對話的地圖是哪裡？','三絕峽',['天魔谷','倫倫村','山頂洞']],['雅最討厭吃什麼？','蔬菜',['肉','甜點','麵包']]]}];
+ {t:'第二章　雅雲的世界',q:[['雅雲的生日是 11/21，這天也是誰的生日？','伊布',['六尾','皮卡丘','卡比獸']],['雅雲最喜歡的電競選手是誰？','Faker',['hide in bush','fader','hello world']],['雅雲最喜歡的書是「＿語」，要填什麼？','倫語',['英語','日語','暗語']]]},
+ {t:'第三章　又回到最初的起點',q:[['「我＿＿來的」，要填什麼？','世新',['台大','政大','師大']],['刀劍裡互相截圖對話的地圖是哪裡？','三絕峽',['天魔谷','倫倫村','山頂洞']],['雅雲最討厭吃什麼？','蔬菜',['肉','甜點','麵包']]]}];
 const Q={npc:null,say:'',sayT:0,on:false,ch:-1,i:0,ok:0,picked:null,opts:[],typed:0,mood:'',moodT:0,adv:0,res:null,doneAt:0,fb:''};
 const sh=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 const wrapT=(s,n)=>{const L=[];for(let i=0;i<s.length;i+=n)L.push(s.slice(i,i+n));return L};
 const NPC=[['dog','狗哥',['嗷嗷！加油！','這題我也想知道。','我只會滑，不會寫。'],['嗷！好棒！','嗷嗚～～','汪！（鼓掌）'],['沒關係，嗷！','下次一定會。','我陪你。']],
- ['lun','倫',['我也在學耶。','這題你可以的。','一起讀吧。'],['你好強喔！','我都不會欸。','太神了。'],['我也常錯啦。','沒事沒事。','再來一次。']],
  ['yun','雅雲',['慢慢來，不急。','認真讀喔。','我在旁邊看著你。'],['答對了，很棒。','就是這樣。','不錯喔。'],['再想一下就會了。','沒關係，下一題。','記起來就好。']],
  ['lzx','李志憲',['專心點。','（理智線繃緊中）','用理智想。'],['理智線很滿意。','合格。','這很理智。'],['理智線快斷了……','冷靜，深呼吸。','下一題用理智。']]];
 const npcCv={};
@@ -4309,16 +4341,168 @@ setInterval(()=>{if($('rhouse').classList.contains('on'))hDraw()},60);
 
 /* ================= DEV：最上面每次只留這次要測的 ================= */
 {const top=$('kdTop');top.innerHTML='';
- const hd=$('kdTopH');if(hd)hd.textContent='本次值得測試（11/26 坐騎動畫、學堂 NPC、打字機音效、小屋放坐騎）';
- top.insertAdjacentHTML('beforeend','<button id="kdN1">① 坐騎探險：九尾狐</button><button id="kdN2">② 坐騎探險：地獄火鳳凰</button><button id="kdN3">③ 卡片配對（倫牌配對）</button><button id="kdN4">④ G7 開場短片（有聲音）</button><button id="kdN5">⑤ 學堂：倫語小考</button><button id="kdN6">⑥ 小屋（先給 500 倫幣）</button><button id="kdN7">⑦ 假裝第 19 天（看 G7 目標）</button><button id="kdN8">⑧ 給全部坐騎（測小屋放坐騎）</button>');
+ const hd=$('kdTopH');if(hd)hd.textContent='本次值得測試（⓪探索尋寶、三界地圖、打字機音效變輕）';
+ top.insertAdjacentHTML('beforeend','<button id="kdN1">① 坐騎探險：九尾狐</button><button id="kdN2">② 坐騎探險：地獄火鳳凰</button><button id="kdN3">③ 卡片配對（倫牌配對）</button><button id="kdN4">④ G7 開場短片（有聲音）</button><button id="kdN5">⑤ 學堂：倫語小考</button><button id="kdN6">⑥ 小屋（先給 500 倫幣）</button><button id="kdN7">⑦ 假裝第 19 天（看 G7 目標）</button><button id="kdN8">⑧ 給全部坐騎（測小屋放坐騎）</button><button id="kdN9">⑨ 三界地圖（全解鎖）</button>');
  const dv=(id,fn)=>{$(id).onclick=()=>{if(!P()||!started){devNote('先按上面的「用測試玩家直接進入卡池」。');return}devClose();fn()}};
  dv('kdN1',()=>window.lunRunOpen('fox'));dv('kdN2',()=>window.lunRunOpen('phoenix'));dv('kdN3',()=>window.lunCardOpen());
  dv('kdN4',()=>window.lunIntroOpen());dv('kdN5',()=>window.lunSchoolOpen(true));
+ dv('kdN9',()=>{rDevAll=true;RLM='human';openMap()});
  dv('kdN8',()=>{MOUNTS.forEach(m=>{rm().own[m.id]=1});save();window.lunHouseOpen()});
  dv('kdN6',()=>{const p=P();p.shard=(p.shard||0)+500;save();window.lunHouseOpen()});
  dv('kdN7',()=>{const p=P(),d=new Date();p.gd=[];for(let i=0;i<19;i++){const x=new Date(d-(18-i)*864e5);p.gd.push(x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0'))}
   p.goal={c:{0:1,1:1,2:1,3:1,4:1,5:1}};save();window.lunGoalOpen&&window.lunGoalOpen()})}
 document.head.insertAdjacentHTML('beforeend',`<style id="thPF">#rpet,#rclaw,#rcook,#rrun,#rcard,#rsch,#rhouse,#rintro,#rpet *,#rclaw *,#rcook *,#rrun *,#rcard *,#rsch *,#rhouse *,#rintro *{font-family:DotGothic16,"Noto Sans TC",sans-serif!important}</style>`);
+})();
+
+/* ===== v22.0（2026-11-26）：區域尋寶（取代地圖上的「這裡的卡池」）＝翻牌式抽取雛形 =====
+   玩法：地圖點區域 → 「探索尋寶」→ 6 張蓋住的寶圖，花 20 倫幣翻 1 張；翻完其他 5 張也會翻開（看你錯過什麼）。
+   每個區域獎品不同；每 5 次保底 1 個「稀有」；存檔 p.dig={n:總次數,pity:距離保底,area:{id:次數}}。舊卡池程式保留不動，之後別的專案用。 */
+(()=>{
+const COST=20;
+const POOL={
+ village:{n:'倫倫村',loot:[['c',30,'小錢袋'],['c',30,'小錢袋'],['ing','herb','草藥'],['ing','meat','肉'],['w',1,'倫性 +1']],rare:['w',3,'倫性 +3']},
+ forest:{n:'迷途森林',loot:[['c',40,'小錢袋'],['ing','mush','蘑菇'],['ing','herb','草藥'],['ing','honey','蜂蜜'],['w',1,'倫性 +1']],rare:['egg',1,'小狐狸蛋']},
+ sky:{n:'倫間仙境',loot:[['c',50,'雲上錢袋'],['ing','honey','蜂蜜'],['ing','honey','蜂蜜'],['w',2,'倫性 +2'],['c',50,'雲上錢袋']],rare:['w',5,'倫性 +5']},
+ peak:{n:'倫生巔峰',loot:[['c',60,'金錢袋'],['w',2,'倫性 +2'],['ing','mush','蘑菇'],['c',60,'金錢袋'],['w',2,'倫性 +2']],rare:['w',6,'倫性 +6']},
+ hell:{n:'瘋火地獄',loot:[['c',50,'焦黑錢袋'],['ing','chili','辣椒'],['ing','chili','辣椒'],['w',2,'倫性 +2'],['ing','meat','肉']],rare:['w',5,'倫性 +5']},
+ dog:{n:'賭狗城',loot:[['c',10,'輸剩的零錢'],['c',120,'大贏錢袋'],['w',2,'倫性 +2'],['c',10,'輸剩的零錢'],['ing','meat','肉']],rare:['c',200,'賭神大獎']}};
+const ING={herb:'草藥',meat:'肉',honey:'蜂蜜',mush:'蘑菇',chili:'辣椒'};
+let area='village',cards=[],picked=-1,busy=false,round=1,got=[];const MAXR=5;
+const DG=()=>{const p=P();p.dig=p.dig||{n:0,pity:0,area:{}};return p.dig};
+document.head.insertAdjacentHTML('beforeend','<style>#rdig .rcb{width:min(92vw,360px);box-sizing:border-box}#rdig .drow{display:flex;gap:10px;margin-top:8px}#rdig .drow .mb{flex:1;margin:0;height:46px;line-height:46px;padding:0}#rdig .drow .mb[disabled]{opacity:.35}#rdig .dmsg{height:44px;display:flex;align-items:center;justify-content:center;text-align:center;margin:0}#rdig .dgrid{height:224px;align-content:start}#rdig .dc span{font-size:13px;text-align:center;line-height:1.2;padding:0 2px}#rdig .dgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0}#rdig .dc{position:relative;height:96px;border:2px solid #d9b56a;border-radius:6px;background:linear-gradient(160deg,#3a2a58,#1d1030);color:#d9b56a;font:15px DotGothic16,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:transform .35s}#rdig .dc.up{background:#f5e9d0;color:#2a1424;transform:rotateY(0)}#rdig .dc.pk{border-color:#ff6a2a;box-shadow:0 0 0 2px #ff6a2a}#rdig .dc.rare{background:#ffe9a0;border-color:#fff}#rdig .dc.dim{opacity:.55}#rdig .dc b{font-size:22px}</style>');
+document.body.insertAdjacentHTML('beforeend',`<div class="rpop" id="rdig"><div class="rcb">${xBtn('rdigX')}<h3 id="rdigH">探索尋寶</h3><div id="rdigB"></div></div></div>`);
+const label=c=>c[0]==='c'?c[2]+' '+c[1]+' 幣':c[0]==='ing'?ING[c[1]]+' ×1':c[2];
+const give=c=>{const p=P();if(c[0]==='c')p.shard=(p.shard||0)+c[1];else if(c[0]==='w')p.wallet=(p.wallet||0)+c[1];else if(c[0]==='ing'){p.ing=p.ing||{herb:0,meat:0,honey:0,mush:0,chili:0};p.ing[c[1]]=(p.ing[c[1]]||0)+1}
+  else if(c[0]==='egg'){p.fox=p.fox||{};if(!p.fox.has){p.fox.has=1;p.fox.eggK=p.kills||0}else p.shard=(p.shard||0)+40}
+  save();try{updWallet&&updWallet()}catch(e){}};
+const deal=()=>{const d=POOL[area],g=DG();const a=d.loot.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}
+  cards=a.slice(0,6);while(cards.length<6)cards.push(d.loot[0]);picked=-1;
+  /* 保底：下一次是第 5 次就一定出稀有；否則每張 6% 機率變稀有（最多 1 張） */
+  const sure=g.pity>=4;const r=Math.random()*6|0;if(sure)cards[r]=d.rare;else cards=cards.map(c=>c);cards.rare=sure?r:-1;cards.chance=!sure};
+const view=msg=>{const d=POOL[area],g=DG(),p=P();if(round>MAXR){$('rdigH').textContent='尋寶結束・'+d.n;$('rdigB').innerHTML=`<p class="gls dmsg" style="height:auto">這趟 ${MAXR} 次尋寶的收穫</p><div style="min-height:150px;text-align:center;line-height:1.8">${got.map(c=>(c===d.rare?'★ ':'◆ ')+label(c)).join('<br>')}</div><div class="drow"><button class="mb" data-dg="end">結束</button><button class="mb" data-dg="more">再來 5 張</button></div>`;return}
+  $('rdigH').textContent='探索尋寶・'+d.n+'（'+round+'/'+MAXR+'）';
+  $('rdigB').innerHTML=`<p class="gls dmsg">${msg||`花 ${COST} 倫幣，翻開 1 張寶圖。你現在有 ${p.shard||0} 倫幣。`}</p><div class="dgrid">${cards.map((c,i)=>{const up=picked>=0;const rare=up&&c===d.rare;return `<button class="dc${up?' up':''}${i===picked?' pk':''}${rare?' rare':''}${up&&i!==picked?' dim':''}" data-i="${i}">${up?`<b>${rare?'★':'◆'}</b><span>${label(c)}</span>`:'<b>？</b><span>寶圖</span>'}</button>`}).join('')}</div><p class="gls dmsg" style="height:36px">保底：再 ${Math.max(0,4-g.pity)} 次必出稀有（${label(d.rare)}）・此區累計 ${g.area[area]||0} 次</p><div class="drow"><button class="mb" data-dg="end">離開</button><button class="mb" data-dg="again"${picked>=0?'':' disabled'}>${round>=MAXR?'看收穫':'繼續翻'}</button></div>`};
+const open=id=>{if(!P())return;area=id;round=1;got=[];rClose('rmap');deal();view();rOpen('rdig')};
+window.lunDigOpen=open;
+$('rdigX').onclick=()=>{rClose('rdig');try{A.S&&A.S.tap&&A.S.tap()}catch(e){}};
+$('rdig').addEventListener('click',e=>{
+  if(e.target.closest('[data-dg="end"]')){rClose('rdig');return}
+  if(e.target.closest('[data-dg="more"]')){round=1;got=[];deal();view();return}
+  if(e.target.closest('[data-dg="again"]')){if(picked<0)return;round++;if(round<=MAXR)deal();view();try{A.S.tap()}catch(x){}return}
+  const b=e.target.closest('.dc');if(!b||busy||picked>=0)return;const p=P(),g=DG();
+  if((p.shard||0)<COST){rToast(`倫幣不夠，要 ${COST} 倫幣。`);try{A.S.miss()}catch(x){}return}
+  p.shard-=COST;const i=+b.dataset.i;busy=true;
+  let c=cards[i];if(cards.chance&&Math.random()<.06)c=POOL[area].rare;cards[i]=c;picked=i;
+  const rare=c===POOL[area].rare;got.push(c);g.n++;g.area[area]=(g.area[area]||0)+1;g.pity=rare?0:g.pity+1;give(c);
+  try{rare?(A.tone(880,.2,'triangle',.08),A.tone(1320,.3,'triangle',.08,.12)):A.S.pickup()}catch(x){}
+  view(rare?`★ 稀有！${label(c)}`:`翻到：${label(c)}`);busy=false});
+/* 地圖：把「這裡的卡池」換成「探索尋寶」，點了直接進尋寶（不再跳到抽卡畫面） */
+const sh=$('rshB');
+new MutationObserver(()=>{const b=$('rshCard');if(b&&b.textContent!=='探索尋寶')b.textContent='探索尋寶'}).observe(sh,{childList:true,subtree:true});
+sh.addEventListener('click',e=>{const b=e.target.closest('#rshCard');if(!b)return;e.stopImmediatePropagation();e.preventDefault();
+  const a=mapSel;if(!a||!POOL[a.id])return;$('rsh').classList.remove('on');open(a.id)},true);
+/* 按 DEV 按鈕或 DEV 面板內任何東西時，先把尋寶頁關掉，否則後面開的測試畫面會被蓋在下面看不到 */
+document.addEventListener('click',e=>{if($('rdig').classList.contains('on')&&e.target.closest('#kdevBtn,#kdev'))rClose('rdig')},true);
+/* 預熱：第一次升天／下凡動畫會卡，所以在地圖打開時先把角色圖、音效、全螢幕合成層準備好 */
+let warmed=0;new MutationObserver(()=>{if(!warmed&&$('rmap').classList.contains('on')){warmed=1;setTimeout(()=>{try{A.init();window.lunAvCanvas&&window.lunAvCanvas(3,0);const c=document.createElement('canvas');c.width=c.height=64;c.getContext('2d').createLinearGradient(0,0,0,64)}catch(e){}},50)}}).observe($('rmap'),{attributes:true,attributeFilter:['class']});
+/* DEV */
+{const top=$('kdTop');if(top){top.insertAdjacentHTML('afterbegin','<button id="kdD1">⓪ 探索尋寶（倫倫村，給 200 倫幣）</button><button id="kdD2">⓪ 尋寶：保底前一次（地獄）</button>');
+ const go=(id,pity)=>{const p=P();if(!p){return}p.shard=(p.shard||0)+200;DG().pity=pity;save();try{$('kdev')&&0}catch(e){}try{devClose()}catch(e){}open(id)};
+ $('kdD1').onclick=()=>go('village',0);$('kdD2').onclick=()=>go('hell',4)}}
+})();
+
+/* ===== v22.1（2026-11-26）：大地圖小特效＋升天／下凡轉場重做（不卡版） =====
+   特效層：在地圖畫布上面再疊一張透明畫布 #rmfx（不擋點擊），依三界畫不同東西。
+   轉場：改成 CSS 動畫（跑在合成層），地圖重畫藏在全白／全黑底下，聲音延後 80ms 才響，避免第一次卡。 */
+(()=>{
+document.head.insertAdjacentHTML('beforeend',`<style>
+#rmfx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;image-rendering:pixelated}
+#rmN .rnode:not(.lk)::before{content:"";position:absolute;left:50%;top:38%;width:54px;height:54px;margin:-27px 0 0 -27px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,226,140,.55),rgba(255,226,140,0));animation:rnHalo 2.4s ease-in-out infinite;pointer-events:none}
+#rmN .rnode canvas{animation:rnBob 2.2s ease-in-out infinite}
+#rmN .rnode:nth-child(2n) canvas{animation-delay:-1.1s}
+@keyframes rnHalo{0%,100%{transform:scale(.8);opacity:.5}50%{transform:scale(1.25);opacity:1}}
+@keyframes rnBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+#rlmFx2{position:fixed;inset:0;z-index:300;overflow:hidden;opacity:0;transition:opacity .35s}
+#rlmFx2.on{opacity:1}
+#rlmFx2 .rp{position:absolute;border-radius:1px;will-change:transform}
+#rlmFx2 .up{animation:rpUp var(--d) linear infinite}#rlmFx2 .dn{animation:rpDn var(--d) linear infinite}
+@keyframes rpUp{from{transform:translateY(0)}to{transform:translateY(-110vh)}}
+@keyframes rpDn{from{transform:translateY(-10vh)}to{transform:translateY(110vh)}}
+#rlmFx2 .av{position:absolute;left:50%;margin-left:-48px;width:96px;image-rendering:pixelated;will-change:transform}
+#rlmFx2 .avU{top:80%;animation:avUp 1.5s ease-in forwards}#rlmFx2 .avD{top:0;animation:avDn 1.5s ease-out forwards}
+@keyframes avUp{from{transform:translateY(0)}to{transform:translateY(-62vh)}}
+@keyframes avDn{from{transform:translateY(-100%)}to{transform:translateY(58vh)}}
+#rlmFx2 .tt{position:absolute;left:0;right:0;top:12%;text-align:center;color:#fff;font:22px DotGothic16,sans-serif;letter-spacing:.3em;text-shadow:0 2px 0 #0006}
+</style>`);
+/* ---------- 地圖特效層 ---------- */
+const cv=document.createElement('canvas');cv.id='rmfx';$('rmcv').insertAdjacentElement('afterend',cv);
+let fxRaf=0;const fxS={star:null};
+const rnd=(a,b)=>a+Math.random()*(b-a);
+const fxDraw=t=>{const m=$('rmap');if(!m.classList.contains('on')){fxRaf=0;return}
+  const W=Math.round(innerWidth/2),H=Math.round(innerHeight/2);if(cv.width!==W||cv.height!==H){cv.width=W;cv.height=H}
+  const g=cv.getContext('2d');g.clearRect(0,0,W,H);const s=t/1000,r=RLM;
+  if(r==='human'){
+    /* 雲影慢慢飄 */
+    g.fillStyle='rgba(0,20,40,.13)';for(let i=0;i<4;i++){const x=((s*5+i*W/3.2)%(W+120))-60,y=H*(.18+i*.2);g.fillRect(Math.round(x),Math.round(y),46,12);g.fillRect(Math.round(x+10),Math.round(y-6),30,8)}
+    /* 海面亮點 */
+    g.fillStyle='#fff';for(let i=0;i<26;i++){if(((i*13+(s*3|0)*7)%6)<1){const x=(i*47)%W,y=(i*83)%H;const ed=x<W*.08||x>W*.92||y<H*.1||y>H*.9;if(ed)g.fillRect(x,y,2,1)}}
+    /* 鳥 */
+    for(let i=0;i<2;i++){const x=((s*14+i*W*.6)%(W+40))-20,y=H*.12+i*H*.1+Math.sin(s*2+i)*4,f=(s*6+i)%2<1;g.fillStyle='#fff';g.fillRect(Math.round(x),Math.round(y),2,1);g.fillRect(Math.round(x)-2,Math.round(y)+(f?-1:1),2,1);g.fillRect(Math.round(x)+2,Math.round(y)+(f?-1:1),2,1)}
+    /* 森林螢火蟲、聖殿金光 */
+    for(let i=0;i<9;i++){const bx=W*.68+Math.sin(i*2.3)*W*.14,by=H*.36+Math.cos(i*1.7)*H*.07;const x=bx+Math.sin(s*.9+i)*8,y=by+Math.cos(s*1.1+i*2)*6;const a=.35+.65*Math.abs(Math.sin(s*1.6+i));g.fillStyle='rgba(255,246,150,'+a.toFixed(2)+')';g.fillRect(Math.round(x),Math.round(y),2,2)}
+    for(let i=0;i<6;i++){const x=W*.5+Math.sin(i*3+s)*10,k=(s*8+i*5)%22,y=H*.62-k;g.fillStyle='rgba(255,224,120,'+(1-k/22).toFixed(2)+')';g.fillRect(Math.round(x),Math.round(y),1,2)}
+  }else if(r==='sky'){
+    /* 日光射線 */
+    for(let i=0;i<5;i++){const a=.05+.04*Math.sin(s*.8+i),x0=W*(.1+i*.2);g.fillStyle='rgba(255,255,255,'+a.toFixed(3)+')';g.beginPath();g.moveTo(x0,0);g.lineTo(x0+26,0);g.lineTo(x0+90+Math.sin(s*.5+i)*10,H);g.lineTo(x0+40,H);g.fill()}
+    /* 流星 */
+    if(!fxS.star&&Math.random()<.012)fxS.star={x:rnd(W*.3,W),y:rnd(0,H*.3),t:0};
+    if(fxS.star){const q=fxS.star;q.t+=.03;const x=q.x-q.t*W*.5,y=q.y+q.t*H*.3;for(let k=0;k<10;k++){g.fillStyle='rgba(255,255,255,'+(1-k/10).toFixed(2)+')';g.fillRect(Math.round(x+k*3),Math.round(y-k*1.8),2,2)}if(q.t>1)fxS.star=null}
+    /* 花瓣／光點往上飄 */
+    for(let i=0;i<28;i++){const x=(i*37+Math.sin(s+i)*8)%W,y=H-((s*10+i*29)%H);g.fillStyle=i%3?'rgba(255,255,255,.8)':'rgba(255,200,230,.9)';g.fillRect(Math.round(x),Math.round(y),i%4?1:2,i%4?1:2)}
+  }else{
+    /* 熔岩光暈 */
+    const gd=g.createLinearGradient(0,H*.7,0,H);gd.addColorStop(0,'rgba(255,90,20,0)');gd.addColorStop(1,'rgba(255,120,30,'+(.25+.1*Math.sin(s*3)).toFixed(2)+')');g.fillStyle=gd;g.fillRect(0,H*.7,W,H*.3);
+    /* 火星往上飄 */
+    for(let i=0;i<46;i++){const k=(s*(14+i%5*4)+i*31)%H,x=(i*53+Math.sin(s*1.4+i)*6)%W,y=H-k;g.fillStyle=k<H*.5?'#ffd070':'#ff7a20';g.globalAlpha=1-k/H;g.fillRect(Math.round(x),Math.round(y),i%3?1:2,2)}
+    g.globalAlpha=1;
+    /* 偶爾紅光閃一下 */
+    if(Math.sin(s*.7)>.985){g.fillStyle='rgba(255,60,30,.12)';g.fillRect(0,0,W,H)}
+  }
+  fxRaf=requestAnimationFrame(fxDraw)};
+new MutationObserver(()=>{if($('rmap').classList.contains('on')&&!fxRaf)fxRaf=requestAnimationFrame(fxDraw)}).observe($('rmap'),{attributes:true,attributeFilter:['class']});
+/* ---------- 升天／下凡／墜入地獄 轉場（CSS 版） ---------- */
+let busyFx=0;
+$('rmN').addEventListener('click',e=>{const b=e.target.closest('.rtrv');if(!b)return;e.stopImmediatePropagation();e.preventDefault();if(busyFx)return;busyFx=1;
+  try{A.init()}catch(x){}
+  const to=b.dataset.to,from=RLM,dn=(from==='sky'&&to==='human'),down=(to==='hell'||dn);
+  const bg=to==='hell'?'linear-gradient(#2a0606,#a02a10)':dn?'linear-gradient(#fff,#8ad070)':to==='sky'?'linear-gradient(#7a6ad8,#ffe6f5)':'linear-gradient(#200,#f0c080)';
+  const o=document.createElement('div');o.id='rlmFx2';o.style.background=bg;
+  const cols=to==='hell'?['#ff7a20','#ffd070','#a02a10']:['#fff','#ffe9a0','#cfe8ff'];
+  let h='';for(let i=0;i<34;i++){const sz=1+(i%3)*1.5,d=(1.6+(i%7)*.25).toFixed(2);h+=`<i class="rp ${down?'dn':'up'}" style="left:${(i*29)%100}%;top:${(i*17)%100}%;width:${sz}px;height:${sz*2}px;background:${cols[i%3]};--d:${d}s;animation-delay:-${(i%9)*.3}s"></i>`}
+  const av=document.createElement('canvas');try{const a=window.lunAvCanvas&&window.lunAvCanvas(3,0);if(a){av.width=a.width;av.height=a.height;av.getContext('2d').drawImage(a,0,0);av.style.height=(a.height*96/a.width)+'px'}}catch(x){}
+  av.className='av '+(down?'avD':'avU');
+  o.innerHTML=h+`<div class="tt">${dn?'下 凡':to==='sky'?'飛 升':to==='hell'?'墜入地獄':'爬回人間'}</div>`;o.appendChild(av);document.body.appendChild(o);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>o.classList.add('on')));
+  setTimeout(()=>{try{if(to==='hell')A.tone(180,.5,'sawtooth',.05,0,50);else[880,1175,1568,2093].forEach((f,i)=>A.tone(f,.25,'sine',.04,i*.1))}catch(x){}},80);
+  setTimeout(()=>{RLM=to;openMap()},520);
+  setTimeout(()=>{o.classList.remove('on')},1500);
+  setTimeout(()=>{o.remove();busyFx=0},1950)},true);
+})();
+
+/* ===== v22.2（2026-11-26）：主畫面那排按鈕整理成兩個入口 =====
+   「寵物與生活」＝小狐狸、夾娃娃機、料理製藥；「玩樂」＝坐騎探險、卡片配對。
+   原本的 5 顆按鈕留在原處但隱藏（舊程式的點擊處理不用改），選單點了就代按原本那顆。 */
+(()=>{
+const r=$('rhgo2');if(!r)return;
+const G={life:['寵物與生活',[['pet','小狐狸','孵蛋、餵食、進化'],['claw','夾娃娃機','10 倫幣一次'],['cook','料理製藥','做菜、煉藥']]],
+         play:['玩樂',[['run','坐騎探險','12 秒跑酷撿東西'],['card','卡片配對','倫牌配對']]]};
+document.head.insertAdjacentHTML('beforeend','<style>#rhgo2 .rq[data-q9]{display:none!important}#rhgo2 .rq.grp{display:block!important;flex:1 1 40%!important}#rgrp .rcb{width:min(90vw,340px)}#rgrp .mb{display:block;width:100%;margin:8px 0;text-align:left}#rgrp .mb small{display:block;opacity:.7;font-size:12px}</style>');
+document.body.insertAdjacentHTML('beforeend',`<div class="rpop" id="rgrp"><div class="rcb">${xBtn('rgrpX')}<h3 id="rgrpH"></h3><div id="rgrpB"></div></div></div>`);
+r.insertAdjacentHTML('beforeend',Object.entries(G).map(([k,v])=>`<button class="rq grp" data-grp="${k}">${v[0]}</button>`).join(''));
+$('rgrpX').onclick=()=>rClose('rgrp');
+r.addEventListener('click',e=>{const b=e.target.closest('[data-grp]');if(!b)return;const g=G[b.dataset.grp];try{A.S.tap()}catch(x){}
+  $('rgrpH').textContent=g[0];$('rgrpB').innerHTML=g[1].map(([k,n,d])=>`<button class="mb" data-go="${k}">${n}<small>${d}</small></button>`).join('');rOpen('rgrp')});
+$('rgrpB').addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(!b)return;rClose('rgrp');const o=r.querySelector('[data-q9="'+b.dataset.go+'"]');o&&o.click()});
 })();
 
 }
