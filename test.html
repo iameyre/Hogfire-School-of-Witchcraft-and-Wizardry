@@ -2442,7 +2442,7 @@ $('rhMap').onclick=()=>{A.init();openMap()};$('rhWard').onclick=()=>{A.init();op
 
 /* ---------- 堆疊式選單 ---------- */
 const NAVI={adv:'<path d="M4 20 20 4M14 4h6v6M4 14l6 6"/>',char:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>',gacha:'<circle cx="12" cy="12" r="8"/><path d="M4 12h16"/><circle cx="12" cy="12" r="2"/>',shop:'<path d="M4 9h16l-1 11H5L4 9zM8 9V7a4 4 0 0 1 8 0v2"/>',more:'<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>'};
-const NAV=[['adv','冒險',[['goal','三天大目標'],['home','主畫面'],['map','世界地圖'],['task','每日任務'],['fort','參拜'],['pet','小狐狸'],['claw','夾娃娃機']]],['char','角色',[['ward','更衣間'],['tal','天賦樹'],['shrine','轉職聖殿'],['ach','成長']]],['gacha','扭蛋',[['card','抽卡'],['look','抽外觀'],['eq','抽裝備']]],['shop','商城',[['shop','商店'],['dex','倫寶閣'],['log','紀錄']]],['more','更多',[['info','說明'],['get','東西怎麼拿'],['call','客服倫員'],['code','存檔代碼']]]];
+const NAV=[['adv','冒險',[['goal','三天大目標'],['home','主畫面'],['map','世界地圖'],['task','每日任務'],['fort','參拜'],['pet','小狐狸'],['claw','夾娃娃機']]],['char','角色',[['ward','更衣間'],['tal','天賦樹'],['shrine','轉職聖殿'],['ach','成長']]],['gacha','扭蛋',[['card','抽卡'],['look','抽外觀'],['eq','抽裝備']]],['shop','商城',[['shop','商店'],['dex','倫寶閣'],['log','紀錄'],['cook','料理製藥']]],['more','更多',[['info','說明'],['get','東西怎麼拿'],['call','客服倫員'],['code','存檔代碼']]]];
 $('rnav').innerHTML=NAV.map(([k,n])=>`<button data-n="${k}"><svg viewBox="0 0 24 24">${NAVI[k]}</svg><span>${n}</span>${k==='adv'?'<i class="rb" id="rnB" hidden></i>':''}</button>`).join('');
 let subOpen=null;
 const closeSub=()=>{subOpen=null;$('rsub').classList.remove('on');$('rshade').classList.remove('on');document.querySelectorAll('#rnav>button').forEach(b=>b.classList.remove('open'))};
@@ -2459,7 +2459,7 @@ const rAct=a=>{if(kbusy&&a!=='card'){rToast('抽卡中，等一下。<button cla
   const lk=subLock(a);if(lk){rToast(a==='bank'?'倫生銀行下次更新開放，先鎖起來。':`${({tal:'天賦樹',shop:'商店',shrine:'轉職聖殿'})[a]} ${lk} 開放。現在 Lv${LV()}。`,1);A.S.kPoot();if(homeOn)return;return}
   const f=({home:rHome,map:openMap,task:()=>{goPanel('task');setNavOn('adv')},fort:()=>{window.lunFortOpen&&window.lunFortOpen()},ward:()=>{openChar()},tal:()=>{goPanel('tal');setNavOn('char')},shrine:()=>openShrine(),ach:()=>{goPanel('ach');setNavOn('char')},
     card:goDraw,look:()=>openGach('look'),eq:()=>openGach('eq'),shop:()=>{goPanel('shop');setNavOn('shop')},dex:()=>{goPanel('dex');setNavOn('shop')},log:()=>{goPanel('log');setNavOn('shop')},
-    info:()=>$('kinfo').classList.add('on'),get:()=>openGet(),call:()=>openCall(),code:()=>window.lunCodeOpen&&window.lunCodeOpen(),goal:()=>window.lunGoalOpen&&window.lunGoalOpen(),pet:()=>window.lunPetOpen&&window.lunPetOpen(),claw:()=>window.lunClawOpen&&window.lunClawOpen()})[a];if(f)f()};
+    info:()=>$('kinfo').classList.add('on'),get:()=>openGet(),call:()=>openCall(),code:()=>window.lunCodeOpen&&window.lunCodeOpen(),goal:()=>window.lunGoalOpen&&window.lunGoalOpen(),pet:()=>window.lunPetOpen&&window.lunPetOpen(),claw:()=>window.lunClawOpen&&window.lunClawOpen(),cook:()=>window.lunCookOpen&&window.lunCookOpen()})[a];if(f)f()};
 const updNavBadge=()=>{const b=$('rnB');if(b)b.hidden=!(typeof todoN==='function'&&(todoN()||miniLeft()))};
 
 /* ---------- 世界地圖 ---------- */
@@ -2518,7 +2518,7 @@ const spawnMon=boss=>{const a=B.a,k=boss?a.boss:a.m[Math.random()<.5?0:1],L=boss
   B.mons.push(m);if(boss){B.boss=m;bossBgm(AREAS.indexOf(B.a));$('rbBoss').classList.add('on');$('rbBN').textContent=`王・${a.bn}・Lv${L}`;bmsg('BOSS',1500);SFX.boom()}};
 const dmgMon=(m,base,forceCrit)=>{if(m.dead)return;const S=B.S,cr=forceCrit||Math.random()*100<S.crit;let d=Math.round(base*(.88+Math.random()*.24)*(cr?1.8:1));m.hp-=d;m.hit=.12;m.kb=(m.x>B.pl.x?1:-1)*(m.boss?20:60);
   B.txt.push({x:m.x,y:m.y-m.h-4,s:String(d),c:cr?'#ffd56a':'#fff',t:0,big:cr});cr?SFX.crit():SFX.hit();if(m.hp<=0)killMon(m)};
-const killMon=m=>{m.dead=.4;try{const q=P();q.kills=(q.kills||0)+1}catch(x){}SFX.die();const L=m.L,ex=Math.round((4+L*3)*(m.boss?10:1));B.exp+=ex;let sh=Math.random()<(m.boss?1:.35)?(m.boss?10+L:1+Math.floor(Math.random()*3)):0;if(sh&&petOn())sh=Math.ceil(sh*1.1);if(sh&&window.lunFortCoin)sh=Math.ceil(sh*window.lunFortCoin());B.sh+=sh;
+const killMon=m=>{m.dead=.4;try{const q=P();q.kills=(q.kills||0)+1}catch(x){}try{window.lunIngDrop&&window.lunIngDrop(m)}catch(x){}SFX.die();const L=m.L,ex=Math.round((4+L*3)*(m.boss?10:1));B.exp+=ex;let sh=Math.random()<(m.boss?1:.35)?(m.boss?10+L:1+Math.floor(Math.random()*3)):0;if(sh&&petOn())sh=Math.ceil(sh*1.1);if(sh&&window.lunFortCoin)sh=Math.ceil(sh*window.lunFortCoin());B.sh+=sh;
   B.txt.push({x:m.x,y:m.y-m.h-12,s:`+${ex} EXP`,c:'#9cf',t:0});if(sh){B.txt.push({x:m.x,y:m.y-m.h-20,s:`+${sh} 幣`,c:'#ffd56a',t:0});setTimeout(SFX.coin,120)}
   if(Math.random()<Math.min(.95,(m.boss?.6:.04)*(window.lunFortDrop?window.lunFortDrop():1))){const av=ensureAv(),c=GEAR.filter(x=>x.t==='eq'&&!x.ltd&&!x.gc&&!x.rare&&!av.own[x.id]&&!B.drops.includes(x.id)&&x.lv<=B.lvNow+2);if(c.length){const it=c[Math.floor(Math.random()*c.length)];B.drops.push(it.id);B.txt.push({x:m.x,y:m.y-m.h-28,s:'掉寶！'+it.n,c:'#ff8ad8',t:0,big:1})}}
   if(!m.boss){B.kills++;rp().kills=(rp().kills||0)+1}else B.bossDone=true;
@@ -3457,7 +3457,7 @@ document.addEventListener('click',async e=>{
 const prayN=p=>{const t=p.pray&&p.pray.tot;return t&&typeof t==='object'?Object.keys(t).reduce((a,k)=>k==='don'?a:a+(+t[k]||0),0):(+t||0)};
 const GOALS=[
  {n:'抽卡日常',d:'12/1～12/3',ms:[['抽卡累計 30 張',p=>(p.st&&p.st.pulls)||0,30],['對一次發票',p=>invs().some(v=>v.ck)?1:0,1],['參拜 3 次',prayN,3]],rw:{w:12,s:150}},
- {n:'打怪',d:'12/4～12/6',ms:[['擊敗怪物 40 隻',p=>p.kills||0,40],['打倒倫倫村的倫凍王',p=>(rp().clear&&rp().clear.village)?1:0,1],['等級到 Lv5',p=>p.lv||1,5]],rw:{w:15,s:200}},{n:'寵物與夾娃娃機',d:'12/7～12/9',ms:[['孵出小狐狸',p=>(p.fox&&p.fox.hatched)?1:0,1],['餵食小狐狸 10 次',p=>(p.fox&&p.fox.fed)||0,10],['小狐狸進化',p=>(p.fox&&p.fox.form&&p.fox.form!=='kit')?1:0,1],['夾娃娃機玩 3 次',p=>(p.claw&&p.claw.n)||0,3]],rw:{w:18,s:250}},{n:'料理與製藥',d:'12/10～12/12'},
+ {n:'打怪',d:'12/4～12/6',ms:[['擊敗怪物 40 隻',p=>p.kills||0,40],['打倒倫倫村的倫凍王',p=>(rp().clear&&rp().clear.village)?1:0,1],['等級到 Lv5',p=>p.lv||1,5]],rw:{w:15,s:200}},{n:'寵物與夾娃娃機',d:'12/7～12/9',ms:[['孵出小狐狸',p=>(p.fox&&p.fox.hatched)?1:0,1],['餵食小狐狸 10 次',p=>(p.fox&&p.fox.fed)||0,10],['小狐狸進化',p=>(p.fox&&p.fox.form&&p.fox.form!=='kit')?1:0,1],['夾娃娃機玩 3 次',p=>(p.claw&&p.claw.n)||0,3]],rw:{w:18,s:250}},{n:'料理與製藥',d:'12/10～12/12',ms:[['做出 3 道料理',p=>(p.cook&&p.cook.n)||0,3],['製作 2 瓶藥',p=>(p.cook&&p.cook.pn)||0,2],['收集食材 15 個',p=>(p.cook&&p.cook.got)||0,15]],rw:{w:20,s:300}},
  {n:'坐騎探險',d:'12/13～12/15'},{n:'卡片對戰',d:'12/16～12/18'},{n:'學堂與小屋',d:'12/19～12/20'}];
 const gCal=p=>Math.max(1,Math.round((Date.parse(today())-Date.parse(p.gd[0]))/864e5)+1);
 const gInfo=()=>{const p=P();p.gd=p.gd||[];const t=today();if(!p.gd.includes(t)){p.gd.push(t);save()}p.goal=p.goal||{c:{}};
@@ -3628,6 +3628,23 @@ const drawFox=(f,t,blink)=>{OX=0;OY=0;const C=FORMS[f]||FORMS.kit,G=mk();const o
   if(C.sun){px(G,cx,6+oy,'#fff7d8');px(G,cx,7+oy,'#ffb02a');px(G,cx-1,6+oy,'#ffd56a');px(G,cx+1,6+oy,'#ffd56a')}
   if(C.fire){px(G,cx,6+oy,'#ff4a1a');px(G,cx,5+oy,'#ffd56a')}
   outline(G);return G};
+const drawFoxSide=(f,t,blink)=>{OX=2;OY=1;const C=FORMS[f]||FORMS.kit,G=mk();const oy=Math.round(Math.sin(t/420));
+  if(C.sun){const cx=16,cy=9+oy;for(let k=0;k<12;k++){const a=t/1400+k*Math.PI/6;for(let r=7;r<=9;r++)px(G,cx+Math.cos(a)*r,cy+Math.sin(a)*r,k%2?'#ffe27a':'#fff2c0')}}
+  for(let k=0;k<C.tails;k++){const ang=(C.tails===1?0:(k-(C.tails-1)/2)*.55),base=[7,15+oy],L=5.5;
+    for(let s=0;s<=L;s+=.6){const a=Math.PI+ang*(.4+s/L)+Math.sin(t/300+k)*.18*(s/L);const x=base[0]+Math.cos(a)*s-1.2,y=base[1]+Math.sin(a)*s*.8-s*.35;ell(G,x,y,2.1-s/L*.8,1.8-s/L*.6,s>L-1.6?C.tip:C.body)}
+    if(C.fire){const a=Math.PI+ang*1.4,x=base[0]+Math.cos(a)*L-1.4,y=base[1]+Math.sin(a)*L*.8-L*.35,fl=Math.floor(t/120+k)%2;px(G,x-1,y-2-fl,'#ff7a1a');px(G,x-1,y-3-fl,'#ffd56a');px(G,x,y-2,'#ff4a1a');px(G,x-2,y-2,'#ff4a1a')}}
+  ell(G,11,16+oy,6,3.6,C.body);ell(G,10,17+oy,4.6,2,C.shade);ell(G,14,16.5+oy,2.8,2.6,C.belly);
+  rect(G,8,19+oy,2,3,C.shade);rect(G,13,19+oy,2,3,C.body);rect(G,10,19+oy,2,3,C.shade);rect(G,15,19+oy,2,3,C.body);
+  ell(G,16,10+oy,4.2,3.8,C.body);ell(G,19.5,11+oy,2.4,1.6,C.belly);
+  tri(G,[13,6+oy],[14,1+oy],[16.5,5+oy],C.body);tri(G,[16,5+oy],[19,1+oy],[20,6+oy],C.body);px(G,14,3+oy,C.ear);px(G,14,4+oy,C.ear);px(G,18,3+oy,C.ear);px(G,18,4+oy,C.ear);
+  if(C.fluff){for(let i=0;i<6;i++){px(G,12+i,13+oy+(i%2),C.belly);px(G,12+i,14+oy,C.belly)}px(G,11,14+oy,C.belly);px(G,18,14+oy,C.belly)}
+  if(blink){px(G,17,9+oy,OUT);px(G,18,9+oy,OUT)}else{px(G,17,9+oy,OUT);px(G,17,10+oy,OUT);px(G,18,9+oy,'#fff')}
+  px(G,21,10+oy,OUT);
+  if(C.sun){px(G,16,6+oy,'#fff7d8');px(G,16,7+oy,'#ffb02a');px(G,15,6+oy,'#ffd56a');px(G,17,6+oy,'#ffd56a')}
+  if(C.fire){px(G,16,6+oy,'#ff4a1a');px(G,16,5+oy,'#ffd56a')}
+  outline(G);return G};
+const paintFoxSide=(cv,f,t,sc)=>{const g=cv.getContext('2d');cv.width=N*sc;cv.height=N*sc;g.imageSmoothingEnabled=false;const G=drawFoxSide(f,t,Math.floor(t/100)%32===0);
+  for(let y=0;y<N;y++)for(let x=0;x<N;x++)if(G[y][x]){g.fillStyle=G[y][x];g.fillRect(x*sc,y*sc,sc,sc)}};
 const paintFox=(cv,f,t,sc)=>{const g=cv.getContext('2d');cv.width=N*sc;cv.height=N*sc;g.imageSmoothingEnabled=false;const G=drawFox(f,t,Math.floor(t/100)%32===0);
   for(let y=0;y<N;y++)for(let x=0;x<N;x++)if(G[y][x]){g.fillStyle=G[y][x];g.fillRect(x*sc,y*sc,sc,sc)}};
 const paintEgg=(cv,t,ready)=>{const sc=7,g=cv.getContext('2d');cv.width=N*sc;cv.height=N*sc;g.imageSmoothingEnabled=false;g.save();g.translate(cv.width/2,cv.height*.6);if(ready)g.rotate(Math.sin(t/80)*.14);
@@ -3683,7 +3700,7 @@ $('rpet').addEventListener('click',e=>{const a=e.target.closest('button[data-pa]
 window.lunPetOpen=()=>{if(!P())return;petRender();rOpen('rpet')};
 let petRaf=0;const petLoop=t=>{const on=$('rpet').classList.contains('on');const c=$('rpetC'),f=FX();
   if(on&&c){if(f.hatched)paintFox(c,f.form,t,7);else if(f.has)paintEgg(c,t,eggReady());else{c.width=182;c.height=182}}
-  const h=document.querySelector('.rhome.on'),m=$('rfoxM');if(m){m.style.display=(h&&FX().hatched)?'block':'none';if(h&&FX().hatched){paintFox(m,FX().form,t,3)}}
+  const h=document.querySelector('.rhome.on'),m=$('rfoxM');if(m){m.style.display=(h&&FX().hatched)?'block':'none';if(h&&FX().hatched){paintFoxSide(m,FX().form,t,3)}}
   petRaf=requestAnimationFrame(petLoop)};
 function mainFox(){let m=$('rfoxM');if(m)return;const sc=$('rhcv');if(!sc||!sc.parentElement)return;m=document.createElement('canvas');m.id='rfoxM';m.className='rfox';m.style.cssText='left:calc(50% - 138px);bottom:34px;width:84px;height:84px;display:none';sc.parentElement.appendChild(m)}
 mainFox();requestAnimationFrame(petLoop);
@@ -3745,6 +3762,85 @@ window.addEventListener('pagehide',markAway);
 window.addEventListener('pageshow',e=>{if(e.persisted){try{localStorage.removeItem(RK)}catch(x){}}});
 const tryResume=()=>{try{const t=+localStorage.getItem(RK)||0;if(t&&Date.now()-t<6*3600e3&&!started){const go=$('cvGo');if(go&&!$('cvName')){localStorage.removeItem(RK);go.click();return true}}}catch(e){}return false};
 setTimeout(()=>{if(!tryResume())setTimeout(tryResume,1500)},900);
+})();
+
+/* ===== v20.0（2026-11-26）：料理與製藥（G4） =====
+   食材（草藥、肉、蜂蜜、蘑菇、辣椒）：打怪掉落（普通 40%、Boss 必掉 3 個），或在「市場」花 10 倫幣買。
+   料理：做出來後接下來 3 場戰鬥有效（一次只能一道，新的蓋掉舊的），效果接在參拜用的 lunFortHp／lunFortCoin／lunFortDrop 上。
+   製藥：補血藥（+1 瓶）、大補血藥（+3 瓶），戰鬥開始時自動帶進去（每場最多帶 3 瓶庫存）。
+   存檔：p.ing={herb,meat,honey,mush,chili}、p.meal={k,n}、p.pot={heal}、p.cook={n,pn,got}。入口：商城 → 料理製藥。 */
+(()=>{
+const ING=[['herb','草藥','#6fd36f'],['meat','肉','#e0605a'],['honey','蜂蜜','#ffcf4a'],['mush','蘑菇','#d9b8f0'],['chili','辣椒','#ff6a2a']];
+const NAME=Object.fromEntries(ING.map(x=>[x[0],x[1]]));
+const COOK=[
+ ['soup','蘑菇湯',{mush:2,herb:1},'接下來 3 場，最大血量 +20%'],
+ ['bbq','烤肉串',{meat:2},'接下來 3 場，倫幣 +30%'],
+ ['tea','蜂蜜茶',{honey:2,herb:1},'接下來 3 場，掉寶機率 +50%'],
+ ['spicy','辣味炒肉',{meat:1,chili:2},'接下來 3 場，血量 +10%、倫幣 +15%、掉寶 +25%']];
+const POTS=[
+ ['heal1','補血藥',{herb:2,honey:1},1,'戰鬥時多 1 瓶補血藥'],
+ ['heal3','大補血藥',{herb:3,mush:2,honey:2},3,'戰鬥時多 3 瓶補血藥']];
+const BUY=10;
+const ST=()=>{const p=P();p.ing=p.ing||{herb:0,meat:0,honey:0,mush:0,chili:0};p.cook=p.cook||{n:0,pn:0,got:0};p.pot=p.pot||{heal:0};return p};
+const need=r=>Object.entries(r).map(([k,v])=>`${NAME[k]}×${v}`).join(' ');
+const can=r=>{const p=ST();return Object.entries(r).every(([k,v])=>(p.ing[k]||0)>=v)};
+const take=r=>{const p=ST();Object.entries(r).forEach(([k,v])=>p.ing[k]-=v)};
+
+/* 掉落（由 killMon 呼叫） */
+window.lunIngDrop=m=>{const p=P();if(!p)return;ST();const boss=m&&m.boss,n=boss?3:(Math.random()<.4?1:0);
+  for(let i=0;i<n;i++){const k=ING[Math.random()*5|0][0];p.ing[k]=(p.ing[k]||0)+1;p.cook.got++}};
+
+/* 料理加成：接在參拜的三個加成函式上；每場戰鬥開始（lunFortHp 被呼叫）扣一場 */
+const MEAL=k=>({soup:{hp:1.2,coin:1,drop:1},bbq:{hp:1,coin:1.3,drop:1},tea:{hp:1,coin:1,drop:1.5},spicy:{hp:1.1,coin:1.15,drop:1.25}})[k]||{hp:1,coin:1,drop:1};
+const act=()=>{const p=P();return p&&p.meal&&p.meal.n>0?MEAL(p.meal.k):null};
+const oHp=window.lunFortHp,oCoin=window.lunFortCoin,oDrop=window.lunFortDrop;
+window.lunFortHp=()=>{let v=oHp?oHp():1;const p=P();if(p){const m=act();if(m){v*=m.hp;p.meal.n--;if(p.meal.n<=0)p.meal=null;save()}
+  const q=ST();const add=Math.min(3,q.pot.heal||0);if(add>0){q.pot.heal-=add;save();setTimeout(()=>{try{if(window.B&&window.B.pots!=null)window.B.pots+=add}catch(e){}},120)}}return v};
+window.lunFortCoin=()=>(oCoin?oCoin():1)*(act()?act().coin:1);
+window.lunFortDrop=()=>(oDrop?oDrop():1)*(act()?act().drop:1);
+
+/* ---------- 視窗 ---------- */
+document.head.insertAdjacentHTML('beforeend',`<style id="thF">
+#rcook .rcb{position:relative;width:min(94vw,380px);max-height:96dvh;overflow-y:auto;padding:16px 14px 14px;text-align:center}
+#rcook h3{margin:0 0 6px;font:400 18px var(--A);letter-spacing:.3em;color:#fff;text-indent:.3em}
+#rcook p{margin:4px 2px;font-size:14px;line-height:1.7;color:#e3dcf2;text-align:start}
+.ing{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:6px 0 8px}
+.ing div{padding:6px 0;border:1px solid color-mix(in srgb,var(--trim) 55%,transparent);background:#0b0714;font-size:13px;color:#e3dcf2}
+.ing i{display:block;width:14px;height:14px;margin:0 auto 2px;border-radius:50%}
+.ing b{display:block;font:400 17px var(--A);color:#fff}
+.ctab{display:flex;gap:6px;margin:4px 0 8px}.ctab button{flex:1;padding:9px 0;border:1px solid #ffffff33;background:#ffffff0a;color:#d2c9e8;font:400 15px var(--A);letter-spacing:.2em}.ctab button.on{background:linear-gradient(90deg,var(--a1),var(--a3));border-color:transparent;color:var(--btx,#fff)}
+.crow{display:flex;gap:8px;align-items:center;padding:8px 10px;margin-top:6px;border:1px solid #ffffff22;border-left:3px solid var(--a1);background:#ffffff08;text-align:start}
+.crow>div{flex:1;min-width:0}.crow b{display:block;font:400 15px var(--A);color:#fff;letter-spacing:.1em}.crow small{display:block;font-size:12px;color:#cfc6e6;line-height:1.5}
+.crow button{flex:none;min-width:72px;padding:8px 6px;border:0;color:#fff;font:400 14px var(--A);letter-spacing:.1em;background:linear-gradient(90deg,var(--a1),var(--a3));box-shadow:0 0 10px color-mix(in srgb,var(--a1) 55%,transparent)}
+.crow button:disabled{background:#ffffff14;box-shadow:none;color:#888}
+.cst{margin:4px 0 6px;padding:6px 8px;border:1px dashed color-mix(in srgb,var(--a2) 60%,transparent);color:var(--a2);font-size:13px;text-align:center}
+</style>`);
+document.body.insertAdjacentHTML('beforeend',`<div class="rpop" id="rcook"><div class="rcb">${xBtn('rcookX')}<h3>料理製藥</h3><div id="rcookB"></div></div></div>`);
+$('rcookX').onclick=()=>{rClose('rcook');A.S&&A.S.tap&&A.S.tap()};
+let tab='cook';
+const render=()=>{const p=ST();
+  const inv=`<div class="ing">${ING.map(([k,n,c])=>`<div><i style="background:${c}"></i>${n}<b>${p.ing[k]||0}</b></div>`).join('')}</div>`;
+  const meal=p.meal&&p.meal.n>0?`<div class="cst">料理中：${COOK.find(x=>x[0]===p.meal.k)[1]}（還有 ${p.meal.n} 場）</div>`:`<div class="cst">現在沒有料理加成</div>`;
+  const pots=`<div class="cst" style="margin-top:0">藥瓶庫存：補血藥 ${p.pot.heal||0} 瓶（每場戰鬥最多帶 3 瓶）</div>`;
+  let body='';
+  if(tab==='cook')body=meal+COOK.map(([k,n,r,d])=>`<div class="crow"><div><b>${n}</b><small>${d}</small><small>需要：${need(r)}</small></div><button data-c="${k}"${can(r)?'':' disabled'}>料理</button></div>`).join('');
+  else if(tab==='pot')body=pots+POTS.map(([k,n,r,q,d])=>`<div class="crow"><div><b>${n}</b><small>${d}</small><small>需要：${need(r)}</small></div><button data-p="${k}"${can(r)?'':' disabled'}>製藥</button></div>`).join('');
+  else body=`<p>食材也會從打怪掉落（Boss 一定掉 3 個）。不夠的話，這裡每個 ${BUY} 倫幣。目前有 ${p.shard||0} 倫幣。</p>`+ING.map(([k,n])=>`<div class="crow"><div><b>${n}</b><small>${BUY} 倫幣 / 個</small></div><button data-b="${k}"${(p.shard||0)>=BUY?'':' disabled'}>買 1 個</button></div>`).join('');
+  $('rcookB').innerHTML=inv+`<div class="ctab"><button data-t="cook" class="${tab==='cook'?'on':''}">料理</button><button data-t="pot" class="${tab==='pot'?'on':''}">製藥</button><button data-t="buy" class="${tab==='buy'?'on':''}">市場</button></div>`+body};
+$('rcook').addEventListener('click',e=>{const p=ST();
+  const t=e.target.closest('button[data-t]');if(t){tab=t.dataset.t;A.S&&A.S.tap&&A.S.tap();render();return}
+  const c=e.target.closest('button[data-c]');if(c){const d=COOK.find(x=>x[0]===c.dataset.c);if(d&&can(d[2])){take(d[2]);p.meal={k:d[0],n:3};p.cook.n++;save();A.S&&A.S.pickup&&A.S.pickup();rToast(`做好了：${d[1]}（接下來 3 場有效）`);render()}return}
+  const q=e.target.closest('button[data-p]');if(q){const d=POTS.find(x=>x[0]===q.dataset.p);if(d&&can(d[2])){take(d[2]);p.pot.heal=(p.pot.heal||0)+d[3];p.cook.pn++;save();A.S&&A.S.pickup&&A.S.pickup();rToast(`做好了：${d[1]}`);render()}return}
+  const b=e.target.closest('button[data-b]');if(b){if((p.shard||0)>=BUY){p.shard-=BUY;p.ing[b.dataset.b]=(p.ing[b.dataset.b]||0)+1;p.cook.got++;save();try{updWallet&&updWallet()}catch(x){}A.S&&A.S.tap&&A.S.tap();render()}else{rToast('倫幣不夠。');A.S&&A.S.miss&&A.S.miss()}}});
+window.lunCookOpen=()=>{if(!P())return;render();rOpen('rcook')};
+
+/* ---------- DEV ---------- */
+$('kdTop').insertAdjacentHTML('beforeend','<button id="kdK1">㉑ 料理製藥（打開）</button><button id="kdK2">㉒ 食材各 +10</button><button id="kdK3">㉓ 假裝第 10 天且 G4 完成</button>');
+const dvk=(id,fn)=>{$(id).onclick=()=>{if(!P()||!started){devNote('先按上面的「用測試玩家直接進入卡池」。');return}devClose();fn()}};
+dvk('kdK1',()=>window.lunCookOpen());
+dvk('kdK2',()=>{const p=ST();ING.forEach(([k])=>p.ing[k]=(p.ing[k]||0)+10);save();window.lunCookOpen()});
+dvk('kdK3',()=>{const p=ST(),d=new Date();p.gd=[];for(let i=0;i<10;i++){const x=new Date(d-(9-i)*864e5);p.gd.push(x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0'))}
+  p.goal={c:{0:1,1:1,2:1}};p.cook={n:3,pn:2,got:15};save();window.lunGoalOpen&&window.lunGoalOpen()});
 })();
 
 }
