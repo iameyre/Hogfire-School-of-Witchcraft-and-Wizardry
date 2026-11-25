@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>倫生・進入畫面與主畫面預覽</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Cinzel:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#06030b;--cy:#6ff7ea;--br:#d9b56a;--br2:#8a6a2a;--mg:#ff3d9a;--vi:#8a4dff;--tx:#f6f0ff;--tx2:#c9bfe0;--F:"DotGothic16","Noto Sans TC","PingFang TC",sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;background:#000;color:var(--tx);-webkit-text-size-adjust:100%}
+body{font:16px/1.7 var(--F);padding:14px 0 40px}
+.note{max-width:420px;margin:0 auto 14px;padding:0 16px;color:#9a9da6;font:13px/1.6 system-ui,sans-serif}
+.cap{max-width:420px;margin:26px auto 8px;padding:0 16px;font:700 14px system-ui,sans-serif;color:var(--br)}
+.ph{position:relative;width:min(100%,400px);height:870px;margin:0 auto;overflow:hidden;background:
+ radial-gradient(90% 50% at 50% 38%,#3a1a6a66,transparent 70%),
+ radial-gradient(70% 40% at 50% 105%,#6ff7ea22,transparent 70%),var(--bg);border-radius:18px;border:1px solid #ffffff1a}
+/* 六角格底紋 */
+.ph::before{content:"";position:absolute;inset:0;opacity:.32;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='56' height='97' viewBox='0 0 56 97'><path d='M28 2 54 17v30L28 62 2 47V17z M28 62v30 M2 47 0 49 M54 47l2 2' fill='none' stroke='%23d9b56a' stroke-opacity='.35' stroke-width='1'/></svg>");mask-image:linear-gradient(180deg,#000,transparent 85%);-webkit-mask-image:linear-gradient(180deg,#000,transparent 85%)}
+.spark{position:absolute;bottom:-10px;width:4px;height:4px;background:var(--cy);box-shadow:0 0 8px var(--cy);animation:up 7s linear infinite;opacity:0}
+.spark.m{background:var(--mg);box-shadow:0 0 8px var(--mg)}.spark.g{background:var(--br);box-shadow:0 0 8px var(--br)}
+@keyframes up{0%{transform:translateY(0);opacity:0}15%{opacity:.9}100%{transform:translateY(-760px) translateX(24px);opacity:0}}
+.abs{position:absolute}
+/* 缺角面板 */
+.pn{position:absolute;background:linear-gradient(180deg,#1a0d2ecc,#0a0512ee);border:1px solid #d9b56a99;clip-path:polygon(0 10px,10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px))}
+.pn::after{content:"";position:absolute;inset:3px;border:1px solid #6ff7ea40;pointer-events:none;clip-path:polygon(0 8px,8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px))}
+.ttl{font:400 20px var(--F);letter-spacing:.3em;color:#fff;text-shadow:2px 0 var(--mg),-2px 0 var(--cy)}
+.hexbtn{display:block;width:100%;padding:14px 0;border:0;color:#fff;font:400 19px var(--F);letter-spacing:.35em;text-indent:.35em;background:linear-gradient(90deg,var(--mg),var(--vi));clip-path:polygon(16px 0,calc(100% - 16px) 0,100% 50%,calc(100% - 16px) 100%,16px 100%,0 50%);box-shadow:0 0 20px #ff3d9a88;text-shadow:0 1px 0 #0006}
+.hexbtn.sec{background:linear-gradient(90deg,#241236,#3a1c58);color:var(--cy)}
+.fil{display:flex;align-items:center;gap:8px;justify-content:center;color:var(--br)}
+.fil i{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--br))}.fil i:last-child{transform:scaleX(-1)}
+.fil b{width:9px;height:9px;transform:rotate(45deg);border:1px solid var(--br);background:#d9b56a44}
+/* 角色底座 */
+.rune{position:absolute;left:50%;width:300px;height:300px;margin-left:-150px;animation:spin 40s linear infinite}
+.rune.r2{animation-duration:26s;animation-direction:reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hero{position:absolute;left:50%;image-rendering:pixelated;transform:translateX(-50%);filter:drop-shadow(0 0 12px #6ff7ea88)}
+.glow{position:absolute;left:50%;width:240px;height:60px;margin-left:-120px;background:radial-gradient(closest-side,#6ff7ea66,transparent);border-radius:50%}
+/* 進入畫面 */
+.news{left:18px;right:18px;top:18px;padding:10px 14px}
+.news h4{margin:0;font:400 15px var(--F);color:var(--br);letter-spacing:.2em;display:flex;justify-content:space-between}
+.news h4 em{font-style:normal;color:var(--mg)}
+.news p{margin:3px 0 0;font-size:14px;line-height:1.6;color:var(--tx2)}
+.sub{left:0;right:0;top:118px;text-align:center;font:500 11px "Cinzel",serif;letter-spacing:.5em;color:var(--br)}
+.big{left:0;right:0;top:136px;text-align:center;font:400 78px/1.1 var(--F);letter-spacing:.1em;color:#fff;text-shadow:3px 0 var(--mg),-3px 0 var(--cy),0 0 30px #8a4dff99}
+.fl{left:60px;right:60px;top:236px}
+.inp{left:34px;right:34px;bottom:150px}
+.inp label{display:block;text-align:center;color:var(--tx2);font-size:15px;margin-bottom:6px}
+.inp input{width:100%;padding:12px;background:#0a0512;border:1px solid var(--cy);color:#fff;font:400 18px var(--F);text-align:center;outline:0;margin-bottom:12px}
+.go{left:34px;right:34px;bottom:96px}
+.lnk{left:0;right:0;bottom:36px;display:flex;justify-content:center;gap:22px;font-size:15px;color:var(--tx2)}
+.lnk span{padding:6px 2px;border-bottom:1px solid #6ff7ea66}
+/* 主畫面 */
+.top{left:0;right:0;top:0;padding:14px 14px 10px;display:flex;justify-content:space-between;align-items:flex-start}
+.me small{display:block;font-size:13px;color:var(--br);letter-spacing:.2em}
+.me b{display:block;font:400 22px var(--F);color:#fff;letter-spacing:.12em}
+.xp{width:150px;height:8px;margin-top:4px;background:#0008;border:1px solid var(--br2);display:flex;gap:2px;padding:1px}
+.xp u{flex:1;background:#ffffff14}.xp u.f{background:linear-gradient(180deg,var(--cy),#2aa)}
+.wal{display:flex;gap:8px}
+.wal span{white-space:nowrap;padding:4px 12px 4px 8px;font-size:16px;color:#fff;background:#0a0512cc;border:1px solid var(--br);clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);display:flex;align-items:center;gap:6px}
+.wal span small{font-size:12px;color:var(--br)}
+.wal i{width:12px;height:12px;background:var(--br);clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%)}.wal i.c{background:var(--cy)}
+.stage{left:14px;right:14px;top:78px;height:290px;overflow:hidden}
+.sky{position:absolute;inset:0;background:linear-gradient(180deg,#2a1450,#6a2a8a 55%,#e0508a)}
+.mt{position:absolute;bottom:60px;left:0;right:0;height:80px;background:linear-gradient(180deg,#3a1d5e,#241240);clip-path:polygon(0 100%,0 60%,18% 20%,34% 62%,52% 10%,70% 58%,86% 28%,100% 64%,100% 100%)}
+.gr{position:absolute;left:0;right:0;bottom:0;height:70px;background:linear-gradient(180deg,#1d3a3a,#0b1a1f)}
+.gr::before{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='24'><path d='M0 12h40M20 0v24' stroke='%236ff7ea' stroke-opacity='.18'/></svg>")}
+.loc{position:absolute;left:10px;bottom:10px;padding:3px 12px;font-size:14px;background:#06030bcc;border:1px solid var(--cy);color:var(--cy)}
+.who{position:absolute;left:0;right:0;top:12px;text-align:center}
+.who b{display:inline-block;padding:3px 16px;font:400 18px var(--F);background:#06030bcc;border:1px solid var(--br);letter-spacing:.15em}
+.who small{display:block;font-size:13px;color:var(--br);margin-top:2px}
+.btns{left:14px;right:14px;top:384px;display:flex;gap:10px}
+.btns .hexbtn{font-size:18px;padding:13px 0}.btns .hexbtn:first-child{flex:1.4}.btns .hexbtn:last-child{flex:1}
+.st{left:14px;right:14px;top:452px;padding:12px 16px}
+.st h5{margin:0 0 6px;font:400 16px var(--F);color:var(--br);letter-spacing:.3em}
+.st dl{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:0 22px}
+.st div{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #ffffff14;font-size:16px;color:var(--tx2)}.st div b{font-weight:400;color:#fff}
+.wp{left:14px;right:14px;top:700px;padding:8px 14px;display:flex;gap:12px;align-items:center;font-size:14px;color:var(--tx2)}
+.wp b{color:#fff;font-weight:400}
+.wp img{width:44px;image-rendering:pixelated;background:#ffffff10}
+.nav{left:0;right:0;bottom:0;height:78px;display:grid;grid-template-columns:repeat(5,1fr);background:linear-gradient(180deg,#0a0512ee,#06030b);border-top:1px solid var(--br)}
+.nav div{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:14px;color:var(--tx2);position:relative}
+.nav svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.6}
+.nav .on{color:var(--cy)}
+.nav .on::before{content:"";position:absolute;top:-1px;left:22%;right:22%;height:3px;background:var(--cy);box-shadow:0 0 12px var(--cy)}
+.nav .on svg{filter:drop-shadow(0 0 6px var(--cy))}
+</style>
+</head>
+<body>
+<p class="note">這是「進入畫面」和「主畫面」的新風格預覽（只是樣品，還沒放進遊戲）。主題：奧術的海克斯科技（六角格、黃銅齒輪、青色光）＋祖安的洋紅紫霓虹。字體 DotGothic16，字放大、淺色加亮，確保看得清楚。</p>
+
+<div class="cap">① 進入畫面</div>
+<div class="ph" id="p1">
+ <div class="abs pn news"><h4><span>更新公告</span><em>● NEWS</em></h4><p>倫生改名「倫生」，變成冒險了！倫會自己出門打怪，地圖、打王、Lv30 都有了。</p></div>
+ <div class="abs sub">FIRESTARTER COLLECTION</div>
+ <div class="abs big">倫生</div>
+ <div class="abs fl fil"><i></i><b></b><i></i></div>
+ <svg class="rune" style="top:300px" viewBox="0 0 300 300"><g fill="none" stroke="#d9b56a" stroke-opacity=".8"><circle cx="150" cy="150" r="140"/><circle cx="150" cy="150" r="128" stroke-dasharray="3 6" stroke="#6ff7ea"/><circle cx="150" cy="150" r="100" stroke-opacity=".5"/></g><g stroke="#d9b56a" stroke-opacity=".7"><path id="t" d="M150 6v14M150 280v14M6 150h14M280 150h14M48 48l10 10M242 242l10 10M242 48l-10 10M48 242l10-10"/></g></svg>
+ <svg class="rune r2" style="top:300px" viewBox="0 0 300 300"><g fill="none" stroke="#ff3d9a" stroke-opacity=".7"><path d="M150 30l104 60v120l-104 60-104-60V90z"/><path d="M150 62l76 44v88l-76 44-76-44v-88z" stroke="#6ff7ea" stroke-opacity=".6"/></g></svg>
+ <div class="glow" style="top:530px"></div>
+ <img class="hero" style="top:356px;width:154px" alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAfCAYAAAD0ma06AAAB+0lEQVR4AeyVvyvEcRjHHzdIsjBJcmYGNoliE5mMFJKMssjfYLOTMjAq5cdKMdgY2E+S6RgkGXCvc8/Xx3Ofz+f7vZLp5OX5+X7efF13Ofnnr7rhnz/w+iONPtKe9v5PiC6ZYU2PlOMurW2vAvTM3WCZyZCDwHEXrj4Vm2syzSGK4Rr59vgF6BPZBeoQUUPEHFLxSE+XgNY2Hr99CKCzM62DhoisGaKz2ztCFbsPTUkvZho0TNSVBCOolFVhpuOtqudreA3tX4fw/GSP4EVnaqrRt+w1tIt6UKM7157GmBm6VEM9xDJQu9BT6GseiqmGCHsHZwXIfTAD38z2MhnOd3cLWLHWzEDrWMxkyIHViyNCEDtfmWoTXnxWkMlwdX5JZPPgl7awfpjUvnkyNEmq4fD4tMhY5zeOOL82+VNV5uXdUndutLRfir7vVENEvQOLhCjuzs7pfXA31ZBPA9SFvgWJwY7ukodINUTIeyMR8k/XhDJu7u6Uh4EfqYY3l1u/pIXWvqR2c5p2l57Fa3j7eNWgj8f936j49P1FQGuNuot2Y78o3NGZRq8hQ5YRkltGG1sEbJ8aDVqgtgQNWUQEE005yV9vlyF3cfvsAtoQUUNXNDS+LECPo0BOD8izkMmQ48/FVwFyPUxOD8i1H4uZDDnAQSB3oQduL5Z/AQAA//8vLOSrAAAABklEQVQDAI+B8T9YbkF1AAAAAElFTkSuQmCC">
+ <div class="abs inp pn" style="padding:14px 14px 4px"><label>你是何許倫也？</label><input value="" placeholder="輸入名字"></div>
+ <div class="abs go"><button class="hexbtn">開始冒險</button></div>
+ <div class="abs lnk"><span>用存檔代碼找回存檔</span><span>撥打客服倫員</span></div>
+</div>
+
+<div class="cap">② 主畫面</div>
+<div class="ph" id="p2">
+ <div class="abs top"><div class="me"><small>LV30 ・ 初心者</small><b>測試倫</b><div class="xp"><u class="f"></u><u class="f"></u><u class="f"></u><u class="f"></u><u class="f"></u><u class="f"></u><u></u><u></u></div></div>
+  <div class="wal"><span><i class="c"></i>100萬<small>倫幣</small></span><span><i></i>100萬<small>倫性</small></span></div></div>
+ <div class="abs pn stage"><div class="sky"></div><div class="mt"></div><div class="gr"></div>
+  <div class="who"><b>測試倫</b><small>LV30 ・ 初心者</small></div>
+  <svg class="rune" style="top:40px;width:250px;height:250px;margin-left:-125px;opacity:.7" viewBox="0 0 300 300"><g fill="none" stroke="#6ff7ea" stroke-opacity=".8"><circle cx="150" cy="150" r="140" stroke-dasharray="3 6"/><circle cx="150" cy="150" r="110" stroke="#d9b56a"/></g></svg>
+  <div class="glow" style="top:225px"></div>
+  <img class="hero" style="top:98px;width:134px" alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAfCAYAAAD0ma06AAAB+0lEQVR4AeyVvyvEcRjHHzdIsjBJcmYGNoliE5mMFJKMssjfYLOTMjAq5cdKMdgY2E+S6RgkGXCvc8/Xx3Ofz+f7vZLp5OX5+X7efF13Ofnnr7rhnz/w+iONPtKe9v5PiC6ZYU2PlOMurW2vAvTM3WCZyZCDwHEXrj4Vm2syzSGK4Rr59vgF6BPZBeoQUUPEHFLxSE+XgNY2Hr99CKCzM62DhoisGaKz2ztCFbsPTUkvZho0TNSVBCOolFVhpuOtqudreA3tX4fw/GSP4EVnaqrRt+w1tIt6UKM7157GmBm6VEM9xDJQu9BT6GseiqmGCHsHZwXIfTAD38z2MhnOd3cLWLHWzEDrWMxkyIHViyNCEDtfmWoTXnxWkMlwdX5JZPPgl7awfpjUvnkyNEmq4fD4tMhY5zeOOL82+VNV5uXdUndutLRfir7vVENEvQOLhCjuzs7pfXA31ZBPA9SFvgWJwY7ukodINUTIeyMR8k/XhDJu7u6Uh4EfqYY3l1u/pIXWvqR2c5p2l57Fa3j7eNWgj8f936j49P1FQGuNuot2Y78o3NGZRq8hQ5YRkltGG1sEbJ8aDVqgtgQNWUQEE005yV9vlyF3cfvsAtoQUUNXNDS+LECPo0BOD8izkMmQ48/FVwFyPUxOD8i1H4uZDDnAQSB3oQduL5Z/AQAA//8vLOSrAAAABklEQVQDAI+B8T9YbkF1AAAAAElFTkSuQmCC">
+  <div class="loc">倫倫村・倫的家</div></div>
+ <div class="abs btns"><button class="hexbtn">出發冒險</button><button class="hexbtn sec">更衣間</button></div>
+ <div class="abs pn st"><h5>能力值</h5><dl>
+  <div>HP<b>662</b></div><div>攻擊<b>114</b></div><div>防禦<b>30</b></div><div>暴擊<b>16%</b></div>
+  <div>移速<b>71</b></div><div>攻速<b>0.38s</b></div><div>力量<b>7</b></div><div>敏捷<b>6</b></div>
+  <div>智力<b>6</b></div><div>幸運<b>7</b></div><div>天賦<b>0</b></div><div>通關<b>1/6</b></div></dl></div>
+ <div class="abs pn wp"><img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAfCAYAAAD0ma06AAAB+0lEQVR4AeyVvyvEcRjHHzdIsjBJcmYGNoliE5mMFJKMssjfYLOTMjAq5cdKMdgY2E+S6RgkGXCvc8/Xx3Ofz+f7vZLp5OX5+X7efF13Ofnnr7rhnz/w+iONPtKe9v5PiC6ZYU2PlOMurW2vAvTM3WCZyZCDwHEXrj4Vm2syzSGK4Rr59vgF6BPZBeoQUUPEHFLxSE+XgNY2Hr99CKCzM62DhoisGaKz2ztCFbsPTUkvZho0TNSVBCOolFVhpuOtqudreA3tX4fw/GSP4EVnaqrRt+w1tIt6UKM7157GmBm6VEM9xDJQu9BT6GseiqmGCHsHZwXIfTAD38z2MhnOd3cLWLHWzEDrWMxkyIHViyNCEDtfmWoTXnxWkMlwdX5JZPPgl7awfpjUvnkyNEmq4fD4tMhY5zeOOL82+VNV5uXdUndutLRfir7vVENEvQOLhCjuzs7pfXA31ZBPA9SFvgWJwY7ukodINUTIeyMR8k/XhDJu7u6Uh4EfqYY3l1u/pIXWvqR2c5p2l57Fa3j7eNWgj8f936j49P1FQGuNuot2Y78o3NGZRq8hQ5YRkltGG1sEbJ8aDVqgtgQNWUQEE005yV9vlyF3cfvsAtoQUUNXNDS+LECPo0BOD8izkMmQ48/FVwFyPUxOD8i1H4uZDDnAQSB3oQduL5Z/AQAA//8vLOSrAAAABklEQVQDAI+B8T9YbkF1AAAAAElFTkSuQmCC"><div>武器：<b>新手木棍</b>（攻擊 +2）<br>技能：<b>倫之怒</b>，把身邊的怪全部打一遍</div></div>
+ <div class="abs nav">
+  <div class="on"><svg viewBox="0 0 24 24"><path d="M4 20 18 6M14 4h6v6M5 15l4 4"/></svg>冒險</div>
+  <div><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 15-5 16 0"/></svg>角色</div>
+  <div><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><circle cx="12" cy="12" r="3"/></svg>扭蛋</div>
+  <div><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6zM9 8a3 3 0 0 1 6 0"/></svg>商城</div>
+  <div><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>更多</div></div>
+</div>
+<script>
+document.querySelectorAll('.ph').forEach((p,pi)=>{for(let i=0;i<14;i++){const s=document.createElement('i');s.className='spark '+['','m','g'][i%3];s.style.left=(6+Math.random()*88)+'%';s.style.animationDelay=(-Math.random()*7)+'s';s.style.animationDuration=(5+Math.random()*5)+'s';p.appendChild(s)}});
+</script>
+</body>
+</html>
