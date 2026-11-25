@@ -2442,7 +2442,7 @@ $('rhMap').onclick=()=>{A.init();openMap()};$('rhWard').onclick=()=>{A.init();op
 
 /* ---------- 堆疊式選單 ---------- */
 const NAVI={adv:'<path d="M4 20 20 4M14 4h6v6M4 14l6 6"/>',char:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>',gacha:'<circle cx="12" cy="12" r="8"/><path d="M4 12h16"/><circle cx="12" cy="12" r="2"/>',shop:'<path d="M4 9h16l-1 11H5L4 9zM8 9V7a4 4 0 0 1 8 0v2"/>',more:'<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>'};
-const NAV=[['adv','冒險',[['goal','三天大目標'],['home','主畫面'],['map','世界地圖'],['task','每日任務'],['fort','參拜'],['pet','小狐狸'],['claw','夾娃娃機']]],['char','角色',[['ward','更衣間'],['tal','天賦樹'],['shrine','轉職聖殿'],['ach','成長']]],['gacha','扭蛋',[['card','抽卡'],['look','抽外觀'],['eq','抽裝備']]],['shop','商城',[['shop','商店'],['dex','倫寶閣'],['log','紀錄'],['cook','料理製藥'],['run','坐騎探險']]],['more','更多',[['info','說明'],['get','東西怎麼拿'],['call','客服倫員'],['code','存檔代碼']]]];
+const NAV=[['adv','冒險',[['goal','三天大目標'],['home','主畫面'],['map','世界地圖'],['task','每日任務'],['fort','參拜'],['pet','小狐狸'],['claw','夾娃娃機']]],['char','角色',[['ward','更衣間'],['tal','天賦樹'],['shrine','轉職聖殿'],['ach','成長']]],['gacha','扭蛋',[['card','抽卡'],['look','抽外觀'],['eq','抽裝備']]],['shop','商城',[['shop','商店'],['dex','倫寶閣'],['log','紀錄'],['cook','料理製藥'],['run','坐騎探險'],['cbt','卡片對戰']]],['more','更多',[['info','說明'],['get','東西怎麼拿'],['call','客服倫員'],['code','存檔代碼']]]];
 $('rnav').innerHTML=NAV.map(([k,n])=>`<button data-n="${k}"><svg viewBox="0 0 24 24">${NAVI[k]}</svg><span>${n}</span>${k==='adv'?'<i class="rb" id="rnB" hidden></i>':''}</button>`).join('');
 let subOpen=null;
 const closeSub=()=>{subOpen=null;$('rsub').classList.remove('on');$('rshade').classList.remove('on');document.querySelectorAll('#rnav>button').forEach(b=>b.classList.remove('open'))};
@@ -2459,7 +2459,7 @@ const rAct=a=>{if(kbusy&&a!=='card'){rToast('抽卡中，等一下。<button cla
   const lk=subLock(a);if(lk){rToast(a==='bank'?'倫生銀行下次更新開放，先鎖起來。':`${({tal:'天賦樹',shop:'商店',shrine:'轉職聖殿'})[a]} ${lk} 開放。現在 Lv${LV()}。`,1);A.S.kPoot();if(homeOn)return;return}
   const f=({home:rHome,map:openMap,task:()=>{goPanel('task');setNavOn('adv')},fort:()=>{window.lunFortOpen&&window.lunFortOpen()},ward:()=>{openChar()},tal:()=>{goPanel('tal');setNavOn('char')},shrine:()=>openShrine(),ach:()=>{goPanel('ach');setNavOn('char')},
     card:goDraw,look:()=>openGach('look'),eq:()=>openGach('eq'),shop:()=>{goPanel('shop');setNavOn('shop')},dex:()=>{goPanel('dex');setNavOn('shop')},log:()=>{goPanel('log');setNavOn('shop')},
-    info:()=>$('kinfo').classList.add('on'),get:()=>openGet(),call:()=>openCall(),code:()=>window.lunCodeOpen&&window.lunCodeOpen(),goal:()=>window.lunGoalOpen&&window.lunGoalOpen(),pet:()=>window.lunPetOpen&&window.lunPetOpen(),claw:()=>window.lunClawOpen&&window.lunClawOpen(),cook:()=>window.lunCookOpen&&window.lunCookOpen(),run:()=>window.lunRunOpen&&window.lunRunOpen()})[a];if(f)f()};
+    info:()=>$('kinfo').classList.add('on'),get:()=>openGet(),call:()=>openCall(),code:()=>window.lunCodeOpen&&window.lunCodeOpen(),goal:()=>window.lunGoalOpen&&window.lunGoalOpen(),pet:()=>window.lunPetOpen&&window.lunPetOpen(),claw:()=>window.lunClawOpen&&window.lunClawOpen(),cook:()=>window.lunCookOpen&&window.lunCookOpen(),run:()=>window.lunRunOpen&&window.lunRunOpen(),cbt:()=>window.lunCardOpen&&window.lunCardOpen()})[a];if(f)f()};
 const updNavBadge=()=>{const b=$('rnB');if(b)b.hidden=!(typeof todoN==='function'&&(todoN()||miniLeft()))};
 
 /* ---------- 世界地圖 ---------- */
@@ -3458,7 +3458,7 @@ const prayN=p=>{const t=p.pray&&p.pray.tot;return t&&typeof t==='object'?Object.
 const GOALS=[
  {n:'抽卡日常',d:'12/1～12/3',ms:[['抽卡累計 30 張',p=>(p.st&&p.st.pulls)||0,30],['對一次發票',p=>invs().some(v=>v.ck)?1:0,1],['參拜 3 次',prayN,3]],rw:{w:12,s:150}},
  {n:'打怪',d:'12/4～12/6',ms:[['擊敗怪物 40 隻',p=>p.kills||0,40],['打倒倫倫村的倫凍王',p=>(rp().clear&&rp().clear.village)?1:0,1],['等級到 Lv5',p=>p.lv||1,5]],rw:{w:15,s:200}},{n:'寵物與夾娃娃機',d:'12/7～12/9',ms:[['孵出小狐狸',p=>(p.fox&&p.fox.hatched)?1:0,1],['餵食小狐狸 10 次',p=>(p.fox&&p.fox.fed)||0,10],['小狐狸進化',p=>(p.fox&&p.fox.form&&p.fox.form!=='kit')?1:0,1],['夾娃娃機玩 3 次',p=>(p.claw&&p.claw.n)||0,3]],rw:{w:18,s:250}},{n:'料理與製藥',d:'12/10～12/12',ms:[['做出 3 道料理',p=>(p.cook&&p.cook.n)||0,3],['製作 2 瓶藥',p=>(p.cook&&p.cook.pn)||0,2],['收集食材 15 個',p=>(p.cook&&p.cook.got)||0,15]],rw:{w:20,s:300}},
- {n:'坐騎探險',d:'12/13～12/15',ms:[['完成 3 次探險',p=>(p.run&&p.run.n)||0,3],['探險中收集 30 個物品',p=>(p.run&&p.run.items)||0,30],['單次探險收集 8 個',p=>(p.run&&p.run.best)||0,8]],rw:{w:22,s:350}},{n:'卡片對戰',d:'12/16～12/18'},{n:'學堂與小屋',d:'12/19～12/20'}];
+ {n:'坐騎探險',d:'12/13～12/15',ms:[['完成 3 次探險',p=>(p.run&&p.run.n)||0,3],['探險中收集 30 個物品',p=>(p.run&&p.run.items)||0,30],['單次探險收集 8 個',p=>(p.run&&p.run.best)||0,8]],rw:{w:22,s:350}},{n:'卡片對戰',d:'12/16～12/18',ms:[['贏得 3 場對戰',p=>(p.cb&&p.cb.w)||0,3],['打倒稜鏡大精靈',p=>(p.cb&&p.cb.b1)?1:0,1],['一場中用過攻、守、補三種牌',p=>(p.cb&&p.cb.mix)?1:0,1]],rw:{w:25,s:400}},{n:'學堂與小屋',d:'12/19～12/20'}];
 const gCal=p=>Math.max(1,Math.round((Date.parse(today())-Date.parse(p.gd[0]))/864e5)+1);
 const gInfo=()=>{const p=P();p.gd=p.gd||[];const t=today();if(!p.gd.includes(t)){p.gd.push(t);save()}p.goal=p.goal||{c:{}};
   const n=p.gd.length;return{p,n,cur:Math.min(7,Math.ceil(n/3)),late:gCal(p)-n>=1}};
@@ -3709,7 +3709,7 @@ function mainFox(){let m=$('rfoxM');if(m)return;const sc=$('rhcv');if(!sc||!sc.p
 mainFox();requestAnimationFrame(petLoop);
 {const go=document.querySelector('.rhgo');if(go&&!$('rhgo2')){go.insertAdjacentHTML('afterend','<div class="rhgo" id="rhgo2"><button class="rq" data-q9="pet">小狐狸</button><button class="rq" data-q9="claw">夾娃娃機</button><button class="rq" data-q9="cook">料理製藥</button></div>');
   document.head.insertAdjacentHTML('beforeend','<style>#rhgo2 .rq{min-height:44px!important;font-size:15px!important;letter-spacing:.08em!important}#rhgo2{margin-top:-4px}</style>');
-  $('rhgo2').addEventListener('click',e=>{const b=e.target.closest('button[data-q9]');if(!b)return;A.S&&A.S.tap&&A.S.tap();const k=b.dataset.q9;if(k==='pet')window.lunPetOpen&&window.lunPetOpen();else if(k==='claw')window.lunClawOpen&&window.lunClawOpen();else if(k==='cook')window.lunCookOpen&&window.lunCookOpen();else window.lunRunOpen&&window.lunRunOpen()})}}
+  $('rhgo2').addEventListener('click',e=>{const b=e.target.closest('button[data-q9]');if(!b)return;A.S&&A.S.tap&&A.S.tap();const k=b.dataset.q9;if(k==='pet')window.lunPetOpen&&window.lunPetOpen();else if(k==='claw')window.lunClawOpen&&window.lunClawOpen();else if(k==='cook')window.lunCookOpen&&window.lunCookOpen();else if(k==='run')window.lunRunOpen&&window.lunRunOpen();else window.lunCardOpen&&window.lunCardOpen()})}}
 
 /* ---------- 夾娃娃機 ---------- */
 const PR={c30:{n:'小錢袋',c:'#e8c060',t:'30幣'},c80:{n:'大錢袋',c:'#ffd56a',t:'80幣'},w3:{n:'倫性',c:'#a02aff',t:'+3'},egg:{n:'狐狸蛋',c:'#f5e9d0',t:'蛋'},doll:{n:'倫娃娃',c:'#e0243a',t:'5幣'}};
@@ -3986,6 +3986,114 @@ const dvr=(id,fn)=>{$(id).onclick=()=>{if(!P()||!started){devNote('先按上面�
 dvr('kdR1',()=>window.lunRunOpen());
 dvr('kdR2',()=>{const p=P(),d=new Date();p.gd=[];for(let i=0;i<13;i++){const x=new Date(d-(12-i)*864e5);p.gd.push(x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0'))}
   p.goal={c:{0:1,1:1,2:1,3:1}};p.run={n:3,items:30,best:8};save();window.lunGoalOpen&&window.lunGoalOpen()});
+})();
+
+/* ===== v22.0（2026-11-26）：卡片對戰（G6） =====
+   用抽到的卡組 3 張牌打 Boss。每張卡依名字固定分成 攻擊／防禦／治療，強度看稀有度（N2 R3 SR5 SSR8…）。
+   每回合選一張還沒用過的牌，用完三張才換下一輪；Boss 每回合出招（下一招會先顯示）。
+   存檔：p.cb={w:勝場,b0,b1,b2:各 Boss 是否打倒,mix:是否有一場用過三種牌,deck:[牌名]}。入口：商城 → 卡片對戰、主畫面快捷列。 */
+(()=>{
+const POW={N:2,R:3,SR:5,SSR:8,SP:7,CHAMP:8,IDOL:10,GOLD:10,ORNG:11,ULT:12,SSSR:12};
+const RC={N:'#9aa0ac',R:'#5aa0ff',SR:'#b06aff',SSR:'#ffd56a',SP:'#ff6ab0',CHAMP:'#6ad7ff',IDOL:'#ff9a4a',GOLD:'#ffd56a',ORNG:'#ff8a3a',ULT:'#ff4a9a',SSSR:'#ff3d3d'};
+const TY=[['atk','攻','#e0605a'],['grd','守','#5aa0ff'],['heal','補','#6fd36f']];
+const ALL=()=>{const L=[];for(const r in pool)pool[r].forEach(c=>L.push({n:c.n,g:c.g,k:c.k,r,pw:POW[r]||3,ty:[...c.n].reduce((a,ch)=>a+ch.charCodeAt(0),0)%3}));return L};
+const BOSS=[
+ {n:'倫凍王',hp:30,atk:5,col:'#8ec9e8',win:{s:40,w:2}},
+ {n:'稜鏡大精靈',hp:60,atk:8,col:'#b8a6ff',win:{s:80,w:4}},
+ {n:'賭狗之王',hp:100,atk:11,col:'#e07ac0',win:{s:150,w:8},heal:true}];
+const CB=()=>{const p=P();p.cb=p.cb||{w:0,b0:0,b1:0,b2:0,mix:0,deck:[]};return p.cb};
+const owned=()=>{const p=P();return ALL().filter(c=>p.dex&&p.dex[c.n]).sort((a,b)=>b.pw-a.pw)};
+const autoDeck=()=>{const o=owned(),d=[];TY.forEach((t,i)=>{const c=o.find(x=>x.ty===i&&!d.includes(x));if(c)d.push(c)});for(const c of o){if(d.length>=3)break;if(!d.includes(c))d.push(c)}return d.slice(0,3).map(x=>x.n)};
+
+document.head.insertAdjacentHTML('beforeend',`<style id="thH">
+#rcard .rcb{position:relative;width:min(94vw,380px);max-height:96dvh;overflow-y:auto;padding:16px 12px 14px;text-align:center}
+#rcard h3{margin:0 0 6px;font:400 18px var(--A);letter-spacing:.3em;color:#fff;text-indent:.3em}
+#rcard p{margin:4px 2px;font-size:14px;line-height:1.7;color:#e3dcf2;text-align:start}
+.cbbar{height:12px;border:1px solid color-mix(in srgb,var(--trim) 55%,#000);background:#000a;margin:3px 0 2px;position:relative}.cbbar u{display:block;height:100%;transition:width .3s}
+.cbrow{display:flex;justify-content:space-between;font-size:13px;color:#e3dcf2}
+.cbbs{margin:8px 0;padding:10px;border:1px solid color-mix(in srgb,var(--trim) 55%,transparent);background:#0b0714}
+.cbbs b{display:block;font:400 18px var(--A);letter-spacing:.2em;color:#fff}
+.cbint{margin-top:4px;padding:5px;border:1px dashed color-mix(in srgb,var(--a2) 60%,transparent);color:var(--a2);font-size:14px}
+.cbhand{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 6px}
+.cbc{position:relative;padding:8px 4px 6px;border:2px solid var(--rc,#999);background:linear-gradient(180deg,#1a1030,#0a0612);color:#fff;min-height:128px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.cbc .g{font:400 36px/1.1 var(--A);color:var(--rc)}
+.cbc .n{font-size:12px;line-height:1.3;color:#e3dcf2}
+.cbc .t{margin-top:auto;padding:2px 10px;font:400 14px var(--A);color:#fff;background:var(--tc)}
+.cbc.used{opacity:.35;filter:grayscale(1)}
+.cbc:disabled{cursor:default}
+.cblog{min-height:46px;margin:6px 0;padding:6px 8px;border:1px solid #ffffff1a;background:#ffffff08;font-size:13px;line-height:1.6;color:#e3dcf2;text-align:start}
+.cbsel{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0;max-height:240px;overflow-y:auto}
+.cbsel .cbc{min-height:92px;padding:5px 2px}.cbsel .cbc .g{font-size:26px}.cbsel .cbc.on{box-shadow:0 0 0 2px var(--a2),0 0 12px var(--a2)}
+.cbx{display:block;margin:10px 0 0 auto;width:64px;height:48px;border:1px solid var(--a2);background:#08040f;color:var(--a2);font:400 22px var(--A)}.cbx:disabled{opacity:.35}
+</style>`);
+document.body.insertAdjacentHTML('beforeend',`<div class="rpop" id="rcard"><div class="rcb">${xBtn('rcardX')}<h3>卡片對戰</h3><div id="rcardB"></div></div></div>`);
+$('rcardX').onclick=()=>{rClose('rcard');A.S&&A.S.tap&&A.S.tap()};
+
+const S={phase:'menu',boss:0,bhp:0,php:40,pmax:40,shield:0,cd:[0,0,0],deck:[],int:null,turn:0,types:{},log:'',doneAt:0,res:null};
+const card=(c,extra='')=>`<button class="cbc ${extra}" style="--rc:${RC[c.r]||'#999'};--tc:${TY[c.ty][2]}" data-cn="${c.n}"><span class="g">${c.g}</span><span class="n">${c.n}</span><span class="t">${TY[c.ty][1]} ${c.pw}</span></button>`;
+const byName=n=>ALL().find(c=>c.n===n);
+const menu=()=>{const cb=CB(),o=owned();if(!cb.deck||cb.deck.filter(n=>byName(n)&&P().dex[n]).length<3)cb.deck=autoDeck();const dk=cb.deck.map(byName).filter(Boolean);
+  S.phase='menu';let h='';
+  if(o.length<3){h=`<p>要先收集 3 張不同的卡才能對戰。到「扭蛋」抽卡吧。（目前 ${o.length} 張）</p>`}
+  else{h=`<p style="text-align:center">你的牌組（點「換牌組」可以改）。出過的牌要休息 1 回合。</p><div class="cbhand">${dk.map(c=>card(c)).join('')}</div><button class="mb sec" data-m="deck">換牌組</button>
+    <p style="text-align:center;margin-top:10px">選一隻對手</p>${BOSS.map((b,i)=>`<button class="mb" data-m="boss${i}" style="margin-top:6px">${b.n}<small>血量 ${b.hp}・勝利 倫幣 ${b.win.s} 倫性 ${b.win.w}${cb['b'+i]?'（已打倒）':''}</small></button>`).join('')}`}
+  $('rcardB').innerHTML=h};
+const deckView=()=>{const cb=CB(),o=owned();S.phase='deck';S.sel=cb.deck.slice();
+  $('rcardB').innerHTML=`<p style="text-align:center">點選 3 張（已選 <span id="cbn">${S.sel.length}</span>/3）。攻守補都有會比較好打。</p><div class="cbsel">${o.map(c=>card(c,S.sel.includes(c.n)?'on':'')).join('')}</div><button class="mb" data-m="deckok">確定</button><button class="mb sec" data-m="auto">用推薦牌組</button><button class="mb sec" data-m="back">返回</button>`};
+const bossAct=()=>{const b=BOSS[S.boss],r=Math.random();if(b.heal&&r<.22&&S.bhp<b.hp*.7)return{k:'heal',v:Math.round(b.hp*.1),t:`回復 ${Math.round(b.hp*.1)}`};
+  if(S.turn%3===2)return{k:'atk',v:Math.round(b.atk*1.8),t:'重擊'};return{k:'atk',v:b.atk+(Math.random()*3|0),t:`攻擊`}};
+const fight=i=>{const cb=CB();S.boss=i;S.bhp=BOSS[i].hp;S.php=S.pmax=40;S.shield=0;S.cd=[0,0,0];S.deck=cb.deck.map(byName);S.turn=0;S.types={};S.res=null;S.log='選一張牌出牌。';S.phase='fight';S.int=bossAct();S.int.t=S.int.k==='heal'?S.int.t:`${S.int.t} ${S.int.v}`;render()};
+const bar=(v,m,c)=>`<div class="cbbar"><u style="width:${Math.max(0,v/m*100)}%;background:${c}"></u></div>`;
+const render=()=>{if(S.phase==='menu')return menu();if(S.phase==='deck')return deckView();
+  const b=BOSS[S.boss];
+  if(S.phase==='fight'||S.phase==='end'){
+    const hand=S.deck.map((c,i)=>`<button class="cbc ${S.cd[i]>0?'used':''}" style="--rc:${RC[c.r]||'#999'};--tc:${TY[c.ty][2]}" data-play="${i}"${(S.cd[i]>0||S.phase==='end')?' disabled':''}><span class="g">${c.g}</span><span class="n">${c.n}</span><span class="t">${TY[c.ty][1]} ${c.pw}</span></button>`).join('');
+    let h=`<div class="cbbs"><b>${b.n}</b>${bar(S.bhp,b.hp,b.col)}<div class="cbrow"><span>血量 ${Math.max(0,S.bhp)} / ${b.hp}</span></div><div class="cbint">下一招：${S.int?S.int.t:''}</div></div>
+      <div class="cbrow"><span>你　血量 ${Math.max(0,S.php)} / ${S.pmax}</span><span>${S.shield>0?'護盾 '+S.shield:''}</span></div>${bar(S.php,S.pmax,'#6fd36f')}
+      <div class="cbhand">${hand}</div><div class="cblog" id="cblog">${S.log}</div>`;
+    if(S.phase==='end')h+=`<button class="cbx" id="cbxr" ${performance.now()<S.doneAt?'disabled':''}>✕</button>`;
+    $('rcardB').innerHTML=h;if(S.phase==='end'&&performance.now()<S.doneAt)setTimeout(()=>{const x=$('cbxr');if(x)x.disabled=false},820)}};
+const play=i=>{if(S.phase!=='fight'||S.cd[i]>0)return;const c=S.deck[i],b=BOSS[S.boss];S.cd[i]=2;S.types[c.ty]=1;let msg=`「${c.k[0]}」`;
+  if(c.ty===0){const d=Math.round(c.pw*3+Math.random()*2);S.bhp-=d;msg+=`造成 ${d} 傷害。`}
+  else if(c.ty===1){const g=Math.round(c.pw*2.5);S.shield+=g;msg+=`獲得 ${g} 護盾。`}
+  else{const h=Math.round(c.pw*3);S.php=Math.min(S.pmax,S.php+h);msg+=`回復 ${h} 血量。`}
+  A.S&&A.S.tap&&A.S.tap();
+  if(S.bhp<=0){end(true,msg);return}
+  // Boss 出招
+  const a=S.int;if(a.k==='heal'){S.bhp=Math.min(b.hp,S.bhp+a.v);msg+=`　${b.n}回復了 ${a.v}。`}
+  else{const d=Math.max(0,a.v-S.shield),ab=Math.min(S.shield,a.v);S.shield=Math.max(0,S.shield-a.v);S.php-=d;msg+=`　${b.n}${a.t.split(' ')[0]}，你受到 ${d} 傷害${ab>0?`（護盾擋掉 ${ab}）`:''}。`;A.S&&A.S.miss&&d>0&&A.S.miss()}
+  S.turn++;if(S.php<=0){end(false,msg);return}
+  S.cd=S.cd.map(v=>Math.max(0,v-1));
+  S.int=bossAct();if(S.int.k!=='heal')S.int.t=`${S.int.t} ${S.int.v}`;S.log=msg;render()};
+const end=(win,msg)=>{const cb=CB(),p=P(),b=BOSS[S.boss];S.phase='end';S.doneAt=performance.now()+800;
+  if(win){cb.w++;cb['b'+S.boss]=1;if(Object.keys(S.types).length>=3)cb.mix=1;p.shard=(p.shard||0)+b.win.s;p.wallet=(p.wallet||0)+b.win.w;save();try{updWallet&&updWallet()}catch(e){}
+    S.log=msg+`<br><b>勝利！倫幣 +${b.win.s}、倫性 +${b.win.w}</b>`;A.S&&A.S.pickup&&A.S.pickup()}
+  else{S.log=msg+'<br><b>敗北……換張牌組再來。</b>';A.S&&A.S.miss&&A.S.miss()}
+  render()};
+$('rcard').addEventListener('click',e=>{
+  const pl=e.target.closest('button[data-play]');if(pl){play(+pl.dataset.play);return}
+  if(e.target.closest('#cbxr')){if(S.phase==='end'&&performance.now()>=S.doneAt){S.phase='menu';render()}return}
+  const m=e.target.closest('button[data-m]');if(m){const k=m.dataset.m;A.S&&A.S.tap&&A.S.tap();
+    if(k==='deck'){deckView();return}
+    if(k==='auto'){CB().deck=autoDeck();menu();return}
+    if(k==='back'){menu();return}
+    if(k==='deckok'){if(S.sel.length===3){CB().deck=S.sel.slice();save();menu()}else rToast('要選滿 3 張。');return}
+    if(/^boss/.test(k)){fight(+k.slice(4));return}}
+  const c=e.target.closest('.cbsel button[data-cn]');if(c&&S.phase==='deck'){const n=c.dataset.cn,i=S.sel.indexOf(n);if(i>=0)S.sel.splice(i,1);else if(S.sel.length<3)S.sel.push(n);else{rToast('最多 3 張。');return}
+    document.querySelectorAll('#rcardB .cbsel button').forEach(x=>x.classList.toggle('on',S.sel.includes(x.dataset.cn)));$('cbn').textContent=S.sel.length}});
+window.lunCardOpen=()=>{if(!P())return;S.phase='menu';render();rOpen('rcard')};
+window.lunCard={fight,play,state:()=>({...S,deck:S.deck.map(c=>c&&c.n)}),menu};
+
+/* 主畫面快捷列：第 5 顆，改成可換行 */
+{const r=$('rhgo2');if(r&&!r.querySelector('[data-q9="card"]')){r.insertAdjacentHTML('beforeend','<button class="rq" data-q9="card">卡片對戰</button>');document.head.insertAdjacentHTML('beforeend','<style>#rhgo2{flex-wrap:wrap}#rhgo2 .rq{flex:1 1 30%}</style>')}}
+
+/* DEV */
+$('kdTop').insertAdjacentHTML('beforeend','<button id="kdC1">㉖ 卡片對戰（打開）</button><button id="kdC2">㉗ 圖鑑補滿所有卡</button><button id="kdC3">㉘ 假裝第 16 天且 G6 完成</button>');
+const dvc=(id,fn)=>{$(id).onclick=()=>{if(!P()||!started){devNote('先按上面的「用測試玩家直接進入卡池」。');return}devClose();fn()}};
+dvc('kdC1',()=>window.lunCardOpen());
+dvc('kdC2',()=>{const p=P();p.dex=p.dex||{};ALL().forEach(c=>p.dex[c.n]=1);save();window.lunCardOpen()});
+dvc('kdC3',()=>{const p=P(),d=new Date();p.gd=[];for(let i=0;i<16;i++){const x=new Date(d-(15-i)*864e5);p.gd.push(x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0'))}
+  p.goal={c:{0:1,1:1,2:1,3:1,4:1}};p.cb={w:3,b0:1,b1:1,b2:0,mix:1,deck:[]};save();window.lunGoalOpen&&window.lunGoalOpen()});
 })();
 
 }
