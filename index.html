@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#050505">
 <title>倫生</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1053,12 +1053,10 @@ body:has(.rpop.on,.rmap.on,.rbat.on,.rcave.on,.rprint.on) .rmoney{opacity:0;poin
 </div></div>
 <div class="kcall" id="kcall"><div class="kav"><i></i><i></i>倫</div><h3>客服倫員</h3><p class="num">0800・倫倫倫・倫倫倫</p><p class="st" id="kcSt"></p><video id="kcV" class="kcv" playsinline controls hidden></video><a class="pbtn" id="kcVid" href="#" target="_blank" rel="noopener" hidden>看機器倫的回覆</a><button class="khang" id="kcHang" aria-label="掛斷">掛斷</button></div>
 <section class="stage on" id="cover">
-  <div class="cv-news" aria-label="更新公告"><div class="nh">更新公告<span>NEWS</span></div><div class="nv"><div class="nt" id="newsT"></div></div></div>
-  <div class="cv-k">FIRESTARTER COLLECTION</div>
-  <h1 class="cv-t">倫生</h1>
+  <div class="cv-news" aria-label="更新公告"><div class="nh">更新公告</div><div class="nv"><div class="nt" id="newsT"></div></div></div>
+    <h1 class="cv-t">倫生</h1>
   <div class="cv-l"></div>
-  <div class="cv-s">Ignite Your Fate</div>
-  <div class="cv-who" id="who"></div>
+    <div class="cv-who" id="who"></div>
   <p class="cv-n">建議打開聲音・iPhone 請關閉靜音</p>
 </section>
 
@@ -3597,7 +3595,7 @@ window.lunAvCanvas=(s,fr)=>avCanvas(ensureAv().eq,s||1,fr||0);
 (()=>{
 const N=26,OUT='#2a1424';
 const mk=()=>Array.from({length:N},()=>Array(N).fill(null));
-const px=(G,x,y,c)=>{x=Math.round(x)+2;y=Math.round(y)+1;if(x>=0&&y>=0&&x<N&&y<N)G[y][x]=c};
+let OX=0,OY=0;const px=(G,x,y,c)=>{x=Math.round(x)+OX;y=Math.round(y)+OY;if(x>=0&&y>=0&&x<N&&y<N)G[y][x]=c};
 const rect=(G,x,y,w,h,c)=>{for(let j=0;j<h;j++)for(let i=0;i<w;i++)px(G,x+i,y+j,c)};
 const ell=(G,cx,cy,rx,ry,c)=>{for(let y=Math.floor(cy-ry);y<=Math.ceil(cy+ry);y++)for(let x=Math.floor(cx-rx);x<=Math.ceil(cx+rx);x++){const dx=(x-cx)/rx,dy=(y-cy)/ry;if(dx*dx+dy*dy<=1)px(G,x,y,c)}};
 const tri=(G,a,b,c2,col)=>{const mnx=Math.min(a[0],b[0],c2[0]),mxx=Math.max(a[0],b[0],c2[0]),mny=Math.min(a[1],b[1],c2[1]),mxy=Math.max(a[1],b[1],c2[1]);
@@ -3608,20 +3606,27 @@ const FORMS={
  kit:{name:'小狐狸（幼體）',body:'#c98a4a',shade:'#a56a30',belly:'#f5e2c0',tip:'#f5e2c0',tails:1,fluff:true,ear:'#e8a0a0'},
  fire:{name:'火焰型',body:'#e2602a',shade:'#b8401a',belly:'#ffd9a0',tip:'#ffd56a',tails:3,fire:true,ear:'#ffb08a'},
  sun:{name:'日光型',body:'#e8b84a',shade:'#c08a20',belly:'#fff2c0',tip:'#fff7d8',tails:2,sun:true,ear:'#ffd9a0'}};
-const drawFox=(f,t,blink)=>{const C=FORMS[f]||FORMS.kit,G=mk();const oy=Math.round(Math.sin(t/420));
-  if(C.sun){const cx=16,cy=9+oy;for(let k=0;k<12;k++){const a=t/1400+k*Math.PI/6;for(let r=7;r<=9;r++)px(G,cx+Math.cos(a)*r,cy+Math.sin(a)*r,k%2?'#ffe27a':'#fff2c0')}}
-  for(let k=0;k<C.tails;k++){const ang=(C.tails===1?0:(k-(C.tails-1)/2)*.55),base=[7,15+oy],L=5.5;
-    for(let s=0;s<=L;s+=.6){const a=Math.PI+ang*(.4+s/L)+Math.sin(t/300+k)*.18*(s/L);const x=base[0]+Math.cos(a)*s-1.2,y=base[1]+Math.sin(a)*s*.8-s*.35;ell(G,x,y,2.1-s/L*.8,1.8-s/L*.6,s>L-1.6?C.tip:C.body)}
-    if(C.fire){const a=Math.PI+ang*1.4,x=base[0]+Math.cos(a)*L-1.4,y=base[1]+Math.sin(a)*L*.8-L*.35,fl=Math.floor(t/120+k)%2;px(G,x-1,y-2-fl,'#ff7a1a');px(G,x-1,y-3-fl,'#ffd56a');px(G,x,y-2,'#ff4a1a');px(G,x-2,y-2,'#ff4a1a')}}
-  ell(G,11,16+oy,6,3.6,C.body);ell(G,10,17+oy,4.6,2,C.shade);ell(G,14,16.5+oy,2.8,2.6,C.belly);
-  rect(G,8,19+oy,2,3,C.shade);rect(G,13,19+oy,2,3,C.body);rect(G,10,19+oy,2,3,C.shade);rect(G,15,19+oy,2,3,C.body);
-  ell(G,16,10+oy,4.2,3.8,C.body);ell(G,19.5,11+oy,2.4,1.6,C.belly);
-  tri(G,[13,6+oy],[14,1+oy],[16.5,5+oy],C.body);tri(G,[16,5+oy],[19,1+oy],[20,6+oy],C.body);px(G,14,3+oy,C.ear);px(G,14,4+oy,C.ear);px(G,18,3+oy,C.ear);px(G,18,4+oy,C.ear);
-  if(C.fluff){for(let i=0;i<6;i++){px(G,12+i,13+oy+(i%2),C.belly);px(G,12+i,14+oy,C.belly)}px(G,11,14+oy,C.belly);px(G,18,14+oy,C.belly)}
-  if(blink){px(G,17,9+oy,OUT);px(G,18,9+oy,OUT)}else{px(G,17,9+oy,OUT);px(G,17,10+oy,OUT);px(G,18,9+oy,'#fff')}
-  px(G,21,10+oy,OUT);
-  if(C.sun){px(G,16,6+oy,'#fff7d8');px(G,16,7+oy,'#ffb02a');px(G,15,6+oy,'#ffd56a');px(G,17,6+oy,'#ffd56a')}
-  if(C.fire){px(G,16,6+oy,'#ff4a1a');px(G,16,5+oy,'#ffd56a')}
+const drawFox=(f,t,blink)=>{OX=0;OY=0;const C=FORMS[f]||FORMS.kit,G=mk();const oy=Math.round(Math.sin(t/420)*.9),cx=13;
+  if(C.sun){for(let k=0;k<12;k++){const a=t/1400+k*Math.PI/6;for(let r=8;r<=10;r++)px(G,cx+Math.cos(a)*r,9+oy+Math.sin(a)*r*.9,k%2?'#ffe27a':'#fff2c0')}}
+  const tl=C.tails;
+  for(let k=0;k<tl;k++){const side=tl===1?1:(k-(tl-1)/2),L=8,ang=(tl===1?.85:side*.75),bx=cx,by=17+oy;
+    for(let s=0;s<=1;s+=.1){const a=ang+Math.sin(t/300+k)*.12*s,x=bx+Math.sin(a)*s*L+(tl===1?3:0)*s,y=by-Math.cos(a)*s*L*.9+s;ell(G,x,y,2.4-s*.9,2.1-s*.8,s>.8?C.tip:C.body)}
+    if(C.fire){const x=bx+Math.sin(ang)*L,y=by-Math.cos(ang)*L*.9,fl=Math.floor(t/120+k)%2;px(G,x,y-3-fl,'#ff7a1a');px(G,x,y-4-fl,'#ffd56a');px(G,x-1,y-3,'#ff4a1a');px(G,x+1,y-3,'#ff4a1a')}}
+  ell(G,cx,17+oy,5,4.3,C.body);ell(G,cx,18+oy,3,3,C.belly);
+  rect(G,cx-4,20,2,3,C.shade);rect(G,cx+3,20,2,3,C.shade);rect(G,cx-4,22,2,1,C.belly);rect(G,cx+3,22,2,1,C.belly);
+  ell(G,cx,10+oy,6,4.6,C.body);
+  tri(G,[cx-7,12+oy],[cx-5,9+oy],[cx-5,14+oy],C.body);tri(G,[cx+7,12+oy],[cx+5,9+oy],[cx+5,14+oy],C.body);
+  ell(G,cx,12+oy,3,2,C.belly);
+  tri(G,[cx-6,7+oy],[cx-5,1+oy],[cx-2,6+oy],C.body);tri(G,[cx+6,7+oy],[cx+5,1+oy],[cx+2,6+oy],C.body);
+  px(G,cx-5,3+oy,C.ear);px(G,cx-5,4+oy,C.ear);px(G,cx+5,3+oy,C.ear);px(G,cx+5,4+oy,C.ear);
+  if(C.fluff){for(let i=-4;i<=4;i++)px(G,cx+i,14+oy+(Math.abs(i)%2),C.belly)}
+  if(blink){px(G,cx-3,10+oy,OUT);px(G,cx-2,10+oy,OUT);px(G,cx+2,10+oy,OUT);px(G,cx+3,10+oy,OUT)}
+  else{rect(G,cx-3,9+oy,1,2,OUT);rect(G,cx+3,9+oy,1,2,OUT);px(G,cx-3,9+oy,'#fff');px(G,cx+3,9+oy,'#fff')}
+  px(G,cx,12+oy,OUT);px(G,cx-1,13+oy,OUT);px(G,cx+1,13+oy,OUT);
+  px(G,cx-5,11+oy,'#ff9aa8');px(G,cx+5,11+oy,'#ff9aa8');
+  if(C.ice){px(G,cx-4,8+oy,OUT);px(G,cx-3,8+oy,OUT);px(G,cx-2,9+oy,OUT);px(G,cx+4,8+oy,OUT);px(G,cx+3,8+oy,OUT);px(G,cx+2,9+oy,OUT)}
+  if(C.sun){px(G,cx,6+oy,'#fff7d8');px(G,cx,7+oy,'#ffb02a');px(G,cx-1,6+oy,'#ffd56a');px(G,cx+1,6+oy,'#ffd56a')}
+  if(C.fire){px(G,cx,6+oy,'#ff4a1a');px(G,cx,5+oy,'#ffd56a')}
   outline(G);return G};
 const paintFox=(cv,f,t,sc)=>{const g=cv.getContext('2d');cv.width=N*sc;cv.height=N*sc;g.imageSmoothingEnabled=false;const G=drawFox(f,t,Math.floor(t/100)%32===0);
   for(let y=0;y<N;y++)for(let x=0;x<N;x++)if(G[y][x]){g.fillStyle=G[y][x];g.fillRect(x*sc,y*sc,sc,sc)}};
@@ -3678,7 +3683,7 @@ $('rpet').addEventListener('click',e=>{const a=e.target.closest('button[data-pa]
 window.lunPetOpen=()=>{if(!P())return;petRender();rOpen('rpet')};
 let petRaf=0;const petLoop=t=>{const on=$('rpet').classList.contains('on');const c=$('rpetC'),f=FX();
   if(on&&c){if(f.hatched)paintFox(c,f.form,t,7);else if(f.has)paintEgg(c,t,eggReady());else{c.width=182;c.height=182}}
-  const h=document.querySelector('.rhome.on'),m=$('rfoxM');if(m){m.style.display=(h&&FX().hatched)?'block':'none';if(h&&FX().hatched){paintFox(m,FX().form,t,3);m.style.transform='scaleX(-1)'}}
+  const h=document.querySelector('.rhome.on'),m=$('rfoxM');if(m){m.style.display=(h&&FX().hatched)?'block':'none';if(h&&FX().hatched){paintFox(m,FX().form,t,3)}}
   petRaf=requestAnimationFrame(petLoop)};
 function mainFox(){let m=$('rfoxM');if(m)return;const sc=$('rhcv');if(!sc||!sc.parentElement)return;m=document.createElement('canvas');m.id='rfoxM';m.className='rfox';m.style.cssText='left:calc(50% - 138px);bottom:34px;width:84px;height:84px;display:none';sc.parentElement.appendChild(m)}
 mainFox();requestAnimationFrame(petLoop);
@@ -3729,6 +3734,17 @@ dvp('kdP3',()=>{const f=FX();f.has=1;f.hatched=1;f.form='kit';f.fed=0;f.hot=0;f.
 dvp('kdP5',()=>{const p=P(),f=FX();f.has=1;f.hatched=0;f.eggK=p.kills||0;p.kills=(p.kills||0)+10;save();window.lunPetOpen()});
 dvp('kdP4',()=>{const p=P(),d=new Date();p.gd=[];for(let i=0;i<7;i++){const x=new Date(d-(6-i)*864e5);p.gd.push(x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0'))}
   p.goal={c:{0:1,1:1}};const f=FX();f.has=1;f.hatched=1;f.form='fire';f.fed=12;f.hot=8;f.sun=0;p.claw={n:3};save();mainFox();window.lunGoalOpen&&window.lunGoalOpen()});
+
+/* ---------- 手機體驗：防雙擊放大／縮放、切到別的 app 回來被重整時自動回到遊戲 ---------- */
+document.head.insertAdjacentHTML('beforeend','<style>:where(*){touch-action:manipulation}</style>');
+['gesturestart','gesturechange','gestureend'].forEach(ev=>document.addEventListener(ev,e=>e.preventDefault(),{passive:false}));
+const RK='lun-resume';
+const markAway=()=>{try{localStorage.setItem(RK,String(Date.now()))}catch(e){}};
+document.addEventListener('visibilitychange',()=>{try{if(document.hidden)markAway();else localStorage.removeItem(RK)}catch(e){}});
+window.addEventListener('pagehide',markAway);
+window.addEventListener('pageshow',e=>{if(e.persisted){try{localStorage.removeItem(RK)}catch(x){}}});
+const tryResume=()=>{try{const t=+localStorage.getItem(RK)||0;if(t&&Date.now()-t<6*3600e3&&!started){const go=$('cvGo');if(go&&!$('cvName')){localStorage.removeItem(RK);go.click();return true}}}catch(e){}return false};
+setTimeout(()=>{if(!tryResume())setTimeout(tryResume,1500)},900);
 })();
 
 }

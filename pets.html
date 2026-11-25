@@ -39,7 +39,7 @@ h1{font:700 18px/1.4 "Noto Serif TC",serif;letter-spacing:.2em;margin:4px 0;colo
 const N=26,S=7;
 const OUT='#2a1424';
 function mk(){return Array.from({length:N},()=>Array(N).fill(null))}
-function px(G,x,y,c){x=Math.round(x)+2;y=Math.round(y)+1;if(x>=0&&y>=0&&x<N&&y<N)G[y][x]=c}
+let OX=0,OY=0;function px(G,x,y,c){x=Math.round(x)+OX;y=Math.round(y)+OY;if(x>=0&&y>=0&&x<N&&y<N)G[y][x]=c}
 function rect(G,x,y,w,h,c){for(let j=0;j<h;j++)for(let i=0;i<w;i++)px(G,x+i,y+j,c)}
 function ell(G,cx,cy,rx,ry,c){for(let y=Math.floor(cy-ry);y<=Math.ceil(cy+ry);y++)for(let x=Math.floor(cx-rx);x<=Math.ceil(cx+rx);x++){const dx=(x-cx)/rx,dy=(y-cy)/ry;if(dx*dx+dy*dy<=1)px(G,x,y,c)}}
 function tri(G,a,b,c2,col){const minx=Math.min(a[0],b[0],c2[0]),maxx=Math.max(a[0],b[0],c2[0]),miny=Math.min(a[1],b[1],c2[1]),maxy=Math.max(a[1],b[1],c2[1]);
@@ -53,34 +53,31 @@ const FORMS={
  sun:{name:'日光型',sub:'額頭一顆小太陽，背後有光環',desc:'多在白天、倫間仙境陪牠，就會變成日光型。牠出場時身後會有一圈旋轉的光芒。',body:'#e8b84a',shade:'#c08a20',belly:'#fff2c0',tip:'#fff7d8',tails:2,sun:true,ear:'#ffd9a0'},
  ice:{name:'冰型（封印中）',sub:'被凍在冰塊裡，一臉不爽',desc:'倫最不喜歡的型態，所以是梗：牠永遠被封印在冰塊裡，只能看，孵不出來，也不會跟在你身邊。',body:'#8ec9e8',shade:'#5a9ac0',belly:'#e8f6ff',tip:'#ffffff',tails:1,ice:true,ear:'#cfeaff'}
 };
-function draw(f,t,blink,tailScale){const C=FORMS[f],G=mk();const bob=Math.round(Math.sin(t/420)*1);const sw=Math.sin(t/300);
- const oy=bob;
- // 光環（日光型，在最底層）
- if(C.sun){const cx=16,cy=9+oy;for(let k=0;k<12;k++){const a=t/1400+k*Math.PI/6;for(let r=7;r<=9;r++){px(G,cx+Math.cos(a)*r,cy+Math.sin(a)*r,k%2?'#ffe27a':'#fff2c0')}}}
- // 尾巴
- for(let k=0;k<C.tails;k++){const ang=(C.tails===1?0:(k-(C.tails-1)/2)*0.55);const base=[7,15+oy];const L=5.5;
-  for(let s=0;s<=L;s+=.6){const a=Math.PI+ang*(.4+s/L)+Math.sin(t/300+k)*.18*(s/L)*tailScale;const x=base[0]+Math.cos(a)*s-1.2,y=base[1]+Math.sin(a)*s*.8-s*.35;ell(G,x,y,2.1-s/L*0.8,1.8-s/L*.6,s>L-1.6?C.tip:C.body)}
-  if(C.fire){const a=Math.PI+ang*1.4;const x=base[0]+Math.cos(a)*L-1.4,y=base[1]+Math.sin(a)*L*.8-L*.35;const fl=Math.floor(t/120+k)%2;px(G,x-1,y-2-fl,'#ff7a1a');px(G,x-1,y-3-fl,'#ffd56a');px(G,x,y-2,'#ff4a1a');px(G,x-2,y-2,'#ff4a1a')}}
- // 身體、胸、腿
- ell(G,11,16+oy,6,3.6,C.body);ell(G,10,17+oy,4.6,2,C.shade);ell(G,14,16.5+oy,2.8,2.6,C.belly);
- rect(G,8,19+oy,2,3-oy+oy,C.shade);rect(G,13,19+oy,2,3,C.body);rect(G,10,19+oy,2,3,C.shade);rect(G,15,19+oy,2,3,C.body);
- // 頭
- ell(G,16,10+oy,4.2,3.8,C.body);ell(G,19.5,11+oy,2.4,1.6,C.belly);
- // 耳朵
- tri(G,[13,6+oy],[14,1+oy],[16.5,5+oy],C.body);tri(G,[16,5+oy],[19,1+oy],[20,6+oy],C.body);px(G,14,3+oy,C.ear);px(G,14,4+oy,C.ear);px(G,18,3+oy,C.ear);px(G,18,4+oy,C.ear);
- // 脖子毛（幼體）
- if(C.fluff){for(let i=0;i<6;i++){px(G,12+i,13+oy+(i%2),C.belly);px(G,12+i,14+oy,C.belly)}px(G,11,14+oy,C.belly);px(G,18,14+oy,C.belly)}
- // 臉
- const eyeC=C.ice?'#2a1424':'#2a1424';
- if(blink){px(G,17,9+oy,eyeC);px(G,18,9+oy,eyeC)}else{px(G,17,9+oy,eyeC);px(G,17,10+oy,eyeC);px(G,18,9+oy,'#ffffff')}
- px(G,21,10+oy,'#2a1424');
- if(C.ice){px(G,16,7+oy,eyeC);px(G,17,7+oy,eyeC);px(G,18,8+oy,eyeC)} // 皺眉
- if(C.sun){px(G,16,6+oy,'#fff7d8');px(G,16,7+oy,'#ffb02a');px(G,15,6+oy,'#ffd56a');px(G,17,6+oy,'#ffd56a')}
- if(C.fire){px(G,16,6+oy,'#ff4a1a');px(G,16,5+oy,'#ffd56a')}
- outline(G);return G}
+function draw(f,t,blink,tailScale){OX=0;OY=0;const C=FORMS[f]||FORMS.kit,G=mk();const oy=Math.round(Math.sin(t/420)*.9),cx=13;
+  if(C.sun){for(let k=0;k<12;k++){const a=t/1400+k*Math.PI/6;for(let r=8;r<=10;r++)px(G,cx+Math.cos(a)*r,9+oy+Math.sin(a)*r*.9,k%2?'#ffe27a':'#fff2c0')}}
+  const tl=C.tails;
+  for(let k=0;k<tl;k++){const side=tl===1?1:(k-(tl-1)/2),L=8,ang=(tl===1?.85:side*.75),bx=cx,by=17+oy;
+    for(let s=0;s<=1;s+=.1){const a=ang+Math.sin(t/300+k)*.12*s,x=bx+Math.sin(a)*s*L+(tl===1?3:0)*s,y=by-Math.cos(a)*s*L*.9+s;ell(G,x,y,2.4-s*.9,2.1-s*.8,s>.8?C.tip:C.body)}
+    if(C.fire){const x=bx+Math.sin(ang)*L,y=by-Math.cos(ang)*L*.9,fl=Math.floor(t/120+k)%2;px(G,x,y-3-fl,'#ff7a1a');px(G,x,y-4-fl,'#ffd56a');px(G,x-1,y-3,'#ff4a1a');px(G,x+1,y-3,'#ff4a1a')}}
+  ell(G,cx,17+oy,5,4.3,C.body);ell(G,cx,18+oy,3,3,C.belly);
+  rect(G,cx-4,20,2,3,C.shade);rect(G,cx+3,20,2,3,C.shade);rect(G,cx-4,22,2,1,C.belly);rect(G,cx+3,22,2,1,C.belly);
+  ell(G,cx,10+oy,6,4.6,C.body);
+  tri(G,[cx-7,12+oy],[cx-5,9+oy],[cx-5,14+oy],C.body);tri(G,[cx+7,12+oy],[cx+5,9+oy],[cx+5,14+oy],C.body);
+  ell(G,cx,12+oy,3,2,C.belly);
+  tri(G,[cx-6,7+oy],[cx-5,1+oy],[cx-2,6+oy],C.body);tri(G,[cx+6,7+oy],[cx+5,1+oy],[cx+2,6+oy],C.body);
+  px(G,cx-5,3+oy,C.ear);px(G,cx-5,4+oy,C.ear);px(G,cx+5,3+oy,C.ear);px(G,cx+5,4+oy,C.ear);
+  if(C.fluff){for(let i=-4;i<=4;i++)px(G,cx+i,14+oy+(Math.abs(i)%2),C.belly)}
+  if(blink){px(G,cx-3,10+oy,OUT);px(G,cx-2,10+oy,OUT);px(G,cx+2,10+oy,OUT);px(G,cx+3,10+oy,OUT)}
+  else{rect(G,cx-3,9+oy,1,2,OUT);rect(G,cx+3,9+oy,1,2,OUT);px(G,cx-3,9+oy,'#fff');px(G,cx+3,9+oy,'#fff')}
+  px(G,cx,12+oy,OUT);px(G,cx-1,13+oy,OUT);px(G,cx+1,13+oy,OUT);
+  px(G,cx-5,11+oy,'#ff9aa8');px(G,cx+5,11+oy,'#ff9aa8');
+  if(C.ice){px(G,cx-4,8+oy,OUT);px(G,cx-3,8+oy,OUT);px(G,cx-2,9+oy,OUT);px(G,cx+4,8+oy,OUT);px(G,cx+3,8+oy,OUT);px(G,cx+2,9+oy,OUT)}
+  if(C.sun){px(G,cx,6+oy,'#fff7d8');px(G,cx,7+oy,'#ffb02a');px(G,cx-1,6+oy,'#ffd56a');px(G,cx+1,6+oy,'#ffd56a')}
+  if(C.fire){px(G,cx,6+oy,'#ff4a1a');px(G,cx,5+oy,'#ffd56a')}
+  outline(G);return G}
 function paint(cv,f,t,blink,scale){const g=cv.getContext('2d');cv.width=N*scale;cv.height=N*scale;g.imageSmoothingEnabled=false;const G=draw(f,t,blink,1);
  for(let y=0;y<N;y++)for(let x=0;x<N;x++){if(G[y][x]){g.fillStyle=G[y][x];g.fillRect(x*scale,y*scale,scale,scale)}}
- if(f==='ice'){const gl=.22+.06*Math.sin(t/500);g.fillStyle='rgba(170,225,255,'+(gl+.18)+')';g.fillRect(5*scale,7*scale,19*scale,17*scale);g.strokeStyle='rgba(255,255,255,.85)';g.lineWidth=scale*.6;g.strokeRect(5*scale,7*scale,19*scale,17*scale);g.fillStyle='rgba(255,255,255,.7)';g.fillRect(7*scale,9*scale,scale*2,scale*6);g.fillRect(7*scale,16*scale,scale*2,scale);for(let k=0;k<5;k++){const sx=(2+((t/90+k*37)%20));g.fillRect(sx*scale,((t/200+k*5)%22)*scale,scale*.7,scale*.7)}}}
+ if(f==='ice'){const gl=.22+.06*Math.sin(t/500);g.fillStyle='rgba(170,225,255,'+(gl+.18)+')';g.fillRect(3*scale,8*scale,20*scale,16*scale);g.strokeStyle='rgba(255,255,255,.85)';g.lineWidth=scale*.6;g.strokeRect(3*scale,8*scale,20*scale,16*scale);g.fillStyle='rgba(255,255,255,.7)';g.fillRect(5*scale,10*scale,scale*2,scale*6);g.fillRect(5*scale,17*scale,scale*2,scale);for(let k=0;k<5;k++){const sx=(2+((t/90+k*37)%20));g.fillRect(sx*scale,((t/200+k*5)%22)*scale,scale*.7,scale*.7)}}}
 const cards=document.getElementById('cards');
 Object.keys(FORMS).forEach(k=>{const F=FORMS[k];cards.insertAdjacentHTML('beforeend',`<div class="card"><div class="row"><canvas class="cv" data-f="${k}"></canvas><div class="tx"><b>${F.name}</b><small>${F.sub}</small><p>${F.desc}</p></div></div></div>`)});
 const walk=document.getElementById('walk');
@@ -95,7 +92,7 @@ function loop(t){document.querySelectorAll('.cv').forEach(c=>paint(c,c.dataset.f
  lc.width=28;lc.height=31;const lg=lc.getContext('2d');lg.imageSmoothingEnabled=false;lg.clearRect(0,0,28,31);lg.save();if(!dirR){lg.translate(28,0);lg.scale(-1,1)}if(LUN.complete)lg.drawImage(LUN,0,0);lg.restore();
  lc.style.left=x+'px';lc.style.bottom=(14+bobY)+'px';
  paint(fc,cur,t,(Math.floor(t/100)%32)===0,5);
- fc.style.transform=dirR?'none':'scaleX(-1)';fc.style.left=(dirR?x-92:x+106)+'px';fc.style.bottom=(14+Math.abs(Math.sin(t/200+1))*2)+'px';
+ fc.style.transform='none';fc.style.left=(dirR?x-92:x+106)+'px';fc.style.bottom=(14+Math.abs(Math.sin(t/200+1))*2)+'px';
  requestAnimationFrame(loop)}
 requestAnimationFrame(loop);
 const pk=document.getElementById('pick');const OP=[['kit','幼體'],['fire','火焰型'],['sun','日光型'],['ice','冰型（封印）']];
