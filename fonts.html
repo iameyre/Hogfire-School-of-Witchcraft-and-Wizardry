@@ -19,7 +19,7 @@ h1{font:700 20px/1.3 "Cinzel","Noto Serif TC",serif;letter-spacing:.3em;margin:6
 .card.b{border-left:3px solid var(--gold)}
 .hd{display:flex;justify-content:space-between;align-items:center;font:13px "Noto Sans TC";color:var(--dim)}
 .hd b{color:var(--gold);font-weight:700}
-.s1{font-size:26px;line-height:1.3;margin:6px 0 2px;color:#fff;letter-spacing:.08em}
+.s1{font-size:36px;line-height:1.3;margin:6px 0 2px;color:#fff;letter-spacing:.08em}
 .s2{font-size:16px;color:var(--gold);margin:0}
 .s3{font-size:14px;line-height:1.7;color:#cfd2d8;margin:4px 0 0}
 .s4{font-size:18px;color:var(--silver);margin:2px 0 0;letter-spacing:.06em}
@@ -42,25 +42,21 @@ h1{font:700 20px/1.3 "Cinzel","Noto Serif TC",serif;letter-spacing:.3em;margin:6
 <script>
 const F=[
  [1,'Cactus Classical Serif（目前使用）','"Cactus Classical Serif","Noto Serif TC",serif',400],
- [2,'Noto Serif TC 粗宋體','"Noto Serif TC",serif',700],
- [3,'Noto Serif TC 特粗宋體','"Noto Serif TC",serif',900],
- [4,'Noto Sans TC 特粗黑體（FIRESTARTER 感）','"Noto Sans TC",sans-serif',900],
- [5,'Chiron Hei HK 黑體','"Chiron Hei HK",sans-serif',700],
- [6,'Chiron Sung HK 宋體','"Chiron Sung HK",serif',700],
- [7,'霞鶩文楷（手寫楷書）','"LXGW WenKai TC",serif',700],
- [8,'Shippori Mincho 日系明朝（偏奧術）','"Shippori Mincho",serif',700],
- [9,'Zen Old Mincho 古典明朝','"Zen Old Mincho",serif',700],
- [10,'Kaisei Tokumin 特粗明朝','"Kaisei Tokumin",serif',700],
- [11,'粉圓 Huninn（圓體）','"Huninn",sans-serif',400],
- [12,'芫荽 Iansui（手寫風）','"Iansui",serif',400],
- [13,'DotGothic16（像素點陣）','"DotGothic16",sans-serif',400]
+ [2,'Noto Serif TC 特粗宋體（奧術古典）','"Noto Serif TC",serif',900],
+ [3,'Noto Sans TC 特粗黑體（FIRESTARTER 感）','"Noto Sans TC",sans-serif',900],
+ [4,'霞鶩文楷（手寫楷書）','"LXGW WenKai TC",serif',700],
+ [5,'Shippori Mincho 日系明朝','"Shippori Mincho",serif',700],
+ [6,'Chiron Sung HK 宋體','"Chiron Sung HK",serif',500],
+ [7,'粉圓 Huninn（圓體）','"Huninn",sans-serif',400],
+ [8,'芫荽 Iansui（手寫風）','"Iansui",serif',400],
+ [9,'DotGothic16（像素點陣）','"DotGothic16",sans-serif',400]
 ];
 let T=null,B=null;try{const s=JSON.parse(localStorage.getItem('lunfont')||'{}');T=s.t||null;B=s.b||null}catch(e){}
 const L=document.getElementById('list');
 F.forEach(([n,name,fam,w])=>{const c=document.createElement('div');c.className='card';c.dataset.n=n;
  c.innerHTML=`<div class="hd"><span><b>${n}</b>　${name}</span></div>
  <div class="smp">
- <p class="s1">三天大目標</p>
+ <p class="s1">倫生・幹話龍鳳</p>
  <p class="s2">G2 打怪　12/4～12/6</p>
  <p class="s3">擊敗怪物 40 隻，打倒倫倫村的倫凍王。領取獎勵（倫性 15、倫幣 200）。進度看玩了幾天，不看日期，漏玩不會被丟下。</p>
  <p class="s4">7/30　0/1　LV 30　1234</p></div>
