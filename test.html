@@ -3966,9 +3966,9 @@ const draw=t=>{const c=$('rrunC');if(!c)return;const g=c.getContext('2d');g.imag
   R.items.forEach(it=>{const y=GY-it.y-14;if(it.k==='coin'){g.fillStyle='#ffd56a';g.beginPath();g.arc(it.x+7,y+7,7,0,7);g.fill();g.fillStyle='#c98a12';g.fillRect(it.x+5,y+4,4,6)}else{const col=ING.find(x=>x[0]===it.k)[2];g.fillStyle=col;g.beginPath();g.arc(it.x+7,y+7,7,0,7);g.fill();g.fillStyle='#fff8';g.fillRect(it.x+4,y+3,3,3)}});
   if(!hero&&window.lunAvCanvas){try{hero=window.lunAvCanvas(2,0)}catch(e){}}
   const px=60,py=GY-R.y;g.fillStyle='#0004';g.beginPath();g.ellipse(px+12,GY+2,14,4,0,0,7);g.fill();
-  let rc=null;try{const id=mid();if(id)rc=rideCanvas(id,LB(),Object.values(ensureAv().eq||{}),t)}catch(e){}
+  let rc=null;try{const id=mid();if(id)rc=rideCanvas(id,LB(),Object.values(ensureAv().eq||{}),Math.floor(t/1000*6)/10)}catch(e){}
   g.fillStyle='#000'+Math.max(2,Math.round(7-R.y/14)).toString(16);g.beginPath();g.ellipse(px+9,GY+2,Math.max(6,22-R.y/6),4,0,0,7);g.fill();
-  if(!(R.inv>0&&Math.floor(t/90)%2)){if(rc){const sc=Math.min(72/rc.width,54/rc.height),w=rc.width*sc,h=rc.height*sc;g.drawImage(rc,px+9-w/2,py-h+3,w,h)}else if(hero)g.drawImage(hero,px-10,py-48,56,62);else{g.fillStyle='#e0243a';g.fillRect(px,py-36,24,36)}}
+  if(!(R.inv>0&&Math.floor(t/90)%2)){if(rc){const mi=MIMG[mid()],bw=(mi&&(mi.w||mi.im.width))||rc.width,bh=(mi&&(mi.h||mi.im.height))||rc.height,sc=Math.min(72/bw,54/bh),w=rc.width*sc,h=rc.height*sc;g.drawImage(rc,px+9-w/2,py-h+3,w,h)}else if(hero)g.drawImage(hero,px-10,py-48,56,62);else{g.fillStyle='#e0243a';g.fillRect(px,py-36,24,36)}}
   g.strokeStyle='#ffffff55';g.lineWidth=1;g.setLineDash([2,2]);g.strokeRect(px,py-34,18,34);g.setLineDash([]);
   g.font='16px DotGothic16,sans-serif';g.textAlign='left';g.fillStyle='#ff6a8a';g.fillText('♥'.repeat(Math.max(0,R.lives)),8,20);g.fillStyle='#fff';g.font='13px DotGothic16,sans-serif';g.textAlign='right';g.fillText('收集 '+R.got,MW-8,20);
   if(R.phase==='idle'){g.fillStyle='#000a';g.fillRect(0,0,MW,MH);g.fillStyle='#e8c566';g.font='18px DotGothic16,sans-serif';g.textAlign='center';g.fillText('坐騎探險',160,50);g.fillStyle='#fff';g.font='14px DotGothic16,sans-serif';['點畫面跳過石頭','按越久跳越高','撿金幣和食材','只有 12 秒！'].forEach((t2,i)=>g.fillText(t2,160,86+i*26))}
@@ -4142,7 +4142,10 @@ const biome=(g,b,t,al)=>{g.globalAlpha=al;
   g.globalAlpha=1};
 const I={on:false,t:0,done:false,doneAt:0,lastC:0,lastSeg:-1,lastStep:-1,flags:{}};
 const LEN=18.5,SEG=2.9;
-const typeSnd=n=>{if(n>0)tone(820+Math.random()*180,.03,'square',.045)};
+const typeKey=sp=>{try{A.noise(.022,.16,sp?1500:3400,0,'highpass');A.tone(sp?120:170+Math.random()*40,.05,'square',sp?.035:.075);A.noise(.06,.05,800,.012,'lowpass')}catch(e){}};
+const bell=()=>{tone(2600,.7,'sine',.05);tone(3900,.5,'sine',.025,.01)};
+const carriage=()=>{noise(.2,.08,1700,0,'bandpass');tone(320,.16,'sawtooth',.02,0,140)};
+const typeSnd=n=>{if(n>0)typeKey()};
 const HEART=['..xx...xx..','.xxxx.xxxx.','xxhhxxxxxxx','xxhxxxxxxxx','xxxxxxxxxxx','.xxxxxxxxx.','..xxxxxxx..','...xxxxx...','....xxx....','.....x.....'];
 const heart=(g,cx,cy,s,t)=>{const sc=s*(1+.1*Math.sin(t*7));HEART.forEach((row,y)=>[...row].forEach((ch,x)=>{if(ch==='.')return;const X=cx+(x-5.5)*sc,Y=cy+(y-5)*sc;g.fillStyle=ch==='h'?'#ffd0e0':(y<3?'#ff5a8a':y<6?'#e0306a':'#b01a50');g.fillRect(Math.round(X),Math.round(Y),Math.ceil(sc),Math.ceil(sc))}));
   g.fillStyle='#6a0a30';[[1,0],[9,0]].forEach(([x,y])=>g.fillRect(Math.round(cx+(x-5.5)*sc),Math.round(cy+(y-5.5)*sc),Math.ceil(sc),Math.ceil(sc)))};
@@ -4189,10 +4192,13 @@ const introSnd=dt=>{const t=I.t;
       if(seg===3){tone(55,2.9,'sawtooth',.045);tone(82,2.9,'sawtooth',.02);for(let k=0;k<7;k++)noise(.06,.05,3000,.2+k*.4,'highpass')}}
     const st=Math.floor(t/.46);if(st!==I.lastStep){I.lastStep=st;noise(.06,.1,350,0,'lowpass');tone(90,.06,'sine',.06)}
     const n1=Math.max(0,Math.min(4,Math.floor((t-.4)*6)));if(n1>I.lastC){typeSnd(1);I.lastC=n1}
-    const n2=Math.max(0,Math.min(12,Math.floor((t-1.5)*6)));if(n2+4>I.lastC&&t>1.5){typeSnd(1);I.lastC=n2+4}}
+    const n2=Math.max(0,Math.min(12,Math.floor((t-1.5)*6)));if(n2+4>I.lastC&&t>1.5){typeSnd(1);I.lastC=n2+4}
+    if(t>3.55&&!I.flags.b1){I.flags.b1=1;bell();carriage()}}
   else{const u=t-12.4;
     const a=Math.max(0,Math.min(11,Math.floor((u-.3)*7))),b=Math.max(0,Math.min(7,Math.floor((u-2.4)*7)));
     const key=u>2.4?100+b:a;if(key!==I.lastC2){if(u>.3&&(u<2.4?a>0:b>0))typeSnd(1);I.lastC2=key}
+    if(u>1.95&&!I.flags.b2){I.flags.b2=1;bell();carriage()}
+    if(u>3.45&&!I.flags.b3){I.flags.b3=1;bell()}
     if(u>3.5&&!I.flags.h){I.flags.h=1;[880,1175,1568].forEach((f,k)=>tone(f,.25,'triangle',.05,k*.09))}
     if(u>4.7&&!I.flags.b){I.flags.b=1;[523,659,784,1047,1319].forEach((f,k)=>tone(f,.9,'sine',.04,k*.12));noise(.6,.03,4000,0,'highpass')}}};
 let iRaf=0,iLt=0;
@@ -4208,10 +4214,17 @@ window.lunIntro={step:iStep,state:()=>({...I})};
 const CH=[
  {t:'第一章　倫的世界',q:[['倫的生日是哪一天？','12/20',['11/21','1/1','5/20']],['遊戲裡倫倫村的 Boss 是誰？','倫凍王',['稜鏡大精靈','賭狗之王','瘋火魔倫']],['倫最不喜歡下面哪一種小狐狸型態？','冰型',['火焰型','日光型','幼體']]]},
  {t:'第二章　雅的世界',q:[['雅的生日是 11/21，這天也是誰的生日？','伊布',['六尾','皮卡丘','卡比獸']],['雅最喜歡的電競選手是誰？','Faker',['hide in bush','fader','hello world']],['雅最喜歡的書是「＿語」，要填什麼？','倫語',['英語','日語','暗語']]]},
- {t:'第三章　倫與雅的世界',q:[['「我＿＿來的」，要填什麼？','世新',['台大','政大','師大']],['刀劍裡互相截圖對話的地圖是哪裡？','三絕峽',['天魔谷','倫倫村','山頂洞']],['雅最討厭吃什麼？','蔬菜',['肉','甜點','麵包']]]}];
-const Q={on:false,ch:-1,i:0,ok:0,picked:null,opts:[],typed:0,mood:'',moodT:0,adv:0,res:null,doneAt:0,fb:''};
+ {t:'第三章　又回到最初的起點',q:[['「我＿＿來的」，要填什麼？','世新',['台大','政大','師大']],['刀劍裡互相截圖對話的地圖是哪裡？','三絕峽',['天魔谷','倫倫村','山頂洞']],['雅最討厭吃什麼？','蔬菜',['肉','甜點','麵包']]]}];
+const Q={npc:null,say:'',sayT:0,on:false,ch:-1,i:0,ok:0,picked:null,opts:[],typed:0,mood:'',moodT:0,adv:0,res:null,doneAt:0,fb:''};
 const sh=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 const wrapT=(s,n)=>{const L=[];for(let i=0;i<s.length;i+=n)L.push(s.slice(i,i+n));return L};
+const NPC=[['dog','狗哥',['嗷嗷！加油！','這題我也想知道。','我只會滑，不會寫。'],['嗷！好棒！','嗷嗚～～','汪！（鼓掌）'],['沒關係，嗷！','下次一定會。','我陪你。']],
+ ['lun','倫',['我也在學耶。','這題你可以的。','一起讀吧。'],['你好強喔！','我都不會欸。','太神了。'],['我也常錯啦。','沒事沒事。','再來一次。']],
+ ['yun','雅雲',['慢慢來，不急。','認真讀喔。','我在旁邊看著你。'],['答對了，很棒。','就是這樣。','不錯喔。'],['再想一下就會了。','沒關係，下一題。','記起來就好。']],
+ ['lzx','李志憲',['專心點。','（理智線繃緊中）','用理智想。'],['理智線很滿意。','合格。','這很理智。'],['理智線快斷了……','冷靜，深呼吸。','下一題用理智。']]];
+const npcCv={};
+const npcImg=k=>{if(npcCv[k]!==undefined)return npcCv[k];let c=null;try{const S=THEATER.SPR[k],P=THEATER.PAL;if(S){const rows=S.map(r=>r.padEnd(20,'.')),H=rows.length,W=Math.max(...rows.map(r=>r.length)),sc=3;c=document.createElement('canvas');c.width=(W+2)*sc;c.height=(H+2)*sc;const g=c.getContext('2d');const f=(i,j)=>i>=0&&i<W&&j>=0&&j<H&&rows[j][i]!=='.';g.fillStyle=P.O;for(let j=-1;j<=H;j++)for(let i=-1;i<=W;i++){if(f(i,j))continue;if(f(i+1,j)||f(i-1,j)||f(i,j+1)||f(i,j-1))g.fillRect((i+1)*sc,(j+1)*sc,sc,sc)}for(let j=0;j<H;j++)for(let i=0;i<W;i++){const ch=rows[j][i];if(ch==='.')continue;g.fillStyle=P[ch]||'#fff';g.fillRect((i+1)*sc,(j+1)*sc,sc,sc)}}}catch(e){}npcCv[k]=c;return c};
+const pickNpc=()=>{const L=NPC.filter(n=>npcImg(n[0]));if(!L.length||Math.random()<.3){Q.npc=null;return}Q.npc=L[Math.random()*L.length|0];Q.say=Q.npc[2][Math.random()*3|0];Q.sayT=2.6};
 let pimg=null;
 const schDraw=t=>{const c=$('rschC');if(!c)return;const g=c.getContext('2d');g.imageSmoothingEnabled=false;
   g.fillStyle='#7a5a3a';g.fillRect(0,0,320,200);g.fillStyle='#5a3a22';for(let i=0;i<10;i++)g.fillRect(0,130+i*8,320,1);
@@ -4222,6 +4235,9 @@ const schDraw=t=>{const c=$('rschC');if(!c)return;const g=c.getContext('2d');g.i
     if(Q.res===null){const q=c0.q[Q.i][0],n=Math.max(0,Math.min(q.length,Math.floor(Q.typed)));const L=wrapT(q.slice(0,n),15);g.fillStyle='#fff';g.font=`17px ${PF}`;L.forEach((s,i)=>g.fillText(s,30,64+i*24));
       if(Q.picked!==null){const right=Q.picked===c0.q[Q.i][1];g.fillStyle=right?'#9aff9a':'#ffb0a0';g.font=`15px ${PF}`;g.fillText(right?'答對了！':'答錯了…… 正確答案：'+c0.q[Q.i][1],30,108)}}
     else{g.textAlign='center';g.fillStyle=Q.res.pass?'#ffe28a':'#ffb0a0';g.font=`26px ${PF}`;g.fillText(Q.res.pass?'過關！':'差一點……',160,70);g.fillStyle='#fff';g.font=`16px ${PF}`;g.fillText(`答對 ${Q.ok} / 3 題`,160,98);if(Q.res.rw){g.fillStyle='#ffd56a';g.font=`13px ${PF}`;g.fillText(Q.res.rw,160,116)}}}
+  if(Q.npc&&Q.ch>=0&&Q.res===null){const im=npcImg(Q.npc[0]);if(im){const nx=236,ny=176-im.height+Math.sin(t/500)*1.5;g.drawImage(im,nx,ny);g.fillStyle='#9a6a3a';g.fillRect(210,170,100,10);
+    if(Q.sayT>0&&Q.say){const w=Math.min(150,Q.say.length*11+16);g.fillStyle='#fff';g.fillRect(nx+30-w,ny-18,w,18);g.fillRect(nx+24,ny,6,4);g.fillStyle='#222';g.font='11px DotGothic16,sans-serif';g.textAlign='left';g.fillText(Q.say,nx+30-w+8,ny-5)}
+    g.fillStyle='#e8c566';g.font='10px DotGothic16,sans-serif';g.textAlign='center';g.fillText(Q.npc[1],nx+im.width/2,176+14)}}
   if(!pimg&&window.lunAvCanvas){try{pimg=window.lunAvCanvas(3,0)}catch(e){}}
   const bob=Q.mood==='ok'?-Math.abs(Math.sin(t/120))*8:(Q.mood==='no'?Math.sin(t/60)*2:0);
   if(pimg){g.drawImage(pimg,16,106+bob,66,73)}
@@ -4230,31 +4246,34 @@ const schDraw=t=>{const c=$('rschC');if(!c)return;const g=c.getContext('2d');g.i
   if(Q.mood==='no'){g.fillStyle='#8ac8ff';g.fillRect(78,112+((t/40)%14),4,6)}
   g.fillStyle='#fff';g.font=`11px ${PF}`;g.textAlign='right';g.fillText(Q.ch>=0?'★'.repeat(Q.ok)+'☆'.repeat(Math.max(0,Math.min(3,Q.i+(Q.picked!==null?1:0))-Q.ok)):'',312,190)};
 let sRaf=0,sLt=0;
-const sStep=dt=>{if(!Q.on)return;if(Q.res===null&&Q.ch>=0){const q=CH[Q.ch].q[Q.i][0];if(Q.typed<q.length){const n0=Math.floor(Q.typed);Q.typed+=dt*14;if(Math.floor(Q.typed)>n0)tone(1200,.02,'square',.025)}}
-  if(Q.moodT>0){Q.moodT-=dt;if(Q.moodT<=0)Q.mood=''}
+const sStep=dt=>{if(!Q.on)return;if(Q.res===null&&Q.ch>=0){const q=CH[Q.ch].q[Q.i][0];if(Q.typed<q.length){const n0=Math.floor(Q.typed);Q.typed+=dt*14;if(Math.floor(Q.typed)>n0)typeKey()}}
+  if(Q.sayT>0)Q.sayT-=dt;if(Q.moodT>0){Q.moodT-=dt;if(Q.moodT<=0)Q.mood=''}
   if(Q.adv>0){Q.adv-=dt;const b=document.querySelector('#rschB .sbar u');if(b)b.style.width=Math.min(100,(1-Q.adv/1.4)*100)+'%';if(Q.adv<=0)nextQ()}};
 const sLoop=t=>{const dt=Math.min(.05,(t-sLt)/1000||0);sLt=t;sStep(dt);if($('rsch').classList.contains('on')){schDraw(t);sRaf=requestAnimationFrame(sLoop)}else sRaf=0};
 const schMenu=()=>{Q.ch=-1;Q.res=null;Q.on=true;Q.adv=0;const g=G7();$('rschB').innerHTML=`<canvas id="rschC" width="320" height="200"></canvas><div class="slist">${CH.map((c,i)=>`<button class="sbtn" data-sch="${i}">${c.t}<small>${g.ch[i]?'已通過':'還沒通過・首次過關有獎勵'}</small></button>`).join('')}<button class="sbtn sec" data-sch="intro">重看開場短片</button></div>`};
 const qBuild=()=>{$('rschB').innerHTML=`<canvas id="rschC" width="320" height="200"></canvas><div class="sopt" id="rschO"></div><div class="sbar"><u></u></div>`;qOpts()};
 const qOpts=()=>{const q=CH[Q.ch].q[Q.i];if(Q.picked===null)Q.opts=sh([q[1],...q[2]]);const done=Q.picked!==null;
   $('rschO').innerHTML=Q.opts.map(o=>`<button class="sbtn ${done?(o===q[1]?'ok':(o===Q.picked?'no':'sec')):'sec'}" data-ans="${o}"${done?' disabled':''}>${o}</button>`).join('');const u=document.querySelector('#rschB .sbar u');if(u)u.style.width='0'};
-const nextQ=()=>{Q.picked=null;Q.typed=0;Q.mood='';if(Q.i<2){Q.i++;qOpts()}else qResult()};
+const nextQ=()=>{Q.picked=null;Q.typed=0;Q.mood='';pickNpc();if(Q.i<2){Q.i++;qOpts()}else qResult()};
 const qResult=()=>{const g=G7(),pass=Q.ok>=2;let rw='';
   if(pass&&!g.ch[Q.ch]){g.ch[Q.ch]=1;g.q=g.ch.filter(x=>x).length;const p=P();p.shard=(p.shard||0)+30;p.wallet=(p.wallet||0)+1;save();try{updWallet&&updWallet()}catch(e){}rw='首次過關：倫幣 +30、倫性 +1';A.S&&A.S.pickup&&A.S.pickup()}else if(!pass)A.S&&A.S.miss&&A.S.miss();
   Q.res={pass,rw};Q.doneAt=performance.now()+800;Q.mood=pass?'ok':'no';Q.moodT=1.2;
   $('rschO').innerHTML=`<div style="grid-column:1/3"></div><div style="grid-column:2/3;text-align:end"><button class="sx" id="qx" disabled>✕</button></div>`;setTimeout(()=>{const x=$('qx');if(x)x.disabled=false},820)};
 $('rsch').addEventListener('click',e=>{
-  const s=e.target.closest('button[data-sch]');if(s){A.S&&A.S.tap&&A.S.tap();const k=s.dataset.sch;if(k==='intro'){rClose('rsch');window.lunIntroOpen();return}Q.ch=+k;Q.i=0;Q.ok=0;Q.picked=null;Q.typed=0;Q.res=null;qBuild();return}
-  const a=e.target.closest('button[data-ans]');if(a&&Q.picked===null){Q.picked=a.dataset.ans;const right=Q.picked===CH[Q.ch].q[Q.i][1];if(right){Q.ok++;Q.mood='ok';A.S&&A.S.pickup&&A.S.pickup()}else{Q.mood='no';A.S&&A.S.miss&&A.S.miss()}Q.moodT=1.2;Q.typed=999;Q.adv=1.4;qOpts();return}
+  const s=e.target.closest('button[data-sch]');if(s){A.S&&A.S.tap&&A.S.tap();const k=s.dataset.sch;if(k==='intro'){rClose('rsch');window.lunIntroOpen();return}Q.ch=+k;Q.i=0;Q.ok=0;Q.picked=null;Q.typed=0;Q.res=null;pickNpc();qBuild();return}
+  const a=e.target.closest('button[data-ans]');if(a&&Q.picked===null){Q.picked=a.dataset.ans;const right=Q.picked===CH[Q.ch].q[Q.i][1];if(right){Q.ok++;Q.mood='ok';A.S&&A.S.pickup&&A.S.pickup()}else{Q.mood='no';A.S&&A.S.miss&&A.S.miss()}Q.moodT=1.2;Q.typed=999;Q.adv=1.4;if(Q.npc){Q.say=Q.npc[right?3:4][Math.random()*3|0];Q.sayT=1.4}qOpts();return}
   if(e.target.closest('#qx')){if(performance.now()>=Q.doneAt)schMenu()}});
 window.lunSchoolOpen=skip=>{if(!P())return;if(!G7().intro&&!skip){window.lunIntroOpen();return}schMenu();rOpen('rsch');if(!sRaf){sLt=performance.now();sRaf=requestAnimationFrame(sLoop)}};
 window.lunSchool={answerAll:ci=>{Q.on=true;Q.ch=ci;Q.i=0;Q.ok=0;Q.picked=null;Q.ok=3;$('rschB').innerHTML='<canvas id="rschC" width="320" height="200"></canvas><div class="sopt" id="rschO"></div><div class="sbar"><u></u></div>';qResult()},step:sStep,state:()=>({...Q})};
 
 /* ================= 小屋（自己拖曳擺放） ================= */
-const FUR={bed:['小床',30,70,40],desk:['書桌',40,64,44],rug:['地毯',20,90,22],plant:['盆栽',25,26,44],nest:['小狐狸窩',50,50,22],shelf:['倫語書架',60,60,70],lamp:['檯燈',35,22,46],paint:['掛畫',30,40,32]};
+const mfur=()=>{const o={};try{const own=rm().own||{};MOUNTS.forEach(m=>{if(own[m.id]&&MIMG[m.id])o['m_'+m.id]=[m.n,0,Math.round((MIMG[m.id].w||MIMG[m.id].im.width)*1.1),Math.round((MIMG[m.id].h||MIMG[m.id].im.height)*1.1)]})}catch(e){}return o};
+const FUR0={bed:['小床',30,70,40],desk:['書桌',40,64,44],rug:['地毯',20,90,22],plant:['盆栽',25,26,44],nest:['小狐狸窩',50,50,22],shelf:['倫語書架',60,60,70],lamp:['檯燈',35,22,46],paint:['掛畫',30,40,32]};
+const FURA=()=>Object.assign({},FUR0,mfur());
 const WALL=['#5a4a6a','#4a6a7a','#7a5a5a'],FLOOR=['#7a5a3a','#6a6a7a','#5a7a5a'];
-const fdraw=(g,id,x,y)=>{const [n,c,w,h]=FUR[id];const l=x-w/2,t=y-h;
-  if(id==='bed'){g.fillStyle='#8a2a44';g.fillRect(l,t+16,w,h-16);g.fillStyle='#c04a6a';g.fillRect(l,t+8,w,h-12);g.fillStyle='#fff';g.fillRect(l+2,t+6,22,12);g.fillStyle='#5a2a1a';g.fillRect(l,t,6,h);g.fillRect(l+w-6,t+14,6,h-14)}
+const fdraw=(g,id,x,y)=>{const [n,c,w,h]=FURA()[id];const l=x-w/2,t=y-h;
+  if(id.startsWith('m_')){const mi=MIMG[id.slice(2)];if(mi&&mi.im.complete){g.fillStyle='#0004';g.beginPath();g.ellipse(x,y-2,w/2.2,4,0,0,7);g.fill();if(mi.anim&&mi.bk.complete&&mi.fr.complete){const fi=Math.floor(performance.now()/200)%12;g.drawImage(mi.bk,fi*mi.w,0,mi.w,mi.h,l,t,w,h);g.drawImage(mi.fr,fi*mi.w,0,mi.w,mi.h,l,t,w,h)}else g.drawImage(mi.im,l,t,w,h)}}
+  else if(id==='bed'){g.fillStyle='#8a2a44';g.fillRect(l,t+16,w,h-16);g.fillStyle='#c04a6a';g.fillRect(l,t+8,w,h-12);g.fillStyle='#fff';g.fillRect(l+2,t+6,22,12);g.fillStyle='#5a2a1a';g.fillRect(l,t,6,h);g.fillRect(l+w-6,t+14,6,h-14)}
   else if(id==='desk'){g.fillStyle='#8a5a2a';g.fillRect(l,t+14,w,8);g.fillRect(l+3,t+22,6,h-22);g.fillRect(l+w-9,t+22,6,h-22);g.fillStyle='#e8c566';g.fillRect(l+8,t+4,14,10);g.fillStyle='#5aa0ff';g.fillRect(l+30,t+6,10,8)}
   else if(id==='rug'){g.fillStyle='#4a6ac0';g.beginPath();g.ellipse(x,y-h/2,w/2,h/2,0,0,7);g.fill();g.strokeStyle='#e8c566';g.lineWidth=2;g.stroke();g.fillStyle='#e8c566';g.beginPath();g.ellipse(x,y-h/2,w/5,h/5,0,0,7);g.fill()}
   else if(id==='plant'){g.fillStyle='#8a4a2a';g.fillRect(l+4,t+28,w-8,16);g.fillStyle='#3a9a4a';g.beginPath();g.arc(x,t+16,12,0,7);g.arc(x-8,t+22,8,0,7);g.arc(x+8,t+22,8,0,7);g.fill()}
@@ -4267,19 +4286,19 @@ const hDraw=()=>{const c=$('rhC');if(!c)return;const g=c.getContext('2d');g.imag
   g.fillStyle=WALL[h.wall||0];g.fillRect(0,0,320,130);g.fillStyle='#00000018';for(let i=0;i<16;i++)g.fillRect(i*20,0,2,130);
   g.fillStyle=FLOOR[h.floor||0];g.fillRect(0,130,320,90);g.fillStyle='#0003';for(let i=0;i<8;i++)g.fillRect(0,130+i*12,320,1);
   g.fillStyle='#8ac8ff';g.fillRect(124,22,64,52);g.fillStyle='#fff';g.fillRect(154,22,4,52);g.fillRect(124,45,64,4);g.fillStyle='#e8c566';g.fillRect(120,18,72,4);
-  const order=hItems().map((it,i)=>({it,i})).sort((a,b)=>(FUR[a.it.id][0]==='地毯'?-1:0)-(FUR[b.it.id][0]==='地毯'?-1:0)||a.it.y-b.it.y);
-  order.forEach(({it,i})=>{fdraw(g,it.id,it.x,it.y);if(H.drag===i){g.strokeStyle='#fff';g.lineWidth=1;g.setLineDash([3,3]);const [n,cc,w,hh]=FUR[it.id];g.strokeRect(it.x-w/2-2,it.y-hh-2,w+4,hh+4);g.setLineDash([])}});
+  const order=hItems().map((it,i)=>({it,i})).sort((a,b)=>(FURA()[a.it.id][0]==='地毯'?-1:0)-(FURA()[b.it.id][0]==='地毯'?-1:0)||a.it.y-b.it.y);
+  order.forEach(({it,i})=>{fdraw(g,it.id,it.x,it.y);if(H.drag===i){g.strokeStyle='#fff';g.lineWidth=1;g.setLineDash([3,3]);const [n,cc,w,hh]=FURA()[it.id];g.strokeRect(it.x-w/2-2,it.y-hh-2,w+4,hh+4);g.setLineDash([])}});
   g.fillStyle='#fff';g.font=`12px ${PF}`;g.textAlign='left';g.fillText('擺了 '+hItems().length+' 件（拖曳移動，拖到最上面丟掉）',6,214)};
 const H={drag:-1,dx:0,dy:0};
 const hView=()=>{const p=P(),g=G7(),h=g.house;
-  $('rhouseB').innerHTML=`<canvas id="rhC" width="320" height="220"></canvas><div class="hgrid">${Object.keys(FUR).map(k=>{const [n,c]=FUR[k],placed=h.items.some(i=>i.id===k),own=h.owned[k];return `<button class="sbtn ${placed?'sec':''}" data-fur="${k}"${(!own&&(p.shard||0)<c)?' disabled':''}>${n}<small>${placed?'點一下收起':own?'點一下擺出':c+' 倫幣'}</small></button>`}).join('')}<button class="sbtn sec" data-wall="1">換牆壁</button><button class="sbtn sec" data-floor="1">換地板</button></div><p style="text-align:center">倫幣 ${p.shard||0}</p>`;
+  $('rhouseB').innerHTML=`<canvas id="rhC" width="320" height="220"></canvas><div class="hgrid">${Object.keys(FURA()).map(k=>{const [n,c]=FURA()[k],placed=h.items.some(i=>i.id===k),own=h.owned[k];return `<button class="sbtn ${placed?'sec':''}" data-fur="${k}"${(!own&&(p.shard||0)<c)?' disabled':''}>${n}<small>${placed?'點一下收起':own?'點一下擺出':(c===0?'免費擺放':c+' 倫幣')}</small></button>`}).join('')}<button class="sbtn sec" data-wall="1">換牆壁</button><button class="sbtn sec" data-floor="1">換地板</button></div><p style="text-align:center">倫幣 ${p.shard||0}</p>`;
   const cv=$('rhC'),pos=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width*320,(e.clientY-r.top)/r.height*220]};
-  cv.addEventListener('pointerdown',e=>{e.preventDefault();const [x,y]=pos(e);const items=hItems();for(let i=items.length-1;i>=0;i--){const it=items[i],[n,c,w,hh]=FUR[it.id];if(x>=it.x-w/2&&x<=it.x+w/2&&y>=it.y-hh&&y<=it.y){H.drag=i;H.dx=it.x-x;H.dy=it.y-y;cv.setPointerCapture&&cv.setPointerCapture(e.pointerId);A.S&&A.S.tap&&A.S.tap();break}}});
+  cv.addEventListener('pointerdown',e=>{e.preventDefault();const [x,y]=pos(e);const items=hItems();for(let i=items.length-1;i>=0;i--){const it=items[i],[n,c,w,hh]=FURA()[it.id];if(x>=it.x-w/2&&x<=it.x+w/2&&y>=it.y-hh&&y<=it.y){H.drag=i;H.dx=it.x-x;H.dy=it.y-y;cv.setPointerCapture&&cv.setPointerCapture(e.pointerId);A.S&&A.S.tap&&A.S.tap();break}}});
   cv.addEventListener('pointermove',e=>{if(H.drag<0)return;const [x,y]=pos(e),it=hItems()[H.drag];it.x=Math.max(20,Math.min(300,x+H.dx));it.y=Math.max(60,Math.min(216,y+H.dy))});
   const up=()=>{if(H.drag<0)return;const it=hItems()[H.drag];if(it.y<64){hItems().splice(H.drag,1);A.S&&A.S.miss&&A.S.miss()}save();H.drag=-1;hView()};
   cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);hDraw()};
 $('rhouse').addEventListener('click',e=>{const p=P(),g=G7(),h=g.house;
-  const b=e.target.closest('button[data-fur]');if(b){const k=b.dataset.fur,f=FUR[k];const idx=h.items.findIndex(i=>i.id===k);
+  const b=e.target.closest('button[data-fur]');if(b){const k=b.dataset.fur,f=FURA()[k];const idx=h.items.findIndex(i=>i.id===k);
     if(idx>=0){h.items.splice(idx,1);save();hView();return}
     if(!h.owned[k]){if((p.shard||0)<f[1]){rToast('倫幣不夠。');A.S&&A.S.miss&&A.S.miss();return}p.shard-=f[1];h.owned[k]=1;try{updWallet&&updWallet()}catch(x){}A.S&&A.S.pickup&&A.S.pickup()}
     h.items.push({id:k,x:60+(h.items.length%5)*50,y:k==='paint'?100:176});save();hView();return}
@@ -4290,11 +4309,12 @@ setInterval(()=>{if($('rhouse').classList.contains('on'))hDraw()},60);
 
 /* ================= DEV：最上面每次只留這次要測的 ================= */
 {const top=$('kdTop');top.innerHTML='';
- const hd=$('kdTopH');if(hd)hd.textContent='本次值得測試（11/26 卡片配對、G7 影片／學堂／小屋、坐騎探險）';
- top.insertAdjacentHTML('beforeend','<button id="kdN1">① 坐騎探險：九尾狐</button><button id="kdN2">② 坐騎探險：地獄火鳳凰</button><button id="kdN3">③ 卡片配對（倫牌配對）</button><button id="kdN4">④ G7 開場短片（有聲音）</button><button id="kdN5">⑤ 學堂：倫語小考</button><button id="kdN6">⑥ 小屋（先給 500 倫幣）</button><button id="kdN7">⑦ 假裝第 19 天（看 G7 目標）</button>');
+ const hd=$('kdTopH');if(hd)hd.textContent='本次值得測試（11/26 坐騎動畫、學堂 NPC、打字機音效、小屋放坐騎）';
+ top.insertAdjacentHTML('beforeend','<button id="kdN1">① 坐騎探險：九尾狐</button><button id="kdN2">② 坐騎探險：地獄火鳳凰</button><button id="kdN3">③ 卡片配對（倫牌配對）</button><button id="kdN4">④ G7 開場短片（有聲音）</button><button id="kdN5">⑤ 學堂：倫語小考</button><button id="kdN6">⑥ 小屋（先給 500 倫幣）</button><button id="kdN7">⑦ 假裝第 19 天（看 G7 目標）</button><button id="kdN8">⑧ 給全部坐騎（測小屋放坐騎）</button>');
  const dv=(id,fn)=>{$(id).onclick=()=>{if(!P()||!started){devNote('先按上面的「用測試玩家直接進入卡池」。');return}devClose();fn()}};
  dv('kdN1',()=>window.lunRunOpen('fox'));dv('kdN2',()=>window.lunRunOpen('phoenix'));dv('kdN3',()=>window.lunCardOpen());
  dv('kdN4',()=>window.lunIntroOpen());dv('kdN5',()=>window.lunSchoolOpen(true));
+ dv('kdN8',()=>{MOUNTS.forEach(m=>{rm().own[m.id]=1});save();window.lunHouseOpen()});
  dv('kdN6',()=>{const p=P();p.shard=(p.shard||0)+500;save();window.lunHouseOpen()});
  dv('kdN7',()=>{const p=P(),d=new Date();p.gd=[];for(let i=0;i<19;i++){const x=new Date(d-(18-i)*864e5);p.gd.push(x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0'))}
   p.goal={c:{0:1,1:1,2:1,3:1,4:1,5:1}};save();window.lunGoalOpen&&window.lunGoalOpen()})}
