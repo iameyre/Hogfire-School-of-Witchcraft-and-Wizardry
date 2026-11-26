@@ -1,0 +1,740 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>卡池重做預覽 1127d・樣張</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cactus+Classical+Serif&family=LXGW+WenKai+TC&family=Cinzel:wght@500;700&family=Noto+Serif+TC:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0608;--ink:#f1e6cf;--mute:#a89884;--gold:#d8b25a;--line:rgba(216,178,90,.22);
+  --noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .22 0 0 0 0 .1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:#0b0608;color:var(--ink);font-family:'Noto Serif TC',serif}
+body{background:radial-gradient(ellipse 90% 50% at 50% 0%,#2b0d16 0%,rgba(11,6,8,0) 70%),#0b0608;min-height:100dvh;overscroll-behavior:none}
+button{font:inherit;color:inherit;cursor:pointer}
+#app{max-width:440px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 14px) 16px calc(env(safe-area-inset-bottom) + 110px);position:relative;min-height:100dvh}
+@media (min-width:620px){
+  body{background:radial-gradient(ellipse 60% 40% at 50% 0%,#2b0d16 0%,rgba(11,6,8,0) 70%),#060304}
+  #app{background:radial-gradient(ellipse 90% 40% at 50% 0%,#2b0d16 0%,rgba(11,6,8,0) 70%),#0b0608;box-shadow:0 0 0 1px rgba(216,178,90,.12),0 0 80px rgba(0,0,0,.8)}
+}
+.top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px}
+.top h1{font-size:19px;letter-spacing:.18em;margin:0;font-weight:900}
+.ver{font-family:Cinzel;font-size:11px;letter-spacing:.2em;color:var(--gold);border:1px solid var(--line);padding:2px 8px;border-radius:99px}
+.sub{color:var(--mute);font-size:12.5px;line-height:1.7;margin:4px 0 14px}
+.tabs{display:flex;gap:6px;margin:0 0 16px;border-bottom:1px solid var(--line)}
+.tabs button{background:none;border:0;padding:9px 4px 10px;margin-right:14px;font-size:15px;letter-spacing:.15em;color:var(--mute);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs button.on{color:var(--ink);border-color:var(--gold)}
+.sec{display:none}.sec.on{display:block}
+h2{font-size:13px;letter-spacing:.3em;color:var(--gold);font-weight:700;margin:22px 0 10px;display:flex;align-items:center;gap:10px}
+h2::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 12px;justify-items:center}
+.cell{display:flex;flex-direction:column;align-items:center;gap:7px}
+.cell .lab{font-size:12px;color:var(--mute);letter-spacing:.12em;text-align:center}
+.cell .lab b{color:var(--ink);font-weight:700;display:block;font-size:13.5px;letter-spacing:.2em}
+.cell.wide{grid-column:1/-1}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:rgba(216,178,90,.06);border-radius:99px;padding:7px 14px;font-size:13px;letter-spacing:.1em}
+.chip:active{transform:scale(.96)}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;justify-content:center;padding:12px 16px calc(env(safe-area-inset-bottom) + 12px);background:linear-gradient(0deg,#0b0608 55%,rgba(11,6,8,0));pointer-events:none}
+.bar .in{width:100%;max-width:408px;display:flex;gap:10px;pointer-events:auto}
+.btn{flex:1;border:0;border-radius:14px;padding:14px 0;font-size:16px;font-weight:700;letter-spacing:.2em;position:relative;overflow:hidden}
+.btn.a{background:linear-gradient(180deg,#3a1520,#220a11);border:1px solid rgba(216,178,90,.35);color:#f3e3b8}
+.btn.b{background:linear-gradient(180deg,#f0d38a,#b88a35);color:#2a1606;box-shadow:0 6px 24px rgba(216,178,90,.25)}
+.btn:active{transform:translateY(1px) scale(.985)}
+.btn small{display:block;font-size:10.5px;letter-spacing:.15em;font-weight:400;opacity:.75;margin-top:2px}
+.kbd{display:none;text-align:center;color:var(--mute);font-size:11.5px;letter-spacing:.1em;margin-top:22px}
+@media (hover:hover) and (pointer:fine){.kbd{display:block}}
+.fb{border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:rgba(255,255,255,.02)}
+.fbr{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px dashed rgba(216,178,90,.14);font-size:14px}
+.fbr:last-of-type{border-bottom:0}
+.fbr .o{display:flex;gap:6px}
+.fbr .o button{border:1px solid var(--line);background:none;border-radius:99px;padding:5px 12px;font-size:12.5px;color:var(--mute)}
+.fbr .o button.on{background:var(--gold);color:#221206;border-color:var(--gold)}
+textarea{width:100%;min-height:76px;margin-top:10px;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:10px;color:var(--ink);font:inherit;font-size:14px;padding:10px}
+.copy{margin-top:10px;width:100%}
+.toast{position:fixed;left:50%;bottom:120px;transform:translateX(-50%) translateY(10px);background:#f0d38a;color:#221206;padding:9px 18px;border-radius:99px;font-size:13.5px;opacity:0;transition:.3s;z-index:90;pointer-events:none}
+.toast.on{opacity:1;transform:translateX(-50%)}
+
+/* ================= 卡片共用 ================= */
+.card{--w:240px;width:var(--w);height:calc(var(--w) * 1.6);font-size:calc(var(--w) / 15);position:relative;flex:none;perspective:1100px;user-select:none;-webkit-user-select:none}
+.card .inner{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .75s cubic-bezier(.25,1.35,.45,1)}
+.card.flipped .inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:.55em;overflow:hidden}
+.front{transform:rotateY(180deg)}
+.card.up .inner{transform:none;transition:none}
+.card.up .front{transform:none}
+.card.up .back{display:none}
+.ct{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;padding:2.3em 1.3em 2.3em;text-align:center}
+.tier{font-family:Cinzel,serif;font-size:.6em;letter-spacing:.38em;font-weight:700;opacity:.9;padding-left:.38em}
+.glyph{font-family:'Cactus Classical Serif',serif;font-size:4.6em;line-height:1.18;margin:.06em 0 .02em}
+.name{font-size:1.12em;font-weight:900;letter-spacing:.14em;line-height:1.35;padding-left:.14em}
+.name.l1{font-size:.98em;letter-spacing:.08em}
+.name.l2{font-size:.86em;letter-spacing:.02em}
+.lines{margin-top:.55em;font-size:.76em;line-height:1.78;letter-spacing:.04em}
+.lines span{display:block}
+.foot{position:absolute;left:0;right:0;bottom:1.05em;font-family:Cinzel,serif;font-size:.5em;letter-spacing:.3em;opacity:.65;z-index:3;text-align:center}
+.card.sm .lines,.card.sm .foot,.card.sm .tier,.card.sm .name{display:none}
+.card.sm .ct{justify-content:center;padding:0}
+.card.sm .glyph{font-size:6.5em}
+.gloss{position:absolute;inset:-60%;z-index:6;pointer-events:none;background:radial-gradient(circle at center,rgba(255,255,255,.22),rgba(255,255,255,0) 32%);transform:translate(var(--gx,40%),var(--gy,-40%));opacity:0;transition:opacity .3s;mix-blend-mode:soft-light}
+#detail .gloss{opacity:1}
+
+/* 卡背 */
+.back{background:radial-gradient(circle at 50% 46%,#47121e 0%,#25070f 55%,#14040a 100%);border:.09em solid #6e4c1d}
+.back::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(216,178,90,.06) 0 .08em,transparent .08em 1.1em),repeating-linear-gradient(-45deg,rgba(216,178,90,.06) 0 .08em,transparent .08em 1.1em)}
+.back .bf{position:absolute;inset:.55em;border:.07em solid rgba(216,178,90,.55);border-radius:.3em}
+.back .bf2{position:absolute;inset:.8em;border:.04em solid rgba(216,178,90,.3);border-radius:.2em}
+.back .crest{position:absolute;left:50%;top:50%;width:9.5em;height:9.5em;margin:-4.75em 0 0 -4.75em;color:#d8b25a}
+.back .crest svg{width:100%;height:100%;overflow:visible}
+.back .cw{position:absolute;inset:0;display:grid;place-items:center;font-family:'Cactus Classical Serif',serif;font-size:3.1em;color:#e9c977;text-shadow:0 0 .3em rgba(233,201,119,.35)}
+.back .bt{position:absolute;left:0;right:0;font-family:Cinzel;font-size:.52em;letter-spacing:.45em;color:rgba(216,178,90,.7);text-align:center}
+.card.sm .back .bt{display:none}
+.card .hint{position:absolute;inset:-14%;border-radius:30%;background:radial-gradient(closest-side,var(--gc,#fff) 0%,rgba(0,0,0,0) 100%);opacity:0;transition:opacity .35s;pointer-events:none;z-index:-1}
+.card.glow .hint{opacity:.85}
+.card.rainbow .hint{background:conic-gradient(#ff3b6b,#ffb43b,#fff36b,#5bff9b,#4bd8ff,#8a6bff,#ff3b6b);border-radius:50%;filter:blur(18px);animation:spin 2.4s linear infinite}
+.card.shake{animation:shake .09s linear infinite}
+.card.deal{animation:deal .55s cubic-bezier(.2,1.2,.4,1) backwards}
+@keyframes shake{0%{transform:translate(0,0) rotate(0)}25%{transform:translate(-.08em,.05em) rotate(-.6deg)}50%{transform:translate(.07em,-.06em) rotate(.5deg)}75%{transform:translate(-.05em,-.04em) rotate(.3deg)}100%{transform:translate(0,0)}}
+@keyframes deal{from{transform:translateY(60px) scale(.6) rotate(-6deg);opacity:0}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ===== N 符紙 ===== */
+
+/* ===== R 魔咒卡 ===== */
+.r-R .front{background:radial-gradient(circle at 50% 30%,#2c4a92 0%,#142559 38%,#081032 72%,#040820 100%);color:#e4ebfa}
+.r-R .front::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.8) 0 .04em,transparent .06em),radial-gradient(circle,rgba(255,255,255,.5) 0 .03em,transparent .05em);background-size:3.1em 3.7em,2.3em 2.9em;background-position:.4em .9em,1.6em .2em;opacity:.5}
+.r-R .rf{position:absolute;inset:.42em;border-radius:.4em;border:.1em solid #c9d1e3;box-shadow:inset 0 0 0 .08em #3c4a6e,inset 0 0 0 .14em rgba(201,209,227,.5),0 0 .6em rgba(160,190,255,.25);z-index:1}
+.r-R .rune{position:absolute;width:10.6em;height:10.6em;left:50%;top:1.15em;margin-left:-5.3em;color:rgba(190,208,255,.6);animation:spin 46s linear infinite;z-index:1}
+.r-R .rune .in{transform-origin:50% 50%;animation:spin 30s linear infinite reverse}
+.r-R .tier{color:#c9d6f4}
+.r-R .glyph{background:linear-gradient(180deg,#ffffff 0%,#d7def0 45%,#8c97b3 55%,#e8edf8 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 .12em rgba(150,180,255,.55))}
+.r-R .name{color:#f4f7ff}
+.r-R .lines{color:#b7c3e3}
+.card.sm.r-R .rune{top:50%;margin-top:-5.3em}
+
+/* ===== SR 咒語卷軸 / SSR 金卷軸 ===== */
+.r-SR .front,.r-SSR .front{border-radius:0;background:none;overflow:visible}
+.paper{position:absolute;left:.85em;right:.85em;top:1.15em;bottom:1.15em;z-index:0}
+.r-SR .paper{background:var(--noise),radial-gradient(ellipse 80% 70% at 50% 50%,#f7ebcf 50%,#e6cf9f 85%,#d4b47a 100%);box-shadow:inset 0 0 1.3em rgba(110,70,30,.35)}
+.r-SSR .paper{background:radial-gradient(ellipse 90% 60% at 50% 35%,rgba(255,210,120,.13),rgba(0,0,0,0) 70%),var(--noise),linear-gradient(180deg,#22100a,#130805 60%,#0c0503);box-shadow:inset 0 0 1.4em rgba(0,0,0,.7)}
+.roll{position:absolute;left:.25em;right:.25em;height:1.75em;border-radius:.9em;z-index:2}
+.roll.t{top:0}.roll.b{bottom:0}
+.r-SR .roll{background:linear-gradient(180deg,#2a130a 0%,#6e4220 30%,#b0804a 48%,#7a4b24 62%,#2a130a 100%)}
+.r-SSR .roll{background:linear-gradient(180deg,#3d2706 0%,#a67a26 28%,#fff0b8 47%,#c99a3c 60%,#4a3008 100%)}
+.roll::before,.roll::after{content:'';position:absolute;top:-.12em;bottom:-.12em;width:.75em;border-radius:.35em;background:linear-gradient(180deg,#5a3b0c,#f7dd8a 48%,#8a6118)}
+.r-SSR .roll::before,.r-SSR .roll::after{background:linear-gradient(180deg,#2a1a04,#8d6a22 48%,#2a1a04)}
+.roll::before{left:-.25em}.roll::after{right:-.25em}
+.rib{position:absolute;top:1.05em;right:2.1em;width:1.05em;height:5.4em;z-index:1;background:linear-gradient(90deg,#3d1260,#8e52c6 45%,#b680e6 52%,#4a1873);clip-path:polygon(0 0,100% 0,100% 100%,50% 84%,0 100%);filter:drop-shadow(0 .1em .1em rgba(0,0,0,.3))}
+.r-SR .ct,.r-SSR .ct{padding-top:2.75em}
+.r-SR .tier{color:#6a2f99}
+.r-SR .glyph{color:#56237f;text-shadow:0 .03em 0 rgba(255,255,255,.4)}
+.r-SR .name{color:#2e1046}
+.r-SR .lines{color:#4d2f60}
+.r-SR .foot,.r-SSR .foot{bottom:2.1em}
+.r-SR .wax2{position:absolute;left:50%;bottom:2.75em;width:1.5em;height:1.5em;margin-left:-.75em;border-radius:50%;z-index:4;background:radial-gradient(circle at 35% 30%,#b483e0,#6b2ea0 55%,#3e1660);box-shadow:0 .06em .12em rgba(0,0,0,.35)}
+
+.card.sm.r-SR .wax2,.card.sm .rib{display:none}
+.ssl{position:absolute;inset:.55em;border:.06em solid rgba(240,208,128,.55);z-index:1}
+.ssl::after{content:'';position:absolute;inset:.25em;border:.03em solid rgba(240,208,128,.28)}
+.orn{position:absolute;width:2.2em;height:2.2em;z-index:1;color:#e8c46c}
+.orn svg{width:100%;height:100%}
+.orn.a{left:.3em;top:.3em}.orn.b{right:.3em;top:.3em;transform:scaleX(-1)}.orn.c{left:.3em;bottom:.3em;transform:scaleY(-1)}.orn.d{right:.3em;bottom:.3em;transform:scale(-1,-1)}
+.sheen{position:absolute;inset:0;z-index:5;overflow:hidden;pointer-events:none}
+.sheen::before{content:'';position:absolute;top:-20%;bottom:-20%;width:45%;left:0;background:linear-gradient(100deg,rgba(255,236,170,0) 0%,rgba(255,236,170,.32) 50%,rgba(255,236,170,0) 100%);transform:translateX(-120%) skewX(-12deg);animation:sheen 3.6s ease-in-out infinite}
+@keyframes sheen{0%{transform:translateX(-120%) skewX(-12deg)}55%,100%{transform:translateX(330%) skewX(-12deg)}}
+.r-SSR .tier{color:#f0cf7a}
+.gt,.r-SSR .glyph{background:linear-gradient(180deg,#fff6cf 0%,#f2cf6e 38%,#a8741e 55%,#f7dc8a 72%,#c2913a 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 .04em 0 rgba(0,0,0,.6))}
+.r-SSR .name{color:#f7e6b4}
+.r-SSR .lines{color:#d2b98a}
+.r-SSR .foot{color:#e8c46c}
+.card.sm .orn{display:none}
+
+/* ===== SP 貓頭鷹信 ===== */
+.r-SP .front{border-radius:.3em;background:var(--noise),linear-gradient(180deg,#f1e4c7 0%,#e5d1a8 100%);color:#3b2614}
+.r-SP .fl2{position:absolute;left:0;right:0;top:0;height:44.5%;background:rgba(110,70,30,.28);clip-path:polygon(0 0,100% 0,50% 100%);z-index:1}
+.r-SP .fl{position:absolute;left:0;right:0;top:0;height:43%;background:var(--noise),linear-gradient(180deg,#e9d7ae,#dcc392);clip-path:polygon(0 0,100% 0,50% 100%);z-index:1}
+.r-SP .side{position:absolute;left:0;right:0;bottom:0;height:60%;z-index:0;background:linear-gradient(32deg,rgba(110,70,30,.12) 0 49.6%,transparent 50%),linear-gradient(-32deg,rgba(110,70,30,.12) 0 49.6%,transparent 50%)}
+.r-SP .wax{position:absolute;left:50%;top:43%;width:3.5em;height:3.5em;margin:-1.95em 0 0 -1.75em;z-index:4;border-radius:52% 48% 55% 45%/50% 56% 44% 50%;background:radial-gradient(circle at 36% 30%,#ec5a62 0%,#b81624 45%,#74080f 100%);box-shadow:0 .14em .28em rgba(60,0,0,.45),inset 0 0 0 .32em rgba(90,0,0,.22);display:grid;place-items:center}
+.r-SP .wax::before{content:'';position:absolute;inset:.42em;border-radius:50%;border:.06em solid rgba(255,190,190,.35)}
+.r-SP .wax b{font-family:'Cactus Classical Serif';font-size:1.55em;font-weight:400;color:#7a0a12;text-shadow:.03em .03em 0 rgba(255,170,170,.55),-.02em -.02em 0 rgba(60,0,0,.5)}
+.r-SP .glyph{display:none}
+.r-SP .ct{padding-top:13.1em}
+.r-SP .tier{position:absolute;top:2.3em;left:0;right:0;color:#8a5a2a}
+.r-SP .name{color:#2b1a0c}
+.r-SP .lines{color:#5a4128}
+.r-SP .pm{position:absolute;right:.9em;bottom:2.6em;width:3em;height:3em;border-radius:50%;border:.07em solid rgba(140,40,40,.45);z-index:2;transform:rotate(-14deg);display:grid;place-items:center;font-family:Cinzel;font-size:.42em;color:rgba(140,40,40,.55);letter-spacing:.1em;line-height:1.2;text-align:center}
+.r-SP .pm::after{content:'';position:absolute;left:-150%;right:100%;top:30%;bottom:30%;background:repeating-linear-gradient(180deg,rgba(140,40,40,.4) 0 .08em,transparent .08em .5em)}
+.card.sm.r-SP .wax{top:50%;margin-top:-1.75em}
+.card.sm.r-SP .pm{display:none}
+
+/* ===== 傳說 魔法書 ===== */
+.book .front{border-radius:.25em .55em .55em .25em;background:var(--noise),radial-gradient(ellipse 90% 70% at 60% 38%,var(--l1) 0%,var(--l2) 75%);color:#f7e7bf}
+.r-GOLD{--l1:#6b4910;--l2:#1c1103;--gem:#ffd34d}
+.r-ORNG{--l1:#7a2d08;--l2:#1f0802;--gem:#ff7a1a}
+.r-ULT{--l1:#22336e;--l2:#060a1d;--gem:#8fe8ff}
+.r-IDOL{--l1:#741650;--l2:#1c0313;--gem:#ff6fc8}
+.spine{position:absolute;left:0;top:0;bottom:0;width:1.75em;z-index:2;background:linear-gradient(90deg,rgba(0,0,0,.6) 0%,rgba(255,255,255,.1) 55%,rgba(0,0,0,.45) 100%)}
+.spine::before{content:'';position:absolute;left:0;right:0;top:0;bottom:0;background:linear-gradient(180deg,transparent 14%,rgba(216,178,90,.65) 14%,rgba(216,178,90,.65) 15%,transparent 15%,transparent 85%,rgba(216,178,90,.65) 85%,rgba(216,178,90,.65) 86%,transparent 86%)}
+.gem{position:absolute;left:.38em;top:50%;width:1em;height:1.45em;margin-top:-.72em;z-index:3;clip-path:polygon(50% 0,100% 28%,100% 72%,50% 100%,0 72%,0 28%);background:radial-gradient(circle at 38% 28%,#fff 0%,var(--gem) 32%,rgba(0,0,0,.85) 110%)}
+.gem::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.6),transparent 40%)}
+.bkf{position:absolute;left:2.45em;right:.85em;top:.85em;bottom:.85em;border:.11em solid #d8b25a;z-index:2;box-shadow:inset 0 0 0 .28em rgba(0,0,0,0),inset 0 0 0 .33em rgba(216,178,90,.5)}
+.bkc{position:absolute;width:1.5em;height:1.5em;z-index:3;background:linear-gradient(135deg,#fff2b8,#b3862e 45%,#5a3b0c);}
+.bkc.a{right:0;top:0;clip-path:polygon(0 0,100% 0,100% 100%)}
+.bkc.b{right:0;bottom:0;clip-path:polygon(100% 0,100% 100%,0 100%)}
+.holo{position:absolute;inset:-100%;z-index:4;pointer-events:none;mix-blend-mode:color-dodge;opacity:.42;background:linear-gradient(115deg,rgba(0,0,0,0) 30%,rgba(255,60,140,.55) 38%,rgba(255,215,60,.55) 44%,rgba(60,255,190,.55) 50%,rgba(80,130,255,.55) 56%,rgba(0,0,0,0) 64%);animation:holo 5.5s ease-in-out infinite alternate}
+.r-ULT .holo{opacity:.65}
+@keyframes holo{from{transform:translate(-22%,-18%)}to{transform:translate(22%,18%)}}
+.book .ct{padding-left:2.7em;padding-right:1.2em}
+.book .tier{color:var(--gem)}
+.book .glyph{background:linear-gradient(180deg,#fff7d6 0%,#f0cc6a 40%,#9e6c1a 56%,#f5da86 74%,#b5852f 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 .05em 0 rgba(0,0,0,.65)) drop-shadow(0 0 .25em color-mix(in srgb,var(--gem) 45%,transparent))}
+.book .name{color:#fbefd0}
+.book .lines{color:#e1cfa6}
+.book .foot{padding-left:1.6em;color:#e3c272}
+.card.sm.book .ct{padding:0 0 0 1.6em}
+
+/* ===== SSSR 火焰咒印 ===== */
+.fseal{position:absolute;right:1.15em;bottom:2.35em;z-index:5;width:1.5em;height:3em;perspective:10em;cursor:default}
+.fseal i{position:absolute;inset:0;font-style:normal;font-family:'Cactus Classical Serif';font-size:.78em;line-height:1.05;writing-mode:vertical-rl;display:grid;place-items:center;border-radius:.14em;backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform .6s cubic-bezier(.3,1.2,.5,1)}
+.fseal .p{background:#9e1016;color:#ffdcbc;box-shadow:inset 0 0 0 .1em #9e1016,inset 0 0 0 .17em rgba(255,220,188,.75);opacity:.92}
+.fseal .q{background:#5d3a34;color:#d9c1ae;box-shadow:inset 0 0 0 .1em #5d3a34,inset 0 0 0 .17em rgba(217,193,174,.5);transform:rotateY(180deg);opacity:.85;filter:saturate(.6)}
+.fseal.old .p{transform:rotateY(-180deg)}
+.fseal.old .q{transform:rotateY(0)}
+.card.sm .fseal,.card.sm .emb{display:none}
+
+/* ================= 舞台 ================= */
+#stage{position:fixed;inset:0;z-index:50;display:none;overflow:hidden;background:rgba(6,3,4,.94);touch-action:manipulation}
+#stage.on{display:block}
+#stage .dark{position:absolute;inset:0;background:#000;opacity:0;transition:opacity .6s}
+#stage.dim .dark{opacity:.7}
+#stage.black .dark{opacity:1;transition:opacity .8s}
+#rays{position:absolute;left:50%;top:46%;width:200vmax;height:200vmax;margin:-100vmax 0 0 -100vmax;opacity:0;transition:opacity .5s;pointer-events:none;background:repeating-conic-gradient(from 0deg,var(--rc,#ffd56a) 0deg 3deg,rgba(0,0,0,0) 3deg 15deg);-webkit-mask:radial-gradient(circle,#000 0%,rgba(0,0,0,.5) 18%,transparent 42%);mask:radial-gradient(circle,#000 0%,rgba(0,0,0,.5) 18%,transparent 42%)}
+#rays.on{opacity:.45;animation:spin 18s linear infinite}
+#rays.rb{background:repeating-conic-gradient(from 0deg,#ff4b7d 0deg 3deg,rgba(0,0,0,0) 3deg 15deg,#ffd34b 15deg 18deg,rgba(0,0,0,0) 18deg 30deg,#4bdcff 30deg 33deg,rgba(0,0,0,0) 33deg 45deg)}
+#pillar{position:absolute;left:50%;top:0;bottom:0;width:58%;margin-left:-29%;pointer-events:none;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.28) 35%,rgba(255,255,255,.55) 50%,rgba(255,255,255,.28) 65%,rgba(255,255,255,0));transform:scaleX(0);transform-origin:50% 50%;opacity:0;transition:transform .7s cubic-bezier(.2,1,.3,1),opacity .5s}
+#pillar.on{transform:scaleX(1);opacity:1}
+#flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+#warm{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .8s;background:radial-gradient(ellipse 80% 60% at 50% 60%,rgba(255,90,20,.35),rgba(120,10,0,.15) 60%,rgba(0,0,0,0))}
+#warm.on{opacity:1}
+#fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:6}
+#slot{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5}
+#slot.ten{align-content:center;flex-wrap:wrap;gap:12px 8px;padding:0 14px;max-width:440px;margin:0 auto}
+#banner{position:absolute;left:0;right:0;top:calc(env(safe-area-inset-top) + 7%);z-index:7;text-align:center;pointer-events:none;opacity:0}
+#banner .en{font-family:Cinzel;font-weight:700;font-size:44px;letter-spacing:.14em;line-height:1;color:var(--bc,#fff);text-shadow:0 0 24px color-mix(in srgb,var(--bc,#fff) 60%,transparent)}
+#banner .zh{font-size:16px;letter-spacing:.6em;margin-top:8px;padding-left:.6em;color:#f6ead2}
+#banner .ln{height:1px;width:72%;margin:12px auto 0;background:linear-gradient(90deg,transparent,var(--bc,#fff),transparent);transform-origin:50% 50%}
+#banner.rb .en{background:linear-gradient(90deg,#ff6b9a,#ffd36b,#6bffc4,#6bb8ff,#c56bff);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 0 14px rgba(255,255,255,.35))}
+#banner.fire .en{background:linear-gradient(180deg,#fff6d0,#ffb347 45%,#ff4a1c);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 0 16px rgba(255,90,20,.7));font-size:54px}
+#banner.show{animation:bIn .7s cubic-bezier(.2,1.3,.4,1) forwards}
+#banner.show .ln{animation:lnIn .8s .15s cubic-bezier(.2,1,.3,1) backwards}
+@keyframes bIn{from{opacity:0;transform:scale(1.5)}to{opacity:1;transform:none}}
+@keyframes lnIn{from{transform:scaleX(0)}}
+#tip{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 96px);text-align:center;font-size:13px;letter-spacing:.25em;color:rgba(241,230,207,.7);z-index:7;pointer-events:none;transition:opacity .3s}
+#tip.pulse{animation:tp 1.6s ease-in-out infinite}
+@keyframes tp{50%{opacity:.35}}
+#sbar{position:absolute;left:0;right:0;bottom:0;z-index:8;display:flex;justify-content:center;padding:12px 16px calc(env(safe-area-inset-bottom) + 14px);opacity:0;pointer-events:none;transition:opacity .35s}
+#sbar.on{opacity:1;pointer-events:auto}
+#sbar .in{width:100%;max-width:408px;display:flex;gap:10px}
+.fall{position:absolute;width:8px;height:8px;border-radius:50%;background:#ffe2a0;box-shadow:0 0 10px 4px rgba(255,140,40,.9),0 0 30px 10px rgba(255,80,20,.45);z-index:8;pointer-events:none}
+.cover{position:absolute;inset:0;z-index:10;border-radius:.55em;overflow:hidden}
+.bedge{position:absolute;left:-6%;right:-6%;bottom:-.9em;height:1.8em;z-index:11;pointer-events:none;background:radial-gradient(ellipse 50% 50% at 50% 50%,rgba(255,240,180,1) 0%,rgba(255,150,40,.9) 35%,rgba(200,40,0,.5) 60%,rgba(0,0,0,0) 75%);border-radius:50%}
+
+/* ================= 詳情 ================= */
+#detail{position:fixed;inset:0;z-index:60;display:none;background:rgba(6,3,4,.92);align-items:center;justify-content:center;flex-direction:column;gap:18px;padding:20px 16px}
+#detail.on{display:flex;animation:fade .25s}
+@keyframes fade{from{opacity:0}}
+#detail .dw{perspective:900px}
+#detail .dw .card{transition:transform .15s ease-out;transform-style:preserve-3d}
+#detail .info{max-width:340px;text-align:center;color:var(--mute);font-size:13px;line-height:1.8;letter-spacing:.06em}
+#detail .info b{display:block;color:var(--ink);font-size:15px;letter-spacing:.3em;margin-bottom:2px}
+#detail .x{position:absolute;right:14px;top:calc(env(safe-area-inset-top) + 12px);width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:rgba(0,0,0,.4);font-size:20px;line-height:1}
+
+/* ================= 1127d 樣張：N 符紙（重做） ================= */
+.r-N .front{border-radius:0;background:transparent;overflow:visible;isolation:isolate;color:#2a1508}
+.r-N .ptex{position:absolute;inset:0;z-index:0;background:var(--texN,linear-gradient(172deg,#f1dca6,#ddb877)) center/100% 100% no-repeat}
+.r-N .nsv{position:absolute;inset:0;width:100%;height:100%;z-index:1;mix-blend-mode:multiply;opacity:.92;overflow:visible}
+.r-N .ct{padding-top:3.55em;mix-blend-mode:multiply}
+.r-N .tier{color:#a3261a;opacity:.85;font-size:.55em}
+.r-N .glyph{color:#b2271a;margin:.02em 0 0;filter:url(#roughT);text-shadow:0 0 .025em rgba(178,39,26,.55)}
+.r-N .name{color:#231107;font-weight:900;letter-spacing:.2em}
+.r-N .lines{color:#3e2413;font-family:'LXGW WenKai TC','Noto Serif TC',serif;font-size:.8em;line-height:1.72;letter-spacing:.06em}
+.r-N .nseal{position:absolute;left:50%;bottom:2.15em;width:2.45em;height:2.45em;margin-left:-1.22em;z-index:4;transform:rotate(-5deg);mix-blend-mode:multiply;opacity:.9}
+.r-N .foot{color:#9a2a1c;opacity:.75;bottom:.95em}
+.card.sm.r-N .nseal{display:none}
+.card.sm.r-N .ct{padding:1.2em 0 0}
+.card.sm.r-N .glyph{font-size:6.2em}
+
+/* ================= 1127d 樣張：SSSR 火焰咒印（重做） ================= */
+.r-SSSR .front{background:#0d0403;color:#ffeccd;border-radius:.62em}
+.r-SSSR .ftex{position:absolute;inset:0;z-index:0;background:var(--texF,radial-gradient(ellipse 120% 70% at 50% 108%,#7a1a06,#0d0403 70%)) center/100% 100% no-repeat}
+.r-SSSR .fcr{position:absolute;inset:0;z-index:1;background:var(--texF2,none) center/100% 100% no-repeat;mix-blend-mode:screen;animation:heat 3.4s ease-in-out infinite;will-change:opacity}
+@keyframes heat{0%,100%{opacity:.55}45%{opacity:1}70%{opacity:.75}}
+.r-SSSR .fcv{position:absolute;left:0;right:0;bottom:0;width:100%;height:46%;z-index:2;pointer-events:none;mix-blend-mode:screen}
+.r-SSSR .fhalo{position:absolute;left:50%;top:6.7em;width:12.5em;height:12.5em;margin:-6.25em 0 0 -6.25em;border-radius:50%;z-index:1;background:radial-gradient(closest-side,rgba(255,150,50,.42),rgba(255,70,15,.14) 55%,rgba(255,60,10,0));animation:breathe 3.2s ease-in-out infinite;will-change:transform,opacity}
+@keyframes breathe{0%,100%{transform:scale(.92);opacity:.7}50%{transform:scale(1.06);opacity:1}}
+.r-SSSR .fcirc{position:absolute;left:50%;top:6.7em;width:10.6em;height:10.6em;margin:-5.3em 0 0 -5.3em;z-index:2;color:#ffb46a;opacity:.62;mix-blend-mode:screen;animation:spin 90s linear infinite}
+.r-SSSR .ffr{position:absolute;inset:0;width:100%;height:100%;z-index:5;pointer-events:none;overflow:visible}
+.r-SSSR .ct{padding-top:3.75em;z-index:4}
+.r-SSSR .tier{display:none}
+.r-SSSR .glyph{font-size:5.5em;line-height:1.05;margin:0;background:var(--noise),linear-gradient(180deg,#fffdf0 0%,#ffe6a8 26%,#ffaa48 52%,#f0501c 76%,#b3180c 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 .02em 0 rgba(60,8,0,.9)) drop-shadow(0 0 .06em rgba(255,150,60,.9)) drop-shadow(0 0 .22em rgba(255,80,20,.6))}
+.r-SSSR .name{font-size:1.45em;letter-spacing:.42em;padding-left:.42em;margin-top:.12em;color:#fff3dc;text-shadow:0 0 .35em rgba(255,110,30,.75),0 .06em .1em rgba(0,0,0,.8)}
+.r-SSSR .lines{margin-top:.75em;color:#ffe2c0;font-size:.78em;line-height:1.85;letter-spacing:.08em;text-shadow:0 .05em .12em #000,0 0 .5em rgba(0,0,0,.85)}
+.r-SSSR .rule{display:block;width:5.5em;height:.55em;margin:.55em auto 0}
+.r-SSSR .foot{color:#ffcf8a;opacity:.85;bottom:1.45em;text-shadow:0 .05em .2em #000}
+.fseal{right:1.35em;bottom:2.75em}
+.fseal .p{background:radial-gradient(circle at 35% 30%,#c4231c,#8e0d10 70%);color:#ffe2c6;box-shadow:inset 0 0 0 .09em #8e0d10,inset 0 0 0 .15em rgba(255,226,198,.8),0 .05em .12em rgba(0,0,0,.6)}
+.card.sm.r-SSSR .ct{padding:0;justify-content:center}
+.card.sm.r-SSSR .fhalo,.card.sm.r-SSSR .fcirc{top:50%}
+.card.sm.r-SSSR .glyph{font-size:6.5em}
+.card.sm .rule{display:none}
+
+/* 樣張頁 */
+.cell .lab .nw{display:inline-block;margin-left:6px;padding:0 6px;border-radius:99px;background:#d8b25a;color:#221206;font-size:10px;letter-spacing:.1em;vertical-align:2px}
+.cell .why{max-width:300px;font-size:12px;line-height:1.75;color:var(--mute);letter-spacing:.04em;text-align:left;margin-top:2px}
+.mini{display:flex;gap:10px;justify-content:center;grid-column:1/-1}
+
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute;left:-9px;top:-9px" aria-hidden="true">
+<defs>
+ <filter id="roughS" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="4" result="t"/><feDisplacementMap in="SourceGraphic" in2="t" scale=".9" xChannelSelector="R" yChannelSelector="G"/></filter>
+ <filter id="roughT" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".55" numOctaves="2" seed="9" result="t"/><feDisplacementMap in="SourceGraphic" in2="t" scale="2.2" xChannelSelector="R" yChannelSelector="G"/></filter>
+ <filter id="inkwear" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".16" numOctaves="3" seed="7" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -5.2 3.7" result="m"/><feComposite in="SourceGraphic" in2="m" operator="in"/></filter>
+ <linearGradient id="gMetal" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="150" y2="240">
+  <stop offset="0" stop-color="#6b1d06"/><stop offset=".1" stop-color="#ffd690"/><stop offset=".2" stop-color="#a5400f"/><stop offset=".34" stop-color="#ffecc0"/><stop offset=".46" stop-color="#b44d18"/><stop offset=".6" stop-color="#ffd28a"/><stop offset=".72" stop-color="#8a2c0a"/><stop offset=".86" stop-color="#ffe2a6"/><stop offset="1" stop-color="#5a1604"/>
+ </linearGradient>
+ <linearGradient id="gMetalS" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#fff0c8"/><stop offset=".4" stop-color="#f2b25a"/><stop offset=".55" stop-color="#9a3410"/><stop offset=".8" stop-color="#ffcf86"/><stop offset="1" stop-color="#7a240a"/>
+ </linearGradient>
+
+ <!-- 符紙：朱砂框、符頭雲紋、四角回紋、符膽 -->
+ <g id="nC" fill="none"><path d="M16.6 33V16.6H33" stroke-width=".95"/><path d="M20 28.5V20H28.5V25H24V22.6" stroke-width=".75"/></g>
+ <g id="nOrn" fill="none" stroke="#a8281b" stroke-linecap="round" stroke-linejoin="round" filter="url(#roughS)">
+  <rect x="9.5" y="9.5" width="131" height="221" stroke-width="2.5"/>
+  <rect x="13.4" y="13.4" width="123.2" height="213.2" stroke-width=".7"/>
+  <use href="#nC"/><use href="#nC" transform="translate(150 0) scale(-1 1)"/><use href="#nC" transform="translate(0 240) scale(1 -1)"/><use href="#nC" transform="translate(150 240) scale(-1 -1)"/>
+  <!-- 符頭 -->
+  <path d="M61 29.5C60 22 69 18.5 75 23.5C81 18.5 90 22 89 29.5" stroke-width="1.6"/>
+  <path d="M61 29.5C56 30 53.5 25 57.5 22.6C60.5 21 62.6 24.4 60 25.6" stroke-width="1.2"/>
+  <path d="M89 29.5C94 30 96.5 25 92.5 22.6C89.5 21 87.4 24.4 90 25.6" stroke-width="1.2"/>
+  <path d="M47 32.6H103" stroke-width="1.1"/>
+  <path d="M47 32.6C43 32.6 42 28.6 45.2 28" stroke-width=".9"/><path d="M103 32.6C107 32.6 108 28.6 104.8 28" stroke-width=".9"/>
+  <path d="M68.5 18.2q1.6-4.2 4.4-1.6M73.6 15.6q1.4-4.6 4.4-1.4M78.6 17q1.8-3.8 4.2-1" stroke-width="1.05"/>
+  <!-- 符膽（下方筆畫） -->
+  <path d="M75 165.5C64 168 63 175.5 74 177.5C86 179.5 86 187 75 189C68 190.3 66.5 194 70.5 196.5" stroke-width="2.1"/>
+  <path d="M58 172l4 1.2M92 172l-4 1.2M57 182l4.2-.6M93 182l-4.2-.6" stroke-width="1"/>
+  <circle cx="75" cy="161.5" r="1.05" fill="#a8281b" stroke="none"/>
+ </g>
+ <g id="nSeal" filter="url(#inkwear)">
+  <rect x="2" y="2" width="36" height="36" rx="2.6" fill="#b3241a"/>
+  <rect x="5" y="5" width="30" height="30" rx="1.2" fill="none" stroke="#fff" stroke-width="1.15"/>
+  <text x="20" y="29.6" text-anchor="middle" font-family="Cactus Classical Serif,serif" font-size="24.5" fill="#fff">倫</text>
+ </g>
+
+ <!-- 火：金屬框 -->
+ <path id="fFl" d="M0 4.2C-4.2 1.4-3.4-4-0.2-8.6C-0.4-5.2 1.8-4.2 2.4-2C3-3.9 3.1-5.1 4-6.3C5.4-1.2 3.8 3.2 0 4.2Z"/>
+ <g id="fC">
+  <path d="M3.6 44V15Q3.6 3.6 15 3.6H44" fill="none" stroke="url(#gMetal)" stroke-width="3.4"/>
+  <path d="M3.6 44V15Q3.6 3.6 15 3.6H44" fill="none" stroke="#2a0602" stroke-width=".35" opacity=".7"/>
+  <path d="M12.5 38C12.5 24 17.5 15 30 12.5" fill="none" stroke="url(#gMetal)" stroke-width=".85"/>
+  <path d="M16.5 33C17.5 25 21 20.5 26 18.5" fill="none" stroke="url(#gMetal)" stroke-width=".5"/>
+  <circle cx="44" cy="3.6" r="1.5" fill="url(#gMetalS)"/><circle cx="3.6" cy="44" r="1.5" fill="url(#gMetalS)"/>
+  <use href="#fFl" transform="translate(12.2 12.2) rotate(-45) scale(1.05)" fill="url(#gMetalS)" stroke="#3a0a02" stroke-width=".3"/>
+ </g>
+ <g id="fFrame">
+  <rect x="3.6" y="3.6" width="142.8" height="232.8" rx="7.5" fill="none" stroke="url(#gMetal)" stroke-width="2.4"/>
+  <rect x="2.2" y="2.2" width="145.6" height="235.6" rx="8.6" fill="none" stroke="#1a0301" stroke-width=".5" opacity=".8"/>
+  <rect x="8.6" y="8.6" width="132.8" height="222.8" rx="4.4" fill="none" stroke="url(#gMetal)" stroke-width=".7" opacity=".9"/>
+  <rect x="10.8" y="10.8" width="128.4" height="218.4" rx="3" fill="none" stroke="#ffa860" stroke-width=".3" opacity=".5" stroke-dasharray=".8 1.7"/>
+  <use href="#fC"/><use href="#fC" transform="translate(150 0) scale(-1 1)"/><use href="#fC" transform="translate(0 240) scale(1 -1)"/><use href="#fC" transform="translate(150 240) scale(-1 -1)"/>
+  <!-- 頂端銘牌 -->
+  <path d="M51 9L57.5 1.6H92.5L99 9L92.5 16.4H57.5Z" fill="#190402" stroke="url(#gMetal)" stroke-width="1"/>
+  <path d="M54.2 9L59 3.8H91L95.8 9L91 14.2H59Z" fill="none" stroke="#ffb46a" stroke-width=".3" opacity=".6"/>
+  <text x="75.9" y="11.4" text-anchor="middle" font-family="Cinzel,serif" font-weight="700" font-size="6.4" letter-spacing="1.8" fill="url(#gMetalS)">SSSR</text>
+  <!-- 左右腰飾 -->
+  <path d="M3.6 112L7.6 120L3.6 128L-.4 120Z" fill="url(#gMetalS)" stroke="#2a0602" stroke-width=".3"/>
+  <path d="M146.4 112L150.4 120L146.4 128L142.4 120Z" fill="url(#gMetalS)" stroke="#2a0602" stroke-width=".3"/>
+  <!-- 底部火紋 -->
+  <path d="M60 236.4H90" stroke="#190402" stroke-width="3.2"/>
+  <use href="#fFl" transform="translate(75 234.8) scale(1.5)" fill="url(#gMetalS)" stroke="#3a0a02" stroke-width=".25"/>
+ </g>
+</defs>
+</svg>
+<div id="app">
+  <div class="top"><h1>卡池重做預覽</h1><span class="ver">1127d</span></div>
+  <p class="sub">這版先只重做兩張樣張：<b style="color:var(--ink)">符紙（最普通）</b>和<b style="color:var(--ink)">火（最稀有）</b>。看精緻度方向對不對，對了再用同樣的做法重做其他五種。翻牌和稀有演出沒動。點卡片會放大，手指（或滑鼠）在卡上移動會傾斜反光。</p>
+  <div class="tabs"><button class="on" data-t="g">卡面</button><button data-t="d">抽卡</button><button data-t="f">回覆</button></div>
+
+  <section class="sec on" id="s-g">
+    <h2>樣張</h2>
+    <div class="grid" id="gal"></div>
+  </section>
+
+  <section class="sec" id="s-d">
+    <h2>直接看某一種演出</h2>
+    <div class="chips" id="reh"></div>
+    <p class="sub" style="margin-top:12px">機率照舊遊戲的感覺抓的（越稀有越難抽），只是試手感用，正式數字之後再定。抽卡花費統一用金幣。</p>
+    <p class="kbd">電腦鍵盤：空白鍵＝抽一張／翻開　T＝連抽十張　A＝全部翻開　Esc＝關閉</p>
+  </section>
+
+  <section class="sec" id="s-f">
+    <h2>樣張的方向對嗎</h2><p class="sub">「方向對」＝其他五種照這個精緻度去做。火的小印章：放大看火卡時，點右下角紅印章三下（或長按）。</p>
+    <div class="fb" id="fb"></div>
+    <textarea id="note" placeholder="想改哪裡直接寫，例如：符紙再舊一點、火的框太亮"></textarea>
+    <button class="btn b copy" id="copy">複製結果<small>貼回對話給我</small></button>
+  </section>
+</div>
+
+<div class="bar"><div class="in"><button class="btn a" id="b1">抽一張</button><button class="btn b" id="b10">連抽十張</button></div></div>
+
+<div id="stage">
+  <div class="dark"></div><div id="warm"></div><div id="rays"></div><div id="pillar"></div>
+  <div id="slot"></div>
+  <canvas id="fx"></canvas>
+  <div id="banner"><div class="en"></div><div class="zh"></div><div class="ln"></div></div>
+  <div id="flash"></div>
+  <div id="tip"></div>
+  <div id="sbar"><div class="in"><button class="btn a" id="sClose">收起來</button><button class="btn b" id="sAgain">再抽</button></div></div>
+</div>
+
+<div id="detail"><button class="x" id="dx">×</button><div class="dw" id="dw"></div><div class="info" id="dinfo"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const POOL={"N": [{"n": "謝謝惠顧", "g": "謝", "k": ["這張什麼都沒有。", "真的什麼都沒有。"]}, {"n": "我先去一下", "g": "廁", "k": ["本回合暫離。", "回來時間未知。"]}, {"n": "語無倫次", "g": "次", "k": ["這張想說什麼。", "它自己也不知道。"]}, {"n": "不倫不類", "g": "類", "k": ["不是 R，不是 SR。", "什麼都不是。"]}, {"n": "倫胎", "g": "胎", "k": ["洩氣了。", "打氣中，請稍候。"]}, {"n": "倫空", "g": "空", "k": ["本回合輪空。", "什麼都沒發生。"]}, {"n": "倫值", "g": "值", "k": ["今天你值日。", "請把卡池掃乾淨。"]}, {"n": "已讀不倫", "g": "讀", "k": ["已讀了。", "回覆時間未知。"]}, {"n": "倫敦霧", "g": "霧", "k": ["一片大霧。", "什麼都看不清。"]}, {"n": "沉倫", "g": "沉", "k": ["越抽越深。", "還在往下沉。"]}, {"n": "倫番上陣", "g": "番", "k": ["輪番上陣。", "全部沒用。"]}, {"n": "一團空氣", "g": "團", "k": ["抽到一團空氣。", "至少很新鮮。"]}, {"n": "卡池的灰塵", "g": "塵", "k": ["卡池底部的灰塵。", "被你抽出來了。"]}, {"n": "等一下", "g": "等", "k": ["這張卡說：", "等一下。"]}, {"n": "再一場", "g": "再", "k": ["打完這場就睡。", "又開了一場。"]}, {"n": "手滑", "g": "滑", "k": ["手滑了一下。", "就變成這張。"]}, {"n": "資源回倫", "g": "收", "k": ["可回收物。", "但沒有人要回收。"]}, {"n": "倫休", "g": "休", "k": ["今天輪休。", "打了一整天遊戲。"]}], "R": [{"n": "你急什麼急", "g": "急", "k": ["對所有催促免疫。", "冷卻 0 秒。"]}, {"n": "我先呼吸一下", "g": "倫", "k": ["跳過本回合。", "回復 1 點理智。"]}, {"n": "嘻嘻", "g": "嘻", "k": ["發動後三秒內，", "保證沒憋好屁。"]}, {"n": "i don kno", "g": "知", "k": ["i don kno。", "打字省了三個字母，", "省下的時間拿去急。"]}, {"n": "u kno", "g": "你", "k": ["u kno。", "你知道的。", "雖然沒人知道是什麼。"]}, {"n": "i don car", "g": "車", "k": ["i don car。", "我不在乎。", "也沒有車。"]}, {"n": "冷死倫", "g": "冷", "k": ["冷死倫。", "冷氣開 16 度。"]}, {"n": "氣死倫", "g": "氣", "k": ["氣死倫。", "但還是回了。"]}, {"n": "海狗・狗哥", "g": "狗", "k": ["我們共同的朋友。", "有他在，就有梗。"], "f": "FRIEND", "fr": 1}, {"n": "lundon bridge", "g": "橋", "k": ["lundon bridge", "is falling down."]}, {"n": "倫巴", "g": "巴", "k": ["跳一支倫巴。", "舞步全部亂掉。"]}, {"n": "倫理課", "g": "理", "k": ["講道理。", "但只講自己的。"]}, {"n": "天倫之樂", "g": "樂", "k": ["全家聚在一起。", "你在打遊戲。"]}, {"n": "羽扇倫巾", "g": "扇", "k": ["羽扇綸巾，", "談笑間，", "遊戲已經輸了。"]}, {"n": "論點", "g": "論", "k": ["論點一：我沒錯。", "論點二：同上。"]}, {"n": "倫壇", "g": "壇", "k": ["發文一篇。", "回覆零則。"]}, {"n": "睡過頭", "g": "睡", "k": ["鬧鐘響了五次。", "你贏了鬧鐘。"]}, {"n": "秒回", "g": "秒", "k": ["打遊戲的時候，", "回得特別快。"]}, {"n": "倫盤", "g": "盤", "k": ["轉一下輪盤。", "指到再轉一次。"]}, {"n": "齒倫", "g": "齒", "k": ["腦中齒輪轉動。", "卡住了。"]}, {"n": "就事倫事", "g": "事", "k": ["就事論事。", "事情先放一邊。"]}, {"n": "晚安", "g": "安", "k": ["說了晚安。", "又上線了。"]}, {"n": "倫生如戲", "g": "戲", "k": ["倫生如戲。", "每天都在加戲。"]}, {"n": "雲淡倫輕", "g": "淡", "k": ["雲淡風輕。", "劫數也是。"]}], "SR": [{"n": "自問自答", "g": "答", "k": ["自己出題，自己作答。", "正確率百分之百。"]}, {"n": "熟倫生巧克力", "g": "巧", "k": ["練了很久。", "練成一塊巧克力。"]}, {"n": "無與倫比", "g": "比", "k": ["無人能比。", "因為沒人跟你比。"]}, {"n": "各倫意見", "g": "各", "k": ["每個倫都是獨立的個體。", "有想法須表示時，", "稱之為各倫意見。"], "f": "倫語・治人之道"}, {"n": "各倫有各倫的命", "g": "命", "k": ["各倫有各倫的命。", "抽到這張，", "也是命。"]}, {"n": "再冷", "g": "暖", "k": ["再冷，", "也不能拿別倫的血，", "來暖自己。"]}, {"n": "笑容轉移", "g": "笑", "k": ["笑容從你的臉上，", "又轉移到倫的臉上。"]}, {"n": "女倫", "g": "女", "k": ["女倫駕到。", "全場安靜。"]}, {"n": "仙倫", "g": "仙", "k": ["仙氣飄飄。", "但還是很急。"]}, {"n": "超倫", "g": "超", "k": ["超越倫類。", "還是倫。"]}, {"n": "咄咄逼倫", "g": "逼", "k": ["一句接一句，", "倫被逼到牆角。"]}, {"n": "u tru me", "g": "踹", "k": ["u tru me。", "倫都說她會踹我。"]}, {"n": "倫敦鐵橋垮下來", "g": "垮", "k": ["倫敦鐵橋垮下來，", "垮下來，垮下來。", "倫的臉垮下來。"]}, {"n": "己所不欲要施於倫", "g": "施", "k": ["己所不欲，", "要施於倫。", "倫：？"]}, {"n": "嚴以律倫，寬以待己", "g": "律", "k": ["嚴以律倫，", "寬以待己。", "雙重標準，一律適用。"]}, {"n": "倫無完倫", "g": "完", "k": ["倫無完倫。", "缺點有點多，", "但都很可愛。"]}, {"n": "倫非聖賢孰能無過", "g": "過", "k": ["倫非聖賢，", "孰能無過。", "過完再犯一次。"]}, {"n": "精妙絕倫", "g": "妙", "k": ["精妙的操作。", "沒有人看到。"]}], "SSR": [{"n": "好便友", "g": "便", "k": ["對方一蹲下，", "你的訊息就到。"]}, {"n": "瘋火倫", "g": "輪", "k": ["腳踩火輪，極速旋轉。", "位移距離零。"]}, {"n": "天有不測瘋雲", "g": "雲", "k": ["召喚雲。", "倫的劫數，立刻開始。"]}, {"n": "無倫可擋", "g": "擋", "k": ["無倫可擋。", "什麼都擋不住你。", "包括你自己。"]}, {"n": "倫娜妲・格萊斯克", "g": "娜", "k": ["合約已經簽好了。", "裝備：聖光美德。"], "champ": 1, "f": "LEAGUE OF LEGENDS"}, {"n": "倫定勝天", "g": "天", "k": ["倫定勝天。", "天說，好啊。"]}, {"n": "超乎常倫", "g": "常", "k": ["超乎常倫。", "這波操作，", "沒人看得懂。"]}, {"n": "無語倫比的美麗", "g": "麗", "k": ["無語倫比的美麗。", "美到說不出話。"]}, {"n": "輔倫之王", "g": "輔", "k": ["開團、保人、插眼。", "一個人做三個人的事。", "功勞全給隊友。"]}, {"n": "中倫之神", "g": "神", "k": ["中路站著一個倫。", "對面不敢上前。", "倫說：基本操作。"]}, {"n": "倫外有倫", "g": "外", "k": ["倫外有倫，", "天外有天。", "雲外有雲。"]}], "SP": [{"n": "英倫瘋・染髮卡", "g": "染", "k": ["今天又換新髮色。", "全家都要看一眼。"]}, {"n": "金達・老兵集合", "g": "兵", "k": ["一聲集合，", "全員到齊。"]}, {"n": "英倫瘋・叮嚀", "g": "叮", "k": ["出門記得帶外套。", "同一句，說了三次。"]}, {"n": "金達・泡茶", "g": "茶", "k": ["茶泡好了。", "坐下來，先喝一杯。"]}], "GOLD": [{"n": "美倫美奐", "g": "美", "k": ["金碧輝煌。", "連抽卡的這隻手，", "都鍍了一層金。"]}], "ORNG": [{"n": "倫回", "g": "回", "k": ["抽完一輪，", "又是一輪。", "劫數生生不息。"]}], "ULT": [{"n": "風水倫流轉", "g": "轉", "k": ["前面的劫數都算數。", "風水轉了一圈，", "終於倫到你。"]}], "IDOL": [{"n": "SUPER 倫 IDOL", "g": "倫", "k": ["出道即巔峰。", "巔峰即退休。"]}], "SSSR": [{"n": "火", "g": "火", "k": ["點火的人。", "倫的每個劫數，", "都從她開始燒起。"]}]};
+const ORDER=['N','R','SR','SSR','SP','GOLD','ORNG','ULT','IDOL','SSSR'];
+const INFO={
+ N:{lv:0,zh:'符紙',en:'N',c:'#f0d58c'},
+ R:{lv:1,zh:'魔咒卡',en:'R',c:'#bcd0ff'},
+ SR:{lv:2,zh:'咒語卷軸',en:'SR',c:'#b77cff'},
+ SSR:{lv:3,zh:'金卷軸',en:'SSR',c:'#ffd56a'},
+ SP:{lv:3,zh:'貓頭鷹信',en:'SP',c:'#ff4a5a'},
+ GOLD:{lv:4,zh:'魔法書',en:'LEGEND',c:'#ffd34d',book:1},
+ ORNG:{lv:4,zh:'魔法書',en:'MYTHIC',c:'#ff8a2a',book:1},
+ ULT:{lv:4,zh:'魔法書',en:'ULTIMATE',c:'#8fe8ff',book:1},
+ IDOL:{lv:4,zh:'魔法書',en:'SUPER IDOL',c:'#ff6fc8',book:1},
+ SSSR:{lv:5,zh:'火焰咒印',en:'SSSR',c:'#ff5a1a'}};
+const DESC={
+ N:'泛黃的符紙，朱砂紅字，角落蓋一個印。正中間有一道摺痕。',
+ R:'深藍的魔咒卡，銀色邊框，字後面的符文圈會慢慢轉。',
+ SR:'羊皮紙卷軸，上下是木頭卷軸，掛一條紫色緞帶。',
+ SSR:'黑漆金卷軸，金色卷軸和花框，一道金光會從紙面掃過。',
+ SP:'貓頭鷹送來的信，紅色蠟封壓著卡上的字，旁邊有郵戳。',
+ BOOK:'皮革魔法書，書背鑲一顆寶石，書封會隨角度泛出彩光。四張各一種顏色。',
+ SSSR:'火焰咒印，底下的火一直在燒，字像剛從火裡拿出來。'};
+const W={N:38,R:30,SR:16,SSR:8,SP:4,GOLD:.9,ORNG:.9,ULT:.9,IDOL:.9,SSSR:.8};
+const ALL=[];let _no=0;ORDER.forEach(r=>POOL[r].forEach(c=>ALL.push(Object.assign({},c,{r,no:++_no}))));
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+
+/* ---------- 撕邊（符紙） ---------- */
+(function(){let p=[],s=7;const rnd=()=>{s=(s*9301+49297)%233280;return s/233280};
+ for(let x=0;x<=100;x+=2.5)p.push(`${x}% ${(rnd()*1.5).toFixed(2)}%`);
+ for(let x=100;x>=0;x-=2.5)p.push(`${x}% ${(100-rnd()*1.5).toFixed(2)}%`);
+ const st=document.createElement('style');st.textContent=`.r-N .front{clip-path:polygon(${p.join(',')})}`;document.head.appendChild(st)})();
+
+/* ---------- 共用 SVG ---------- */
+const RUNES=['M0-2.5V2.5M0-1L2-2.5','M-1.5-2.5V2.5M-1.5-2.5L1.5 0L-1.5 2.5','M0-2.5V2.5M-2-1L2 1','M-2-2.5L2 2.5M2-2.5L-2 2.5','M0-2.5V2.5M0 0L2-2M0 0L-2-2','M-2-2.5H2L-2 2.5H2','M-1.5-2.5V2.5H1.5','M0-2.5L2 0L0 2.5L-2 0Z'];
+const RUNE_SVG=(()=>{let s='<svg class="rune" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">';
+ s+='<circle cx="50" cy="50" r="48.5" stroke-width=".5"/><circle cx="50" cy="50" r="38" stroke-width=".9"/><circle cx="50" cy="50" r="36.4" stroke-width=".35" stroke-dasharray="1 1.6"/>';
+ for(let i=0;i<30;i++){s+=`<g transform="rotate(${i*12} 50 50) translate(50 6.8)"><path d="${RUNES[(i*5+i%3)%8]}" stroke-width=".7"/></g>`}
+ s+='<g class="in">';const tri=o=>[0,1,2].map(k=>{const a=(o+k*120-90)*Math.PI/180;return (50+33*Math.cos(a)).toFixed(2)+','+(50+33*Math.sin(a)).toFixed(2)}).join(' ');
+ s+=`<polygon points="${tri(0)}" stroke-width=".45"/><polygon points="${tri(60)}" stroke-width=".45"/><circle cx="50" cy="50" r="19" stroke-width=".4"/>`;
+ for(let i=0;i<6;i++){const a=(i*60-90)*Math.PI/180;s+=`<circle cx="${(50+33*Math.cos(a)).toFixed(2)}" cy="${(50+33*Math.sin(a)).toFixed(2)}" r="1.4" stroke-width=".5"/>`}
+ return s+'</g></g></svg>'})();
+const ORN='<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M3 3H22M3 3V22" stroke-width="1.6"/><path d="M7 7H17M7 7V17" stroke-width=".8"/><path d="M7 7C16 7 19 12 16 16C13 19 9 16 11 13C12.5 11 15 12 14.5 14" stroke-width="1"/><circle cx="24.5" cy="3" r="1.3" fill="currentColor"/><circle cx="3" cy="24.5" r="1.3" fill="currentColor"/></svg>';
+const CREST='<svg viewBox="0 0 100 100" fill="none" stroke="currentColor"><circle cx="50" cy="50" r="47" stroke-width="1.1"/><circle cx="50" cy="50" r="43" stroke-width=".5" stroke-dasharray="1.2 2.2"/><circle cx="50" cy="50" r="31" stroke-width=".7"/>'+
+ Array.from({length:12},(_,i)=>{const a=(i*30-90)*Math.PI/180,x=50+37*Math.cos(a),y=50+37*Math.sin(a);return i%3===0?`<path d="M${x} ${y-2.6}L${x+.8} ${y-.8}L${x+2.6} ${y}L${x+.8} ${y+.8}L${x} ${y+2.6}L${x-.8} ${y+.8}L${x-2.6} ${y}L${x-.8} ${y-.8}Z" fill="currentColor" stroke="none"/>`:`<circle cx="${x}" cy="${y}" r=".9" fill="currentColor" stroke="none"/>`}).join('')+
+ '<path d="M50 3V-6M50 97V106M3 50H-6M97 50H106" stroke-width=".6"/></svg>';
+const BACK=`<div class="bf"></div><div class="bf2"></div><div class="bt" style="top:1.9em">HOGWARTS OF FIRE</div><div class="crest">${CREST}<div class="cw">倫</div></div><div class="bt" style="bottom:1.9em">· 倫 生 ·</div>`;
+
+function decor(c){
+ const r=c.r;
+ if(r==='N')return '<div class="ptex"></div><svg class="nsv" viewBox="0 0 150 240" preserveAspectRatio="none"><use href="#nOrn"/></svg><svg class="nseal" viewBox="0 0 40 40"><use href="#nSeal"/></svg>';
+ if(r==='R')return '<div class="rf"></div>'+RUNE_SVG;
+ if(r==='SR')return '<div class="paper"></div><div class="roll t"></div><div class="roll b"></div><div class="rib"></div>';
+ if(r==='SSR')return '<div class="paper"><div class="ssl"></div>'+['a','b','c','d'].map(k=>`<div class="orn ${k}">${ORN}</div>`).join('')+'<div class="sheen"></div></div><div class="roll t"></div><div class="roll b"></div>';
+ if(r==='SP')return '<div class="side"></div><div class="fl2"></div><div class="fl"></div><div class="wax"><b>'+esc(c.g)+'</b></div><div class="pm">OWL<br>POST</div>';
+ if(INFO[r].book)return '<div class="spine"></div><div class="gem"></div><div class="bkf"></div><div class="bkc a"></div><div class="bkc b"></div><div class="holo"></div>';
+ if(r==='SSSR')return '<div class="ftex"></div><div class="fcr"></div><div class="fhalo"></div>'+FCIRC+'<canvas class="fcv"></canvas><svg class="ffr" viewBox="0 0 150 240" preserveAspectRatio="none"><use href="#fFrame"/></svg><div class="fseal"><i class="p">焰火</i><i class="q">艷火</i></div>';
+ return '';
+}
+function cardEl(c,o={}){
+ const I=INFO[c.r],d=document.createElement('div');
+ d.className=`card r-${c.r}${I.book?' book':''}${o.up?' up':''}${o.sm?' sm':''}`;
+ d.style.setProperty('--w',(o.w||240)+'px');d.style.setProperty('--gc',I.c);
+ const L=c.n.length,nc=L>7?' l2':L>5?' l1':'';
+ d.innerHTML=`<div class="hint"></div><div class="inner"><div class="face back">${BACK}</div><div class="face front">${decor(c)}<div class="ct"><div class="tier">${I.en}</div><div class="glyph">${esc(c.g)}</div><div class="name${nc}">${esc(c.n)}</div>${c.r==='SSSR'?FRULE:''}<div class="lines">${c.k.map(x=>`<span>${esc(x)}</span>`).join('')}</div></div><div class="foot">NO.${String(c.no).padStart(2,'0')} ・ ${I.zh}</div><div class="gloss"></div></div></div>`;
+ d._c=c;if(c.r==='SSSR'&&!o.sm)mountFlame(d);return d;
+}
+
+
+/* ---------- 1127d：材質（程式即時畫一次，存成圖片給每張卡共用） ---------- */
+function rng(s){return()=>{s=(s*16807)%2147483647;return(s-1)/2147483646}}
+function mkCv(w,h){const c=document.createElement('canvas');c.width=w;c.height=h;return c}
+function useTex(name,cv){const put=u=>document.documentElement.style.setProperty(name,`url(${u})`);
+ if(cv.toBlob)cv.toBlob(b=>{if(b)put(URL.createObjectURL(b));else put(cv.toDataURL())},'image/png');else put(cv.toDataURL())}
+/* 符紙：撕邊、纖維、斑駁、水漬、摺痕、邊緣老化 */
+function genPaper(){const W=640,H=1024,m=16,R=rng(11),c=mkCv(W,H),x=c.getContext('2d');const pts=[];
+ const edge=(x0,y0,x1,y1,amp,nx,ny)=>{const L=Math.hypot(x1-x0,y1-y0),n=Math.ceil(L/2),K=[];for(let i=0;i<n/6+3;i++)K.push(R());
+  for(let i=0;i<n;i++){const t=i/n,k=t*(K.length-2),k0=k|0,f=k-k0,s=f*f*(3-2*f),v=K[k0]*(1-s)+K[k0+1]*s,off=(v*.8+R()*.25)*amp;pts.push([x0+(x1-x0)*t+nx*off,y0+(y1-y0)*t+ny*off])}};
+ edge(m,m,W-m,m,11,0,1);edge(W-m,m,W-m,H-m,3.5,-1,0);edge(W-m,H-m,m,H-m,11,0,-1);edge(m,H-m,m,m,3.5,1,0);
+ const path=()=>{x.beginPath();pts.forEach((p,i)=>i?x.lineTo(p[0],p[1]):x.moveTo(p[0],p[1]));x.closePath()};
+ x.save();x.shadowColor='rgba(15,5,0,.6)';x.shadowBlur=20;x.shadowOffsetY=7;path();x.fillStyle='#e2c487';x.fill();x.restore();
+ x.save();path();x.clip();
+ let g=x.createLinearGradient(0,0,W*.3,H);g.addColorStop(0,'#f4e2b2');g.addColorStop(.5,'#ebd298');g.addColorStop(1,'#d9b675');x.fillStyle=g;x.fillRect(0,0,W,H);
+ g=x.createRadialGradient(W*.46,H*.38,0,W*.46,H*.38,H*.62);g.addColorStop(0,'rgba(255,249,226,.42)');g.addColorStop(1,'rgba(255,249,226,0)');x.fillStyle=g;x.fillRect(0,0,W,H);
+ for(let i=0;i<80;i++){const px=R()*W,py=R()*H,r=30+R()*170,d=R()<.62,a=.018+R()*.05;g=x.createRadialGradient(px,py,0,px,py,r);g.addColorStop(0,d?`rgba(150,96,34,${a})`:`rgba(255,247,220,${a*1.3})`);g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(px-r,py-r,r*2,r*2)}
+ x.lineCap='round';
+ for(let i=0;i<3600;i++){const px=R()*W,py=R()*H,l=4+R()*R()*44,a=R()*6.283,cu=(R()-.5)*l*.9,d=R()<.55,ex=px+Math.cos(a)*l,ey=py+Math.sin(a)*l;
+  x.strokeStyle=d?`rgba(118,76,28,${.035+R()*.08})`:`rgba(255,251,236,${.06+R()*.16})`;x.lineWidth=.35+R()*1.1;x.beginPath();x.moveTo(px,py);x.quadraticCurveTo((px+ex)/2-Math.sin(a)*cu,(py+ey)/2+Math.cos(a)*cu,ex,ey);x.stroke()}
+ for(let i=0;i<2;i++){const px=i?W*.82:W*.2,py=i?H*.16:H*.8,r=46+R()*40;g=x.createRadialGradient(px,py,r*.78,px,py,r);g.addColorStop(0,'rgba(140,90,30,0)');g.addColorStop(.88,'rgba(140,88,28,.06)');g.addColorStop(1,'rgba(140,90,30,0)');x.fillStyle=g;x.beginPath();x.arc(px,py,r,0,6.283);x.fill()}
+ for(let i=0;i<26;i++){const px=R()*W,py=R()*H,r=.6+R()*2.2;x.fillStyle=`rgba(90,50,15,${.15+R()*.3})`;x.beginPath();x.arc(px,py,r,0,6.283);x.fill()}
+ const crH=(y,a)=>{g=x.createLinearGradient(0,y-12,0,y+12);g.addColorStop(0,'rgba(110,70,25,0)');g.addColorStop(.46,`rgba(110,70,25,${a})`);g.addColorStop(.52,`rgba(255,251,232,${a*1.7})`);g.addColorStop(1,'rgba(255,251,232,0)');x.fillStyle=g;x.fillRect(0,y-12,W,24)};
+ const crV=(X,a)=>{g=x.createLinearGradient(X-10,0,X+10,0);g.addColorStop(0,'rgba(110,70,25,0)');g.addColorStop(.46,`rgba(110,70,25,${a})`);g.addColorStop(.52,`rgba(255,251,232,${a*1.6})`);g.addColorStop(1,'rgba(255,251,232,0)');x.fillStyle=g;x.fillRect(X-10,0,20,H)};
+ crH(H*.5,.17);crV(W*.5,.07);crH(H*.25,.05);
+ const id=x.getImageData(0,0,W,H),d=id.data;for(let i=0;i<d.length;i+=4){if(d[i+3]<250)continue;const n=(R()-.5)*15;d[i]+=n;d[i+1]+=n;d[i+2]+=n*.8}x.putImageData(id,0,0);
+ [[70,.045],[38,.06],[20,.075],[9,.1],[3.5,.17]].forEach(([w,a])=>{path();x.lineWidth=w;x.strokeStyle=`rgba(118,62,18,${a})`;x.stroke()});
+ x.restore();
+ path();x.lineWidth=1.3;x.strokeStyle='rgba(255,247,224,.6)';x.stroke();
+ x.lineCap='round';pts.forEach((p,i)=>{if(R()<.35){const top=p[1]<H/2,side=Math.abs(p[0]-W/2)>W/2-m-6&&Math.abs(p[1]-H/2)<H/2-m-14;if(side)return;const l=1.5+R()*4.5,a=(top?-1.57:1.57)+(R()-.5)*1.6;x.strokeStyle=`rgba(244,228,186,${.35+R()*.4})`;x.lineWidth=.5+R()*.6;x.beginPath();x.moveTo(p[0],p[1]);x.lineTo(p[0]+Math.cos(a)*l,p[1]+Math.sin(a)*l);x.stroke()}});
+ return c}
+/* 火：黑曜石底＋熔岩裂紋（底圖一張、發光一張，發光那張會慢慢呼吸） */
+function genFire(){const W=640,H=1024,R=rng(29),b=mkCv(W,H),x=b.getContext('2d'),gc=mkCv(W,H),y=gc.getContext('2d');
+ x.fillStyle='#0c0403';x.fillRect(0,0,W,H);
+ let g=x.createRadialGradient(W/2,H*1.04,0,W/2,H*1.04,H*.8);g.addColorStop(0,'rgba(150,34,6,.75)');g.addColorStop(.45,'rgba(80,14,3,.45)');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(0,0,W,H);
+ g=x.createRadialGradient(W/2,H*.27,0,W/2,H*.27,W*.55);g.addColorStop(0,'rgba(90,24,8,.55)');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(0,0,W,H);
+ for(let i=0;i<110;i++){const px=R()*W,py=R()*H,r=20+R()*120,a=.03+R()*.07;g=x.createRadialGradient(px,py,0,px,py,r);g.addColorStop(0,R()<.5?`rgba(85,48,36,${a})`:`rgba(0,0,0,${a*2})`);g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(px-r,py-r,r*2,r*2)}
+ const id=x.getImageData(0,0,W,H),d=id.data;for(let i=0;i<d.length;i+=4){const n=(R()-.5)*18;d[i]+=n;d[i+1]+=n*.8;d[i+2]+=n*.7}x.putImageData(id,0,0);
+ const cracks=[];const walk=(px,py,a,n,w)=>{const P=[[px,py]];for(let i=0;i<n;i++){a+=(R()-.5)*.95;const s=6+R()*7;px+=Math.cos(a)*s;py+=Math.sin(a)*s;P.push([px,py]);if(R()<.07&&w>.45)walk(px,py,a+(R()<.5?-1:1)*(.6+R()*.6),n*.45|0,w*.65)}cracks.push({P,w})};
+ for(let i=0;i<30;i++){const py=H*(1-Math.pow(R(),1.7)*.98);walk(R()*W,py,-1.57+(R()-.5)*2.4,14+R()*36|0,.8+R()*.5)}
+ const heat=py=>Math.max(0,Math.min(1,(py/H-.18)/.82))**1.35;
+ x.lineCap=y.lineCap='round';x.lineJoin=y.lineJoin='round';
+ cracks.forEach(({P,w})=>{for(let i=0;i<P.length-1;i+=4){const seg=P.slice(i,i+5),h=heat(seg[0][1]);const ln=(c,lw)=>{c.beginPath();seg.forEach((p,j)=>j?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1]));c.lineWidth=lw;c.stroke()};
+  x.strokeStyle='rgba(2,0,0,.85)';ln(x,4.2*w);x.strokeStyle='rgba(110,52,34,.35)';x.save();x.translate(-1,-1);ln(x,1.2*w);x.restore();
+  y.shadowColor=`rgba(255,70,8,${.9*h})`;y.shadowBlur=16;y.strokeStyle=`rgba(255,84,16,${.12+.7*h})`;ln(y,3.2*w);
+  y.shadowBlur=0;y.strokeStyle=`rgba(255,190,100,${.08+.9*h})`;ln(y,1.3*w);y.strokeStyle=`rgba(255,246,214,${h*h})`;ln(y,.55*w)}});
+ x.globalAlpha=.32;x.drawImage(gc,0,0);x.globalAlpha=1;
+ return [b,gc]}
+let TEX_DONE=0;function makeTex(){if(TEX_DONE)return;TEX_DONE=1;try{useTex('--texN',genPaper());const [a,b]=genFire();useTex('--texF',a);useTex('--texF2',b)}catch(e){(window.__errs||[]).push('tex '+e.message)}}
+
+/* 火：背後的八卦咒陣（離卦在正上方，比較亮） */
+const FCIRC=(()=>{const T=[[1,0,1],[0,0,0],[1,1,0],[1,1,1],[0,1,0],[0,0,1],[1,0,0],[0,1,1]];let s='<g fill="none" stroke="currentColor" stroke-linecap="round">';
+ s+='<circle cx="50" cy="50" r="48" stroke-width=".55"/><circle cx="50" cy="50" r="45.4" stroke-width=".3"/><circle cx="50" cy="50" r="31.5" stroke-width=".5"/><circle cx="50" cy="50" r="29.6" stroke-width=".25" stroke-dasharray=".6 1.2"/>';
+ for(let i=0;i<72;i++){const a=i*5*Math.PI/180,r1=45.4,r2=i%2?46.6:47.6;s+=`<path d="M${(50+r1*Math.cos(a)).toFixed(2)} ${(50+r1*Math.sin(a)).toFixed(2)}L${(50+r2*Math.cos(a)).toFixed(2)} ${(50+r2*Math.sin(a)).toFixed(2)}" stroke-width=".3"/>`}
+ T.forEach((t,i)=>{const a=(i*45-90)*Math.PI/180,ca=Math.cos(a),sa=Math.sin(a),tx=-sa,ty=ca,hot=i===0;
+  t.forEach((yang,j)=>{const r=34.2+j*3.3,cx=50+r*ca,cy=50+r*sa,L=4.6+j*.5;const seg=(u0,u1)=>`<path d="M${(cx+tx*u0).toFixed(2)} ${(cy+ty*u0).toFixed(2)}L${(cx+tx*u1).toFixed(2)} ${(cy+ty*u1).toFixed(2)}" stroke-width="${hot?1.5:1.05}"${hot?' stroke="#ffe2a8"':''}/>`;
+   s+=yang?seg(-L,L):seg(-L,-L*.22)+seg(L*.22,L)})});
+ for(let i=0;i<8;i++){const a=(i*45-67.5)*Math.PI/180;s+=`<circle cx="${(50+38.2*Math.cos(a)).toFixed(2)}" cy="${(50+38.2*Math.sin(a)).toFixed(2)}" r=".55" fill="currentColor" stroke="none"/>`}
+ return `<svg class="fcirc" viewBox="0 0 100 100">${s}</g></svg>`})();
+const FRULE='<svg class="rule" viewBox="0 0 110 11" fill="none" stroke="url(#gMetalS)" stroke-linecap="round"><path d="M4 5.5H44M66 5.5H106" stroke-width=".9"/><path d="M44 5.5C48 5.5 49 2 52 1.5M66 5.5C62 5.5 61 2 58 1.5" stroke-width=".8"/><use href="#fFl" transform="translate(55 7.2) scale(.95)" fill="url(#gMetalS)" stroke="none"/></svg>';
+
+/* 火：卡片下緣的真火（canvas，小卡不開；看不到時自動停） */
+const FLAMES=new Set();let flRaf=0;let SPR=null;
+function sprites(){if(SPR)return SPR;const mk=(a,b,c)=>{const s=mkCv(64,64),x=s.getContext('2d'),g=x.createRadialGradient(32,32,0,32,32,32);g.addColorStop(0,a);g.addColorStop(.4,b);g.addColorStop(1,c);x.fillStyle=g;x.fillRect(0,0,64,64);return s};
+ SPR=[mk('rgba(255,250,225,1)','rgba(255,205,110,.55)','rgba(255,140,40,0)'),mk('rgba(255,190,90,.95)','rgba(255,110,30,.45)','rgba(220,50,10,0)'),mk('rgba(255,96,30,.8)','rgba(190,30,8,.35)','rgba(120,10,0,0)')];return SPR}
+function mountFlame(card){const cv=card.querySelector('.fcv');if(!cv)return;FLAMES.add({card,cv,ps:[],miss:0});if(!flRaf)flRaf=requestAnimationFrame(flLoop)}
+function flLoop(){sprites();const dpr=Math.min(2,window.devicePixelRatio||1);
+ for(const f of FLAMES){const {card,cv}=f;if(!card.isConnected){if(++f.miss>180)FLAMES.delete(f);continue}f.miss=0;
+  if(!card.classList.contains('up')&&!card.classList.contains('flipped'))continue;
+  const w=cv.offsetWidth,h=cv.offsetHeight;if(!w)continue;const r=cv.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight)continue;
+  if(cv.width!==Math.round(w*dpr)){cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr)}
+  const x=cv.getContext('2d');x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,w,h);x.globalCompositeOperation='lighter';
+  const k=w/240,n=2+(Math.random()<.6);
+  for(let i=0;i<n;i++){const u=Math.random(),c=1-Math.abs(u-.5)*1.25;f.ps.push({x:w*(.02+u*.96),y:h+8*k,vx:(Math.random()-.5)*.35*k,vy:-(1.1+Math.random()*1.5)*k*(.6+c*.6),s:(22+Math.random()*26)*k*(.55+c*.6),l:0,m:38+Math.random()*30,e:0})}
+  if(Math.random()<.14)f.ps.push({x:w*(.1+Math.random()*.8),y:h-4*k,vx:(Math.random()-.5)*.5*k,vy:-(1.2+Math.random()*1.4)*k,s:1.4*k+Math.random()*k,l:0,m:70+Math.random()*50,e:1,ph:Math.random()*6});
+  for(const p of f.ps){p.l++;const t=p.l/p.m;p.x+=p.vx+(p.e?Math.sin(p.l*.12+p.ph)*.35*k:0);p.y+=p.vy;
+   if(p.e){x.globalAlpha=Math.max(0,1-t);x.fillStyle='#ffe3a6';x.beginPath();x.arc(p.x,p.y,p.s,0,6.283);x.fill();continue}
+   const sz=p.s*(1-t*.75),sp=SPR[t<.28?0:t<.6?1:2];x.globalAlpha=Math.sin(Math.min(1,t*1.4)*Math.PI)*.55;x.drawImage(sp,p.x-sz/2,p.y-sz/2,sz,sz*1.25)}
+  f.ps=f.ps.filter(p=>p.l<p.m);x.globalAlpha=1;x.globalCompositeOperation='source-over'}
+ flRaf=FLAMES.size?requestAnimationFrame(flLoop):0}
+
+/* ---------- 音效（Web Audio 即時合成） ---------- */
+let AC=null,MG=null;
+function ac(){if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)();MG=AC.createGain();MG.gain.value=.7;MG.connect(AC.destination)}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();return AC}
+function tone(f,t,d,type='sine',v=.2,f2){const a=ac();if(!a)return;const o=a.createOscillator(),g=a.createGain(),T=a.currentTime+t;o.type=type;o.frequency.setValueAtTime(f,T);if(f2)o.frequency.exponentialRampToValueAtTime(f2,T+d);g.gain.setValueAtTime(0,T);g.gain.linearRampToValueAtTime(v,T+.012);g.gain.exponentialRampToValueAtTime(.0008,T+d);o.connect(g);g.connect(MG);o.start(T);o.stop(T+d+.05)}
+let NB=null;function nbuf(){const a=ac();if(!NB){NB=a.createBuffer(1,a.sampleRate*2,a.sampleRate);const d=NB.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1}return NB}
+function noise(t,d,ft,f1,f2,v=.2,q=1){const a=ac();if(!a)return;const s=a.createBufferSource(),fl=a.createBiquadFilter(),g=a.createGain(),T=a.currentTime+t;s.buffer=nbuf();fl.type=ft;fl.Q.value=q;fl.frequency.setValueAtTime(f1,T);if(f2)fl.frequency.exponentialRampToValueAtTime(f2,T+d);g.gain.setValueAtTime(0,T);g.gain.linearRampToValueAtTime(v,T+d*.25);g.gain.exponentialRampToValueAtTime(.0008,T+d);s.connect(fl);fl.connect(g);g.connect(MG);s.start(T,Math.random());s.stop(T+d+.05)}
+const SND={
+ tap(){tone(1320,0,.06,'triangle',.08);tone(1980,.012,.05,'sine',.04)},
+ deal(){noise(0,.18,'bandpass',900,2600,.12,1.2)},
+ flip(){noise(0,.22,'bandpass',600,3200,.22,.9);tone(520,.02,.09,'triangle',.06,780)},
+ chime(lv){const N=[0,2,4,7,9,12,14,16,19,21];const base=lv>=4?523.25:lv>=3?440:392;const n=Math.min(3+lv,8);for(let i=0;i<n;i++){const f=base*Math.pow(2,N[i]/12);tone(f,i*.075,1.1,'triangle',.11);tone(f*2,i*.075+.01,.8,'sine',.04)}},
+ shine(){for(let i=0;i<6;i++)tone(2400+i*380,i*.04,.35,'sine',.03)},
+ rise(d){const a=ac();if(!a)return;const o=a.createOscillator(),fl=a.createBiquadFilter(),g=a.createGain(),T=a.currentTime;o.type='sawtooth';o.frequency.setValueAtTime(110,T);o.frequency.exponentialRampToValueAtTime(440,T+d);fl.type='lowpass';fl.frequency.setValueAtTime(300,T);fl.frequency.exponentialRampToValueAtTime(2400,T+d);g.gain.setValueAtTime(0,T);g.gain.linearRampToValueAtTime(.07,T+d*.8);g.gain.linearRampToValueAtTime(0,T+d+.05);o.connect(fl);fl.connect(g);g.connect(MG);o.start(T);o.stop(T+d+.1);noise(0,d,'bandpass',400,4000,.08,2)},
+ thump(){tone(140,0,.35,'sine',.35,42);noise(0,.12,'lowpass',900,200,.18)},
+ seal(){tone(180,0,.25,'sine',.3,60);noise(0,.08,'highpass',2500,null,.08);tone(880,.08,.3,'triangle',.05)},
+ boom(){tone(70,0,1.6,'sine',.4,32);noise(0,1.2,'lowpass',1200,120,.3)},
+ crackle(d){for(let t=0;t<d;t+=.02+Math.random()*.05)noise(t,.03+Math.random()*.03,'highpass',1800+Math.random()*3000,null,.05+Math.random()*.09)},
+ whoosh(){noise(0,.5,'bandpass',300,1800,.18,.7)},
+ fall(){tone(1800,0,.8,'sine',.05,900)}
+};
+
+/* ---------- 粒子 ---------- */
+const FX=$('#fx'),G=FX.getContext('2d');let PS=[],raf=0,DPR=Math.min(2,window.devicePixelRatio||1),emitters=[];
+function fxSize(){FX.width=innerWidth*DPR;FX.height=innerHeight*DPR}
+function loop(){G.setTransform(DPR,0,0,DPR,0,0);G.clearRect(0,0,innerWidth,innerHeight);G.globalCompositeOperation='lighter';
+ emitters=emitters.filter(e=>e());
+ for(const p of PS){p.l--;p.vx*=p.dr;p.vy=p.vy*p.dr+p.g;p.x+=p.vx;p.y+=p.vy;const a=Math.max(0,p.l/p.m);G.globalAlpha=a;G.fillStyle=p.c;
+  if(p.t==='s'){const s=p.s*(.6+.4*a);G.beginPath();G.moveTo(p.x,p.y-s*2);G.lineTo(p.x+s*.5,p.y-s*.5);G.lineTo(p.x+s*2,p.y);G.lineTo(p.x+s*.5,p.y+s*.5);G.lineTo(p.x,p.y+s*2);G.lineTo(p.x-s*.5,p.y+s*.5);G.lineTo(p.x-s*2,p.y);G.lineTo(p.x-s*.5,p.y-s*.5);G.fill()}
+  else{G.beginPath();G.arc(p.x,p.y,p.s*(p.t==='f'?a:1),0,6.283);G.fill()}}
+ PS=PS.filter(p=>p.l>0);G.globalAlpha=1;
+ if(PS.length||emitters.length)raf=requestAnimationFrame(loop);else{raf=0;G.clearRect(0,0,innerWidth,innerHeight)}}
+function kick(){if(!raf)raf=requestAnimationFrame(loop)}
+function burst(x,y,o){const n=o.n||40;for(let i=0;i<n;i++){const a=Math.random()*6.283,sp=(o.sp||5)*(.3+Math.random()*.9);const m=(o.life||60)*(.6+Math.random()*.6);PS.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-(o.up||0),g:o.g||0,dr:o.dr||.95,s:(o.s||2.2)*(.5+Math.random()),c:o.cs[i%o.cs.length],l:m,m,t:o.t||'c'})}if(PS.length>520)PS.splice(0,PS.length-520);kick()}
+function fireAt(x,y,w,k=1){for(let i=0;i<k;i++){const m=30+Math.random()*30;PS.push({x:x+(Math.random()-.5)*w,y,vx:(Math.random()-.5)*.8,vy:-1.2-Math.random()*2.4,g:-.03,dr:.985,s:3+Math.random()*5,c:['#ffd27a','#ff8a2a','#ff4a1c','#ffb347'][i%4],l:m,m,t:'f'})}kick()}
+
+/* ---------- 抽卡 ---------- */
+const TOT=Object.values(W).reduce((a,b)=>a+b,0);
+function roll(){let x=Math.random()*TOT;for(const r of ORDER){x-=W[r];if(x<0){const L=POOL[r];const c=L[Math.random()*L.length|0];return ALL.find(z=>z.n===c.n&&z.r===r)}}return ALL[0]}
+const S={mode:null,busy:false,cards:[]};
+const stage=$('#stage'),slot=$('#slot'),banner=$('#banner'),tip=$('#tip'),sbar=$('#sbar');
+function setTip(t,p){tip.textContent=t;tip.classList.toggle('pulse',!!p)}
+function resetFx(){stage.classList.remove('dim','black');$('#rays').className='';$('#pillar').className='';$('#warm').className='';banner.className='';banner.style.opacity=''}
+function singleW(){return Math.round(Math.min(innerWidth*.7,290,(innerHeight-250)/1.6))}
+function openStage(){stage.classList.add('on');fxSize();resetFx();sbar.classList.remove('on');slot.innerHTML='';slot.className=''}
+function closeStage(){if(S.busy)return;stage.classList.remove('on');slot.innerHTML='';PS=[];emitters=[];S.mode=null;SND.tap()}
+function drawOne(forced){if(S.busy)return;SND.tap();openStage();S.mode='one';
+ const c=forced||roll();const el=cardEl(c,{w:singleW()});el.classList.add('deal');slot.appendChild(el);S.cards=[el];SND.deal();
+ setTip('點卡片翻開',true);el.onclick=()=>revealOne(el)}
+async function revealOne(el){if(S.busy||el.classList.contains('flipped'))return;S.busy=true;setTip('');await reveal(el,true);S.busy=false;
+ sbar.classList.add('on');$('#sAgain').textContent='再抽一張';setTip('點卡片可以放大看');el.onclick=()=>openDetail(el._c)}
+function drawTen(){if(S.busy)return;SND.tap();openStage();S.mode='ten';slot.className='ten';
+ const w=Math.floor(Math.min((Math.min(innerWidth,440)-28-32)/5,(innerHeight-300)/3.4,84));
+ const cs=Array.from({length:10},()=>roll());
+ if(!cs.some(c=>INFO[c.r].lv>=2))cs[9]=roll2();
+ S.cards=cs.map((c,i)=>{const el=cardEl(c,{w,sm:1});el.classList.add('deal');el.style.animationDelay=(i*.06)+'s';slot.appendChild(el);setTimeout(()=>SND.deal(),i*60);el.onclick=()=>tapTen(el);return el});
+ setTip('點卡片翻開，或按「全部翻開」',true);sbar.classList.add('on');$('#sAgain').textContent='全部翻開'}
+function roll2(){let c;do{c=roll()}while(INFO[c.r].lv<2);return c}
+async function tapTen(el){if(S.busy)return;if(el.classList.contains('flipped')){openDetail(el._c);return}S.busy=true;await flipTen(el);S.busy=false;afterTen()}
+async function flipTen(el){const lv=INFO[el._c.r].lv;
+ if(lv>=3){await bigReveal(el._c);el.classList.add('flipped');return}
+ if(lv>=1){el.classList.add('glow');await sleep(lv===2?380:160)}
+ el.classList.add('flipped');SND.flip();if(lv>=1)setTimeout(()=>SND.chime(lv),180);
+ const r=el.getBoundingClientRect();setTimeout(()=>{if(lv>=1)burst(r.left+r.width/2,r.top+r.height/2,{n:lv*12,cs:[INFO[el._c.r].c,'#fff'],sp:3,life:40,s:1.6})},260);
+ setTimeout(()=>el.classList.remove('glow'),700);await sleep(120)}
+function afterTen(){const left=S.cards.filter(e=>!e.classList.contains('flipped'));if(!left.length){$('#sAgain').textContent='再抽十張';setTip('點卡片可以放大看')}}
+async function flipAll(){if(S.busy)return;S.busy=true;setTip('');SND.tap();
+ const left=S.cards.filter(e=>!e.classList.contains('flipped'));
+ const low=left.filter(e=>INFO[e._c.r].lv<3),hi=left.filter(e=>INFO[e._c.r].lv>=3).sort((a,b)=>INFO[a._c.r].lv-INFO[b._c.r].lv);
+ for(const e of low)await flipTen(e);for(const e of hi){await sleep(250);await flipTen(e)}
+ S.busy=false;afterTen()}
+/* 大張演出（十連裡抽到 SSR 以上） */
+function bigReveal(c){return new Promise(async res=>{
+ const prev=slot.innerHTML?[...slot.children]:[];prev.forEach(e=>e.style.visibility='hidden');
+ const cls=slot.className;slot.className='';sbar.classList.remove('on');
+ const el=cardEl(c,{w:singleW()});el.classList.add('deal');slot.appendChild(el);SND.deal();await sleep(450);
+ await reveal(el,false);setTip('點一下繼續',true);
+ const done=e=>{e.stopPropagation();e.preventDefault();stage.removeEventListener('click',done,true);el.remove();resetFx();slot.className=cls;prev.forEach(e=>e.style.visibility='');sbar.classList.add('on');setTip('');res()};
+ setTimeout(()=>stage.addEventListener('click',done,true),400)})}
+
+function showBanner(c){const I=INFO[c.r];banner.querySelector('.en').textContent=I.en;banner.querySelector('.zh').textContent=I.zh;banner.style.setProperty('--bc',I.c);banner.className='';void banner.offsetWidth;banner.className='show'+(I.book?' rb':'')+(c.r==='SSSR'?' fire':'')}
+function flash(ms=420,o=.85){$('#flash').animate([{opacity:o},{opacity:0}],{duration:ms,easing:'ease-out'})}
+function centerOf(el){const r=el.getBoundingClientRect();return [r.left+r.width/2,r.top+r.height/2,r]}
+
+async function reveal(el,single){const c=el._c,I=INFO[c.r],lv=I.lv;const rays=$('#rays'),pil=$('#pillar');
+ if(c.r==='SSSR')return fireReveal(el);
+ if(lv===0){el.classList.add('flipped');SND.flip();await sleep(500);return}
+ if(lv===1){el.classList.add('glow');await sleep(220);el.classList.add('flipped');SND.flip();setTimeout(()=>SND.chime(1),200);await sleep(300);const [x,y]=centerOf(el);burst(x,y,{n:26,cs:['#dfe8ff','#9fb8ff','#fff'],sp:4,life:50,s:1.6});await sleep(400);el.classList.remove('glow');return}
+ if(lv===2){el.classList.add('glow','shake');SND.rise(.6);await sleep(620);el.classList.remove('shake');el.classList.add('flipped');SND.flip();setTimeout(()=>SND.chime(2),180);await sleep(300);const [x,y]=centerOf(el);burst(x,y,{n:48,cs:['#c79bff','#8e52c6','#fff'],sp:5,life:60,s:2,t:'s'});showBanner(c);await sleep(700);el.classList.remove('glow');return}
+ if(c.r==='SP'){stage.classList.add('dim');el.classList.add('glow');
+  const [x,y,r]=centerOf(el);const w=document.createElement('div');w.className='card r-SP';w.style.cssText=`position:fixed;left:${x}px;top:${y}px;width:0;height:0;z-index:9;font-size:${r.width/15}px;pointer-events:none`;
+  w.innerHTML=`<div class="wax" style="top:0;left:0;margin:-1.75em 0 0 -1.75em"><b>${esc(c.g)}</b></div>`;stage.appendChild(w);
+  w.animate([{transform:'scale(3.2)',opacity:0},{transform:'scale(1)',opacity:1}],{duration:520,easing:'cubic-bezier(.5,0,.8,.4)',fill:'forwards'});
+  await sleep(520);SND.seal();el.classList.add('shake');burst(x,y,{n:22,cs:['#ff6a72','#b81624'],sp:3,life:30,s:2});await sleep(260);el.classList.remove('shake');await sleep(500);
+  w.animate([{opacity:1},{opacity:0,transform:'scale(1.3)'}],{duration:260,fill:'forwards'});setTimeout(()=>w.remove(),280);
+  el.classList.add('flipped');SND.flip();flash(300,.5);setTimeout(()=>SND.chime(3),150);await sleep(320);burst(x,y,{n:70,cs:['#ff4a5a','#ffd0d0','#ffb347'],sp:6,life:70,s:2.4,t:'s'});showBanner(c);await sleep(900);el.classList.remove('glow');return}
+ if(lv===3){stage.classList.add('dim');rays.style.setProperty('--rc',I.c);rays.className='on';el.classList.add('glow','shake');SND.rise(1.1);
+  const [x,y]=centerOf(el);const t0=performance.now();emitters.push(()=>{const k=(performance.now()-t0)/1100;if(k>1)return false;if(Math.random()<.6)burst(x+(Math.random()-.5)*innerWidth*.8,y+(Math.random()-.5)*innerHeight*.6,{n:1,cs:['#ffe9a8'],sp:.4,life:40,s:1.4});return true});kick();
+  await sleep(1100);el.classList.remove('shake');flash(380,.8);el.classList.add('flipped');SND.flip();SND.shine();setTimeout(()=>SND.chime(3),120);await sleep(260);
+  burst(x,y,{n:110,cs:['#ffd56a','#fff2c0','#e8a93a'],sp:8,life:80,s:2.6,t:'s',g:.04});showBanner(c);await sleep(1000);el.classList.remove('glow');return}
+ /* 傳說 */
+ stage.classList.add('dim');await sleep(250);pil.className='on';SND.whoosh();await sleep(350);rays.className='on rb';el.classList.add('glow','rainbow','shake');SND.rise(1.5);
+ const [x,y]=centerOf(el);const t0=performance.now();
+ emitters.push(()=>{const k=(performance.now()-t0)/1500;if(k>1)return false;const a=Math.random()*6.283,d=160+Math.random()*120;const m=40;PS.push({x:x+Math.cos(a)*d,y:y+Math.sin(a)*d,vx:-Math.cos(a)*d/m,vy:-Math.sin(a)*d/m,g:0,dr:1,s:1.8,c:['#ff6b9a','#ffd36b','#6bffc4','#6bb8ff'][Math.random()*4|0],l:m,m,t:'c'});return true});kick();
+ await sleep(1500);el.classList.remove('shake');flash(520,1);el.classList.add('flipped');SND.boom();SND.flip();setTimeout(()=>SND.chime(4),100);setTimeout(()=>SND.shine(),500);await sleep(280);
+ burst(x,y,{n:160,cs:['#ff6b9a','#ffd36b','#6bffc4','#6bb8ff','#fff'],sp:10,life:90,s:2.6,t:'s',g:.03});showBanner(c);
+ await sleep(1200);el.classList.remove('rainbow','glow')}
+
+/* 火：燒掉卡背 */
+async function fireReveal(el){
+ stage.classList.add('black');SND.whoosh();await sleep(1100);
+ const [x,y,r]=centerOf(el);
+ const f=document.createElement('div');f.className='fall';f.style.left=(x-4)+'px';f.style.top='-20px';stage.appendChild(f);SND.fall();
+ await f.animate([{transform:'translate(0,0)'},{transform:`translate(${(Math.random()-.5)*40}px,${r.bottom+12}px)`}],{duration:1000,easing:'cubic-bezier(.5,0,.9,.6)',fill:'forwards'}).finished;
+ f.remove();burst(x,r.bottom-4,{n:26,cs:['#ffd27a','#ff8a2a'],sp:3,life:30,s:2});SND.thump();
+ const cover=document.createElement('div');cover.className='face back cover';cover.innerHTML=BACK;el.appendChild(cover);
+ const inn=el.querySelector('.inner');inn.style.transition='none';el.classList.add('flipped');void inn.offsetWidth;inn.style.transition='';
+ const edge=document.createElement('div');edge.className='bedge';el.appendChild(edge);
+ const D=1900,H=r.height;SND.crackle(2.6);stage.classList.remove('black');stage.classList.add('dim');$('#warm').className='on';
+ cover.animate([{clipPath:'inset(0 0 0% 0)'},{clipPath:'inset(0 0 100% 0)'}],{duration:D,easing:'cubic-bezier(.4,0,.7,1)',fill:'forwards'});
+ const ea=edge.animate([{transform:'translateY(0)'},{transform:`translateY(${-H}px)`,opacity:.9}],{duration:D,easing:'cubic-bezier(.4,0,.7,1)',fill:'forwards'});
+ const t0=performance.now();emitters.push(()=>{const k=(performance.now()-t0)/D;if(k>1)return false;const ek=1-Math.pow(1-k,1.4);fireAt(x,r.bottom-H*Math.min(1,k*1.05),r.width*1.05,3);return true});kick();
+ await ea.finished;edge.remove();cover.remove();
+ SND.boom();flash(500,.55);
+ const t1=performance.now();emitters.push(()=>{const k=(performance.now()-t1)/1400;if(k>1)return false;fireAt(x,r.bottom,r.width*1.3,5);return true});
+ burst(x,y,{n:120,cs:['#ffd27a','#ff8a2a','#ff4a1c','#fff0c8'],sp:9,life:90,s:2.4,g:-.02});
+ setTimeout(()=>SND.chime(5),200);showBanner(el._c);await sleep(1500)}
+
+/* ---------- 詳情 ---------- */
+const det=$('#detail'),dw=$('#dw');
+function openDetail(c){SND.tap();dw.innerHTML='';const w=Math.round(Math.min(innerWidth*.78,320,(innerHeight-220)/1.6));const el=cardEl(c,{up:1,w});dw.appendChild(el);
+ const key=INFO[c.r].book?'BOOK':c.r;$('#dinfo').innerHTML=`<b>${INFO[c.r].en} ・ ${INFO[c.r].zh}</b>${DESC[key]}`;det.classList.add('on');
+ const gl=el.querySelector('.gloss');
+ const mv=e=>{const p=e.touches?e.touches[0]:e;const b=el.getBoundingClientRect();const px=Math.max(0,Math.min(1,(p.clientX-b.left)/b.width)),py=Math.max(0,Math.min(1,(p.clientY-b.top)/b.height));
+  el.style.transform=`rotateX(${(.5-py)*16}deg) rotateY(${(px-.5)*20}deg)`;gl.style.setProperty('--gx',((px-.5)*70)+'%');gl.style.setProperty('--gy',((py-.5)*70)+'%')};
+ det.onpointermove=mv;det.ontouchmove=e=>{mv(e)};
+ const seal=el.querySelector('.fseal');if(seal)armSeal(seal);
+ el.onclick=e=>e.stopPropagation()}
+function closeDetail(){det.classList.remove('on');dw.innerHTML='';SND.tap()}
+det.addEventListener('click',e=>{if(e.target===det||e.target.id==='dx')closeDetail()});
+/* 小印章：點三下或長按會翻一下，什麼字都不解釋 */
+function armSeal(s){let n=0,t=0,lp=0;const go=()=>{if(s.classList.contains('old'))return;s.classList.add('old');SND.crackle(.25);tone(660,0,.5,'sine',.03);setTimeout(()=>s.classList.remove('old'),1700)};
+ s.addEventListener('click',e=>{e.stopPropagation();const now=Date.now();n=now-t<450?n+1:1;t=now;if(n>=3){n=0;go()}});
+ s.addEventListener('pointerdown',()=>{lp=setTimeout(go,650)});['pointerup','pointerleave','pointercancel'].forEach(k=>s.addEventListener(k,()=>clearTimeout(lp)))}
+
+/* ---------- 頁面 ---------- */
+const SAMPLE=[['N','謝謝惠顧'],['R','你急什麼急'],['SR','各倫有各倫的命'],['SSR','好便友'],['SP','英倫瘋・染髮卡'],['GOLD','美倫美奐'],['ORNG','倫回'],['ULT','風水倫流轉'],['IDOL','SUPER 倫 IDOL'],['SSSR','火']];
+function buildGal(){const g=$('#gal');g.innerHTML='';const cw=Math.floor((Math.min(innerWidth,440)-32-12)/2),big=Math.min(Math.min(innerWidth,440)-32-30,300);
+ const H=t=>{const h=document.createElement('h2');h.style.gridColumn='1/-1';h.style.justifySelf='stretch';h.textContent=t;g.appendChild(h)};
+ const add=(r,n,w,o={})=>{const c=ALL.find(z=>z.r===r&&z.n===n);const cell=document.createElement('div');cell.className='cell'+(o.wide?' wide':'');
+  cell.appendChild(cardEl(c,{up:1,w}));if(o.lab!==0){const lab=document.createElement('div');lab.className='lab';lab.innerHTML=`<b>${INFO[r].zh}${o.nw?'<span class="nw">新</span>':''}</b>${INFO[r].en}`;cell.appendChild(lab)}
+  if(o.why){const p=document.createElement('div');p.className='why';p.textContent=o.why;cell.appendChild(p)}
+  cell.onclick=()=>openDetail(c);(o.into||g).appendChild(cell)};
+ add('N','謝謝惠顧',big,{wide:1,nw:1,why:'泛黃手工紙：紙纖維、上下撕邊、對摺痕、水漬和老化的邊。朱砂畫的符框、符頭雲紋、四角回紋，下面一道符膽，蓋一個「倫」字的印（印泥有自然缺角）。字和朱砂會吃進紙紋裡。'});
+ const m=document.createElement('div');m.className='mini';g.appendChild(m);
+ add('N','已讀不倫',Math.min(cw,150),{into:m,lab:0});add('N','倫胎',Math.min(cw,150),{into:m,lab:0});
+ add('SSSR','火',big,{wide:1,nw:1,why:'黑曜石底，裂縫裡透出熔岩紅光，會慢慢呼吸。金紅金屬框、四角火紋、頂上 SSSR 銘牌。字後面是八卦咒陣（正上方是代表火的離卦，比較亮），慢慢轉。卡片下緣是真的在燒的火和往上飄的火星。右下角的小紅印章還在。'});
+ H('還沒重做（舊的樣子，方向對了再照樣張重做）');
+ [['R','你急什麼急'],['SR','各倫有各倫的命'],['SSR','好便友'],['SP','英倫瘋・染髮卡'],['GOLD','美倫美奐'],['ULT','風水倫流轉']].forEach(([r,n])=>add(r,n,cw))}
+const REH=[['符紙（新）','N'],['火（新）','SSSR'],['魔咒卡','R'],['咒語卷軸','SR'],['金卷軸','SSR'],['貓頭鷹信','SP'],['魔法書','GOLD']];
+$('#reh').innerHTML=REH.map(([t,r])=>`<button class="chip" data-r="${r}">${t}</button>`).join('');
+$('#reh').onclick=e=>{const b=e.target.closest('button');if(!b)return;const r=b.dataset.r;const L=POOL[r];const c0=L[Math.random()*L.length|0];drawOne(ALL.find(z=>z.r===r&&z.n===c0.n))};
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{SND.tap();document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('.sec').forEach(s=>s.classList.toggle('on',s.id==='s-'+b.dataset.t))});
+$('#b1').onclick=()=>drawOne();$('#b10').onclick=()=>drawTen();
+$('#sClose').onclick=e=>{e.stopPropagation();closeStage()};
+$('#sAgain').onclick=e=>{e.stopPropagation();if(S.busy)return;const t=$('#sAgain').textContent;if(t==='全部翻開')flipAll();else if(S.mode==='ten')drawTen();else drawOne()};
+/* 回覆 */
+const FB=[['N','符紙樣張'],['SSSR','火樣張'],['SEAL','火的小印章（焰火）']];const ANS={};
+$('#fb').innerHTML=FB.map(([k,t])=>`<div class="fbr"><span>${t}</span><span class="o" data-k="${k}"><button>方向對</button><button>要改</button></span></div>`).join('');
+$('#fb').onclick=e=>{const b=e.target.closest('button');if(!b)return;SND.tap();const o=b.parentNode;[...o.children].forEach(x=>x.classList.toggle('on',x===b));ANS[o.dataset.k]=b.textContent};
+$('#copy').onclick=async()=>{SND.tap();const txt='卡池重做預覽 1127d（樣張）回覆\n'+FB.map(([k,t])=>`${t}：${ANS[k]||'（沒選）'}`).join('\n')+'\n補充：'+($('#note').value.trim()||'無');
+ let ok=false;try{await navigator.clipboard.writeText(txt);ok=true}catch(e){}if(!ok){const t=document.createElement('textarea');t.value=txt;document.body.appendChild(t);t.select();try{ok=document.execCommand('copy')}catch(e){}t.remove()}
+ toast(ok?'複製好了，貼回對話就可以':'沒辦法自動複製，請長按下面文字複製');if(!ok)$('#note').value=txt};
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),2200)}
+/* 鍵盤 */
+addEventListener('keydown',e=>{if(e.target.tagName==='TEXTAREA')return;const k=e.key.toLowerCase();
+ if(k==='escape'){if(det.classList.contains('on'))closeDetail();else if(stage.classList.contains('on'))closeStage();return}
+ if(det.classList.contains('on'))return;
+ if(k===' '||k==='enter'){e.preventDefault();if(stage.classList.contains('on')){if(S.mode==='one'&&S.cards[0]&&!S.cards[0].classList.contains('flipped'))revealOne(S.cards[0]);else if(S.mode==='ten'&&$('#sAgain').textContent==='全部翻開')flipAll();else if(!S.busy)$('#sAgain').click()}else drawOne()}
+ else if(k==='t'){if(!S.busy)drawTen()}else if(k==='a'&&S.mode==='ten')flipAll()});
+let rzT;addEventListener('resize',()=>{clearTimeout(rzT);rzT=setTimeout(()=>{buildGal();fxSize()},200)});
+window.__errs=[];addEventListener('error',e=>__errs.push(String(e.message)));
+makeTex();buildGal();if(document.fonts)document.fonts.ready.then(()=>{});
+</script>
+</body>
+</html>
