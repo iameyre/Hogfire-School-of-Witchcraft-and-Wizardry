@@ -5026,6 +5026,236 @@ if(top){top.insertAdjacentHTML('afterbegin','<button id="kdFr">⑤ 第 2 章夜�
  $$('kdFr3').onclick=()=>{const p=P();if(!p)return;delete p.ch2;if(p.titles)p.titles=p.titles.filter(t=>t!=='見習生');sv();try{rToast('已清掉第 2 章進度')}catch(e){}}}
 })();
 
+/* ===== v27.0 第 4 章「魔藥課」（2026-11-27 雲指定：照劇情總規劃往下做；李志憲主教授，阿嚕偷吃實驗品）=====
+   食堂地下室。流程：李志憲教 3 堂（第 1 堂手把手教安眠藥水；第 2、3 堂只給提示，要自己猜出提神藥水、隱形藥水）→ 自由實驗 → 做出 5 種不同的藥水就通關。
+   玩法：藥櫃有 8 種材料（用不完），點 3 個放進鍋子 → 攪拌 → 依「材料組合」（不管順序，可重複）得到藥水或「奇怪的泥」。共 12 種配方，第一次做出會記進配方簿。
+   通關：稱號「魔藥學徒」（p.titles）。藥水目前只收藏、沒有數值效果（雲沒指定；舊的料理製藥已刪）。
+   坐騎「倫妃步輦」（第 4 章通關獎勵）要先做預覽給雲選，所以這版沒有給（p.ch4.mountPending=1 記起來）。
+   存檔：p.ch4={intro,stage,rec:{配方id:次數},done,mountPending}。
+   對話框一律用「整句先排好、未出現的字透明」逐字，不重排（雲 2026-11-27 要求，不要再卡）。
+   對外：window.lunPotionOpen。 */
+(()=>{
+if(window.lunPotionOpen)return;
+const $$=id=>document.getElementById(id);
+const sfx=(f,d,ty='sine',v=.04,dl=0)=>{try{A.tone(f,d,ty,v,dl)}catch(e){}};
+/* ---------- 資料 ---------- */
+const ING=[
+ {n:'月光草',c:'#9ad0ff',s:'leaf'},{n:'螢火蟲粉',c:'#d8ff6a',s:'dots'},{n:'龍鱗屑',c:'#ff7a4a',s:'scale'},{n:'獨角獸毛',c:'#fff0ff',s:'feather'},
+ {n:'蘑菇傘',c:'#e0383a',s:'cap'},{n:'蛇蛻皮',c:'#6acf7a',s:'coil'},{n:'冰晶花',c:'#8ae8ff',s:'flower'},{n:'火星砂',c:'#ffb84a',s:'star'}];
+const SH={
+ leaf:['...oo...','..o##o..','.o####o.','o######o','.o####o.','..o##o..','...##...','...#....'],
+ dots:['..#..o..','.###.oo.','..#..o..','o....#..','oo..###.','o....#..','..#...o.','.###.ooo'],
+ scale:['...##...','..#oo#..','.#oooo#.','#oooooo#','.#oooo#.','..#oo#..','...##...','........'],
+ feather:['.....o##','....o###','...o###.','..o###..','.o###...','o##o....','#o......','#.......'],
+ cap:['..####..','.#oo###.','#oo#####','########','...##...','...##...','...##...','..####..'],
+ coil:['.######.','#......#','#.####.#','#.#..#.#','#.#.##.#','#.#....#','#.######','#.......'],
+ flower:['..#..#..','.#o##o#.','..####..','#o####o#','#o####o#','..####..','.#o##o#.','..#..#..'],
+ star:['...#....','...#....','..###...','#######.','..###...','.#.#.#..','#..#..#.','...#....']};
+const shade=(hex,k)=>{const n=parseInt(hex.slice(1),16);const f=v=>Math.max(0,Math.min(255,Math.round(v*k)));return '#'+[(n>>16)&255,(n>>8)&255,n&255].map(f).map(v=>v.toString(16).padStart(2,'0')).join('')};
+const icon=(i,px=3)=>{const I=ING[i],c=document.createElement('canvas');c.width=c.height=8*px;const g=c.getContext('2d');SH[I.s].forEach((r,y)=>{for(let x=0;x<8;x++){const ch=r[x];if(ch==='.')continue;g.fillStyle=ch==='o'?shade(I.c,1.25):shade(I.c,.82);g.fillRect(x*px,y*px,px,px)}});return c};
+/* 配方：key = 排序後的材料編號。hint 是第 2、3 堂給的提示 */
+const REC=[
+ {id:'sleep',n:'安眠藥水',k:'0,1,6',c:'#7a8cff',d:'喝了立刻想睡午覺。李志憲說這是他自己最常用的藥。'},
+ {id:'wake',n:'提神藥水',k:'1,4,7',c:'#ff6a4a',d:'整個人醒到眼睛會發光，連夢都醒了。'},
+ {id:'invis',n:'隱形藥水',k:'0,3,6',c:'#c8e8ff',d:'喝了就看不到你，但看得到你的鞋。'},
+ {id:'brave',n:'勇氣藥水',k:'2,3,7',c:'#ff9a3a',d:'敢對老師說「這題我不會」。'},
+ {id:'luck',n:'好運藥水',k:'1,3,3',c:'#fff06a',d:'今天出門一定會撿到錢，但是只有一塊。'},
+ {id:'big',n:'變大藥水',k:'2,4,4',c:'#ff5a8a',d:'變大兩倍，衣服不會，要自己小心。'},
+ {id:'small',n:'變小藥水',k:'4,5,6',c:'#8aff9a',d:'變小到可以坐在茶杯裡。'},
+ {id:'smart',n:'聰明藥水',k:'0,0,3',c:'#6ad0ff',d:'短暫變聰明，副作用是會一直講「其實」。'},
+ {id:'bbq',n:'烤肉藥水',k:'2,7,7',c:'#ff7a2a',d:'喝完整個人香香的，有點想被吃掉。'},
+ {id:'friend',n:'友情藥水',k:'1,3,5',c:'#ffb0e0',d:'兩個人一起喝，吵架的事就忘了。'},
+ {id:'bad',n:'倒楣藥水',k:'5,5,5',c:'#6a4a8a',d:'喝完剛好踩到香蕉皮。不要給別人喝。'},
+ {id:'truth',n:'說真話藥水',k:'0,4,5',c:'#d0ff8a',d:'喝完什麼都講，連昨天偷吃的東西都講。'}];
+const REQ=5;
+const FAIL=['鍋裡冒出一團紫色的煙，聞起來像理智線燒斷的味道。','鍋底沉了一坨灰灰的東西，戳一下，它自己縮起來了。','藥水變成黏稠的泥，還一直發出「噗」的聲音。','整鍋變成透明的，什麼都沒有，只剩下一股排骨便當的味道。','鍋子咳了一聲，吐出一隻小小的襪子。'];
+const key=a=>[...a].sort((x,y)=>x-y).join(',');
+/* ---------- 存檔 ---------- */
+const ch=()=>{const p=P();if(!p)return null;if(!p.ch4)p.ch4={intro:0,stage:0,rec:{},done:0};return p.ch4};
+const sv=()=>{try{save()}catch(e){}};
+const nRec=()=>{const c=ch();return c?Object.keys(c.rec).length:0};
+/* ---------- 頭像 ---------- */
+const spImg=k=>{try{const S=THEATER.SPR[k],P0=THEATER.PAL;if(!S)return null;const rows=S.map(r=>r.padEnd(20,'.')),H=rows.length,W=Math.max(...rows.map(r=>r.length));const c=document.createElement('canvas');c.width=W+2;c.height=H+2;const g=c.getContext('2d');const fl=(i,j)=>i>=0&&i<W&&j>=0&&j<H&&rows[j][i]!=='.';
+ g.fillStyle=P0.O||'#2a1620';for(let j=-1;j<=H;j++)for(let i=-1;i<=W;i++){if(fl(i,j))continue;if(fl(i+1,j)||fl(i-1,j)||fl(i,j+1)||fl(i,j-1))g.fillRect(i+1,j+1,1,1)}
+ for(let j=0;j<H;j++)for(let i=0;i<W;i++){const c2=rows[j][i];if(c2==='.')continue;g.fillStyle=P0[c2]||'#fff';g.fillRect(i+1,j+1,1,1)}return c}catch(e){return null}};
+const IMG={};
+const portrait=k=>{if(IMG[k]!==undefined)return IMG[k];let im=null;
+ if(k==='l')im=window.lunSP&&window.lunSP.d?window.lunSP.d[0]:null;else if(k==='g')im=spImg('lzx');else if(k==='a')im=spImg('alu');
+ if(im)IMG[k]=im;return im};
+/* ---------- DOM ---------- */
+document.head.insertAdjacentHTML('beforeend',`<style id="pt27css">
+#pt27,#pt27 *,#rw27,#rw27 *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+#pt27{position:fixed;inset:0;z-index:140;background:#0a0612;display:none;flex-direction:column;align-items:center;font-family:DotGothic16,sans-serif;color:#fff;overflow:hidden}
+#pt27.on{display:flex}
+#pt27 button{font-family:DotGothic16,sans-serif;border-radius:0;touch-action:manipulation}
+#pt27 .ptt{width:100%;max-width:440px;flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:calc(var(--st) + 8px) 10px 6px}
+#pt27 .ptt b{flex:1;text-align:center;font-weight:400;font-size:19px;letter-spacing:.3em;color:#ffe9a8;text-shadow:0 2px 0 #000}
+#pt27 .ptt button{height:44px;min-width:48px;border:2px solid #ffe9a8;background:#140a2cd9;color:#ffe9a8;font-size:15px;letter-spacing:.1em;padding:0 10px}
+#pt27 .ptt button svg{width:20px;height:20px;display:block;margin:auto}
+#pt27 .ptg{width:100%;max-width:440px;flex:0 0 auto;padding:6px 14px;font-size:14px;line-height:1.5;letter-spacing:.06em;color:#cfe6ff;background:#140a2c;border-top:2px solid #ffffff22;border-bottom:2px solid #ffffff22;min-height:46px;display:flex;align-items:center}
+#pt27 canvas#ptC{image-rendering:pixelated;display:block;flex:0 0 auto}
+#pt27 .pts{width:100%;max-width:440px;flex:0 0 auto;display:flex;justify-content:center;align-items:center;gap:10px;padding:8px 10px}
+#pt27 .pts .sl{width:62px;height:62px;border:3px solid #ffe9a8;background:#140a2c;display:flex;align-items:center;justify-content:center;padding:0}
+#pt27 .pts .sl canvas{image-rendering:pixelated;width:40px;height:40px}
+#pt27 .pts .go{height:62px;flex:1;max-width:150px;border:3px solid #6a4a1e;outline:2px solid #ffe9a8;outline-offset:2px;background:linear-gradient(180deg,#fff3d2,#d9ad5e);color:#4a2a10;font-size:20px;letter-spacing:.3em}
+#pt27 .pts .go:disabled{opacity:.4}
+#pt27 .pti{width:100%;max-width:440px;flex:1 1 0;min-height:0;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:6px 12px calc(var(--sb) + 12px);align-content:start;overflow-y:auto}
+#pt27 .pti button{border:2px solid #ffffff55;background:linear-gradient(180deg,#1c1040,#10082a);color:#fff;padding:6px 2px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;letter-spacing:.04em;min-height:74px}
+#pt27 .pti button canvas{image-rendering:pixelated;width:34px;height:34px}
+#pt27 .pti button:active{background:#3a2070}
+#pt27 .ptr{position:absolute;left:50%;top:34%;translate:-50% 0;width:min(86%,360px);background:#140a2cf5;border:3px solid #ffe9a8;box-shadow:0 0 0 3px #b3182f,0 0 0 6px #ffe9a8,0 10px 30px #000a;padding:16px;text-align:center;z-index:6;display:none}
+#pt27 .ptr.on{display:block}
+#pt27 .ptr h3{font-weight:400;font-size:22px;letter-spacing:.2em;color:#ffe9a8;margin-bottom:8px}
+#pt27 .ptr p{font-size:15px;line-height:1.6;letter-spacing:.05em;color:#ffd0dc;margin-bottom:12px}
+#pt27 .ptr button{height:48px;width:100%;border:2px solid #6a4a1e;background:linear-gradient(180deg,#fff3d2,#d9ad5e);color:#4a2a10;font-size:18px;letter-spacing:.3em}
+#pt27 .ptb{position:absolute;inset:0;background:#05030af0;z-index:5;display:none;flex-direction:column;align-items:center;padding:calc(var(--st) + 16px) 14px 20px;overflow-y:auto}
+#pt27 .ptb.on{display:flex}
+#pt27 .ptb h3{font-weight:400;font-size:20px;letter-spacing:.3em;color:#ffe9a8;margin-bottom:10px}
+#pt27 .ptb .li{width:min(94%,400px);display:flex;gap:10px;align-items:center;padding:8px 10px;margin-bottom:6px;border:2px solid #ffffff33;background:#140a2c;font-size:14px;line-height:1.5;letter-spacing:.04em}
+#pt27 .ptb .li i{width:22px;height:22px;flex:0 0 auto;border:2px solid #fff6;border-radius:50%}
+#pt27 .ptb .li.no{color:#ffffff77}
+#pt27 .ptb .li b{display:block;font-weight:400;color:#ffe9a8;font-size:15px}
+#pt27 .ptb button{margin-top:10px;height:48px;width:min(80vw,300px);border:2px solid #ffe9a8;background:#140a2c;color:#ffe9a8;font-size:17px;letter-spacing:.3em}
+#pt27 .fdl{position:absolute;inset:0;display:none;z-index:7}
+#pt27 .fdl.on{display:block}
+#pt27 .fdp{position:absolute;left:50%;translate:-50% 0;width:min(94vw,420px);bottom:calc(var(--sb) + 14px + var(--bh,184px));height:150px;display:flex;align-items:flex-end;justify-content:flex-start;padding-left:14px;pointer-events:none}
+#pt27 .fdp canvas{image-rendering:pixelated;height:140px;width:auto;filter:drop-shadow(0 4px 0 #0008)}
+#pt27 .fdb{position:absolute;left:50%;translate:-50% 0;width:min(94vw,420px);bottom:calc(var(--sb) + 14px);height:var(--bh,184px);background:#140a2cf5;border:3px solid #ffe9a8;box-shadow:0 0 0 3px #b3182f,0 0 0 6px #ffe9a8,0 10px 30px #000a;padding:12px 16px 14px;display:flex;flex-direction:column}
+#pt27 .fdw{font-size:16px;letter-spacing:.2em;color:#ffe9a8;margin-bottom:6px;min-height:20px}
+#pt27 .fdt{contain:layout paint;font-size:19px;line-height:1.6;letter-spacing:.06em;flex:1}
+#pt27 .fdn{position:absolute;right:16px;bottom:12px;width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;border-top:12px solid #ffe9a8;animation:ptbl .8s steps(2) infinite}
+@keyframes ptbl{50%{opacity:0}}
+#rw27{position:fixed;inset:0;z-index:185;background:radial-gradient(ellipse at 50% 35%,#3a1a4a 0,#08040f 78%);display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:20px;font-family:DotGothic16,sans-serif;color:#fff;text-align:center;opacity:0;transition:opacity .3s}
+#rw27.on{display:flex}#rw27.vis{opacity:1}
+#rw27 h2{font-weight:400;font-size:26px;letter-spacing:.2em;padding-left:.2em;color:#ffe9a8;text-shadow:0 3px 0 #b3182f,0 0 18px #ffb84a88}
+#rw27 .sub{font-size:15px;letter-spacing:.1em;color:#ffd0dc;line-height:1.6}
+#rw27 .nm{font-size:22px;letter-spacing:.2em;color:#ffe9a8}
+#rw27 .bt{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;max-width:340px}
+#rw27 .bt i{font-style:normal;font-size:13px;padding:3px 8px;border:1px solid var(--c);color:var(--c);letter-spacing:.05em}
+#rw27 button{margin-top:4px;height:54px;width:min(80vw,300px);border:3px solid #6a4a1e;outline:2px solid #ffe9a8;outline-offset:2px;background:linear-gradient(180deg,#fff3d2,#d9ad5e);color:#4a2a10;font:400 19px DotGothic16,sans-serif;letter-spacing:.3em;border-radius:0}
+</style>`);
+const root=document.createElement('div');root.id='pt27';
+root.innerHTML=`<div class="ptt"><button id="ptX" aria-label="離開"><svg viewBox="0 0 20 20"><path d="M3 3L17 17M17 3L3 17" stroke="#ffe9a8" stroke-width="2.6" fill="none"/></svg></button><b>魔藥課</b><button id="ptB">配方簿</button></div>
+<div class="ptg" id="ptG"></div><canvas id="ptC" width="128" height="80"></canvas>
+<div class="pts"><button class="sl" data-s="0"></button><button class="sl" data-s="1"></button><button class="sl" data-s="2"></button><button class="go" id="ptGo" disabled>攪拌</button></div>
+<div class="pti" id="ptI"></div>
+<div class="ptr" id="ptR"><h3 id="ptRh"></h3><p id="ptRp"></p><button id="ptRb">好</button></div>
+<div class="ptb" id="ptBk"></div>
+<div class="fdl" id="ptDl"><div class="fdp"><canvas id="ptPt" width="1" height="1"></canvas></div><div class="fdb"><div class="fdw" id="ptW"></div><div class="fdt" id="ptT"></div><div class="fdn" id="ptN"></div></div></div>`;
+document.body.appendChild(root);
+const rw=document.createElement('div');rw.id='rw27';document.body.appendChild(rw);
+const cv=$$('ptC'),g=cv.getContext('2d');g.imageSmoothingEnabled=false;
+const LW=128,LH=80;
+const resize=()=>{const w=Math.min(innerWidth,440);cv.style.width=w+'px';cv.style.height=Math.round(w*LH/LW*(innerHeight<640?.8:1))+'px';
+ root.style.setProperty('--bh',Math.max(184,Math.min(230,Math.floor(innerHeight*.26)))+'px')};
+/* ---------- 對話（不重排逐字）---------- */
+const WHO={l:'倫',g:'李志憲教授',a:'阿嚕',x:''};
+let tmr=0,typing=false,fullTx='',tapRes=null,busy=false,cta=null,ctb=null;
+const putCv=(c,im)=>{if(!im){c.width=1;c.height=1;return}c.width=im.width;c.height=im.height;const x=c.getContext('2d');x.imageSmoothingEnabled=false;x.clearRect(0,0,c.width,c.height);x.drawImage(im,0,0)};
+const say1=(who,text)=>new Promise(res=>{$$('ptDl').classList.add('on');$$('ptW').textContent=WHO[who]||'';putCv($$('ptPt'),who==='x'?null:portrait(who));$$('ptN').style.display='none';
+ fullTx=text;let i=0;typing=true;clearInterval(tmr);
+ const T=$$('ptT');T.textContent='';cta=document.createTextNode('');ctb=document.createTextNode(text);const sp=document.createElement('span');sp.style.color='transparent';sp.appendChild(ctb);T.append(cta,sp);
+ tmr=setInterval(()=>{i++;cta.data=text.slice(0,i);ctb.data=text.slice(i);if(i%4===1)sfx(900+Math.random()*60,.02,'square',.008);if(i>=text.length){clearInterval(tmr);typing=false;$$('ptN').style.display='block'}},45);
+ tapRes=()=>{if(typing){clearInterval(tmr);typing=false;cta.data=fullTx;ctb.data='';$$('ptN').style.display='block';return}tapRes=null;res()}});
+const talk=async lines=>{busy=true;for(const L of lines)await say1(L[0],L[1]);$$('ptDl').classList.remove('on');busy=false};
+$$('ptDl').addEventListener('click',()=>{tapRes&&tapRes()});
+addEventListener('keydown',e=>{if(!root.classList.contains('on'))return;if((e.key===' '||e.key==='Enter')&&tapRes){tapRes();e.preventDefault()}else if(e.key==='Escape'&&!busy)$$('ptX').click()});
+/* ---------- 台詞 ---------- */
+const INTRO=[['x','食堂的地下室。很多鍋子，很多瓶子，還有一點排骨便當的味道。'],
+ ['g','魔藥課，歡迎。我是李志憲，主教授。理智線請放在門口。'],['l','老師，這裡為什麼有排骨便當的味道？'],['g','因為這裡是食堂的地下室。鍋子洗過了，放心。'],
+ ['a','（阿嚕從鍋子後面探出頭）我只是來檢查實驗品有沒有壞掉。（嚼嚼）'],['g','阿嚕校長，那是明天要用的材料。'],['a','……不好意嚕。'],
+ ['g','今天只學一件事：三樣材料，一鍋藥水。順序不重要，材料很重要。'],['g','先做安眠藥水：月光草、螢火蟲粉、冰晶花。把三樣放進鍋裡，按攪拌。']];
+const L2=[['g','很好，沒有爆炸。這代表你有天分，或者運氣很好。'],['g','第二題，提神藥水。我只給提示：紅色的蘑菇傘讓人清醒，螢火蟲粉讓眼睛發亮，最後要一點會爆的東西。'],['l','會爆的東西？'],['g','放心，只會小爆一下。']];
+const L3=[['g','不錯。第三題，隱形藥水。月亮，獨角獸，還有一樣很冰的東西。'],['a','隱形藥水可以讓我偷吃的時候不被看到嗎？'],['g','不行。而且你剛剛承認了。']];
+const L4=[['g','三堂都過了。接下來自己試，配方簿裡還有很多空格。'],['g',`做出 ${REQ} 種不同的藥水，就算通過。亂配也沒關係，只要不要喝。`],['a','那我可以喝嗎？'],['g','不可以。']];
+const END=[['g','五種藥水，沒有人受傷，鍋子也還在。魔藥課，通過。'],['a','那我可以喝一點嗎？'],['g','不可以，校長。'],['a','……不好意嚕。'],
+ ['g','稱號「魔藥學徒」。另外，我替你準備了一份獎勵，不過還沒做好。'],['l','什麼獎勵？'],['g','等你下次上課，就知道了。']];
+const GOALS=['目標：照老師說的做安眠藥水（月光草＋螢火蟲粉＋冰晶花）','目標：猜出提神藥水（蘑菇傘、螢火蟲粉，再加一點會爆的）','目標：猜出隱形藥水（月亮、獨角獸、很冰的東西）'];
+const goalTx=()=>{const c=ch();if(c.done)return '魔藥課通過了。可以繼續自由實驗，把配方簿填滿。';if(c.stage<3)return GOALS[c.stage];return `目標：做出 ${REQ} 種不同的藥水（${nRec()} / ${REQ}）。自由實驗。`};
+/* ---------- 鍋子畫面 ---------- */
+let slots=[],liquid='#3a6a4a',bub=[],boil=0,flashT=0,on=false,raf=0,t0=0,brewing=false;
+const rnd=(a,b)=>a+Math.random()*(b-a);
+const bg=document.createElement('canvas');bg.width=LW;bg.height=LH;
+const buildBg=()=>{const m=bg.getContext('2d');m.fillStyle='#1a1224';m.fillRect(0,0,LW,LH);
+ for(let y=0;y<LH;y+=8)for(let x=0;x<LW;x+=16){const o=(y/8)%2?8:0;m.fillStyle=(x/16+y/8)%3?'#221a30':'#281e38';m.fillRect(x+o-8,y,15,7)}
+ m.fillStyle='#120c1a';m.fillRect(0,LH-14,LW,14);m.fillStyle='#2a2038';m.fillRect(0,LH-14,LW,1);
+ m.fillStyle='#4a3020';m.fillRect(4,24,44,3);m.fillRect(80,24,44,3);
+ const cols=['#9ad0ff','#d8ff6a','#ff7a4a','#fff0ff','#e0383a','#6acf7a','#8ae8ff','#ffb84a'];
+ for(let i=0;i<5;i++){m.fillStyle=cols[i];m.fillRect(7+i*8,16,5,8);m.fillRect(8+i*8,13,3,3);m.fillStyle='#ffffff55';m.fillRect(8+i*8,17,1,5)}
+ for(let i=0;i<5;i++){m.fillStyle=cols[(i+3)%8];m.fillRect(83+i*8,16,5,8);m.fillRect(84+i*8,13,3,3);m.fillStyle='#ffffff55';m.fillRect(84+i*8,17,1,5)}};
+buildBg();
+const ell=(x,y,rx,ry,col)=>{g.fillStyle=col;for(let j=-ry;j<=ry;j++){const w=Math.round(rx*Math.sqrt(1-(j*j)/(ry*ry+.0001)));g.fillRect(x-w,y+j,w*2,1)}};
+const tick=ts=>{if(!on)return;const t=(ts-t0)/1000;if(busy&&!brewing&&(Math.floor(t*60)&1)){raf=requestAnimationFrame(tick);return}
+ g.drawImage(bg,0,0);
+ /* 火把 */
+ for(const x of [10,118]){g.fillStyle='#5a3a20';g.fillRect(x-1,34,3,10);const f=Math.sin(t*9+x)*1.5;g.fillStyle='#ff9a3a';g.fillRect(x-2,29+f,5,6);g.fillStyle='#ffe08a';g.fillRect(x-1,31+f,3,3);g.fillStyle='#ff9a3a22';g.fillRect(x-14,18,29,30)}
+ /* 李志憲、倫 */
+ const gm=portrait('g'),lm=portrait('l');
+ if(gm){const h=44,w=Math.round(gm.width*h/gm.height);g.fillStyle='#0006';g.fillRect(12,LH-14-2,w-4,3);g.drawImage(gm,10,LH-14-h+2+Math.round(Math.sin(t*2)*.8),w,h)}
+ if(lm){const h=36,w=Math.round(lm.width*h/lm.height);g.fillStyle='#0006';g.fillRect(LW-w-14,LH-14-2,w-2,3);g.drawImage(lm,LW-w-12,LH-14-h+2,w,h)}
+ /* 鍋子 */
+ const cx=64,cy=52;
+ for(let i=0;i<4;i++){const f=Math.sin(t*10+i*2)*2;g.fillStyle=i%2?'#ff9a3a':'#ffd05a';g.fillRect(cx-12+i*7,LH-14-7+f,4,7);}
+ ell(cx,cy+8,22,14,'#0e0a14');ell(cx,cy+8,20,12,'#241c30');g.fillStyle='#0e0a14';g.fillRect(cx-23,cy-1,46,4);g.fillStyle='#3a2e4a';g.fillRect(cx-22,cy-1,44,1);
+ ell(cx,cy,19,5,'#0e0a14');ell(cx,cy,17,4,liquid);ell(cx,cy-1,12,2,shade(liquid,1.25));
+ /* 泡泡 */
+ if(Math.random()<.06+boil*.4)bub.push({x:cx+rnd(-13,13),y:cy,v:rnd(10,22),r:rnd(1,2.2),c:liquid});
+ bub=bub.filter(b=>{b.y-=b.v*.016;b.x+=Math.sin(b.y*.3)*.2;if(b.y<cy-26)return false;g.fillStyle=shade(b.c,1.3);g.fillRect(Math.round(b.x),Math.round(b.y),Math.ceil(b.r),Math.ceil(b.r));return true});
+ boil=Math.max(0,boil-.008);
+ if(flashT>0){g.fillStyle=`rgba(255,255,255,${flashT})`;g.fillRect(0,0,LW,LH);flashT=Math.max(0,flashT-.04)}
+ raf=requestAnimationFrame(tick)};
+/* ---------- 材料與攪拌 ---------- */
+const renderSlots=()=>{root.querySelectorAll('.sl').forEach((b,i)=>{b.innerHTML='';if(slots[i]!==undefined)b.appendChild(icon(slots[i],5))});$$('ptGo').disabled=slots.length<3||brewing};
+const buildIng=()=>{$$('ptI').innerHTML='';ING.forEach((I,i)=>{const b=document.createElement('button');b.dataset.i=i;b.appendChild(icon(i,4));b.insertAdjacentHTML('beforeend','<span>'+I.n+'</span>');$$('ptI').appendChild(b)})};
+$$('ptI').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||busy||brewing)return;if(slots.length>=3){sfx(180,.1,'sawtooth',.03);return}slots.push(+b.dataset.i);sfx(500+slots.length*120,.08,'sine',.05);boil=.3;renderSlots()});
+root.querySelectorAll('.sl').forEach(b=>b.addEventListener('click',()=>{if(busy||brewing)return;const i=+b.dataset.s;if(slots[i]!==undefined){slots.splice(i,1);sfx(330,.06,'sine',.04);renderSlots()}}));
+const mix=a=>{let r=0,gg=0,b=0;a.forEach(i=>{const n=parseInt(ING[i].c.slice(1),16);r+=(n>>16)&255;gg+=(n>>8)&255;b+=n&255});const f=v=>Math.round(v/3).toString(16).padStart(2,'0');return '#'+f(r)+f(gg)+f(b)};
+const showRes=(h,p,cb)=>{$$('ptRh').textContent=h;$$('ptRp').textContent=p;$$('ptR').classList.add('on');$$('ptRb').onclick=()=>{$$('ptR').classList.remove('on');cb&&cb()}};
+const brew=async()=>{if(slots.length<3||brewing||busy)return;brewing=true;renderSlots();const c=ch(),k=key(slots),R=REC.find(r=>r.k===k);
+ liquid=mix(slots);boil=1;for(let i=0;i<6;i++)sfx(200+i*60,.12,'triangle',.04,i*.15);
+ await new Promise(r=>setTimeout(r,1500));flashT=.8;
+ const used=slots.slice();slots=[];brewing=false;renderSlots();
+ if(R){const first=!c.rec[R.id];c.rec[R.id]=(c.rec[R.id]||0)+1;sv();liquid=R.c;sfx(784,.12,'sine',.05);sfx(1047,.15,'sine',.05,.1);sfx(1568,.3,'sine',.05,.2);
+  showRes((first?'第一次做出：':'做出了：')+R.n,R.d+(first?'　（已記進配方簿）':''),()=>afterBrew(R))}
+ else{sfx(160,.3,'sawtooth',.05);sfx(120,.3,'sawtooth',.05,.15);liquid='#4a4a3a';showRes('奇怪的泥',FAIL[Math.floor(Math.random()*FAIL.length)],async()=>{if(Math.random()<.3){await talk([['a','（嚼）這個……意外地不難吃。'],['g','阿嚕校長，請把實驗品吐出來。'],['a','……不好意嚕。']])}})}
+ setGoal()};
+const setGoal=()=>{$$('ptG').textContent=goalTx()};
+const afterBrew=async R=>{const c=ch();
+ if(c.stage===0&&R.id==='sleep'){c.stage=1;sv();setGoal();await talk(L2)}
+ else if(c.stage===1&&R.id==='wake'){c.stage=2;sv();setGoal();await talk(L3)}
+ else if(c.stage===2&&R.id==='invis'){c.stage=3;sv();setGoal();await talk(L4)}
+ if(c.stage>=3&&!c.done&&nRec()>=REQ){await talk(END);c.done=1;c.mountPending=1;const p=P();p.titles=p.titles||[];if(!p.titles.includes('魔藥學徒'))p.titles.push('魔藥學徒');sv();setGoal();showReward()}};
+$$('ptGo').onclick=brew;
+/* ---------- 配方簿與通關畫面 ---------- */
+const showBook=()=>{const c=ch();const bk=$$('ptBk');
+ bk.innerHTML='<h3>配方簿　'+nRec()+' / '+REC.length+'</h3>'+REC.map(R=>{const have=c.rec[R.id];return have?`<div class="li"><i style="background:${R.c}"></i><div><b>${R.n}</b>${R.d}</div></div>`:`<div class="li no"><i></i><div><b>？？？</b>還沒做出來</div></div>`}).join('')+'<button id="ptBx">關閉</button>';
+ bk.classList.add('on');$$('ptBx').onclick=()=>bk.classList.remove('on')};
+$$('ptB').onclick=()=>{if(!busy&&!brewing)showBook()};
+const showReward=()=>{const c=ch();rw.innerHTML=`<h2>第 4 章　通關！</h2><div class="sub">魔藥課通過了</div><div class="bt">${REC.filter(R=>c.rec[R.id]).map(R=>`<i style="--c:${R.c}">${R.n}</i>`).join('')}</div><div class="nm">獲得稱號：魔藥學徒</div><div class="sub">李志憲還幫你準備了一份獎勵，<br>還沒做好，下次上課再說。</div><button id="rwOk27">太好了</button>`;
+ rw.classList.add('on');requestAnimationFrame(()=>requestAnimationFrame(()=>rw.classList.add('vis')));
+ sfx(523,.12,'sine',.05);sfx(659,.12,'sine',.05,.1);sfx(784,.12,'sine',.05,.2);sfx(1047,.4,'sine',.05,.3);
+ $$('rwOk27').onclick=()=>{rw.classList.remove('vis');setTimeout(()=>rw.classList.remove('on'),300)}};
+/* ---------- 開關 ---------- */
+const open=async()=>{if(!P())return;try{leaveHome&&leaveHome();closeSub&&closeSub()}catch(e){}try{A.init()}catch(e){}
+ const c=ch();if(!$$('ptI').children.length)buildIng();slots=[];liquid='#3a6a4a';renderSlots();resize();setGoal();root.classList.add('on');on=true;t0=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(tick);
+ if(!c.intro){await talk(INTRO);c.intro=1;sv()}};
+const close=()=>{on=false;cancelAnimationFrame(raf);root.classList.remove('on');$$('ptBk').classList.remove('on');$$('ptR').classList.remove('on');clearInterval(tmr);$$('ptDl').classList.remove('on');busy=false;brewing=false;try{rHome()}catch(e){}};
+$$('ptX').onclick=()=>{if(!busy&&!brewing)close()};
+addEventListener('resize',()=>{if(on)resize()});
+root.addEventListener('contextmenu',e=>e.preventDefault());
+/* ---------- 入口 ---------- */
+const enter=()=>{const p=P();if(!p)return;const c=ch();const ok=window.LUN_DEV||c.intro||(p.ch2&&p.ch2.done);
+ if(!ok){try{rToast('先完成第 2 章：夜間實習')}catch(e){}return}open()};
+window.lunPotionOpen=enter;
+const rg=$$('rhgo2');
+if(rg){rg.insertAdjacentHTML('beforeend','<button class="rq ptb27" id="ptGo27">魔藥課</button>');$$('ptGo27').onclick=()=>{try{A.S.tap()}catch(e){}enter()}}
+const top=$$('kdTop');
+if(top){top.insertAdjacentHTML('afterbegin','<button id="kdPt">⑥ 第 4 章魔藥課：進食堂地下室</button><button id="kdPt2">⑥b 魔藥課：直接做完前 4 種（只差 1 種就通關）</button><button id="kdPt3">⑥c 魔藥課：清掉進度重來</button>');
+ $$('kdPt').onclick=()=>{if(!P())return;try{devClose()}catch(e){}open()};
+ $$('kdPt2').onclick=()=>{const c=ch();if(!c)return;c.intro=1;c.stage=3;c.done=0;c.rec={sleep:1,wake:1,invis:1,luck:1};sv();try{devClose()}catch(e){}open()};
+ $$('kdPt3').onclick=()=>{const p=P();if(!p)return;delete p.ch4;if(p.titles)p.titles=p.titles.filter(t=>t!=='魔藥學徒');sv();try{rToast('已清掉第 4 章進度')}catch(e){}}}
+})();
+
 }
 </script>
 </body>
