@@ -280,7 +280,7 @@ textarea{width:100%;min-height:76px;margin-top:10px;background:rgba(0,0,0,.35);b
 .book .glyph{background:var(--noise),linear-gradient(180deg,#fff7d6 0%,#f0cc6a 40%,#9e6c1a 56%,#f5da86 74%,#b5852f 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 .03em 0 rgba(0,0,0,.85)) drop-shadow(0 -.012em 0 rgba(255,240,200,.3))}
 .book .name{color:#f8e9c4;text-shadow:0 .05em .08em rgba(0,0,0,.8)}
 .book .lines{color:#e6d3a8;text-shadow:0 .05em .08em rgba(0,0,0,.8)}
-.book .foot{padding-left:1.4em;color:#e3c272;bottom:1.45em}
+.book .foot{padding-left:1.4em;color:#e3c272;bottom:2em}
 .card.sm.book .ct{padding:0 0 0 1.4em;justify-content:center}
 .card.sm .clasp{display:none}
 
@@ -414,7 +414,7 @@ textarea{width:100%;min-height:76px;margin-top:10px;background:rgba(0,0,0,.35);b
    <circle cx="115" cy="52" r="19" fill="none" stroke="#2c2a3a" stroke-width=".9"/><circle cx="115" cy="52" r="12" fill="none" stroke="#2c2a3a" stroke-width=".6"/>
    <text font-family="Cinzel,serif" font-size="4.2" font-weight="700" letter-spacing=".8" fill="#2c2a3a"><textPath href="#pmArc" startOffset="2%">HOGWARTS OF FIRE · OWL POST ·</textPath></text>
    <text x="115" y="51" text-anchor="middle" font-family="Cinzel,serif" font-size="5" font-weight="700" fill="#2c2a3a">11·27</text><text x="115" y="56.6" text-anchor="middle" font-family="Cinzel,serif" font-size="3" fill="#2c2a3a">2026</text>
-   <path d="M88 44q4-3 8 0t8 0M86 52q4-3 8 0t8 0M88 60q4-3 8 0t8 0" fill="none" stroke="#2c2a3a" stroke-width=".7" transform="translate(-30 0)"/>
+   <path d="M88 44q4-3 8 0t8 0M86 52q4-3 8 0t8 0M88 60q4-3 8 0t8 0" fill="none" stroke="#2c2a3a" stroke-width=".7" transform="translate(-12 0)"/>
   </g>
  </g>
 </defs>
@@ -669,8 +669,8 @@ function genHang(){const W=640,H=1024,R=rng(57),c=mkCv(W,H),x=c.getContext('2d')
  // 梨子地金粉：上下比較密
  for(let i=0;i<9000;i++){const u=R(),py=u<.5?pt+Math.pow(R(),2.2)*(pb-pt)*.55:pb-Math.pow(R(),2.2)*(pb-pt)*.55,px=pl+R()*(pr-pl),v=170+R()*85;x.fillStyle=`rgba(${v+30|0},${v*.82|0},${v*.42|0},${.25+R()*.6})`;x.fillRect(px,py,.8+R()*1.4,.8+R()*1.4)}
  // 金箔片：左上、右下
- for(let i=0;i<150;i++){const k=i%2,px=k?pr-Math.pow(R(),1.6)*(pr-pl)*.6:pl+Math.pow(R(),1.6)*(pr-pl)*.6,py=k?pb-Math.pow(R(),1.6)*240:pt+Math.pow(R(),1.6)*240,s=3+R()*R()*12,a=R()*6.283,tone=R();
-  x.save();x.translate(px,py);x.rotate(a);x.fillStyle=lg(x,-s,-s,s,s,[[0,tone<.5?'#fff0bb':'#d9a83c'],[.5,tone<.5?'#c8922c':'#ffe7a0'],[1,'#8a6216']]);x.beginPath();x.moveTo(-s,-s*.7);x.lineTo(s*.9,-s);x.lineTo(s*.6,s*.8);x.lineTo(-s*.8,s*.6);x.closePath();x.globalAlpha=.55+R()*.45;x.fill();x.restore()}
+ for(let i=0;i<110;i++){const k=i%2,px=k?pr-Math.pow(R(),1.6)*(pr-pl)*.6:pl+Math.pow(R(),1.6)*(pr-pl)*.6,py=k?pb-Math.pow(R(),1.6)*240:pt+Math.pow(R(),1.6)*240,s=2.5+R()*R()*8,a=R()*6.283,tone=R();
+  x.save();x.translate(px,py);x.rotate(a);x.fillStyle=lg(x,-s,-s,s,s,[[0,tone<.5?'#fff0bb':'#d9a83c'],[.5,tone<.5?'#c8922c':'#ffe7a0'],[1,'#8a6216']]);x.beginPath();x.moveTo(-s,-s*.7);x.lineTo(s*.9,-s);x.lineTo(s*.6,s*.8);x.lineTo(-s*.8,s*.6);x.closePath();x.globalAlpha=.4+R()*.45;x.fill();x.restore()}
  grain(x,W,H,R,6,1);x.restore();
  // 黑漆軸＋金軸頭
  const rod=y=>{x.save();x.shadowColor='rgba(0,0,0,.6)';x.shadowBlur=10;x.shadowOffsetY=4;rr(x,30,y+6,W-60,rodH-12,(rodH-12)/2);x.fillStyle='#000';x.fill();x.restore();
