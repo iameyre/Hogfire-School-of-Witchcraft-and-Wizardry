@@ -1059,7 +1059,7 @@ body:has(.rpop.on,.rmap.on,.rbat.on,.rcave.on,.rprint.on) .rmoney{opacity:0;poin
     <h1 class="cv-t">倫生</h1>
   <div class="cv-l"></div>
     <div class="cv-who" id="who"></div>
-  <p class="cv-n">建議打開聲音・iPhone 請關閉靜音</p>
+  <p class="cv-n">建議打開聲音・手機請關閉靜音</p>
 </section>
 
 <section class="stage" id="s-main">
@@ -3558,39 +3558,6 @@ const lunPick=(key,list)=>{let last=null;try{last=localStorage.getItem(key)}catc
 window.lunThemeSet=(pal,ts)=>{if(pal)document.documentElement.dataset.pal=pal;if(ts)document.documentElement.dataset.ts=ts};
 window.lunThemeSet(lunPick('lunpal',['1','2','3','5','6','7','8','9']),lunPick('lunts',['1','2','3']));
 {const t=document.querySelector('#cover .cv-t');if(t&&!t.querySelector('.cvem')){const d=document.createElement('div');d.className='cvem';for(let i=0;i<16;i++){const e=document.createElement('i');e.style.left=(Math.random()*100)+'%';e.style.setProperty('--dx',(Math.random()*30-15)+'px');e.style.animationDelay=(-Math.random()*2.6)+'s';e.style.animationDuration=(1.8+Math.random()*1.6)+'s';d.appendChild(e)}t.appendChild(d)}}
-$('kdTop').insertAdjacentHTML('beforeend','<button id="kdT1">⑭ 換下一組配色（五組輪換）</button><button id="kdT2">⑮ 換下一個標題特效（封面）</button>');
-$('kdT1').onclick=()=>{const L=['1','2','3','5','6','7','8','9'],c=document.documentElement.dataset.pal||'1';window.lunThemeSet(L[(L.indexOf(c)+1)%L.length]);devNote('配色 '+document.documentElement.dataset.pal)};
-$('kdT2').onclick=()=>{const c=+(document.documentElement.dataset.ts||1);window.lunThemeSet(null,String(c%3+1));devNote('標題特效 '+document.documentElement.dataset.ts+'（回到封面才看得到）')};
-/* 進入畫面中央：符文圓環＋角色（有存檔玩家才顯示角色） */
-document.head.insertAdjacentHTML('beforeend',`<style id="thC">
-.cvrune{position:absolute;left:0;right:0;margin:0 auto;top:50%;transform:translateY(-62%);width:min(76vw,300px);height:min(76vw,300px);pointer-events:none;z-index:-1}
-.cvrune svg{position:absolute;inset:0;width:100%;height:100%;animation:cvSpin 40s linear infinite}
-.cvrune svg.r2{animation-duration:26s;animation-direction:reverse}
-@keyframes cvSpin{to{transform:rotate(360deg)}}
-.cvrune .t{stroke:var(--trim)}.cvrune .c{stroke:var(--a2)}.cvrune .m{stroke:var(--a1)}
-.cvrune canvas{position:absolute;left:50%;top:50%;width:46%;height:auto;transform:translate(-50%,-50%);image-rendering:pixelated;filter:drop-shadow(0 0 12px var(--a2))}
-</style>`);
-setTimeout(()=>{try{const cv=document.getElementById('cover');if(!cv||cv.querySelector('.cvrune'))return;
- const d=document.createElement('div');d.className='cvrune';
- d.innerHTML='<svg viewBox="0 0 300 300"><g fill="none"><circle class="t" cx="150" cy="150" r="140" stroke-opacity=".8"/><circle class="c" cx="150" cy="150" r="128" stroke-dasharray="3 6"/><circle class="t" cx="150" cy="150" r="100" stroke-opacity=".5"/><path class="t" d="M150 6v14M150 280v14M6 150h14M280 150h14M48 48l10 10M242 242l10 10M242 48l-10 10M48 242l10-10" stroke-opacity=".7"/></g></svg><svg class="r2" viewBox="0 0 300 300"><g fill="none"><path class="m" d="M150 30l104 60v120l-104 60-104-60V90z" stroke-opacity=".7"/><path class="c" d="M150 62l76 44v88l-76 44-76-44v-88z" stroke-opacity=".6"/></g></svg>';
- try{if(P()&&window.lunAvCanvas){const c=window.lunAvCanvas(6,0);c.className='pix';d.appendChild(c)}}catch(e){}
- cv.insertBefore(d,cv.firstChild)}catch(e){}},400);
-/* 選單與按鈕：更清楚、更有質感（雲 11/26 回饋：選項看不清楚、出發冒險那幾顆很廉價） */
-document.head.insertAdjacentHTML('beforeend',`<style id="thD">
-.rsub button{min-height:50px!important;min-width:136px!important;font-size:16px!important;letter-spacing:.14em!important;color:#fff!important;background:linear-gradient(180deg,#22123a,#0a0512)!important;border:1px solid var(--trim)!important;border-radius:0!important;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px)!important;box-shadow:inset 0 0 0 2px #0a0512,inset 0 0 0 3px color-mix(in srgb,var(--a2) 45%,transparent)!important;text-shadow:0 1px 2px #000}
-.rsub button.lk{color:rgba(255,255,255,.55)!important}
-.rshade{background:rgba(0,0,0,.6)!important}
-.pbtn,.rhgo .rq{position:relative;overflow:hidden;border:0!important;border-radius:0!important;min-height:56px;font-size:19px!important;letter-spacing:.4em!important;color:#fff!important;text-shadow:0 1px 0 #000b,0 0 10px color-mix(in srgb,var(--a1) 60%,transparent);clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px)!important;background:linear-gradient(180deg,color-mix(in srgb,var(--a1) 82%,#fff) 0%,var(--a1) 42%,var(--a3) 100%)!important;box-shadow:inset 0 1px 0 #fffa,inset 0 -3px 0 #0007,inset 0 0 0 2px color-mix(in srgb,var(--trim) 75%,transparent)!important}
-.pbtn::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.4) 50%,transparent 60%);transform:translateX(-120%);animation:btnShine 5s ease-in-out infinite}
-@keyframes btnShine{0%,62%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
-.rhgo .rq{background:linear-gradient(180deg,#2c1a48,#10081c)!important;color:var(--a2)!important;box-shadow:inset 0 1px 0 #fff3,inset 0 -3px 0 #0007,inset 0 0 0 2px color-mix(in srgb,var(--trim) 75%,transparent)!important}
-.pbtn:disabled{opacity:.45}
-.rst div{font-size:15px!important;color:#ece6f8!important}.rst div b{font-size:17px!important}
-.rwp p{font-size:14px!important;color:#ece6f8!important}
-.rhtips{font-size:13px!important;opacity:1!important;color:#d6cfe8!important}
-.kpl small{color:var(--trim)!important;font-size:12px!important;opacity:1!important}
-.kpl b{font-size:20px}
-</style>`);
 window.lunAvCanvas=(s,fr)=>avCanvas(ensureAv().eq,s||1,fr||0);
 
 /* ===== v19.0（2026-11-26）：小狐狸寵物（孵蛋、餵食、進化、跟隨）＋夾娃娃機（G3） =====
