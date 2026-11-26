@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>倫生・卡池重做預覽</title>
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0626;--gold:#ffe9a8;--line:#3a2a70;--mut:#ffffffaa}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:#fff;font-family:'DotGothic16','Noto Sans TC',sans-serif}
+body{padding-bottom:140px}
+.wrap{max-width:720px;margin:0 auto;padding:0 14px}
+header{padding:calc(env(safe-area-inset-top) + 18px) 0 6px}
+h1{font-weight:400;font-size:22px;letter-spacing:.2em;color:var(--gold)}
+header p{font-size:13px;color:var(--mut);line-height:1.7;margin-top:6px}
+h2{font-weight:400;font-size:16px;letter-spacing:.2em;color:var(--gold);margin:26px 0 6px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+.note{font-size:12px;color:var(--mut);line-height:1.7;margin:4px 0 12px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px 12px}
+@media(min-width:560px){.grid{grid-template-columns:repeat(3,1fr)}}
+.cw{perspective:900px}
+.card{position:relative;aspect-ratio:5/8;width:100%;transform-style:preserve-3d;transition:transform .6s;cursor:pointer}
+.card.flip{transform:rotateY(180deg)}
+.face,.back{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;display:flex;flex-direction:column;align-items:center;text-align:center;padding:10px 8px 8px}
+.back{transform:rotateY(180deg);justify-content:center;gap:8px;font-size:11px;color:#fff;line-height:1.6;padding:12px}
+.tag{font-size:10px;letter-spacing:.2em;padding:1px 6px;border:1px solid currentColor}
+.glyph{font-size:54px;line-height:1;margin:auto 0 4px}
+.nm{font-size:15px;letter-spacing:.08em;margin-bottom:4px}
+.ln{font-size:10.5px;line-height:1.5;opacity:.9;min-height:46px}
+.no{font-size:9px;letter-spacing:.2em;opacity:.7;margin-top:4px;align-self:flex-end}
+.rw{position:absolute;left:6px;right:6px;bottom:22px;font-size:9.5px;padding:2px 4px;background:#000a;color:var(--gold);border:1px solid var(--gold);letter-spacing:.05em}
+.kind{font-size:11px;color:var(--mut);text-align:center;margin-top:6px;letter-spacing:.1em}
+/* 符紙 N */
+.t-n .face{background:linear-gradient(180deg,#f0dc9a,#d9bd6a);color:#5a1a10;clip-path:polygon(0 3%,6% 0,14% 2%,26% 0,40% 2%,55% 0,70% 2%,84% 0,95% 2%,100% 0,100% 97%,92% 100%,78% 98%,62% 100%,46% 98%,30% 100%,14% 98%,5% 100%,0 97%);box-shadow:inset 0 0 22px #8a5a1a66}
+.t-n .face::before{content:'';position:absolute;inset:6px;border:2px solid #b3182f88}
+.t-n .glyph{color:#b3182f;text-shadow:0 0 0 #b3182f;border:3px solid #b3182f;padding:4px 8px;border-radius:2px;font-size:44px}
+.t-n .back{background:#c9a850;clip-path:polygon(0 3%,6% 0,14% 2%,26% 0,40% 2%,55% 0,70% 2%,84% 0,95% 2%,100% 0,100% 97%,92% 100%,78% 98%,62% 100%,46% 98%,30% 100%,14% 98%,5% 100%,0 97%);color:#5a1a10}
+/* 魔咒卡 R */
+.t-r .face{background:linear-gradient(160deg,#1a2a5a,#0a1230);color:#e8f0ff;border:3px solid #c8d8ff;box-shadow:0 0 14px #6a8aff66,inset 0 0 20px #3a5aff44}
+.t-r .glyph{color:#cfe0ff;text-shadow:0 0 14px #6a8aff;position:relative}
+.t-r .glyph::after{content:'';position:absolute;left:50%;top:50%;width:92px;height:92px;margin:-46px 0 0 -46px;border:2px dashed #8aa8ff88;border-radius:50%;animation:spin 14s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.t-r .back{background:#0a1230;border:3px solid #c8d8ff}
+/* 卷軸 SR */
+.t-sr .face{background:linear-gradient(180deg,#e8d8f8,#c8aee8);color:#2a1050;border-top:14px solid #5a2a9a;border-bottom:14px solid #5a2a9a;box-shadow:0 4px 0 #2a1050,0 0 16px #a070ff66}
+.t-sr .face::before{content:'';position:absolute;left:0;right:0;top:-14px;height:14px;background:repeating-linear-gradient(90deg,#7a4aca 0 6px,#5a2a9a 6px 12px)}
+.t-sr .glyph{color:#5a2a9a}
+.t-sr .back{background:#5a2a9a;border:3px solid #e8d8f8}
+/* 金卷 SSR */
+.t-ssr .face{background:linear-gradient(135deg,#fff3b0,#e8b84a 45%,#fff3b0 55%,#c8902a);color:#4a2a05;border:3px solid #fff8d0;box-shadow:0 0 20px #ffd04aaa}
+.t-ssr .face::after{content:'';position:absolute;top:-20%;bottom:-20%;width:30%;left:-40%;background:linear-gradient(90deg,transparent,#fffa,transparent);transform:skewX(-20deg);animation:sh 3s ease-in-out infinite}
+@keyframes sh{0%,50%{left:-40%}100%{left:130%}}
+.t-ssr .glyph{color:#7a4a05}
+.t-ssr .back{background:#c8902a;border:3px solid #fff8d0}
+/* 貓頭鷹信 SP */
+.t-sp .face{background:linear-gradient(180deg,#fff4e0,#f0dcb0);color:#4a2a10;border:3px solid #8a5a2a}
+.t-sp .face::before{content:'';position:absolute;left:0;right:0;top:0;height:46%;background:linear-gradient(160deg,#e8caa0 50%,transparent 50%),linear-gradient(200deg,#e8caa0 50%,transparent 50%);background-size:50% 100%;background-position:left,right;background-repeat:no-repeat;opacity:.9}
+.t-sp .glyph{color:#b3182f;margin-top:62px;position:relative;z-index:1}
+.t-sp .seal{position:absolute;top:calc(46% - 13px);left:50%;width:26px;height:26px;margin-left:-13px;border-radius:50%;background:#b3182f;box-shadow:inset 0 0 0 3px #e0102e,0 2px 0 #5a0c18}
+.t-sp .back{background:#8a5a2a;border:3px solid #fff4e0}
+/* 魔法書 傳說 */
+.t-lg .face{background:linear-gradient(160deg,#3a0a50,#1a0530);color:#fff;border:4px solid transparent;border-image:linear-gradient(135deg,#ff5a8a,#ffd04a,#5affb0,#5aa8ff,#ff5a8a) 1;box-shadow:0 0 22px #c08aff88}
+.t-lg .face::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:8px;background:linear-gradient(180deg,#ffd04a,#c8902a)}
+.t-lg .glyph{color:#ffe9a8;text-shadow:0 0 16px #ffb84a}
+.t-lg .back{background:#3a0a50;border:4px solid #ffd04a}
+/* 火焰咒印 SSSR */
+.t-x .face{background:radial-gradient(ellipse at 50% 100%,#ff5a1a,#8a0a10 45%,#1a0204 80%);color:#fff;border:3px solid #ff9a3a;box-shadow:0 0 26px #ff5a1acc;animation:fl 1.4s ease-in-out infinite}
+@keyframes fl{50%{box-shadow:0 0 38px #ffb84aee}}
+.t-x .glyph{color:#fff3b0;text-shadow:0 0 18px #ff7a1a,0 0 36px #ff3a0a;font-size:64px}
+.t-x .back{background:#2a0406;border:3px solid #ff9a3a}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.tools button,.bar button,.opt button{font:inherit;font-size:14px;color:#fff;background:#140a2c;border:2px solid var(--gold);padding:10px 14px;border-radius:0;letter-spacing:.05em}
+.tools button:active,.bar button:active{background:#3a2a70}
+.stage{position:relative;min-height:340px;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,#2a1050,#05030a 70%);border:2px solid var(--line);margin:10px 0}
+.stage .cw{width:200px}
+.hint{position:absolute;bottom:10px;left:0;right:0;text-align:center;font-size:12px;color:var(--mut)}
+.pop{position:absolute;top:10px;left:0;right:0;text-align:center;font-size:20px;letter-spacing:.2em;color:var(--gold);text-shadow:0 2px 0 #000;opacity:0}
+.pop.go{animation:pp 1.6s ease-out}
+@keyframes pp{0%{opacity:0;transform:scale(.6)}20%{opacity:1;transform:scale(1.1)}80%{opacity:1}100%{opacity:0}}
+.rcard{background:#140a2c;border:2px solid var(--line);padding:12px;margin-bottom:10px}
+.rcard h3{font-weight:400;font-size:16px;letter-spacing:.1em;color:var(--gold)}
+.rcard p{font-size:12px;line-height:1.7;color:#ffffffcc;margin:4px 0 8px}
+.opt{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.opt button{padding:10px 4px;border-color:#ffffff44;color:#ffffffbb;font-size:13px}
+.opt button.on{background:#12402a;border-color:#6aff9a;color:#6aff9a}
+.bar{position:fixed;left:0;right:0;bottom:0;background:#05030af2;border-top:3px solid var(--gold);padding:10px 14px calc(env(safe-area-inset-bottom) + 10px);z-index:5}
+.bar .in{max-width:720px;margin:0 auto;display:flex;gap:8px}
+.bar button{flex:1}
+.bar button.p{background:linear-gradient(180deg,#fff3d2,#d9ad5e);color:#4a2a10;border-color:#6a4a1e}
+.out{display:none;margin:14px 0;border:2px solid var(--gold);padding:10px;background:#05030a}
+.out.on{display:block}
+.out textarea{width:100%;height:230px;background:#0a0618;color:#fff;border:1px solid var(--line);font:13px/1.6 'DotGothic16',monospace;padding:8px}
+.ta2{width:100%;height:70px;background:#0a0618;color:#fff;border:2px solid var(--line);font:13px/1.6 'DotGothic16',sans-serif;padding:8px;margin-top:6px}
+</style></head><body><div class="wrap">
+<header><h1>卡池重做預覽</h1>
+<p>原本的卡池（共 80 張卡，卡名和梗都保留）換成「魔法世界的東西」：普通是符紙，越稀有越像魔法道具。<br>下面三塊：①卡面長相（點卡片翻面）②抽一張試試 ③特殊卡要給什麼獎勵（點選，最後複製結果貼回對話）。</p></header>
+
+<h2>① 卡面長相</h2>
+<p class="note">同一張卡的名字和梗一字不改，只換「紙」。右上小標是稀有度。最稀有的幾張會寫出獎勵。</p>
+<div class="grid" id="grid"></div>
+
+<h2>② 抽一張試試</h2>
+<p class="note">機率只是預覽用（普通 56%、咒語 24%、卷軸 12%、金卷 5%、朋友信 2%、傳說 0.8%、火 0.2%）。點「抽一張」，點卡片翻面。</p>
+<div class="tools"><button id="draw">抽一張</button><button id="ten">連抽 10 張（看結果）</button></div>
+<div class="stage" id="stage"><div class="pop" id="pop"></div><div class="hint" id="hint">按「抽一張」</div></div>
+<div class="note" id="tenOut"></div>
+
+<h2>③ 特殊卡的獎勵（請點選）</h2>
+<p class="note">你說的：抽到最特殊的卡才有「特殊技能」，最特殊的送坐騎。下面是我的建議，已經先選好「都給」，不同意就改。技能會出現在咒語戰鬥的選單裡。</p>
+<div id="rewards"></div>
+
+<h2>④ 順便要拆掉的舊東西（確認用）</h2>
+<p class="note">卡池重做後，這些舊東西會一起從程式碼拆掉：各種抽法（戳戳樂、蓄力、拉霸、扭蛋機、刮刮樂、釣魚、大富翁）、舊的「選秘境」抽卡入口、每日任務頁、開局擲骰、特別任務小條。抽卡只留「翻牌」一種，三個秘境（仙境、地獄、賭狗）可以保留當三個「卡包」，或合併成一個，請在下面備註告訴我。</p>
+<textarea class="ta2" id="note" placeholder="例如：三個秘境合併成一個卡池／某張卡的新梗／符紙的顏色想改"></textarea>
+<div class="out" id="out"><textarea id="ta" readonly></textarea></div>
+</div>
+<div class="bar"><div class="in"><button id="bAll">獎勵全部用建議</button><button class="p" id="bCopy">複製結果</button></div></div>
+<script>
+const KINDS={N:['t-n','符紙','普通'],R:['t-r','魔咒卡','咒語'],SR:['t-sr','咒語卷軸','卷軸'],SSR:['t-ssr','金卷軸','金卷'],SP:['t-sp','貓頭鷹信','朋友信'],LG:['t-lg','魔法書','傳說'],X:['t-x','火焰咒印','火']};
+const CARDS=[
+ {r:'N',g:'謝',n:'謝謝惠顧',k:['這張什麼都沒有。','真的什麼都沒有。']},
+ {r:'R',g:'急',n:'你急什麼急',k:['對所有催促免疫。','冷卻 0 秒。']},
+ {r:'SR',g:'答',n:'自問自答',k:['自己出題，自己作答。','正確率百分之百。']},
+ {r:'SSR',g:'便',n:'好便友',k:['對方一蹲下，','你的訊息就到。']},
+ {r:'SP',g:'瘋',n:'英倫瘋・染髮卡',k:['今天又換新髮色。','全家都要看一眼。']},
+ {r:'LG',g:'金',n:'美倫美奐',k:['金碧輝煌。','連抽卡的這隻手，','都鍍了一層金。'],rw:'特殊技能：金光閃閃'},
+ {r:'LG',g:'回',n:'倫回',k:['抽完一輪，','又是一輪。','劫數生生不息。'],rw:'特殊技能：倫回'},
+ {r:'LG',g:'轉',n:'風水倫流轉',k:['前面的劫數都算數。','風水轉了一圈，','終於倫到你。'],rw:'技能＋坐騎：倫妃步輦'},
+ {r:'LG',g:'星',n:'SUPER 倫 IDOL',k:['出道即巔峰。','巔峰即退休。'],rw:'技能＋坐騎：九尾狐'},
+ {r:'X',g:'火',n:'火',k:['點火的人。','倫的每個劫數，','都從她開始燒起。'],rw:'技能＋坐騎：地獄火鳳凰'}];
+const mk=(c,i,flipped)=>{const K=KINDS[c.r];const w=document.createElement('div');w.className='cw';
+ w.innerHTML=`<div class="card ${K[0]}${flipped?' flip':''}"><div class="face"><span class="tag">${K[2]}</span>${c.r==='SP'?'<i class="seal"></i>':''}<div class="glyph">${c.g}</div><div class="nm">${c.n}</div><div class="ln">${c.k.join('<br>')}</div>${c.rw?`<div class="rw">${c.rw}</div>`:''}<div class="no">NO.${String(i+1).padStart(2,'0')}</div></div><div class="back"><b>${K[1]}</b><span>${c.r==='N'?'揉皺的黃色符紙，上面的字快糊掉了。':c.r==='R'?'銀邊魔咒卡，轉圈的符文代表有人在念咒。':c.r==='SR'?'紫色絲帶綁起來的卷軸。':c.r==='SSR'?'金箔卷軸，會反光。':c.r==='SP'?'貓頭鷹送來的信，蠟封是紅色的。':c.r==='LG'?'會發光的魔法書，書背有寶石。':'火焰咒印。拿在手上會有點燙。'}</span></div></div><div class="kind">${K[1]}</div>`;
+ w.querySelector('.card').onclick=e=>e.currentTarget.classList.toggle('flip');return w};
+const grid=document.getElementById('grid');CARDS.forEach((c,i)=>grid.appendChild(mk(c,i)));
+/* 抽卡預覽 */
+const ODDS=[['N',.56],['R',.24],['SR',.12],['SSR',.05],['SP',.02],['LG',.008],['X',.002]];
+const SAMP={N:[CARDS[0]],R:[CARDS[1]],SR:[CARDS[2]],SSR:[CARDS[3]],SP:[CARDS[4]],LG:CARDS.slice(5,9),X:[CARDS[9]]};
+const roll=()=>{let x=Math.random(),a=0;for(const [r,p] of ODDS){a+=p;if(x<a)return r}return 'N'};
+let AC;const tone=(f,d,v=.04,t='sine',dl=0)=>{try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.type=t;o.frequency.value=f;g.gain.value=v;o.connect(g);g.connect(AC.destination);const t0=AC.currentTime+dl;o.start(t0);g.gain.exponentialRampToValueAtTime(.0001,t0+d);o.stop(t0+d)}catch(e){}};
+const stage=document.getElementById('stage');
+document.getElementById('draw').onclick=()=>{const r=roll(),c=SAMP[r][Math.floor(Math.random()*SAMP[r].length)];stage.querySelectorAll('.cw').forEach(x=>x.remove());const w=mk(c,Math.floor(Math.random()*80),true);stage.appendChild(w);document.getElementById('hint').textContent='點卡片翻面';
+ const card=w.querySelector('.card');card.addEventListener('click',()=>{if(card.classList.contains('flip'))return;},{once:false});
+ tone(440,.15);tone(660,.15,.04,'sine',.1);
+ const pop=document.getElementById('pop');const lab={N:'',R:'',SR:'卷軸！',SSR:'金卷！',SP:'朋友來信！',LG:'傳說卡！',X:'火！！'}[r];
+ // 自動翻面（模擬拆封）
+ setTimeout(()=>{card.classList.remove('flip');if(lab){pop.textContent=lab;pop.classList.remove('go');void pop.offsetWidth;pop.classList.add('go');[523,659,784,1047].forEach((f,i)=>tone(f,.25,.05,'sine',i*.1))}else tone(330,.1,.03)},500)};
+document.getElementById('ten').onclick=()=>{const cnt={};for(let i=0;i<10;i++){const r=roll();cnt[r]=(cnt[r]||0)+1}document.getElementById('tenOut').textContent='這十張：'+Object.entries(cnt).map(([r,n])=>KINDS[r][1]+' ×'+n).join('、')};
+/* 獎勵設定 */
+const RW=[
+ {id:'gold',c:'美倫美奐（金）',d:'建議：特殊技能「金光閃閃」＝魔力一次回滿。',skill:'金光閃閃（魔力回滿）',mount:null},
+ {id:'orng',c:'倫回',d:'建議：特殊技能「倫回」＝每場戰鬥倒下時復活一次。',skill:'倫回（倒下復活一次）',mount:null},
+ {id:'ult',c:'風水倫流轉',d:'建議：技能「風水輪流轉」＝和對手交換血量比例；坐騎「倫妃步輦」（原本第 4 章通關的坐騎，改成抽卡拿）。',skill:'風水輪流轉（和對手交換血量比例）',mount:'倫妃步輦'},
+ {id:'idol',c:'SUPER 倫 IDOL',d:'建議：技能「出道」＝大招，高傷害＋回復；坐騎「九尾狐」。',skill:'出道（高傷害＋回復）',mount:'九尾狐'},
+ {id:'fire',c:'火（SSSR）',d:'建議：技能「點火」＝讓對手持續燃燒 3 回合；坐騎「地獄火鳳凰」。這張是整個卡池最稀有的一張。',skill:'點火（對手燃燒 3 回合）',mount:'地獄火鳳凰'}];
+const OPT=[['both','技能＋坐騎（建議）'],['skill','只給技能'],['mount','只給坐騎'],['none','都不給（只是收藏）']];
+const S={};RW.forEach(r=>S[r.id]=r.mount?'both':'skill');
+const rw=document.getElementById('rewards');
+const renderRW=()=>{rw.innerHTML='';RW.forEach(r=>{const d=document.createElement('div');d.className='rcard';const opts=r.mount?OPT:[['skill','給技能（建議）'],['none','不給（只是收藏）']];
+ d.innerHTML=`<h3>${r.c}</h3><p>${r.d}</p><div class="opt">${opts.map(([v,t])=>`<button data-r="${r.id}" data-v="${v}" class="${S[r.id]===v?'on':''}">${t}</button>`).join('')}</div>`;rw.appendChild(d)})};
+renderRW();
+rw.addEventListener('click',e=>{const b=e.target.closest('button[data-r]');if(!b)return;S[b.dataset.r]=b.dataset.v;renderRW()});
+document.getElementById('bAll').onclick=()=>{RW.forEach(r=>S[r.id]=r.mount?'both':'skill');renderRW()};
+document.getElementById('bCopy').onclick=()=>{const L=RW.map(r=>{const v=S[r.id];const t=v==='both'?`技能「${r.skill}」＋坐騎「${r.mount}」`:v==='skill'?`技能「${r.skill}」`:v==='mount'?`坐騎「${r.mount}」`:'都不給';return '・'+r.c+'：'+t});
+ const note=document.getElementById('note').value.trim();const txt='【倫生・卡池重做 選擇結果】\n\n卡面：符紙（普通）、魔咒卡（R）、咒語卷軸（SR）、金卷軸（SSR）、貓頭鷹信（朋友卡）、魔法書（傳說）、火焰咒印（SSSR）\n\n特殊卡獎勵：\n'+L.join('\n')+(note?'\n\n備註：'+note:'');
+ const ta=document.getElementById('ta');ta.value=txt;document.getElementById('out').classList.add('on');
+ const done=()=>{document.getElementById('bCopy').textContent='已複製，貼回對話';setTimeout(()=>document.getElementById('bCopy').textContent='複製結果',2500)};
+ if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(done).catch(()=>ta.select());else{ta.select();try{document.execCommand('copy');done()}catch(e){}}
+ document.getElementById('out').scrollIntoView({behavior:'smooth',block:'center'})};
+</script></body></html>
