@@ -4781,7 +4781,7 @@ const RAT=mkSprite(['..gg....gg..','.gppg..gppg.','.gggggggggg.','gggkgggkgggg',
 const IMG={};
 const portrait=k=>{if(IMG[k]!==undefined)return IMG[k];let im=null;
  if(k==='l')im=window.lunSP&&window.lunSP.d?window.lunSP.d[0]:null;
- else if(k==='p')im=spImg('peng');else if(k==='d')im=spImg('dog');else if(k==='s')im=window.lunSbnImg||null;else if(k==='r')im=RAT;
+ else if(k==='p')im=spImg('peng');else if(k==='d')im=spImg('dog');else if(k==='s')im=window.lunSbnImg||null;else if(k==='r')im=RAT;else if(k==='w')im=spImg('mom');
  if(im)IMG[k]=im;return im};
 /* ---------- DOM ---------- */
 document.head.insertAdjacentHTML('beforeend',`<style id="fr26css">
@@ -4880,7 +4880,7 @@ const hit=(x,y)=>{for(const [ox,oy] of [[3,11],[11,11],[3,17],[11,17]]){const tx
 const setHud=()=>{const c=ch();if(!c)return;$$('frS').textContent=`照片 ${photoN()}/3　鼠 ${c.rat?1:0}/1　夜行怪 ${monN()}/2`;const e2=$$('frS2');if(e2)e2.textContent=goalTx()};
 const goalTx=()=>{const c=ch();if(c.done)return '已通關，隨便逛逛。';if(photoN()<3)return '目標：往上走，踩發光圈拍照（還差 '+(3-photoN())+' 張）';if(!c.mk[0]||!c.mk[1])return '目標：打倒擋路的怪（撞上去就開打）';if(!c.rat)return '目標：在灌木叢找西當普利鼠（最上面那一叢，說「不好意鼠」）';return '目標：全部完成，走到最上面的出口';};
 /* ---------- 對話 ---------- */
-const WHO={l:'倫',p:'天彭星',d:'海狗',s:'鼠內普',r:'西當普利鼠',x:''};
+const WHO={l:'倫',p:'天彭星',d:'海狗',s:'鼠內普',r:'西當普利鼠',w:'湯姆瑞英',x:''};
 let tmr=0,typing=false,fullTx='',tapRes=null;
 const putCv=(c,im)=>{if(!im){c.width=1;c.height=1;return}c.width=im.width;c.height=im.height;const x=c.getContext('2d');x.imageSmoothingEnabled=false;x.clearRect(0,0,c.width,c.height);x.drawImage(im,0,0)};
 let cta=null,ctb=null;
@@ -4920,7 +4920,7 @@ const RATL=[['x','撥開草叢……有小小的聲音。'],['r','……不好�
  ['?','x','要怎麼叫牠出來？',['大聲喊「出來！」','小聲說「不好意鼠，我是來找你的」','原地跳舞'],1,'提示：牠一直在說什麼？跟牠說一樣的話。'],
  ['r','……你也說不好意鼠。你是好人。不好意鼠。'],['l','不要怕，我帶你去找主人。'],['r','不好意鼠，那麻煩你了。'],['d','找到了！出口就在前面，我們走。']];
 const NEED=()=>{const c=ch(),a=[];const n=3-photoN();if(n>0)a.push(`還有 ${n} 張照片沒拍`);if(!c.rat)a.push('還沒找到西當普利鼠');if(!c.mk[0]||!c.mk[1])a.push('還有夜行怪沒解決');return a.join('、')};
-const END=[['x','森林出口。一盞小燈亮著，有人在等。'],['s','……不好意鼠。你們終於出來了。我是鼠內普。'],['r','不好意鼠，主人。'],
+const END=[['x','森林出口。一盞小燈亮著，有人在等。'],['x','出口的樹洞裡，躺著一本舊日記。封面寫著：湯姆瑞英。'],['w','……你終於出來了。你有吃飯嗎？有沒有穿外套？'],['l','……媽？'],['w','叫湯姆瑞英。我只是一本日記。'],['w','（小聲）今晚早點睡。'],['s','……不好意鼠。你們終於出來了。我是鼠內普。'],['r','不好意鼠，主人。'],
  ['s','我的鼠走丟了一整晚，我找得很急。謝謝你，在黑暗裡也肯幫忙。'],['p','年鑑照片三張都拍好了，很有質感。'],['d','你很夠意思，新生。'],
  ['s','夜間實習，這就是要學的事：天黑了，也要有人點燈。我宣布，實習通過。'],['l','我只是走了一趟森林。'],['s','對。而且你沒有把鼠弄丟。這樣就夠了。']];
 /* ---------- 拍照 ---------- */
@@ -5315,7 +5315,7 @@ const azkaban=()=>{const c=ch(),q=pot();let lost=0;REC.filter(R=>R.ban).forEach(
  let sec=15;const iv=setInterval(()=>{sec--;const el=$$('azT');if(el)el.textContent=sec>0?'服刑中　'+sec+' 秒':'刑期結束';if(sec===11&&!myst){myst=.01;sfx(70,.8,'sine',.04);startDlg()}if(sec<=0){clearInterval(iv);timeDone=true;chk()}},1000);
  const chk=()=>{const b=$$('azOk');if(b&&timeDone&&dlgDone)b.disabled=false};
  /* 神秘人的對話（不重排逐字）*/
- const L=[['','（一個披著黑斗篷的人，站在鐵柵欄外，看了你很久。）'],['神秘人','……你做的藥，味道不錯。'],['倫','你是誰？'],['神秘人','一個不想被你看到的人。'],['神秘人',nh?'我留一張紙條給你。下次，不要被抓到。':'你已經什麼都知道了。下次，不要被抓到。']];
+ const L=[['','（一個披著黑斗篷的人，站在鐵柵欄外，看了你很久。）'],['神秘人','……你做的藥，味道不錯。'],['倫','你是誰？'],['神秘人','一個不想被你看到的人。'],['神秘人','……你吃飯了沒有？'],['倫','……？'],['神秘人',nh?'我留一張紙條給你。下次，不要被抓到。':'你已經什麼都知道了。下次，不要被抓到。']];
  let li=0,typing=false,full='',tm=0,ta=null,tb=null;
  const line=()=>{const it=L[li];if(!it){return endDlg()}const D=$$('azD');D.innerHTML='<b></b><div></div>';D.firstChild.textContent=it[0];const tx=D.lastChild;ta=document.createTextNode('');tb=document.createTextNode(it[1]);const sp=document.createElement('span');sp.style.color='transparent';sp.appendChild(tb);tx.append(ta,sp);full=it[1];typing=true;let i=0;clearInterval(tm);
   tm=setInterval(()=>{i++;ta.data=full.slice(0,i);tb.data=full.slice(i);if(i%4===1)sfx(700+Math.random()*40,.02,'square',.008);if(i>=full.length){clearInterval(tm);typing=false}},45)};
@@ -5354,8 +5354,8 @@ if(top){top.insertAdjacentHTML('afterbegin','<button id="kdPt">⑥ 第 4 章魔�
    一個小引擎 run(steps)：背景(bg)／對話(t)／問答(q)／特效(fx)／小遊戲(egg)／打怪(fight)／自訂(do)。對話框一律「整句先排好、未出現的字透明」逐字，不重排（雲要求不要再卡）。
    第 3 章 領養生物課（倫間仙境）：芳教授＋貓頭鷹送蛋→摸蛋孵化→小狐狸（寫進 p.fox）。
    第 5 章 守護神課（倫生巔峰）：鄧布嚕多教守護神咒（問答）→放出發光海狗→崔狂魔（雲姓崔的梗）來襲→用咒語＋藥水打贏（rpg20 的 守護神咒 對崔狂魔傷害 ×2）。
-   第 6 章 學院盃（瘋火地獄體育場）：連打李志憲、鄧布嚕多、天彭星三場（咒語戰鬥）→積分榜（我們的學院第一）。
-   第 7 章 開學典禮（12/20 才開放，DEV 不鎖）：揭曉是生日會，大家輪流祝福＋雅雲的留言（YUN_MSG 是草稿，請雅雲自己改）。
+   第 6 章 學院盃＝金探子（瘋火地獄體育場，2026-11-27 雲改）：騎飛天掃帚抓金探子三輪（對手李志憲、鄧布嚕多、佛達魔；講評湯姆瑞英），小遊戲 snitch()：按住畫面飛向手指，金探子忽快忽慢、靠近會衝開，對手也會追；→積分榜。
+   第 7 章 開學典禮（12/20 才開放，DEV 不鎖）：揭曉是生日會。湯姆瑞英（文英＝媽）和佛達魔（金達＝爸，阿茲卡班的神秘人）是總策劃，大家輪流祝福＋雅雲的留言（YUN_MSG 是草稿，請雅雲自己改）。
    坐騎（銀光海狗守護神、許願雲）要先做預覽給雲選，所以這版只記 mountPending，不給。
    存檔：p.ch3／p.ch5／p.ch6／p.ch7 ={done,...}。稱號存 p.titles（領養員、守護神使、學院盃冠軍、壽星）。
    對外：window.lunChaptersOpen（章節總覽）。 */
@@ -5370,17 +5370,14 @@ const title=t=>{const p=P();p.titles=p.titles||[];if(!p.titles.includes(t))p.tit
 /* ---------- 新增戰鬥場地（rpg20 用 AOF(id) 找）---------- */
 const addArea=a=>{if(!AREAS.find(x=>x.id===a.id))AREAS.push(Object.assign({lv:1,k:1,x:.5,y:.1,d:'劇情戰鬥。'},a))};
 addArea({id:'dementor',n:'倫生巔峰・夜',L:[10,12],m:['ghost'],boss:'ghost',bn:'崔狂魔',sky:['#05060f','#1a1a3a'],gr:'#2a2a3a',gd:'#14141f'});
-addArea({id:'cup1',n:'學院盃・第一場',L:[8,9],m:['knight'],boss:'knight',bn:'李志憲教授',sky:['#3a0a10','#a02a20'],gr:'#5a2a2a',gd:'#3a1010'});
-addArea({id:'cup2',n:'學院盃・第二場',L:[9,10],m:['dog'],boss:'dog',bn:'鄧布嚕多校長',sky:['#3a0a10','#a02a20'],gr:'#5a2a2a',gd:'#3a1010'});
-addArea({id:'cup3',n:'學院盃・第三場',L:[10,11],m:['imp'],boss:'imp',bn:'天彭星',sky:['#3a0a10','#a02a20'],gr:'#5a2a2a',gd:'#3a1010'});
 /* ---------- 頭像 ---------- */
 const spImg=k=>{try{const Sx=THEATER.SPR[k],P0=THEATER.PAL;if(!Sx)return null;const rows=Sx.map(r=>r.padEnd(20,'.')),H=rows.length,W=Math.max(...rows.map(r=>r.length));const c=document.createElement('canvas');c.width=W+2;c.height=H+2;const g=c.getContext('2d');const fl=(i,j)=>i>=0&&i<W&&j>=0&&j<H&&rows[j][i]!=='.';
  g.fillStyle=P0.O||'#2a1620';for(let j=-1;j<=H;j++)for(let i=-1;i<=W;i++){if(fl(i,j))continue;if(fl(i+1,j)||fl(i-1,j)||fl(i,j+1)||fl(i,j-1))g.fillRect(i+1,j+1,1,1)}
  for(let j=0;j<H;j++)for(let i=0;i<W;i++){const c2=rows[j][i];if(c2==='.')continue;g.fillStyle=P0[c2]||'#fff';g.fillRect(i+1,j+1,1,1)}return c}catch(e){return null}};
 const IMG={};
-const WHO={l:'倫',g:'李志憲教授',a:'鄧布嚕多校長',p:'天彭星',d:'海狗',f:'芳教授',s:'鼠內普',y:'雅雲',x:''};
+const WHO={l:'倫',g:'李志憲教授',a:'鄧布嚕多校長',p:'天彭星',d:'海狗',f:'芳教授',s:'鼠內普',y:'雅雲',w:'湯姆瑞英',v:'佛達魔',n:'神秘人',x:''};
 const portrait=k=>{if(IMG[k]!==undefined)return IMG[k];let im=null;
- if(k==='l')im=window.lunSP&&window.lunSP.d?window.lunSP.d[0]:null;else if(k==='g')im=spImg('lzx');else if(k==='a')im=spImg('alu');else if(k==='p')im=spImg('peng');else if(k==='d')im=spImg('dog');else if(k==='f')im=spImg('fang');else if(k==='y')im=spImg('yun');else if(k==='s')im=window.lunSbnImg||null;
+ if(k==='l')im=window.lunSP&&window.lunSP.d?window.lunSP.d[0]:null;else if(k==='g')im=spImg('lzx');else if(k==='a')im=spImg('alu');else if(k==='p')im=spImg('peng');else if(k==='d')im=spImg('dog');else if(k==='f')im=spImg('fang');else if(k==='y')im=spImg('yun');else if(k==='s')im=window.lunSbnImg||null;else if(k==='w')im=spImg('mom');else if(k==='v')im=spImg('dad');
  if(im)IMG[k]=im;return im};
 /* ---------- DOM ---------- */
 document.head.insertAdjacentHTML('beforeend',`<style id="sc28css">
@@ -5497,6 +5494,78 @@ const eggGame=()=>new Promise(res=>{const E=$$('scE'),c=$$('scEc'),x=c.getContex
    const col={o:'#ff9a3a',O:'#ffd0a0',w:'#fff3e0',k:'#2a1620',n:'#e0506a'};F.forEach((r,j)=>{for(let i=0;i<12;i++){const ch=r[i];if(ch&&ch!=='.'){x.fillStyle=col[ch];x.fillRect(18+i-6+6,20+j,1,1)}}});x.fillStyle='#ff9a3a';x.fillRect(32,30,6,3);x.fillRect(36,27,3,4);x.fillStyle='#fff3e0';x.fillRect(37,26,2,2);
    $$('scEp').textContent='蛋孵化了！';setTimeout(()=>{E.classList.remove('on');$$('scB').style.visibility='';root.querySelector('.scp').style.visibility='';res()},1400)}};
  c.onclick=tap;E.onclick=tap});
+/* ---------- 金探子小遊戲（騎飛天掃帚抓金探子；按住畫面飛向手指，電腦滑鼠或方向鍵）---------- */
+document.head.insertAdjacentHTML('beforeend',`<style id="sn28css">
+#sn28,#sn28 *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+#sn28{position:fixed;inset:0;z-index:142;background:#05030a;display:none;flex-direction:column;align-items:center;font-family:DotGothic16,sans-serif;color:#fff;touch-action:none;overflow:hidden}
+#sn28.on{display:flex}
+#sn28 canvas{image-rendering:pixelated;display:block;touch-action:none}
+#sn28 .snh{position:absolute;top:calc(var(--st) + 10px);left:0;right:0;text-align:center;pointer-events:none;text-shadow:0 2px 0 #000}
+#sn28 .snh b{display:block;font-weight:400;font-size:18px;letter-spacing:.2em;color:#ffe9a8}
+#sn28 .snh small{display:block;font-size:13px;letter-spacing:.1em;color:#fff;margin-top:3px}
+#sn28 .snb{position:absolute;left:50%;translate:-50% 0;bottom:calc(var(--sb) + 22px);width:min(70vw,260px);height:14px;border:2px solid #ffe9a8;background:#140a2cd9}
+#sn28 .snb i{display:block;height:100%;width:0;background:linear-gradient(180deg,#ffe9a8,#ffb84a)}
+#sn28 .snt{position:absolute;left:0;right:0;bottom:calc(var(--sb) + 44px);text-align:center;font-size:13px;color:#fff;text-shadow:0 2px 0 #000;pointer-events:none}
+#sn28 .snm{position:absolute;left:0;right:0;top:38%;text-align:center;font-size:32px;letter-spacing:.2em;padding-left:.2em;text-shadow:0 3px 0 #000,0 0 16px currentColor;opacity:0;pointer-events:none}
+#sn28 .snm.go{animation:snm 1.4s ease-out forwards}
+@keyframes snm{0%{opacity:0;transform:scale(.6)}20%{opacity:1;transform:scale(1.1)}80%{opacity:1}100%{opacity:0}}
+</style>`);
+const sn=document.createElement('div');sn.id='sn28';
+sn.innerHTML='<canvas id="snC"></canvas><div class="snh"><b id="snT"></b><small id="snS"></small></div><div class="snt">按住畫面，倫會飛向你的手指（電腦：滑鼠或方向鍵）</div><div class="snb"><i id="snB"></i></div><div class="snm" id="snM"></div>';
+document.body.appendChild(sn);
+const SNC={1:{sp:46,rv:24,hold:.7,time:30},2:{sp:58,rv:32,hold:.8,time:30},3:{sp:70,rv:40,hold:.9,time:32}};
+const snitch=(round,rk,rn)=>new Promise(res=>{
+ const C=SNC[round]||SNC[3],cv2=$$('snC'),g2=cv2.getContext('2d');g2.imageSmoothingEnabled=false;
+ const w=Math.min(innerWidth,440),sc=w/128,lh=Math.max(120,Math.floor(innerHeight/sc));cv2.width=128;cv2.height=lh;cv2.style.width=Math.round(128*sc)+'px';cv2.style.height=Math.round(lh*sc)+'px';
+ sn.classList.add('on');$$('snT').textContent='第 '+round+' 輪　抓金探子';$$('snS').textContent='對手：'+rn;$$('snB').style.width='0';
+ const rival=spImg(rk),rnd=(a,b)=>a+Math.random()*(b-a),M=10;
+ const Pl={x:30,y:lh*.6},Sn={x:90,y:lh*.4,tx:90,ty:lh*.4,t:0,f:1,burst:0},Rv={x:105,y:lh*.72},trail=[];
+ let tgt=null,K={u:0,d:0,l:0,r:0},hold=0,rh=0,time=C.time,last=performance.now(),fin=false,face=1,raf2=0;
+ const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+ const msg=(t,col)=>{const m=$$('snM');m.textContent=t;m.style.color=col;m.classList.remove('go');void m.offsetWidth;m.classList.add('go')};
+ msg('開始！','#ffe9a8');sfx(660,.1);sfx(990,.14,'sine',.04,.08);
+ const pos=e=>{const r=cv2.getBoundingClientRect();return {x:(e.clientX-r.left)/sc,y:(e.clientY-r.top)/sc}};
+ const pd=e=>{e.preventDefault();tgt=pos(e);try{cv2.setPointerCapture(e.pointerId)}catch(x){}};
+ const pm=e=>{if(e.pointerType==='mouse'||e.buttons)tgt=pos(e)};
+ const pu=e=>{if(e.pointerType!=='mouse')tgt=null};
+ cv2.addEventListener('pointerdown',pd);cv2.addEventListener('pointermove',pm);cv2.addEventListener('pointerup',pu);cv2.addEventListener('pointercancel',pu);
+ const KM={ArrowUp:'u',ArrowDown:'d',ArrowLeft:'l',ArrowRight:'r',w:'u',s:'d',a:'l',d:'r'};
+ const kd=e=>{const k=KM[e.key];if(k){K[k]=1;tgt=null;e.preventDefault()}},ku=e=>{const k=KM[e.key];if(k)K[k]=0};
+ addEventListener('keydown',kd);addEventListener('keyup',ku);
+ const clouds=Array.from({length:7},()=>({x:rnd(0,160),y:rnd(10,lh-20),s:rnd(20,40),r:rnd(8,16)}));
+ const end=win=>{if(fin)return;fin=true;msg(win?'抓到了！':(time<=0?'時間到…':'被搶先了…'),win?'#ffe9a8':'#ff8a9a');if(win){sfx(784,.12);sfx(1047,.15,'sine',.05,.1);sfx(1568,.3,'sine',.05,.2)}else{sfx(160,.3,'sawtooth',.05)}
+  setTimeout(()=>{cancelAnimationFrame(raf2);cv2.removeEventListener('pointerdown',pd);cv2.removeEventListener('pointermove',pm);cv2.removeEventListener('pointerup',pu);cv2.removeEventListener('pointercancel',pu);removeEventListener('keydown',kd);removeEventListener('keyup',ku);sn.classList.remove('on');res(win)},1500)};
+ const tick=ts=>{const dt=Math.min(.05,(ts-last)/1000);last=ts;const t=ts/1000;
+  if(!fin){time-=dt;
+   let dx=0,dy=0;if(tgt){dx=tgt.x-Pl.x;dy=tgt.y-Pl.y;const d=Math.hypot(dx,dy);if(d>2){dx/=d;dy/=d}else{dx=dy=0}}else{dx=(K.r?1:0)-(K.l?1:0);dy=(K.d?1:0)-(K.u?1:0);const d=Math.hypot(dx,dy);if(d){dx/=d;dy/=d}}
+   if(dx)face=dx>0?1:-1;Pl.x=clamp(Pl.x+dx*72*dt,M,128-M);Pl.y=clamp(Pl.y+dy*72*dt,28,lh-M);
+   /* 金探子：忽快忽慢亂飛，玩家靠近會突然衝開 */
+   Sn.t-=dt;if(Sn.t<=0){Sn.tx=rnd(M,128-M);Sn.ty=rnd(30,lh-M);Sn.t=rnd(.35,1.1);Sn.f=Math.random()<.45?1.9:.65}
+   const dp=Math.hypot(Pl.x-Sn.x,Pl.y-Sn.y);if(dp<18&&Sn.burst<=0&&Math.random()<dt*2.2){const a=Math.atan2(Sn.y-Pl.y,Sn.x-Pl.x);Sn.tx=clamp(Sn.x+Math.cos(a)*50,M,128-M);Sn.ty=clamp(Sn.y+Math.sin(a)*50,30,lh-M);Sn.burst=.35;Sn.t=.6}
+   Sn.burst-=dt;const sp=C.sp*Sn.f*(Sn.burst>0?2.2:1),ex=Sn.tx-Sn.x,ey=Sn.ty-Sn.y,ed=Math.hypot(ex,ey);if(ed>1){Sn.x+=ex/ed*sp*dt;Sn.y+=ey/ed*sp*dt}
+   trail.push({x:Sn.x,y:Sn.y});if(trail.length>9)trail.shift();
+   /* 對手追金探子 */
+   const rx=Sn.x-Rv.x,ry=Sn.y-Rv.y,rd=Math.hypot(rx,ry);if(rd>1){Rv.x+=rx/rd*C.rv*dt;Rv.y+=ry/rd*C.rv*dt}
+   if(dp<8)hold+=dt;else hold=Math.max(0,hold-dt*.6);
+   if(rd<8)rh+=dt;else rh=Math.max(0,rh-dt*.4);
+   $$('snB').style.width=Math.min(100,hold/C.hold*100)+'%';
+   $$('snS').textContent='對手：'+rn+'　剩 '+Math.max(0,Math.ceil(time))+' 秒';
+   if(hold>=C.hold)end(true);else if(rh>=2.4||time<=0)end(false)}
+  /* 畫面 */
+  const gr=g2.createLinearGradient(0,0,0,lh);gr.addColorStop(0,'#5aa8ff');gr.addColorStop(1,'#d8f0ff');g2.fillStyle=gr;g2.fillRect(0,0,128,lh);
+  for(const c of clouds){c.x-=c.s*.016*(fin?0:1);if(c.x<-30)c.x=158;g2.fillStyle='#ffffffcc';g2.fillRect(Math.round(c.x-c.r),Math.round(c.y),Math.round(c.r*2),3);g2.fillRect(Math.round(c.x-c.r*.6),Math.round(c.y-3),Math.round(c.r*1.2),3)}
+  /* 對手 */
+  g2.fillStyle='#8a5a2a';g2.fillRect(Math.round(Rv.x-12),Math.round(Rv.y+8),24,2);g2.fillStyle='#d6a850';g2.fillRect(Math.round(Rv.x-16),Math.round(Rv.y+7),5,4);
+  if(rival){const h=22,ww=Math.round(rival.width*h/rival.height);g2.drawImage(rival,Math.round(Rv.x-ww/2),Math.round(Rv.y-12),ww,h)}
+  /* 金探子 */
+  trail.forEach((p,i)=>{g2.globalAlpha=i/trail.length*.6;g2.fillStyle='#ffe9a8';g2.fillRect(Math.round(p.x),Math.round(p.y),2,2)});g2.globalAlpha=1;
+  const fl=Math.sin(t*40)>0?1:-1;g2.fillStyle='#fff';g2.fillRect(Math.round(Sn.x-7),Math.round(Sn.y-3+fl),5,2);g2.fillRect(Math.round(Sn.x+3),Math.round(Sn.y-3-fl),5,2);
+  g2.fillStyle='#ffd37a';g2.fillRect(Math.round(Sn.x-3),Math.round(Sn.y-3),7,7);g2.fillStyle='#fff3b0';g2.fillRect(Math.round(Sn.x-2),Math.round(Sn.y-2),3,3);g2.fillStyle='#ffd37a44';g2.fillRect(Math.round(Sn.x-6),Math.round(Sn.y-6),13,13);
+  /* 倫（飛天掃帚）*/
+  const f=window.lunBroomRide?window.lunBroomRide(t):null;
+  if(f){g2.save();g2.translate(Math.round(Pl.x),Math.round(Pl.y));g2.scale(face,1);g2.drawImage(f,-20,-17);g2.restore()}else{g2.fillStyle='#e0102e';g2.fillRect(Math.round(Pl.x-5),Math.round(Pl.y-5),10,10)}
+  raf2=requestAnimationFrame(tick)};
+ raf2=requestAnimationFrame(tick)});
 /* ---------- 引擎 ---------- */
 let ctx=null,pendF=null;
 const setBg=k=>{BG=k;fxk='';fxt=0};
@@ -5514,6 +5583,7 @@ const loop=async()=>{while(ctx&&ctx.i<ctx.steps.length){const st=ctx.steps[ctx.i
   else if(k==='fx')await fxRun(st[1]);
   else if(k==='egg'){busy=false;await eggGame()}
   else if(k==='do'){await st[1]()}
+  else if(k==='snitch'){busy=false;const win=await snitch(st[1],st[2],st[3]);if(!win){ctx.i--;ctx.steps.splice(ctx.i,0,['t','x','（沒抓到金探子，再試一次。）'])}}
   else if(k==='fight'){busy=false;startFight(st[1]);return}}
  busy=false;if(ctx){const d=ctx.onDone;closeRoot();ctx=null;d&&d()}};
 const run=(steps,onDone)=>{ctx={steps,i:0,onDone};openRoot();$$('scB').style.display='';loop()};
@@ -5541,17 +5611,20 @@ const CH={
    ['t','a','守護神是每個人心裡最暖的那一塊。倫的是海狗，這很合理。'],['do',async()=>{learn('patr');sfx(1047,.2,'sine',.05);try{rToast('學會了新咒語：守護神咒')}catch(e){}}],
    ['fx','dark'],['t','x','突然，天空暗了下來。風停了，連星星都不閃了。'],['t','d','……好冷。'],['t','a','不好。有「崔狂魔」混進來了。它們專門吸走快樂。'],['t','l','崔……狂魔？'],['t','a','名字不是我取的。是造這個世界的人姓崔，她說這樣比較順口。'],
    ['t','a','你剛學的守護神咒，就是最好的武器。帶藥水了嗎？戰鬥的時候，選單裡的「藥水」用用看。'],['do',async()=>{gotPots()}],['fight','dementor'],
-   ['t','x','崔狂魔發出一聲長長的嘆息，化成黑煙，被風吹散了。天空慢慢亮了起來。'],['t','a','你做到了。守護神，是真的屬於你的了。'],['t','d','那……我的親戚，可以請牠吃飯嗎？'],['t','a','牠是銀色的，吃不到。']],
+   ['t','x','崔狂魔發出一聲長長的嘆息，化成黑煙，被風吹散了。天空慢慢亮了起來。'],['t','x','山頂的遠處，有一個披著黑斗篷的人，靜靜看了很久，然後消失在夜色裡。'],['t','d','……剛剛那個人是誰？'],['t','a','神秘人。不用追，他想看的是你，不是我們。'],['t','a','你做到了。守護神，是真的屬於你的了。'],['t','d','那……我的親戚，可以請牠吃飯嗎？'],['t','a','牠是銀色的，吃不到。']],
   reward:()=>{title('守護神使');S('ch5').mountPending=1;return {sub:'崔狂魔被守護神趕跑了',get:'獲得：咒語「守護神咒」＋稱號「守護神使」',note:'「銀光海狗守護神」坐騎還沒做好，預覽出來給雅雲選之後再給。'}}},
- 6:{n:'學院盃',loc:'瘋火地獄體育場',need:()=>R('ch5').done,needTx:'先完成第 5 章：守護神課',goal:'連續打贏三位教授',
-  steps:()=>[['bg','stadium'],['name','瘋火地獄體育場'],['t','x','瘋火地獄體育場。四個學院的觀眾席都坐滿了，旗子揮得很用力。'],['t','a','歡迎來到學院盃！今年的規則很簡單：打贏三位教授，就算你們學院贏。'],['t','l','三位教授是……？'],['t','a','李志憲、我，還有天彭星。他們都不會放水。'],['t','d','我負責加油，順便賣爆米花。'],
-   ['t','g','第一場，由我出賽。理智線，請放在場邊。'],['fight','cup1'],['t','g','……打得不錯。理智線，保住了。'],
-   ['t','a','第二場換我。我先吃一口，等一下。（嚼嚼）'],['t','l','校長，比賽中不能吃。'],['t','a','這是能量。'],['fight','cup2'],['t','a','不好意嚕……我輸了。'],
-   ['t','p','最後一場是我。我先拍一張，開場照。（喀嚓）'],['fight','cup3'],['t','p','這場最精彩，我要放進年鑑封面。'],['t','a','三場全勝！學院盃，由你們學院奪冠！'],['do',async()=>{await board()}]],
-  reward:()=>{title('學院盃冠軍');return {sub:'三位教授都被打敗了',get:'獲得：學院盃獎盃＋稱號「學院盃冠軍」',note:'學院專屬卡背屬於卡池的部分，之後和卡池對話再接。'}}},
+ 6:{n:'學院盃（金探子）',loc:'瘋火地獄體育場',need:()=>R('ch5').done,needTx:'先完成第 5 章：守護神課',goal:'騎掃帚抓三次金探子',
+  steps:()=>[['bg','stadium'],['name','瘋火地獄體育場'],['t','x','瘋火地獄體育場。四個學院的觀眾席都坐滿了，旗子揮得很用力。'],['t','w','各位觀眾，歡迎來到學院盃！我是今天的講評，湯姆瑞英。'],['t','l','（小聲）你不是……'],['t','w','在學校裡，請叫我教授。（小聲）有沒有喝水？'],
+   ['t','a','今年的比賽是金探子。一顆金色的小球，會到處亂飛，抓到牠的人就贏。'],['t','a','倫，你的飛天掃帚，今天要派上用場了。'],['t','d','我負責加油，順便賣爆米花。'],
+   ['t','g','第一輪，對手是我。理智線，請不要被金探子牽著跑。'],['snitch',1,'lzx','李志憲教授'],['t','g','……動作很快。理智線，保住了。'],
+   ['t','a','第二輪換我。我先吃一口，等一下。（嚼嚼）'],['t','l','校長，比賽中不能吃。'],['t','a','這是能量。'],['snitch',2,'alu','鄧布嚕多校長'],['t','a','不好意嚕……我輸了。'],
+   ['t','w','最後一輪！對手是——佛達魔！'],['t','v','（披著黑斗篷飄進場）……吃飽了嗎？'],['t','l','……？'],['t','v','我是說，比賽，開始。'],['snitch',3,'dad','佛達魔'],['t','v','……不錯。'],
+   ['t','w','三輪全勝！學院盃，由你們學院奪冠！'],['do',async()=>{await board()}]],
+  reward:()=>{title('學院盃冠軍');return {sub:'三輪金探子都被你抓到了',get:'獲得：學院盃獎盃＋稱號「學院盃冠軍」',note:'學院專屬卡背屬於卡池的部分，之後和卡池對話再接。'}}},
  7:{n:'開學典禮',loc:'火格華茲大禮堂',need:()=>R('ch6').done,needTx:'先完成第 6 章：學院盃',goal:'12/20 揭曉',
   steps:()=>[['bg','hall'],['name','火格華茲大禮堂'],['t','x','火格華茲大禮堂。燭火飄在半空，長桌一路排到最裡面。'],['t','a','各位同學、各位教授，歡迎來到火格華茲的開學典禮！'],['t','l','（小聲）開學典禮不是 12 月 1 日嗎？'],['t','a','別急，今天的主角，是一位特別的新生。'],
    ['fx','cake'],['t','x','燈光暗下來。一個大蛋糕被推了出來，上面插滿了蠟燭。'],['t','a','所謂的錄取通知、分類帽、魔藥課……全部都是為了今天。'],['t','l','原來……是這樣。'],
+   ['t','w','……是我。湯姆瑞英。'],['t','l','媽？'],['t','w','在這裡請叫教授。（小聲）你今天有吃飯嗎？'],['t','v','還有我。佛達魔。'],['t','l','爸？……你就是阿茲卡班那個神秘人？'],['t','v','……我只是想看你過得好不好。'],['t','a','兩位是這次生日會的總策劃。壞人，是他們請我們演的。'],
    ['t','g','我是李志憲。理智線今天放假，所以我可以說：生日快樂。'],['t','f','加拿大那邊的人，也託我說：生日快樂！'],['t','s','不好意鼠，我的鼠也要說：吱。'],['t','p','年鑑最後一頁，我拍了很多照片。每一張都有你。'],['t','d','我負責帶路。今天也帶你走到這裡了。'],
    ['t','y',YUN_MSG],['t','a','許願吧，吹蠟燭。'],['q','x','你許了什麼願？',['希望大家都平安快樂','希望明年還有蛋糕','希望午覺可以睡到飽'],-1],['fx','blow'],
    ['t','x','蠟燭熄滅的那一刻，整個禮堂亮了起來，所有人一起鼓掌。'],['t','a','歡迎來到火格華茲，倫。這所學校，永遠有你的位子。']],
@@ -5583,7 +5656,7 @@ window.lunChaptersOpen=hubOpen;
 const rg=$$('rhgo2');
 if(rg){rg.insertAdjacentHTML('beforeend','<button class="rq hub28" id="hbGo">章節</button>');$$('hbGo').onclick=()=>{try{A.S.tap()}catch(e){}hubOpen()}}
 const top=$$('kdTop');
-if(top){top.insertAdjacentHTML('afterbegin','<button id="kdSc">⑦ 章節總覽（第 1～7 章）</button><button id="kdSc3">⑦a 第 3 章領養生物課：進去玩</button><button id="kdSc5">⑦b 第 5 章守護神課（崔狂魔）：進去玩</button><button id="kdSc6">⑦c 第 6 章學院盃：進去玩</button><button id="kdSc7">⑦d 第 7 章開學典禮：進去玩</button><button id="kdScA">⑦e 第 3、5、6、7 章：全部直接通關</button><button id="kdScR">⑦f 清掉第 3、5、6、7 章進度</button>');
+if(top){top.insertAdjacentHTML('afterbegin','<button id="kdSc">⑦ 章節總覽（第 1～7 章）</button><button id="kdSc3">⑦a 第 3 章領養生物課：進去玩</button><button id="kdSc5">⑦b 第 5 章守護神課（崔狂魔）：進去玩</button><button id="kdSc6">⑦c 第 6 章學院盃（金探子）：進去玩</button><button id="kdSc7">⑦d 第 7 章開學典禮：進去玩</button><button id="kdScA">⑦e 第 3、5、6、7 章：全部直接通關</button><button id="kdScR">⑦f 清掉第 3、5、6、7 章進度</button>');
  $$('kdSc').onclick=()=>{try{devClose()}catch(e){}hubOpen()};
  [3,5,6,7].forEach(n=>{$$('kdSc'+n).onclick=()=>{try{devClose()}catch(e){}enterCh(n)}});
  $$('kdScA').onclick=()=>{const p=P();if(!p)return;try{devClose()}catch(e){}p.dk=p.dk||{};p.dk.patr=1;[3,5,6,7].forEach(n=>{const c=S('ch'+n);if(!c.done){c.done=1;CH[n].reward()}});sv();try{rToast('第 3、5、6、7 章已全部通關')}catch(e){}};
