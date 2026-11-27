@@ -3786,13 +3786,13 @@ const run=(cb)=>{if(!P())return;try{A.init()}catch(e){}const nm=(P().name||'新�
   const quiz=()=>{if(S.qi>=QS.length){const h=pickHouse(S.sc);const lead=S.sc.indexOf(Math.max(...S.sc));
       say(HAT,'嗯……我看看。……你的答案偏向「'+HS[lead].n+'」……',()=>say(HAT,'但是。（停頓）\n\n我是分類帽，我說了算。',()=>say(HAT,'『'+HS[h].n+'』！',()=>{
         $('rhogB').innerHTML=`<div class="who">${HAT}</div><div class="bdg" style="color:${HS[h].c}">★ ${HS[h].n} ★</div><div class="tx" style="text-align:center">${HS[h].d}</div>`;try{[660,880,1320].forEach((f,i)=>A.tone(f,.3,'triangle',.05,i*.12))}catch(e){}
-        setTimeout(()=>{$('rhogB').onclick=()=>{$('rhogB').onclick=null;aluIn();say(AL,'欸～新來的，本宮看你順眼，賜你一枚學院徽章。\n（轉頭）下一位——',()=>say(AL,nm+'，歡迎來到火格華茲。\n開學典禮在 12 月 20 日，別遲到。',()=>finish(h)))}},900)})));
+        setTimeout(()=>{$('rhogB').onclick=()=>{$('rhogB').onclick=null;aluIn();say(AL,'欸～新來的，本宮看你順眼，賜你一枚學院徽章。\n（轉頭）下一位——',()=>say(AL,nm+'，歡迎來到火格華茲。\n畢業典禮在 12 月 20 日，別遲到。',()=>finish(h)))}},900)})));
       return}
     const q=QS[S.qi];ask(HAT,'第 '+(S.qi+1)+' 題：'+q[0],q[1],i=>{S.sc[i]++;S.qi++;quiz()})};
-  $('rhogB').innerHTML='';setTimeout(()=>{if(!S)return;say('信',`親愛的 ${nm}：\n\n恭喜你錄取火格華茲魔法學院。\n開學典禮：12 月 20 日。`,()=>
+  $('rhogB').innerHTML='';setTimeout(()=>{if(!S)return;say('信',`親愛的 ${nm}：\n\n恭喜你錄取火格華茲魔法學院。\n畢業典禮：12 月 20 日。`,()=>
   say('分類帽','（一頂歪歪的帽子飛到你頭上）\n嗯？又一個新生。\n我先問你 5 個問題，別緊張。',quiz))},450)};
 $('rhogK').onclick=()=>{if(!S)return;if(S.raf)clearInterval(S.raf);const p=P();if(p&&!(p.hog&&p.hog.house)){finish(pickHouse([0,0,0,0]))}else back()};
-try{(window.lunDlg=window.lunDlg||[]).push({id:'ch0.hat',chap:'序章 分類帽',title:'錄取通知＋分類帽',bg:'night',names:{x:'信',h:'分類帽',a:'鄧布嚕多校長'},portrait:{},lines:[['x','親愛的 倫：\n\n恭喜你錄取火格華茲魔法學院。\n開學典禮：12 月 20 日。'],['h','（一頂歪歪的帽子飛到你頭上）\n嗯？又一個新生。\n我先問你 5 個問題，別緊張。']].concat(QS.map((q,i)=>['h','第 '+(i+1)+' 題：'+q[0],Array.isArray(q[1])?'選項：'+q[1].join('／'):'']),[['h','嗯……我看看。……你的答案偏向「（學院）」……'],['h','但是。（停頓）\n\n我是分類帽，我說了算。'],['h','『（學院）』！'],['a','欸～新來的，本宮看你順眼，賜你一枚學院徽章。\n（轉頭）下一位——'],['a','倫，歡迎來到火格華茲。\n開學典禮在 12 月 20 日，別遲到。']])})}catch(e){}
+try{(window.lunDlg=window.lunDlg||[]).push({id:'ch0.hat',chap:'序章 分類帽',title:'錄取通知＋分類帽',bg:'night',names:{x:'信',h:'分類帽',a:'鄧布嚕多校長'},portrait:{},lines:[['x','親愛的 倫：\n\n恭喜你錄取火格華茲魔法學院。\n畢業典禮：12 月 20 日。'],['h','（一頂歪歪的帽子飛到你頭上）\n嗯？又一個新生。\n我先問你 5 個問題，別緊張。']].concat(QS.map((q,i)=>['h','第 '+(i+1)+' 題：'+q[0],Array.isArray(q[1])?'選項：'+q[1].join('／'):'']),[['h','嗯……我看看。……你的答案偏向「（學院）」……'],['h','但是。（停頓）\n\n我是分類帽，我說了算。'],['h','『（學院）』！'],['a','欸～新來的，本宮看你順眼，賜你一枚學院徽章。\n（轉頭）下一位——'],['a','倫，歡迎來到火格華茲。\n畢業典禮在 12 月 20 日，別遲到。']])})}catch(e){}
 window.lunHogOpen=run;
 /* 選完倫的樣子後接這段（只跑一次） */
 const lk=()=>setTimeout(()=>{const p=P();if(p&&!(p.hog&&p.hog.house)&&!S)run()},450);
@@ -4447,7 +4447,7 @@ const adv=()=>{if(busy||!script)return;if($$('shGo').style.display==='flex')retu
 const enter=(shop,onLeave)=>{const def=NPCS[shop.name];if(!def)return onLeave&&onLeave();const SHOPS=window.lunAlleyShops||[];
  cur={shop,def,last:-1,here:true};if(shop.name==='藥店'){cur.here=Math.random()<.5;if(!cur.here){cur.def=Object.assign({},def,{n:'（店裡沒人）',s:[[['n','櫃台後面沒有人。大鍋自己在冒泡。'],['l','李志憲教授不在……'],['n','（趁現在，可以偷偷調藥。）']]]})}}leave=onLeave;busy=true;fit();try{window.lunAlleyVisited&&window.lunAlleyVisited(shop.name)}catch(e){}
  $$('shName').textContent=shop.name;root.style.setProperty('--gc',shop.glow);
- drawBg(shop,SHOPS);try{window.lunShopBg&&window.lunShopBg(shop.name,$$('shBg'))}catch(e){}
+ drawBg(shop,SHOPS);try{window.lunShopBg&&window.lunShopBg(shop.name,$$('shBg'))}catch(e){}try{if(def.k&&!(shop.name==='藥店'&&cur.here===false))window.lunRelMeet&&window.lunRelMeet(def.k)}catch(e){}
  const nimg=def.k?spImg(def.k,false):spImg('alu',true);putCv($$('shNpc'),nimg);$$('shNpc').style.visibility=cur.here?'':'hidden';
  const lun=window.lunSP&&window.lunSP.d?window.lunSP.d[0]:null;putCv($$('shLun'),lun);
  root.classList.add('on');requestAnimationFrame(()=>requestAnimationFrame(()=>root.classList.add('vis')));
@@ -4590,7 +4590,7 @@ $$('dkBox').addEventListener('click',e=>{if(e.target.closest('button'))return;ad
 $$('dkX').onclick=()=>{if(cur&&$$('dkMenu').style.display==='none'){showMenu()}else closeDark()};
 addEventListener('keydown',e=>{if(!root.classList.contains('on'))return;if(e.key==='Escape')$$('dkX').click();else if(e.key===' '||e.key==='Enter')adv()});
 addEventListener('resize',()=>{if(root.classList.contains('on'))fit()});
-window.lunDarkOpen=openDark;
+window.lunDarkOpen=(...a)=>{try{window.lunRelMeet&&window.lunRelMeet('shu')}catch(e){}return openDark(...a)};
 const rg=$('rhgo2');
 if(rg){rg.insertAdjacentHTML('beforeend','<button class="rq dkb" id="dkGo">黑魔法課</button>');$('dkGo').onclick=()=>{try{A.S.tap()}catch(e){}openDark()}}
 const top=$('kdTop');
@@ -5060,7 +5060,7 @@ const enter=()=>{const p=P();if(!p)return;const c=ch();
  const r=typeof rm==='function'?rm():null;const unlocked=window.LUN_DEV||(r&&r.own&&r.own.broom)||c.intro;
  if(!unlocked){try{rToast('先完成第 1 章：把斜角巷 8 家店都逛過')}catch(e){}return}
  if(c.done)showAlbum(true);else open()};
-window.lunForestOpen=enter;
+window.lunForestOpen=(...a)=>{try{window.lunRelMeet&&window.lunRelMeet('peng')}catch(e){}return enter(...a)};
 const rg=$$('rhgo2');
 if(rg){rg.insertAdjacentHTML('beforeend','<button class="rq frb" id="frGo">夜間實習</button>');$$('frGo').onclick=()=>{try{A.S.tap()}catch(e){}enter()}}
 const top=$$('kdTop');
@@ -5375,7 +5375,7 @@ if(top){top.insertAdjacentHTML('afterbegin','<button id="kdPt">⑥ 第 4 章魔�
    第 3 章 領養生物課（倫間仙境）：芳教授＋貓頭鷹送蛋→摸蛋孵化→小狐狸（寫進 p.fox）。
    第 5 章 守護神課（倫生巔峰）：鄧布嚕多教守護神咒（問答）→放出發光海狗→崔狂魔（雲姓崔的梗）來襲→用咒語＋藥水打贏（rpg20 的 守護神咒 對崔狂魔傷害 ×2）。
    第 6 章 學院盃＝金探子（瘋火地獄體育場，2026-11-27 雲改）：騎飛天掃帚抓金探子三輪（對手李志憲、鄧布嚕多、佛達魔；講評湯姆瑞英），小遊戲 snitch()：按住畫面飛向手指，金探子忽快忽慢、靠近會衝開，對手也會追；→積分榜。
-   第 7 章 開學典禮（12/20 才開放，DEV 不鎖）：揭曉是生日會。湯姆瑞英（文英＝媽）和佛達魔（金達＝爸，阿茲卡班的神秘人）是總策劃，大家輪流祝福＋雅雲的留言（YUN_MSG 是草稿，請雅雲自己改）。
+   第 7 章 畢業典禮（12/20 才開放，DEV 不鎖）：揭曉是生日會。湯姆瑞英（文英＝媽）和佛達魔（金達＝爸，阿茲卡班的神秘人）是總策劃，大家輪流祝福＋雅雲的留言（YUN_MSG 是草稿，請雅雲自己改）。
    坐騎（銀光海狗守護神、許願雲）要先做預覽給雲選，所以這版只記 mountPending，不給。
    存檔：p.ch3／p.ch5／p.ch6／p.ch7 ={done,...}。稱號存 p.titles（領養員、守護神使、學院盃冠軍、壽星）。
    對外：window.lunChaptersOpen（章節總覽）。 */
@@ -5401,9 +5401,9 @@ try{THEATER.PAL.f='#f2c230';THEATER.PAL.j='#c8901a'}catch(e){}
 const TOM={X:'#17121f',v:'#c9b0ff',q:'#c9b0ff',u:'#2a1a14',o:'#4a3a52'},VOL={b:'#17121f',d:'#6a4ac0',W:'#d8d0e8'};
 const silh=()=>{const b=spImg('dad',VOL);if(!b)return null;const c=document.createElement('canvas');c.width=b.width;c.height=b.height;const x=c.getContext('2d');x.drawImage(b,0,0);x.globalCompositeOperation='source-in';x.fillStyle='#06030c';x.fillRect(0,0,c.width,c.height);x.globalCompositeOperation='source-over';x.fillStyle='#b8a0ff';const ey=Math.floor(c.height*.22);x.fillRect(Math.floor(c.width*.38),ey,1,1);x.fillRect(Math.floor(c.width*.6),ey,1,1);return c};
 const IMG={};
-const WHO={l:'倫',g:'李志憲教授',a:'鄧布嚕多校長',p:'天彭星',d:'海狗',f:'芳教授',s:'鼠內普',y:'雅雲',w:'湯姆瑞英',v:'佛達魔',n:'神秘人',q:'？？？',x:''};
+const WHO={l:'倫',g:'李志憲教授',a:'鄧布嚕多校長',p:'天彭星',d:'海狗',f:'芳教授',s:'鼠內普',y:'雅雲',m:'文英',k:'金達',w:'湯姆瑞英',v:'佛達魔',n:'神秘人',q:'？？？',x:''};
 const portrait=k=>{if(IMG[k]!==undefined)return IMG[k];let im=null;
- if(k==='l')im=window.lunSP&&window.lunSP.d?window.lunSP.d[0]:null;else if(k==='g')im=spImg('lzx');else if(k==='a')im=spImg('alu');else if(k==='p')im=spImg('peng');else if(k==='d')im=spImg('dog');else if(k==='f')im=spImg('fang');else if(k==='y')im=spImg('yun');else if(k==='s')im=window.lunSbnImg||null;else if(k==='w')im=spImgO('mom',TOM);else if(k==='v')im=spImgO('dad',VOL);else if(k==='q')im=silh();
+ if(k==='l')im=window.lunSP&&window.lunSP.d?window.lunSP.d[0]:null;else if(k==='g')im=spImg('lzx');else if(k==='a')im=spImg('alu');else if(k==='p')im=spImg('peng');else if(k==='d')im=spImg('dog');else if(k==='f')im=spImg('fang');else if(k==='y')im=spImg('yun');else if(k==='s')im=window.lunSbnImg||null;else if(k==='m')im=spImg('mom');else if(k==='k')im=spImg('dad');else if(k==='w')im=spImgO('mom',TOM);else if(k==='v')im=spImgO('dad',VOL);else if(k==='q')im=silh();
  if(im)IMG[k]=im;return im};
 /* ---------- DOM ---------- */
 document.head.insertAdjacentHTML('beforeend',`<style id="sc28css">
@@ -5500,7 +5500,8 @@ const draw=ts=>{const t=ts/1000;g.fillStyle='#05030a';g.fillRect(0,0,LW,LH);(BGS
 /* ---------- 對話 ---------- */
 let busy=false,tmr=0,typing=false,fullTx='',tapRes=null,cta=null,ctb=null,on=false,raf=0;
 const putCv=(c,im)=>{if(!im){c.width=1;c.height=1;return}c.width=im.width;c.height=im.height;const x=c.getContext('2d');x.imageSmoothingEnabled=false;x.clearRect(0,0,c.width,c.height);x.drawImage(im,0,0)};
-const say1=(who,text)=>new Promise(res=>{$$('scB').classList.remove('q');$$('scQ').style.display='none';$$('scW').textContent=WHO[who]||'';putCv($$('scPt'),who==='x'?null:portrait(who));$$('scX').style.display='none';
+const RELK={g:'lzx',a:'alu',p:'peng',d:'dog',f:'fang',s:'shu',y:'yun',w:'tom',v:'vol',m:'mom',k:'dad'};
+const say1=(who,text)=>new Promise(res=>{try{RELK[who]&&window.lunRelMeet&&window.lunRelMeet(RELK[who])}catch(e){}$$('scB').classList.remove('q');$$('scQ').style.display='none';$$('scW').textContent=WHO[who]||'';putCv($$('scPt'),who==='x'?null:portrait(who));$$('scX').style.display='none';
  fullTx=text;let i=0;typing=true;clearInterval(tmr);
  const T=$$('scT');T.textContent='';cta=document.createTextNode('');ctb=document.createTextNode(text);const sp=document.createElement('span');sp.style.color='transparent';sp.appendChild(ctb);T.append(cta,sp);
  tmr=setInterval(()=>{i++;cta.data=text.slice(0,i);ctb.data=text.slice(i);if(i%4===1)sfx(900+Math.random()*60,.02,'square',.008);if(i>=text.length){clearInterval(tmr);typing=false;$$('scX').style.display='block'}},45);
@@ -5765,13 +5766,13 @@ const CH={
    ['t','v','不可能……我只是……想要一個不會離開我的人。'],['t','w','（日記裡傳來湯姆瑞英的聲音）原來，不用吃掉別人的字，也可以被記得。'],['t','l','你們也可以不當壞人。'],
    ['t','x','日記的墨水慢慢乾了。被吃掉的字，一個一個從書頁裡飄出來，回到倫的手上。'],['t','a','這本日記，我會收好。……你很勇敢，倫。']],
   reward:()=>{title('日記破解者');return {sub:'佛達魔被打敗了，被吃掉的字都回來了',get:'獲得：稱號「日記破解者」',note:'日記由鄧布嚕多校長收好。'}}},
- 8:{n:'開學典禮',loc:'火格華茲大禮堂',need:()=>R('ch7').done,needTx:'先完成第 7 章：日記',goal:'12/20 揭曉',
-  steps:()=>[['bg','hall'],['name','火格華茲大禮堂'],['t','x','火格華茲大禮堂。燭火飄在半空，長桌一路排到最裡面。'],['t','a','各位同學、各位教授，歡迎來到火格華茲的開學典禮！'],['t','l','（小聲）開學典禮不是 12 月 1 日嗎？'],['t','a','別急，今天的主角，是一位特別的新生。'],
-   ['fx','cake'],['t','x','燈光暗下來。一個大蛋糕被推了出來，上面插滿了蠟燭。'],['t','a','所謂的錄取通知、分類帽、魔藥課、守護神、日記……全部都是為了今天。'],['t','l','原來……是這樣。'],
+ 8:{n:'畢業典禮',loc:'火格華茲大禮堂',need:()=>R('ch7').done,needTx:'先完成第 7 章：日記',goal:'12/20 揭曉',
+  steps:()=>[['bg','hall'],['name','火格華茲大禮堂'],['t','x','火格華茲大禮堂。燭火飄在半空，長桌一路排到最裡面。'],['t','a','各位同學、各位教授，歡迎來到火格華茲的畢業典禮！'],['t','l','（小聲）我才剛入學，怎麼就畢業了？'],['t','a','別急，今天的主角，是一位特別的畢業生。'],
+   ['fx','cake'],['t','x','燈光暗下來。一個大蛋糕被推了出來，上面插滿了蠟燭。'],['t','a','所謂的錄取通知、分類帽、魔藥課、守護神、日記……全部都是為了今天。'],['t','l','原來……是這樣。'],['t','m','倫，畢業快樂。這一路，媽媽都有看。'],['t','k','……爸爸不太會講話。畢業快樂。'],['t','l','爸、媽，你們怎麼也在這裡？'],['t','m','因為今天，是你的日子。'],
    ['t','g','我是李志憲。理智線今天放假，所以我可以說：生日快樂。'],['t','f','加拿大那邊的人，也託我說：生日快樂！'],['t','s','不好意鼠，我的鼠也要說：吱。'],['t','p','年鑑最後一頁，我拍了很多照片。每一張都有你。'],['t','d','我負責帶路。今天也帶你走到這裡了。'],
    ['t','y',YUN_MSG],['t','a','許願吧，吹蠟燭。'],['q','x','你許了什麼願？',['希望大家都平安快樂','希望明年還有蛋糕','希望午覺可以睡到飽'],-1],['fx','blow'],
-   ['t','x','蠟燭熄滅的那一刻，整個禮堂亮了起來，所有人一起鼓掌。'],['t','a','歡迎來到火格華茲，倫。這所學校，永遠有你的位子。']],
-  reward:()=>{title('壽星');S('ch8').mountPending=1;return {sub:'火格華茲的開學典禮，是為你辦的生日會',get:'獲得：稱號「壽星」',note:'「許願雲」坐騎還沒做好，預覽出來給雅雲選之後再給。'}}}};
+   ['t','x','蠟燭熄滅的那一刻，整個禮堂亮了起來，所有人一起鼓掌。'],['t','a','恭喜畢業，倫。這所學校，永遠有你的位子。']],
+  reward:()=>{title('壽星');S('ch8').mountPending=1;return {sub:'火格華茲的畢業典禮，是為你辦的生日會',get:'獲得：稱號「壽星」',note:'「許願雲」坐騎還沒做好，預覽出來給雅雲選之後再給。'}}}};
 /* 學院積分榜 */
 const board=()=>new Promise(res=>{const H=['葛來倫多','赫倫帕夫','雷倫克勞','史萊哲倫'];const p=P();const mine=p.house||p.hogHouse||H[0];const my=H.includes(mine)?mine:H[0];const sc=H.map((h,i)=>[h,h===my?330:130+Math.floor(Math.random()*120)+i*3]).sort((a,b)=>b[1]-a[1]);
  const d=document.createElement('div');d.style.cssText='position:absolute;inset:0;z-index:7;background:#05030af0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;font-family:DotGothic16,sans-serif;color:#fff';
@@ -5833,7 +5834,7 @@ const drawCard=(cv,e,who,text)=>{const c=cv.getContext('2d'),CW=cv.width,CHH=cv.
  const nm=(e.names&&e.names[who])!==undefined?e.names[who]:who;c.font='15px DotGothic16, sans-serif';c.textBaseline='top';c.fillStyle='#ffe9a8';c.fillText(nm,bx+12,by+8);
  c.font='16px DotGothic16, sans-serif';c.fillStyle='#fff';const ls=wrap(c,text,bw-28);ls.slice(0,6).forEach((l,i)=>c.fillText(l+(i===5&&ls.length>6?'…':''),bx+12,by+30+i*23))};
 const collect=()=>{const out=[...(window.lunDlg||[])];
- const pk={l:'lun',g:'lzx',a:'alu',p:'peng',d:'dog',f:'fang',s:'sbn',y:'yun',w:'tom',v:'vol',q:'shadow'};
+ const pk={l:'lun',g:'lzx',a:'alu',p:'peng',d:'dog',f:'fang',s:'sbn',y:'yun',w:'tom',v:'vol',m:'mom',k:'dad',q:'shadow'};
  [3,5,6,7,8].forEach(n=>{const D=CH[n];let steps;try{steps=D.steps()}catch(e){return}let bg='night',nm=D.loc,cur=null,k=0;
   const flush=()=>{if(cur&&cur.lines.length)out.push(cur);cur=null};const start=()=>{cur={id:'ch'+n+'.s'+(++k),chap:'第 '+n+' 章 '+D.n,title:nm,bg,names:WHO,portrait:pk,lines:[]}};
   steps.forEach(st=>{const t=st[0];if(t==='bg'){flush();bg=st[1]}else if(t==='name'){flush();nm=st[1]}else if(t==='t'){if(!cur)start();cur.lines.push([st[1],st[2]])}else if(t==='q'){if(!cur)start();cur.lines.push([st[1],st[2],'選項：'+st[3].join('／')])}});flush()});
@@ -5878,14 +5879,14 @@ if(location.hash==='#review')setTimeout(reviewOpen,1200);
 const runPart=(n,which)=>{if(!P())return;try{leaveHome&&leaveHome();closeSub&&closeSub()}catch(e){}try{A.init()}catch(e){}const st=CH[n].steps(),i=st.findIndex(x=>x[0]==='mark');run(which==='A'?st.slice(0,i):st.slice(i+1),()=>{try{rHome()}catch(e){}})};
 const enterCh=(n,at)=>{const D=CH[n];if(!D||!P())return;try{leaveHome&&leaveHome();closeSub&&closeSub()}catch(e){}try{A.init()}catch(e){}
  if(!window.LUN_DEV&&!D.need()){try{rToast(D.needTx)}catch(e){}return}
- if(n===8&&!window.LUN_DEV&&Date.now()<OPEN7){const days=Math.ceil((OPEN7-Date.now())/86400000);setBg('hall');openRoot();ctx={steps:[['bg','hall'],['t','a',`開學典禮的日子是 12 月 20 日，還有 ${days} 天。`],['t','a','大禮堂還在佈置，裡面的東西，現在不能偷看。'],['t','d','我偷看了一眼。……沒什麼，我什麼都沒看到。'],['t','a','提前祝你生日快樂。典禮那天，再來吧。']],i:0,onDone:()=>{try{rHome()}catch(e){}}};loop();return}
+ if(n===8&&!window.LUN_DEV&&Date.now()<OPEN7){const days=Math.ceil((OPEN7-Date.now())/86400000);setBg('hall');openRoot();ctx={steps:[['bg','hall'],['t','a',`畢業典禮的日子是 12 月 20 日，還有 ${days} 天。`],['t','a','大禮堂還在佈置，裡面的東西，現在不能偷看。'],['t','d','我偷看了一眼。……沒什麼，我什麼都沒看到。'],['t','a','提前祝你生日快樂。典禮那天，再來吧。']],i:0,onDone:()=>{try{rHome()}catch(e){}}};loop();return}
  let sts=D.steps();if(at>0){let bg=null,nm=null;for(let j=0;j<at&&j<sts.length;j++){if(sts[j][0]==='bg')bg=sts[j];if(sts[j][0]==='name')nm=sts[j]}sts=[bg,nm].filter(Boolean).concat(sts.slice(at))}
  run(sts,()=>finish(n))};
 const sedanLabel=()=>'步輦簾子：'+((P()&&P().sedanBead)?'珍珠簾':'粉紅綢簾')+'（點一下切換）';
 const sedanBtn=()=>{const r=(typeof rm==='function'&&rm())||{own:{}};return (window.LUN_DEV||(r.own&&r.own.sedan))?'<button class="cl" id="hb28C" style="background:#140a2c;color:#ffe9a8;outline:none;border-color:#ffe9a8;font-size:15px;letter-spacing:.1em;height:48px">'+sedanLabel()+'</button>':''};
 const hubOpen=()=>{if(!P())return;try{leaveHome&&leaveHome();closeSub&&closeSub()}catch(e){}
  const p=P(),r=(typeof rm==='function'&&rm())||{own:{}};
- const rows=[[1,'斜角巷採買','逛完 8 家店',!!(r.own&&r.own.broom),true],[2,'夜間實習','迷途森林',!!R('ch2').done,true],[3,'領養生物課',CH[3].loc,!!R('ch3').done,!!R('ch2').done||!!window.LUN_DEV],[4,'魔藥課','食堂地下室',!!R('ch4').done,!!R('ch2').done||!!window.LUN_DEV],[5,'守護神課',CH[5].loc,!!R('ch5').done,!!R('ch4').done||!!window.LUN_DEV],[6,'學院盃（金探子）',CH[6].loc,!!R('ch6').done,!!R('ch5').done||!!window.LUN_DEV],[7,'日記',CH[7].loc,!!R('ch7').done,!!R('ch6').done||!!window.LUN_DEV],[8,'開學典禮','12/20 開放',!!R('ch8').done,!!R('ch7').done||!!window.LUN_DEV]];
+ const rows=[[1,'斜角巷採買','逛完 8 家店',!!(r.own&&r.own.broom),true],[2,'夜間實習','迷途森林',!!R('ch2').done,true],[3,'領養生物課',CH[3].loc,!!R('ch3').done,!!R('ch2').done||!!window.LUN_DEV],[4,'魔藥課','食堂地下室',!!R('ch4').done,!!R('ch2').done||!!window.LUN_DEV],[5,'守護神課',CH[5].loc,!!R('ch5').done,!!R('ch4').done||!!window.LUN_DEV],[6,'學院盃（金探子）',CH[6].loc,!!R('ch6').done,!!R('ch5').done||!!window.LUN_DEV],[7,'日記',CH[7].loc,!!R('ch7').done,!!R('ch6').done||!!window.LUN_DEV],[8,'畢業典禮','12/20 開放',!!R('ch8').done,!!R('ch7').done||!!window.LUN_DEV]];
  hub.innerHTML='<h2>章節</h2>'+rows.map(x=>`<button class="it ${x[3]?'ok':''} ${x[4]?'':'lock'}" data-n="${x[0]}"><b>${x[3]?'✓':x[0]}</b><div>第 ${x[0]} 章　${x[1]}<small>${x[4]?x[2]:'尚未解鎖'}</small></div></button>`).join('')+sedanBtn()+'<button class="cl" id="hb28X">關閉</button>';
  hub.classList.add('on');requestAnimationFrame(()=>requestAnimationFrame(()=>hub.classList.add('vis')));
  const close=()=>{hub.classList.remove('vis');setTimeout(()=>hub.classList.remove('on'),300)};
@@ -5893,7 +5894,7 @@ const hubOpen=()=>{if(!P())return;try{leaveHome&&leaveHome();closeSub&&closeSub(
  hub.onclick=e=>{const b=e.target.closest('.it');if(!b||b.classList.contains('lock'))return;const n=+b.dataset.n;close();setTimeout(()=>{if(n===1)window.lunAlleyOpen&&window.lunAlleyOpen();else if(n===2)window.lunForestOpen&&window.lunForestOpen();else if(n===4)window.lunPotionOpen&&window.lunPotionOpen();else enterCh(n)},320)}};
 window.lunChaptersOpen=hubOpen;
 /* DEV 新版（rpg31）用的出入口 */
-window.lunDev28={enter:enterCh,idx:(n,txt)=>CH[n].steps().findIndex(s=>s[0]==='t'&&String(s[2]).includes(txt)),reward:n=>{showReward(n,CH[n].reward())},done:n=>!!R('ch'+n).done,abort:()=>{ctx=null;pendF=null;try{closeRoot()}catch(e){}},
+window.lunDev28={spr:(k,ov)=>spImg(k,ov),TOM,VOL,enter:enterCh,idx:(n,txt)=>CH[n].steps().findIndex(s=>s[0]==='t'&&String(s[2]).includes(txt)),reward:n=>{showReward(n,CH[n].reward())},done:n=>!!R('ch'+n).done,abort:()=>{ctx=null;pendF=null;try{closeRoot()}catch(e){}},
  now:()=>{if(!ctx)return null;const j=Math.max(0,ctx.i-1);let line='',who='';for(let k=j;k>=0;k--){const s=ctx.steps[k];if(s&&s[0]==='t'){who=WHO[s[1]]||'';line=s[2];break}}return {i:j,who,line:String(line).slice(0,80)}},
  skip:n=>{const c=S('ch'+n);try{ctx=null;pendF=null;closeRoot()}catch(e){}const p=P();if(n>=5){p.dk=p.dk||{};p.dk.patr=1}if(!c.done){c.done=1;CH[n].reward()}sv();try{rHome()}catch(e){}}};
 const rg=$$('rhgo2');
@@ -6074,7 +6075,7 @@ const CHS=[
  {t:'第 5 章　守護神課',go:at=>enter28(5,at),n28:5},
  {t:'第 6 章　學院盃（金探子）',go:at=>enter28(6,at),n28:6},
  {t:'第 7 章　日記＋佛達魔',go:at=>enter28(7,at),n28:7},
- {t:'第 8 章　開學典禮',go:at=>enter28(8,at),n28:8}];
+ {t:'第 8 章　畢業典禮',go:at=>enter28(8,at),n28:8}];
 CHS.forEach(c=>{if(c.n28)c.done=()=>!!(window.lunDev28&&window.lunDev28.done(c.n28))});
 /* ---- 狀態 ---- */
 let cur=-1,speed=2,collapsed=false;
@@ -6156,13 +6157,16 @@ const viewNotes=()=>{const a=notes();g('ntB').innerHTML='<h4>意見記錄（'+a.
   try{rToast(ok?'已複製，貼給我就好':'複製失敗，請長按文字手動複製')}catch(e){}}};
 /* ---- 體驗流程 ---- */
 const TESTS=[
- ['新版主畫面（繼續劇情、快捷磚）','home'],['三境短片（仙境／人間／地獄）','film'],['學籍・稱號（位階）','prof'],['註冊流程（填表→簽名→拍照→蓋章→學生證）','reg'],['巫師商場（預覽、穿戴）','shop:巫師商場'],['魔杖店','shop:魔杖店'],['書店（買書、借書）','shop:書店'],['雜貨鋪','shop:雜貨鋪'],['郵局（收信、註冊處）','shop:郵局'],['冰淇淋','shop:冰淇淋'],
+ ['新版主畫面（繼續劇情、快捷磚）','home'],['倫物關係圖（全部解鎖看）','relall'],['新人物彈出（李志憲）','relnew'],['學籍・位階・考核（條件全補齊）','rank'],['三境短片（仙境／人間／地獄）','film'],['學籍・稱號（位階）','prof'],['註冊流程（填表→簽名→拍照→蓋章→學生證）','reg'],['巫師商場（預覽、穿戴）','shop:巫師商場'],['魔杖店','shop:魔杖店'],['書店（買書、借書）','shop:書店'],['雜貨鋪','shop:雜貨鋪'],['郵局（收信、註冊處）','shop:郵局'],['冰淇淋','shop:冰淇淋'],
  ['藥店・李志憲在','shop:藥店:1'],['藥店・李志憲不在','shop:藥店:0'],['魔藥課開場（禁藥提示）','pot'],['迷途森林（方向鍵）','forest'],
  ['第 3 章孵蛋（稜彩九尾狐寶寶）','ch:3:12'],['第 6 章校長（黃衣服）','ch:6:2'],['第 6 章通關畫面（換行）','rw:6'],['第 7 章手寫日記（黑墨水）','ch:7:10'],['第 7 章暗場＋閃電＋湯姆瑞英','ch:7:11'],['第 7 章佛達魔登場（黑衣）','chq:7:墨水在地上聚成']];
 const prep=()=>{const p=P();if(!p)return false;try{A.init()}catch(e){}p.shard=Math.max(p.shard||0,500);p.ch2=p.ch2||{};p.ch4=p.ch4||{intro:0,stage:0,rec:{},done:0};try{leaveHome&&leaveHome();closeSub&&closeSub()}catch(e){}return p};
 const runTest=k=>{if(!P()){try{rToast('請先進入遊戲再測')}catch(e){}return}
  const [t,a,b]=k.split(':');g('dv31').classList.remove('on');const p=prep();
  if(t==='home'){try{rHome()}catch(e){}}
+ else if(t==='relall'){p.rel=p.rel||{};['lun','yun','alu','fang','lzx','shu','peng','mom','dog','dad','tom','vol'].forEach(k=>p.rel[k]=1);sv0();window.lunRelOpen&&window.lunRelOpen()}
+ else if(t==='relnew'){p.rel=p.rel||{lun:1};delete p.rel.lzx;sv0();try{rHome()}catch(e){}window.lunRelMeet&&window.lunRelMeet('lzx')}
+ else if(t==='rank'){p.hog=p.hog||{house:'gry'};if(!p.card)p.card={no:'1234',ts:Date.now(),sig:''};[2,3,4,5,6,7,8].forEach(n=>{p['ch'+n]=Object.assign(p['ch'+n]||{},{done:1})});p.rankIdx=0;sv0();window.lunProfile&&window.lunProfile()}
  else if(t==='film'){window.lunFilmMenu&&window.lunFilmMenu()}
  else if(t==='prof'){window.lunProfile&&window.lunProfile()}
  else if(t==='reg'){p.hog=p.hog||{house:'gry'};if(!p.hog.house)p.hog.house='gry';delete p.card;sv0();window.lunRegister&&window.lunRegister()}
@@ -6296,13 +6300,17 @@ document.head.insertAdjacentHTML('beforeend',`<style id="sp32css">
 #sp32 .pv>div{flex:1;text-align:center;font-size:12px;color:#ffe9a8;letter-spacing:.2em}
 #sp32 .pv canvas{display:block;width:100%;image-rendering:pixelated;background:radial-gradient(#3a2060,#140a2c);border:2px solid #ffe9a8;margin-bottom:4px}
 #sp32 .row2{display:flex;gap:8px}.row2>button{flex:1}
-.card32{margin:8px auto;width:272px;border:3px solid #ffe9a8;background:linear-gradient(135deg,#3a1a5a,#1a0a3a);padding:12px;position:relative;box-shadow:0 0 0 2px #b3182f;color:#fff;font-family:DotGothic16,sans-serif}
-.card32 .t{font-size:12px;letter-spacing:.3em;color:#ffe9a8}
-.card32 .ph{position:absolute;right:12px;top:36px;width:56px;height:56px;border:2px solid #ffe9a8;background:#d8e8ff;image-rendering:pixelated}
-.card32 .n{font-size:24px;margin:18px 0 2px;letter-spacing:.2em}
-.card32 .s{font-size:12px;opacity:.9;line-height:1.8;width:170px}
+.card32{margin:8px auto;width:min(300px,88vw);border:3px solid #ffe9a8;background:linear-gradient(135deg,#3a1a5a,#1a0a3a);padding:12px 12px 36px;position:relative;box-shadow:0 0 0 2px #b3182f;color:#fff;font-family:DotGothic16,sans-serif}
+.card32 .t{font-size:12px;letter-spacing:.2em;color:#ffe9a8;line-height:1.6}
+.card32 .ph{position:absolute;right:12px;top:36px;width:60px;height:60px;border:2px solid #ffe9a8;background:#d8e8ff;image-rendering:pixelated}
+.card32 .n{font-size:24px;margin:12px 0 6px;letter-spacing:.15em;max-width:62%;word-break:keep-all;overflow-wrap:anywhere}
+.card32 .rw{display:flex;gap:6px;max-width:64%;font-size:12px;line-height:1.7}
+.card32 .rw span{color:#ffe9a8;flex:0 0 auto}
+.card32 .rw b{font-weight:400;word-break:keep-all;overflow-wrap:anywhere;text-wrap:balance}
 .card32 .sg{height:30px;margin-top:2px;filter:invert(1) brightness(1.4)}
-.card32 .no{position:absolute;right:10px;bottom:8px;font-size:11px;color:#ffe9a8;letter-spacing:.1em}
+.card32 .st{position:absolute;right:14px;bottom:10px;width:46px;height:46px;border:3px solid #ff5a6a;color:#ff5a6a;border-radius:50%;display:grid;place-items:center;font-size:11px;transform:rotate(-14deg);opacity:.85}
+#sp32 .co,#sp32 .lt,#sp32 .tp,#sp32 .it span,#rg32 .co,#rg32 .lt,#rg32 p{word-break:keep-all;overflow-wrap:anywhere;text-wrap:balance;line-break:strict}
+.card32 .no{position:absolute;left:12px;bottom:10px;font-size:11px;color:#ffe9a8;letter-spacing:.1em}
 .card32 .st{position:absolute;right:48px;bottom:14px;width:44px;height:44px;border:3px solid #ff5a6a;color:#ff5a6a;border-radius:50%;display:grid;place-items:center;font-size:11px;transform:rotate(-14deg);opacity:.85}
 #rg32{position:fixed;inset:0;z-index:175;background:#000c;display:none;align-items:center;justify-content:center;padding:14px;font-family:DotGothic16,sans-serif;color:#fff}
 #rg32.on{display:flex}
@@ -6338,12 +6346,13 @@ const lend=()=>{const p=P();
 /* ---------- 學生證與註冊 ---------- */
 const HN={gry:'葛來倫多',huf:'赫倫帕夫',rav:'雷倫克勞',sly:'史萊哲倫'};
 const faceURL=()=>{const im=window.lunSP&&window.lunSP.d&&window.lunSP.d[0];const c=document.createElement('canvas');c.width=c.height=56;const x=c.getContext('2d');x.fillStyle='#d8e8ff';x.fillRect(0,0,56,56);if(im){x.imageSmoothingEnabled=false;x.drawImage(im,0,0,14,12,0,2,56,48)}return c.toDataURL()};
-const cardHTML=()=>{const p=P(),c=p.card||{};return '<div class="card32"><div class="t">火格華茲魔法學院　學生證</div><img class="ph" src="'+faceURL()+'"><div class="n">'+(p.name||'倫')+'</div><div class="s">學院：'+(HN[p.hog&&p.hog.house]||'（尚未分院）')+'<br>位階：'+rank().n+'<br>簽名：'+(c.sig?'<img class="sg" src="'+c.sig+'">':'')+'</div><div class="st">已註冊</div><div class="no">No.'+(c.no||'0000')+'</div></div>'};
+const cardHTML=()=>{const p=P(),c=p.card||{};const row=(a,b)=>'<div class="rw"><span>'+a+'：</span><b>'+b+'</b></div>';return '<div class="card32"><div class="t">火格華茲魔法學院<br>學生證</div><img class="ph" src="'+faceURL()+'"><div class="n">'+(p.name||'倫')+'</div>'+row('學院',HN[p.hog&&p.hog.house]||'（尚未分院）')+row('位階',rank().n)+row('簽名',c.sig?'<img class="sg" src="'+c.sig+'">':'')+'<div class="st">已註冊</div><div class="no">No.'+(c.no||'0000')+'</div></div>'};
+window.lunCardHTML=cardHTML;
 const regOpen=()=>{const p=P();if(!p)return;
  if(p.card){openP('<h3>學生證</h3>'+cardHTML()+'<button class="cl" id="spX">關閉</button>');g('spX').onclick=closeP;return}
  closeP();const bx=g('rzB'),o=g('rg32');o.classList.add('on');
  const S={sig:''};
- const s1=()=>{bx.innerHTML='<h3 style="margin:0 0 6px;font-weight:400;color:#ffe9a8">入學註冊（1／4）填表</h3><p class="lt" style="font-size:15px;line-height:2">姓名：<b>'+(p.name||'倫')+'</b>\n學院：<b>'+(HN[p.hog&&p.hog.house]||'（還沒分院，先去見分類帽）')+'</b>\n入學日：<b>12 月 20 日</b>\n緊急聯絡人：<b>海狗（嗷）</b></p><button class="bt pri" id="rzN" style="width:100%;height:48px;border:2px solid #fff;background:#e0102e;color:#fff;font:inherit;font-size:16px;letter-spacing:.2em">確認無誤，下一步</button><button id="rzC" style="width:100%;height:44px;margin-top:6px;border:2px solid #ffe9a8;background:#140a2c;color:#ffe9a8;font:inherit">先不要</button>';
+ const s1=()=>{bx.innerHTML='<h3 style="margin:0 0 6px;font-weight:400;color:#ffe9a8">入學註冊（1／4）填表</h3><p class="lt" style="font-size:15px;line-height:2">姓名：<b>'+(p.name||'倫')+'</b>\n學院：<b>'+(HN[p.hog&&p.hog.house]||'（還沒分院，先去見分類帽）')+'</b>\n預計畢業日：<b>12 月 20 日</b>\n緊急聯絡人：<b>海狗（嗷）</b></p><button class="bt pri" id="rzN" style="width:100%;height:48px;border:2px solid #fff;background:#e0102e;color:#fff;font:inherit;font-size:16px;letter-spacing:.2em">確認無誤，下一步</button><button id="rzC" style="width:100%;height:44px;margin-top:6px;border:2px solid #ffe9a8;background:#140a2c;color:#ffe9a8;font:inherit">先不要</button>';
   g('rzC').onclick=()=>o.classList.remove('on');g('rzN').onclick=()=>{if(!(p.hog&&p.hog.house)){toast('先去見分類帽（序章）再來註冊');return}s2()}};
  const s2=()=>{bx.innerHTML='<h3 style="margin:0 0 6px;font-weight:400;color:#ffe9a8">入學註冊（2／4）簽名</h3><p class="co" style="font-size:13px">在下面用手指簽下你的名字。</p><canvas class="sg" id="rzS" width="400" height="160"></canvas><div style="display:flex;gap:8px;margin-top:8px"><button id="rzX" style="flex:1;height:46px;border:2px solid #ffe9a8;background:#140a2c;color:#ffe9a8;font:inherit">重簽</button><button id="rzO" style="flex:2;height:46px;border:2px solid #fff;background:#e0102e;color:#fff;font:inherit;letter-spacing:.2em">簽好了</button></div>';
   const cv=g('rzS'),c=cv.getContext('2d');c.lineCap='round';c.lineJoin='round';c.strokeStyle='#14203a';c.lineWidth=5;let dr=false,lx=0,ly=0,any=false;
@@ -6362,16 +6371,16 @@ const regOpen=()=>{const p=P();if(!p)return;
 /* ---------- 位階與稱號 ---------- */
 const done=k=>{const p=P();return !!(p&&p[k]&&p[k].done)};
 const RANKS=[{n:'新生',need:'完成入學註冊',ok:()=>true},{n:'螢火見習生',need:'完成入學註冊',ok:()=>!!(P()&&P().card),d:'剛入學的見習生，魔杖還握不太穩。'},{n:'銀月巫師',need:'通過第 5 章：守護神課',ok:()=>done('ch5'),d:'學會了守護神咒，月光會跟著你。'},{n:'曜日大巫',need:'通過第 7 章：打倒佛達魔',ok:()=>done('ch7'),d:'最高位階。日記裡的黑暗，已經被你寫完了。'}];
-const rank=()=>{let r=RANKS[0];RANKS.forEach(x=>{try{if(x.ok())r=x}catch(e){}});return r};
+const rank=()=>({n:window.lunRankName?window.lunRankName():'新生'});
 const azN=()=>{const p=P();return (p&&p.ch4&&p.ch4.az)||0};
-const syncTitles=()=>{const p=P();if(!p)return;p.titles=p.titles||[];const r=rank();RANKS.slice(1).forEach(x=>{try{if(x.ok()&&!p.titles.includes(x.n))p.titles.push(x.n)}catch(e){}});if(azN()>0&&!p.titles.includes('阿茲卡班歸來者'))p.titles.push('阿茲卡班歸來者');sv();return r};
+const syncTitles=()=>{if(window.lunRankSync)return window.lunRankSync();const p=P();if(!p)return;p.titles=p.titles||[];const r=rank();RANKS.slice(1).forEach(x=>{try{if(x.ok()&&!p.titles.includes(x.n))p.titles.push(x.n)}catch(e){}});if(azN()>0&&!p.titles.includes('阿茲卡班歸來者'))p.titles.push('阿茲卡班歸來者');sv();return r};
 window.lunRank=()=>{const r=rank();return r.n+(azN()>0?'（阿茲卡班歸來者）':'')};
 const profile=()=>{const p=P();if(!p)return;try{leaveHome&&leaveHome();closeSub&&closeSub()}catch(e){}syncTitles();const r=rank(),idx=RANKS.indexOf(r),nx=RANKS[idx+1];
  const chs=['ch2','ch3','ch4','ch5','ch6','ch7','ch8'].filter(k=>done(k)).length+(p.hog&&p.hog.house?1:0);
  const W=wear(),wl=Object.keys(W).map(k=>SLOTN[k]+'：'+IT[W[k]].n);
  openP('<h3>學籍・稱號</h3><div class="co">位階：<b style="color:#ffe9a8;font-size:18px">'+r.n+'</b>'+(azN()>0?'　<b style="color:#ff7a8a">阿茲卡班歸來者</b>':'')+'<br>'+(r.d||'')+(nx?'<br>下一階「'+nx.n+'」：'+nx.need:'<br>已經是最高位階。')+'</div>'+(p.card?cardHTML():'<p class="lt" style="font-size:14px">還沒有學生證。要先完成「註冊」。</p><button class="bt pri" id="pfReg">'+(mailDone('m0')?'前往註冊':'（等入學註冊通知）')+'</button>')+'<div class="co" style="margin-top:8px">稱號：'+((p.titles||[]).join('、')||'（還沒有）')+'<br>章節進度：'+chs+' / 8<br>借的書：'+(lib().length?lib().map(k=>LEND.find(r=>r[0]===k)[1]).join('、'):'無')+'<br>穿著：'+(wl.join('、')||'沒有')+'</div><button class="cl" id="spX">關閉</button>');
  g('spX').onclick=()=>{closeP();try{rHome()}catch(e){}};const b=g('pfReg');if(b)b.onclick=()=>{if(mailDone('m0'))regOpen();else toast('還沒收到入學註冊通知')};B().insertAdjacentHTML('beforeend','<button class="cl" id="pfWr">脫下全部穿戴</button>');g('pfWr').onclick=()=>{p.wear={};sv();profile()}};
-window.lunProfile=profile;window.lunRegister=regOpen;
+window.lunProfile=profile;window.lunRegister=regOpen;window.lunPanel={open:openP,close:closeP,B};
 /* ---------- 信（正式版要排指定時間，at＝台灣時間）---------- */
 const TW=s=>Date.parse(s+'+08:00');
 const LET=[
@@ -6447,16 +6456,16 @@ document.head.insertAdjacentHTML('beforeend',`<style id="hm33css">
 #rhome .rhtips{color:#9d8fc4;font-family:DotGothic16,sans-serif}
 </style>`);
 const body=document.querySelector('#rhome .rhbody');if(!body)return;
-const T=[['alley','斜角巷','#ff8ab0'],['film','三境短片','#7ad0ff'],['prof','學籍・稱號','#ffe9a8'],['rhGoal','三天大目標','#6ad0ff'],['rhTask','每日任務','#ffd56a'],['rhWard','更衣間','#ff8ac0'],['rhHouse','小屋','#8aff9a'],['pet','小狐狸','#ff9a3a'],['claw','夾娃娃機','#c58cff']];
+const T=[['rel','倫物關係圖','#ff6a6a'],['alley','斜角巷','#ff8ab0'],['film','三境短片','#7ad0ff'],['prof','學籍・稱號','#ffe9a8'],['rhGoal','三天大目標','#6ad0ff'],['rhTask','每日任務','#ffd56a'],['rhWard','更衣間','#ff8ac0'],['rhHouse','小屋','#8aff9a'],['pet','小狐狸','#ff9a3a'],['claw','夾娃娃機','#c58cff']];
 const box=document.createElement('div');box.className='hm33';
 box.innerHTML='<button class="go" data-r="chap" id="hmGo33">繼續劇情</button>'+T.map(t=>'<button class="'+(t[3]||'')+'" style="--c:'+t[2]+'" data-r="'+t[0]+'">'+t[1]+'</button>').join('');
 body.insertBefore(box,body.firstChild);
 /* 「繼續劇情」按鈕上顯示下一章 */
-const NEXT=[['序章　分類帽',()=>{const p=P();return !!(p&&p.hog&&p.hog.house)}],['第 1 章　斜角巷',()=>{const r=rm();return !!(r&&r.own&&r.own.broom)}],['第 2 章　夜間實習',()=>!!(P().ch2&&P().ch2.done)],['第 3 章　領養生物課',()=>window.lunDev28&&window.lunDev28.done(3)],['第 4 章　魔藥課',()=>!!(P().ch4&&P().ch4.done)],['第 5 章　守護神課',()=>window.lunDev28.done(5)],['第 6 章　學院盃',()=>window.lunDev28.done(6)],['第 7 章　日記',()=>window.lunDev28.done(7)],['第 8 章　開學典禮',()=>window.lunDev28.done(8)]];
+const NEXT=[['序章　分類帽',()=>{const p=P();return !!(p&&p.hog&&p.hog.house)}],['第 1 章　斜角巷',()=>{const r=rm();return !!(r&&r.own&&r.own.broom)}],['第 2 章　夜間實習',()=>!!(P().ch2&&P().ch2.done)],['第 3 章　領養生物課',()=>window.lunDev28&&window.lunDev28.done(3)],['第 4 章　魔藥課',()=>!!(P().ch4&&P().ch4.done)],['第 5 章　守護神課',()=>window.lunDev28.done(5)],['第 6 章　學院盃',()=>window.lunDev28.done(6)],['第 7 章　日記',()=>window.lunDev28.done(7)],['第 8 章　畢業典禮',()=>window.lunDev28.done(8)]];
 const updGo=()=>{try{if(!P())return;const n=NEXT.find(x=>{try{return !x[1]()}catch(e){return true}});const b=document.getElementById('hmGo33');if(b)b.textContent=n?'繼續劇情　'+n[0]:'劇情全部完成'}catch(e){}};
 updGo();{const h=document.getElementById('rhome');if(h)new MutationObserver(updGo).observe(h,{attributes:true,attributeFilter:['class']})}
 box.addEventListener('click',e=>{const b=e.target.closest('[data-r]');if(!b)return;try{A.S.tap&&A.S.tap()}catch(x){}
- const k=b.dataset.r;if(k==='chap'){window.lunChaptersOpen&&window.lunChaptersOpen();return}if(k==='alley'){window.lunAlleyOpen&&window.lunAlleyOpen();return}if(k==='film'){window.lunFilmMenu&&window.lunFilmMenu();return}if(k==='prof'){window.lunProfile&&window.lunProfile();return}
+ const k=b.dataset.r;if(k==='chap'){window.lunChaptersOpen&&window.lunChaptersOpen();return}if(k==='rel'){window.lunRelOpen&&window.lunRelOpen();return}if(k==='alley'){window.lunAlleyOpen&&window.lunAlleyOpen();return}if(k==='film'){window.lunFilmMenu&&window.lunFilmMenu();return}if(k==='prof'){window.lunProfile&&window.lunProfile();return}
  let el=null;if(k==='pet'||k==='claw')el=document.querySelector('[data-q9="'+k+'"]');else el=document.getElementById(k);
  if(el)el.click();else try{rToast('這個功能還沒準備好')}catch(x){}});
 })();
@@ -6507,10 +6516,18 @@ document.head.insertAdjacentHTML('beforeend',`<style id="fm34css">
 #fm34 .ct button{flex:1;min-height:48px;font-size:16px}
 </style>`);
 document.body.insertAdjacentHTML('beforeend','<div id="fm34"><button class="x" id="fmX" aria-label="關閉">×</button><div class="mn" id="fmM"></div><div id="fmS" style="display:none;flex-direction:column;align-items:center"><div class="st"><canvas id="fmC" width="144" height="256"></canvas><div class="cp" id="fmP"></div></div><div class="ct"><button id="fmR">重播</button><button id="fmB">回選單</button></div></div></div>');
+/* 三境短片的劇情跟「倫物關係圖」掛勾：仙境＝家人（文英、金達、海狗）、人間＝同學老師（李志憲、鼠＋芳教授、彭董）、地獄＝黑衣情侶（湯姆瑞英、佛達魔，伏筆）。
+   cam＝客串人物 [key, 位置比例, 透明度, 調色]；每幕一組 */
 const REALMS={
- sky:{n:'仙境篇',sub:'稜鏡光彩的雲上世界',ids:['sky','peak'],cap:{t:'倫間仙境。雲很軟，風很輕。',w:'倫一個人往前走，雲海在腳下流動。',a:['雲裡跳出一團發光的東西。','牠不太高興。','倫舉起魔杖，念了咒語。'],w2:'倫繼續往上走，天越來越暗。',a2:['山頂有一個披著黑影的身影。','牠擋在路中間，不肯讓路。'],end:'風停了。倫往下看，整個仙境都亮著。'}},
- human:{n:'人間篇',sub:'有煙火氣的倫倫村與迷途森林',ids:['village','forest'],cap:{t:'倫倫村。倫的家就在這裡。',w:'倫走出家門，往村外的森林走。',a:['路邊跳出一團軟軟的東西。','牠想跟倫玩，但玩法有點危險。','倫舉起魔杖，念了咒語。'],w2:'越走越深，森林也越來越暗。',a2:['一棵老樹動了起來。','牠看起來，已經等了很久。'],end:'天亮了。倫走出森林，口袋裡多了一點倫幣。'}},
- hell:{n:'地獄篇',sub:'瘋火與霓虹交織的底層',ids:['hell','dog'],cap:{t:'瘋火地獄。岩漿在腳邊冒泡。',w:'倫小心翼翼，沿著黑色的石頭路往前走。',a:['火裡竄出一個小小的影子。','牠的尾巴，正在燒。','倫舉起魔杖，念了咒語。'],w2:'再往前，是一座霓虹閃爍的賭城。',a2:['骰子會自己走路，還會自己丟。','賭狗之王，擋在門口。'],end:'倫把魔杖收起來。這一次，沒有輸。'}}};
+ sky:{n:'仙境篇',sub:'雲上的一家人',ids:['sky','peak'],
+  cam:[[['mom',.03],['dad',.17]],[['dog',.12]]],
+  cap:{t:'倫間仙境。',w:'雲上有一張小桌子，坐著文英和金達。',a:['一團發光的稜鏡精靈，闖進了野餐。','文英：倫，小心！　金達：……（默默撐起傘）','倫舉起魔杖，念了咒語。'],w2:'倫往山頂走。海狗從後面追上來。',a2:['山頂的騎士擋住了路。','海狗：倫，我來當你的守護神！'],end:'雲上，文英和金達揮著手。倫知道，不管走多遠，都有人在等。'}},
+ human:{n:'人間篇',sub:'同學與老師',ids:['village','forest'],
+  cam:[[['lzx',.03],['shu',.17]],[['peng',.04],['fang',.17]]],
+  cap:{t:'倫倫村。',w:'李志憲教授在點名，鼠和芳教授站在一起。',a:['一團果凍衝進了課堂。','李志憲：理智線，先放在旁邊。','倫舉起魔杖，念了咒語。'],w2:'放學後，彭董拉著倫去森林拍年鑑。',a2:['一棵老樹動了起來。','彭董：這張我要放封面！（喀嚓）　芳教授：鼠，別躲在我後面。'],end:'鼠偷偷牽起芳教授的手，大家都假裝沒看到。'}},
+ hell:{n:'地獄篇',sub:'兩個黑影',ids:['hell','dog'],
+  cam:[[['tom',.04,.55],['vol',.18,.55]],[['tom',.04,.4],['vol',.18,.4]]],
+  cap:{t:'瘋火地獄。',w:'遠處的岩石上，站著兩個穿黑衣的人。',a:['火裡竄出一個小小的影子。','黑衣的兩個人，只是靜靜看著。','倫舉起魔杖，念了咒語。'],w2:'再往前，是霓虹閃爍的賭城。兩個黑影，還跟在後面。',a2:['骰子會自己走路，還會自己丟。','賭狗之王擋在門口。黑影還是沒有出手。'],end:'回頭一看，黑影不見了。他們看起來，好像在哪裡見過。'}}};
 let raf=0,run=null;
 const sc=document.createElement('canvas');
 const stop=()=>{cancelAnimationFrame(raf);raf=0;run=null};
@@ -6518,19 +6535,21 @@ const menu=()=>{stop();g('fmS').style.display='none';const M=g('fmM');M.style.di
  M.innerHTML='<h2>三境短片</h2><p>以前要自己走地圖打怪的畫面，現在是 25 秒的像素短片。</p>'+Object.keys(REALMS).map(k=>'<button data-r="'+k+'">'+REALMS[k].n+'<small>'+REALMS[k].sub+'</small></button>').join('');};
 const play=k=>{const R=REALMS[k];if(!R)return;g('fmM').style.display='none';g('fmS').style.display='flex';
  const cv=g('fmC'),c=cv.getContext('2d'),W=cv.width,H=cv.height;c.imageSmoothingEnabled=false;
- const SPs=window.lunSP&&window.lunSP.s;const T0=performance.now();run={k};const areas=R.ids.map(AOF);
+ const SPs=window.lunSP&&window.lunSP.s;const T0=performance.now();run={k};const SPR=(kk)=>{const D=window.lunDev28;return kk==='tom'?D.spr('mom',D.TOM):kk==='vol'?D.spr('dad',D.VOL):D.spr(kk)};const areas=R.ids.map(AOF);
  const parts=[];let lastCap='';
  const cap=t=>{if(t!==lastCap){lastCap=t;g('fmP').textContent=t}};
  const TIT=2.5,ACT=11.5,TOT=TIT+ACT*2+3.5;
  const beam=(x0,y0,x1,y1,col,a)=>{c.save();c.globalAlpha=a;c.strokeStyle=col;c.lineWidth=5;c.beginPath();c.moveTo(x0,y0);c.lineTo(x1,y1);c.stroke();c.strokeStyle='#fff';c.lineWidth=2;c.stroke();c.restore()};
  const frame=ts=>{if(!run||run.k!==k)return;const T=(ts-T0)/1000;
-  if(T>=TOT){c.fillStyle='#05030a';c.fillRect(0,0,W,H);c.fillStyle='#ffe9a8';c.font='16px DotGothic16,sans-serif';c.textAlign='center';c.fillText('完',W/2,H/2);cap(R.cap.end);return}
+  if(T>=TOT){try{const pp=P();pp.filmSeen=pp.filmSeen||{};if(!pp.filmSeen[k]){pp.filmSeen[k]=1;save()}}catch(e){}c.fillStyle='#05030a';c.fillRect(0,0,W,H);c.fillStyle='#ffe9a8';c.font='16px DotGothic16,sans-serif';c.textAlign='center';c.fillText('完',W/2,H/2);cap(R.cap.end);return}
   if(T<TIT){c.fillStyle='#05030a';c.fillRect(0,0,W,H);const a=Math.min(1,T/.6)*Math.min(1,(TIT-T)/.5);c.globalAlpha=a;c.fillStyle='#ffe9a8';c.font='20px DotGothic16,sans-serif';c.textAlign='center';c.fillText(R.n,W/2,H/2-4);c.font='9px DotGothic16,sans-serif';c.fillStyle='#fff';c.fillText(R.sub,W/2,H/2+14);c.globalAlpha=1;cap('');raf=requestAnimationFrame(frame);return}
   const u=T-TIT,ai=Math.min(1,Math.floor(u/ACT)),a=u-ai*ACT,A0=areas[ai],boss=ai===1;
   const gy=drawScene(c,W,H,A0,T,H-70);
   const mk=boss?A0.boss:A0.m[0],im=mSprite(mk,boss),ms=Math.max(1,Math.floor(56/Math.max(im.width,im.height)*(boss?1.5:1)));
+  /* 客串人物（倫物關係圖裡的人）*/
+  (R.cam[ai]||[]).forEach(([ck,cx,al])=>{const ci=SPR(ck);if(!ci)return;const cs=2;c.save();c.globalAlpha=al||1;c.drawImage(ci,Math.round(W*cx),Math.round(gy-ci.height*cs+2),ci.width*cs,ci.height*cs);c.restore()});
   /* 倫 */
-  let lx=W*.14+Math.min(a,4)/4*W*.18;const wk=a<4;const lf=SPs?SPs[wk?Math.floor(a*5)&1:0]:null;const ls=3;
+  let lx=W*.36+Math.min(a,4)/4*W*.12;const wk=a<4;const lf=SPs?SPs[wk?Math.floor(a*5)&1:0]:null;const ls=3;
   if(lf)c.drawImage(lf,Math.round(lx),Math.round(gy-lf.height*ls+2),lf.width*ls,lf.height*ls);
   const hx=lx+lf.width*ls-6,hy=gy-lf.height*ls*.55;
   /* 怪物 */
@@ -6556,6 +6575,121 @@ const open=()=>{if(!P())return;try{leaveHome&&leaveHome();closeSub&&closeSub()}c
 const close=()=>{stop();const f=g('fm34');f.classList.remove('vis');setTimeout(()=>{f.classList.remove('on');try{rHome()}catch(e){}},300)};
 g('fmX').onclick=close;g('fmB').onclick=menu;g('fmM').onclick=e=>{const b=e.target.closest('[data-r]');if(b){try{A.init()}catch(x){}play(b.dataset.r)}};
 window.lunFilmMenu=open;window.lunFilm=play;
+})();
+
+/* ===== v35.0 倫物關係圖＋巫師位階與考核（雅雲 2026-11-27 指定）=====
+   ① 倫物關係圖：像犯罪調查那種「軟木板＋照片＋紅線」人物關係圖。每解鎖一個 NPC（第一次見到／第一次說話）就跳出來，新的人物會被釘上去。
+      也可以從「更多→倫物關係圖」、主畫面磚、DEV 看。存檔 p.rel={人物key:時間}。
+      人物：倫（中心）、雅雲、鄧布嚕多、芳教授、李志憲、鼠內普、彭董、海狗、文英、金達、湯姆瑞英、佛達魔。
+      湯姆瑞英＝文英的暗面（日記裡的影子）、佛達魔＝金達的暗面；兩組都是情侶，穿黑色情侶裝與一般外觀不同。
+   ② 巫師位階 11 階（見習 3／中級 3／終極 5），每一階都要通過「晉階考核」（3 題答對 2 題）才升。存檔 p.rankIdx（-1＝新生、0＝引靈者…）。
+      被關進阿茲卡班另有稱號「阿茲卡班歸來者」，不影響位階，但「賢者」要求沒進過阿茲卡班。 */
+(()=>{
+if(window.lunRelOpen)return;
+const g=id=>document.getElementById(id);
+const sv=()=>{try{save()}catch(e){}};
+const toast=t=>{try{rToast(t)}catch(e){}};
+/* ================= ① 人物關係圖 ================= */
+const NODES={
+ lun:{n:'倫',r:'你（主角）',x:.5,y:.44},yun:{n:'雅雲',r:'巫師商場老闆',x:.5,y:.07},alu:{n:'鄧布嚕多',r:'校長（不會只是校長）',x:.17,y:.11},fang:{n:'芳教授',r:'領養生物課',x:.83,y:.11},
+ lzx:{n:'李志憲',r:'魔藥課教授',x:.14,y:.29},shu:{n:'鼠內普',r:'黑魔法教學',x:.86,y:.29},peng:{n:'彭董',r:'年鑑攝影師',x:.14,y:.47},mom:{n:'文英',r:'媽媽',x:.86,y:.47},
+ dog:{n:'海狗',r:'守護神・郵差',x:.16,y:.65},dad:{n:'金達',r:'爸爸',x:.86,y:.65},tom:{n:'湯姆瑞英',r:'日記裡的人',x:.34,y:.84},vol:{n:'佛達魔',r:'黑斗篷的男人',x:.66,y:.84}};
+const EDGES=[['lun','dog','夥伴・守護神'],['lun','lzx','學生・魔藥課'],['lun','fang','學生・小狐狸'],['lun','alu','校長'],['lun','peng','森林嚮導'],['lun','yun','巫師商場'],['lun','shu','黑魔法課'],['lun','mom','家人'],['lun','dad','家人'],
+ ['shu','fang','情侶'],['mom','dad','夫妻'],['tom','mom','日記裡的影子'],['vol','dad','黑暗的另一面'],['tom','vol','黑衣情侶'],['lun','tom','吃掉字的日記'],['lun','vol','宿敵'],['alu','lzx','同事'],['alu','vol','追查多年']];
+const KEYS=Object.keys(NODES);
+const rel=()=>{const p=P();if(!p)return {};p.rel=p.rel||{lun:1};return p.rel};
+const nImg=k=>{try{const S=window.lunDev28;if(k==='lun')return window.lunSP&&window.lunSP.d&&window.lunSP.d[0];if(k==='tom')return S.spr('mom',S.TOM);if(k==='vol')return S.spr('dad',S.VOL);return S.spr(k)}catch(e){return null}};
+const W=360,H=560,PW=62,PH=78;
+const seed=(k)=>{let h=0;for(const c of k)h=(h*31+c.charCodeAt(0))%997;return h};
+const cork=c=>{c.fillStyle='#b07c4c';c.fillRect(0,0,W,H);let s=7;const rnd=()=>(s=(s*1664525+1013904223)>>>0)/4294967296;for(let i=0;i<1400;i++){c.fillStyle=rnd()<.5?'#8a5c34':'#c89a68';c.fillRect(rnd()*W,rnd()*H,1+rnd()*2,1+rnd()*2)}
+ c.strokeStyle='#5a3a1a';c.lineWidth=10;c.strokeRect(5,5,W-10,H-10);c.strokeStyle='#8a5a2a';c.lineWidth=2;c.strokeRect(10,10,W-20,H-20)};
+const draw=(cv,newK,t)=>{const c=cv.getContext('2d');c.setTransform(2,0,0,2,0,0);c.imageSmoothingEnabled=false;cork(c);const R=rel();
+ const P0=k=>[NODES[k].x*W,NODES[k].y*H-PH/2+7];
+ /* 紅線 */
+ EDGES.forEach(([a,b,l])=>{if(!R[a]||!R[b])return;const[A,B]=[P0(a),P0(b)],mx=(A[0]+B[0])/2,my=(A[1]+B[1])/2+10;
+  c.strokeStyle='#00000055';c.lineWidth=2.4;c.beginPath();c.moveTo(A[0]+1,A[1]+2);c.quadraticCurveTo(mx+1,my+2,B[0]+1,B[1]+2);c.stroke();
+  c.strokeStyle='#d01a2c';c.lineWidth=1.6;c.beginPath();c.moveTo(A[0],A[1]);c.quadraticCurveTo(mx,my,B[0],B[1]);c.stroke();
+  c.font='9px DotGothic16,sans-serif';const tw=c.measureText(l).width+8,qx=(A[0]+B[0])/4*2*.5+(mx)*.5-0,qy=(A[1]+B[1])/4+my/2;
+  c.save();c.translate((A[0]+B[0])/2,(A[1]+B[1])/2+5);c.fillStyle='#fff3d8';c.strokeStyle='#8a6a3a';c.lineWidth=.8;c.fillRect(-tw/2,-7,tw,13);c.strokeRect(-tw/2,-7,tw,13);c.fillStyle='#3a1a0a';c.textAlign='center';c.fillText(l,0,3);c.restore()});
+ /* 照片 */
+ KEYS.forEach(k=>{const N=NODES[k],on=!!R[k];let sc=1,al=1;if(k===newK){const q=Math.min(1,t/.7);sc=1+(1-q)*.9;al=q}
+  c.save();c.globalAlpha=al;c.translate(N.x*W,N.y*H);c.rotate(((seed(k)%9)-4)*.012);c.scale(sc,sc);
+  c.fillStyle='#00000044';c.fillRect(-PW/2+3,-PH/2+4,PW,PH);c.fillStyle=on?'#fdf8ec':'#d8d4cc';c.fillRect(-PW/2,-PH/2,PW,PH);
+  c.fillStyle=on?'#cfd8ea':'#555';c.fillRect(-PW/2+5,-PH/2+8,PW-10,PW-10);
+  if(on){const im=nImg(k);if(im){const s=Math.floor(Math.min((PW-14)/im.width,(PW-14)/im.height)*2)/2||1,w=im.width*s,h=im.height*s;if(k==='tom'||k==='vol'){c.fillStyle='#1a1224';c.fillRect(-PW/2+5,-PH/2+8,PW-10,PW-10)}c.drawImage(im,-w/2,-PH/2+8+(PW-10-h)/2,w,h)}}
+  else{c.fillStyle='#777';c.font='28px DotGothic16,sans-serif';c.textAlign='center';c.fillText('？',0,-PH/2+8+(PW-10)/2+10)}
+  c.fillStyle=on?'#2a1608':'#666';c.font='11px DotGothic16,sans-serif';c.textAlign='center';c.fillText(on?N.n:'？？？',0,PH/2-9);
+  c.fillStyle=on?'#a01020':'#777';c.font='7px DotGothic16,sans-serif';c.fillText(on?N.r.slice(0,9):'尚未認識',0,PH/2-1);
+  c.restore();
+  /* 圖釘 */
+  const px=N.x*W,py=N.y*H-PH/2+7;c.fillStyle='#00000055';c.beginPath();c.arc(px+1.5,py+2,4,0,7);c.fill();c.fillStyle=on?'#e01a2c':'#888';c.beginPath();c.arc(px,py,4,0,7);c.fill();c.fillStyle='#fff9';c.fillRect(px-2,py-2,2,2);
+  if(k===newK&&t>.7){c.strokeStyle='#ffe9a8';c.lineWidth=2;c.beginPath();c.arc(px,py+PH/2-6,PH/2+6+Math.sin(t*6)*2,0,7);c.stroke();c.fillStyle='#e0102e';c.fillRect(N.x*W+PW/2-20,N.y*H-PH/2-4,28,12);c.fillStyle='#fff';c.font='9px DotGothic16,sans-serif';c.textAlign='center';c.fillText('NEW',N.x*W+PW/2-6,N.y*H-PH/2+5)}});
+ /* 標題 */
+ c.save();c.translate(W/2,H-24);c.rotate(-.02);c.fillStyle='#fdf0c8';c.fillRect(-92,-14,184,26);c.fillStyle='#e0102e';c.font='16px DotGothic16,sans-serif';c.textAlign='center';c.fillText('【倫物關係圖】',0,5);c.fillStyle='#8a1a1a';c.font='7px DotGothic16,sans-serif';c.fillText('CASE FILE 1220　解鎖 '+Object.keys(R).length+' / '+KEYS.length,0,-6);c.restore()};
+document.head.insertAdjacentHTML('beforeend',`<style id="rl35css">
+#rl35{position:fixed;inset:0;z-index:180;background:#000d;display:none;flex-direction:column;align-items:center;overflow:auto;padding:calc(var(--st,0px) + 10px) 8px 18px;font-family:DotGothic16,sans-serif;color:#fff}
+#rl35.on{display:flex}
+#rl35 .hd{font-size:15px;letter-spacing:.2em;color:#ffe9a8;margin:4px 0 8px;text-align:center;line-height:1.6;min-height:24px;word-break:keep-all;overflow-wrap:anywhere;text-wrap:balance}
+#rl35 canvas{width:min(96vw,400px);aspect-ratio:360/560;image-rendering:auto;border:2px solid #ffe9a8;box-shadow:0 8px 30px #000}
+#rl35 button{margin-top:10px;width:min(96vw,400px);min-height:48px;border:2px solid #ffe9a8;background:#140a2c;color:#ffe9a8;font:inherit;font-size:16px;letter-spacing:.3em}
+</style>`);
+document.body.insertAdjacentHTML('beforeend','<div id="rl35"><div class="hd" id="rlH"></div><canvas id="rlC" width="720" height="1120"></canvas><button id="rlX">收起來</button></div>');
+let raf=0,T0=0;
+const show=(newK)=>{const o=g('rl35');o.classList.add('on');const cv=g('rlC');g('rlH').textContent=newK?'新的人物：'+NODES[newK].n+'（'+NODES[newK].r+'）　關係圖更新了':'倫物關係圖';
+ cancelAnimationFrame(raf);T0=performance.now();const f=ts=>{const t=(ts-T0)/1000;draw(cv,newK,t);if(newK&&t<30)raf=requestAnimationFrame(f)};raf=requestAnimationFrame(f);if(newK){try{A.tone(660,.1,'square',.04);A.tone(990,.15,'square',.04,.1);A.tone(1320,.2,'sine',.04,.2)}catch(e){}}};
+const closeRl=()=>{cancelAnimationFrame(raf);g('rl35').classList.remove('on');try{if(!document.querySelector('#sc28.on,#shop21.on,#al19.on,#pt27.on,#fr26.on'))rHome&&rHome()}catch(e){}};
+g('rlX').onclick=closeRl;
+window.lunRelOpen=()=>{if(!P())return;try{leaveHome&&leaveHome();closeSub&&closeSub()}catch(e){}try{A.init()}catch(e){}show(null)};
+const Q=[];
+const BUSY='#sc28.on,#shop21.on,#sn28.on,#fr26.on,#pt27.on,#sp20.on,#dr28.on,#rhog.on,#fm34.on,#sp32.on,#rg32.on,#rl35.on,#dv31.on';
+window.lunRelMeet=k=>{try{if(!P()||!NODES[k])return;const R=rel();if(R[k])return;R[k]=Date.now();sv();Q.push(k)}catch(e){}};
+setInterval(()=>{if(!Q.length||document.querySelector(BUSY))return;show(Q.shift())},700);
+/* 導覽列「更多」加入口 */
+try{const more=NAV.find(x=>x[0]==='more');if(more&&!more[2].some(r=>r[0]==='rel'))more[2].unshift(['rel','倫物關係圖'])}catch(e){}
+document.addEventListener('click',e=>{const b=e.target.closest('#rsub button[data-a="rel"]');if(!b)return;e.stopImmediatePropagation();e.preventDefault();try{closeSub()}catch(x){}window.lunRelOpen()},true);
+/* ================= ② 位階與考核 ================= */
+const done=k=>{const p=P();return !!(p&&p[k]&&p[k].done)};
+const nRec=()=>{const p=P();return p&&p.ch4&&p.ch4.rec?Object.keys(p.ch4.rec).length:0};
+const film3=()=>{const p=P();return !!(p&&p.filmSeen&&p.filmSeen.sky&&p.filmSeen.human&&p.filmSeen.hell)};
+const nItems=()=>{const p=P();return p&&p.items?Object.keys(p.items).filter(k=>p.items[k]>0).length:0};
+const az=()=>{const p=P();return (p&&p.ch4&&p.ch4.az)||0};
+const Qs=(q,a,b,c)=>({q,o:[a,b,c]});/* 第一個選項是正確答案，顯示時會洗牌 */
+const RK=[
+ {n:'引靈者',t:'見習',need:'完成入學註冊',pre:()=>!!(P()&&P().card)},
+ {n:'聚魔學徒',t:'見習',need:'通過第 2 章：夜間實習',pre:()=>done('ch2'),ex:[Qs('迷途森林裡，替倫帶路的是誰？','天彭星','海狗','李志憲教授'),Qs('夜行怪出沒的地方叫什麼？','迷途森林','倫倫村','倫生巔峰'),Qs('森林裡出題考倫的那隻鼠叫什麼？','西當普利鼠','鼠內普','倫凍王')]},
+ {n:'點火者',t:'見習',need:'通過第 3 章：領養生物課',pre:()=>done('ch3'),ex:[Qs('領養生物課的教授是誰？','芳教授','李志憲教授','鼠內普'),Qs('蛋是從哪裡寄來的？','加拿大','倫間仙境','阿茲卡班'),Qs('小狐狸要餵食幾次以上才會進化？','12 次','3 次','100 次')]},
+ {n:'織法者',t:'中級',need:'通過第 4 章：魔藥課',pre:()=>done('ch4'),ex:[Qs('哪一種不是禁藥？','安眠藥水','迷情藥水','說真話藥水'),Qs('偷做禁藥被發現，會被送去哪裡？','阿茲卡班','圖書館','冰淇淋店'),Qs('魔藥課的主教授是誰？','李志憲','彭董','海狗')]},
+ {n:'共鳴巫師',t:'中級',need:'通過第 5 章：守護神課',pre:()=>done('ch5'),ex:[Qs('放守護神，要想著什麼？','最開心的事','最討厭的人','明天的功課'),Qs('倫的守護神是什麼？','海狗','貓頭鷹','小狐狸'),Qs('「崔狂魔」專門吸走什麼？','快樂','倫幣','魔杖')]},
+ {n:'調律者',t:'中級',need:'通過第 6 章：學院盃',pre:()=>done('ch6'),ex:[Qs('學院盃今年比什麼？','金探子','飛天掃帚賽跑','魔藥競速'),Qs('金探子是一顆什麼樣的球？','金色、會亂飛的小球','銀色的石頭','紅色的蛋'),Qs('比賽時，坐在觀眾席最高處的是誰？','披黑斗篷的人','海狗','校長')]},
+ {n:'昇華者',t:'終極',need:'通過第 7 章：日記',pre:()=>done('ch7'),ex:[Qs('日記封面的名字是？','湯姆瑞英','佛達魔','文英'),Qs('日記為什麼要吃掉你寫的字？','字是靈魂的碎片','墨水不夠了','紙很餓'),Qs('最後被打倒的是誰？','佛達魔','崔狂魔','李志憲教授')]},
+ {n:'源流巫師',t:'終極',need:'通過第 8 章：畢業典禮',pre:()=>done('ch8'),ex:[Qs('畢業典禮在幾月幾日？','12 月 20 日','12 月 1 日','1 月 1 日'),Qs('典禮上被推出來的是什麼？','大蛋糕','掃帚','魔杖'),Qs('校長不會只是什麼？','校長','冰淇淋老闆','貓頭鷹')]},
+ {n:'萬象宗師',t:'終極',need:'配方簿填滿 10 種以上，而且三境短片都看過',pre:()=>nRec()>=10&&film3(),ex:[Qs('下面哪一種是「禁藥」？','變身藥水','勇氣藥水','安眠藥水'),Qs('借書要先出示什麼？','學生證','魔杖','發票'),Qs('買東西會開什麼給你？','發票','借據','成績單')]},
+ {n:'傳奇巫師',t:'終極',need:'認識 10 位以上的人物，而且買過 8 種以上的商品',pre:()=>Object.keys(rel()).length>=10&&nItems()>=8,ex:[Qs('鼠內普和誰是一對？','芳教授','彭董','雅雲'),Qs('金達和誰是夫妻？','文英','芳教授','李志憲'),Qs('湯姆瑞英和佛達魔是什麼關係？','黑衣情侶','師生','仇人')]},
+ {n:'賢者',t:'終極',need:'前面全部通過，而且從沒被關進阿茲卡班',pre:()=>az()===0&&Object.keys(rel()).length>=12,ex:[Qs('倫物關係圖正中間的人是誰？','倫','校長','海狗'),Qs('巫師位階最高的是？','賢者','傳奇巫師','昇華者'),Qs('校長在冰淇淋店說過什麼？','校長不會只是校長','第三球免費','倫凍賣完了')]}];
+const idx=()=>{const p=P();if(!p||!p.card)return -1;if(p.rankIdx==null)p.rankIdx=0;return p.rankIdx};
+window.lunRankName=()=>{const i=idx();return i<0?'新生':RK[i].n};
+window.lunRank=()=>window.lunRankName()+(az()>0?'（阿茲卡班歸來者）':'');
+window.lunRankSync=()=>{const p=P();if(!p)return;p.titles=p.titles||[];const i=idx();if(i>=0&&!p.titles.includes(RK[i].n))p.titles.push(RK[i].n);if(az()>0&&!p.titles.includes('阿茲卡班歸來者'))p.titles.push('阿茲卡班歸來者');sv()};
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const panel=()=>window.lunPanel;
+const exam=(ri)=>{const R=RK[ri],P_=panel();let qi=0,ok=0;const wrong=[];
+ const ask=()=>{if(qi>=R.ex.length)return fin();const Q1=R.ex[qi],opts=shuf(Q1.o.map((t,i)=>[t,i===0]));
+  P_.open('<h3>晉階考核・'+R.n+'</h3><div class="co">第 '+(qi+1)+' / '+R.ex.length+' 題（答對 2 題以上就通過）</div><p class="lt" style="font-size:17px">'+Q1.q+'</p>'+opts.map((o,i)=>'<button class="it" data-o="'+i+'"><span>'+o[0]+'</span></button>').join(''));
+  P_.B().onclick=e=>{const b=e.target.closest('[data-o]');if(!b)return;const o=opts[+b.dataset.o];if(o[1])ok++;else wrong.push(Q1.q+'　答案：'+Q1.o[0]);qi++;ask()}};
+ const fin=()=>{const pass=ok>=2;if(pass){const p=P();p.rankIdx=ri;sv();window.lunRankSync();try{[523,659,784,1047].forEach((f,i)=>A.tone(f,.2,'sine',.05,i*.12))}catch(e){}}
+  P_.open('<h3>'+(pass?'考核通過！':'考核沒通過')+'</h3><div class="co">答對 '+ok+' / '+R.ex.length+' 題。</div><p class="lt" style="font-size:17px">'+(pass?'你晉階為「'+R.n+'」（'+R.t+'）。':'再讀一下，可以重考。')+'</p>'+(wrong.length?'<p class="tp">答錯的題目：<br>'+wrong.join('<br>')+'</p>':'')+'<button class="bt pri" id="exOk">'+(pass?'收下':'回學籍')+'</button>');g('exOk').onclick=profile};
+ ask()};
+const profile=()=>{const p=P();if(!p)return;try{leaveHome&&leaveHome();closeSub&&closeSub()}catch(e){}window.lunRankSync();const i=idx(),P_=panel();
+ const nx=RK[i+1];const can=nx&&nx.ex&&(()=>{try{return nx.pre()}catch(e){return false}})();
+ const list=RK.map((r,k)=>'<div style="display:flex;gap:6px;align-items:center;font-size:13px;padding:2px 0;'+(k<=i?'color:#ffe9a8':'opacity:.55')+'"><span style="width:34px;font-size:11px">'+r.t+'</span><b style="font-weight:400;flex:1">'+(k<=i?'✓ ':'')+r.n+'</b></div>').join('');
+ const chs=['ch2','ch3','ch4','ch5','ch6','ch7','ch8'].filter(k=>done(k)).length+(p.hog&&p.hog.house?1:0);
+ P_.open('<h3>學籍・稱號</h3><div class="co">位階：<b style="color:#ffe9a8;font-size:18px">'+window.lunRankName()+'</b>'+(i>=0?'（'+RK[i].t+'）':'')+(az()>0?'　<b style="color:#ff7a8a">阿茲卡班歸來者</b>':'')+'</div>'+(p.card?window.lunCardHTML():'<p class="lt" style="font-size:14px">還沒有學生證。要先完成「註冊」，收到入學註冊通知後，到郵局的「註冊處」。</p><button class="bt pri" id="pfReg">前往註冊處</button>')
+  +(nx?'<div class="co" style="margin-top:8px">下一階：<b style="color:#ffe9a8">'+nx.n+'</b>（'+nx.t+'）<br>條件：'+nx.need+(nx.ex?'<br>通過考核才會晉階。':'')+'</div>'+(nx.ex?'<button class="bt pri" id="pfEx" '+(can?'':'style="opacity:.45"')+'>'+(can?'參加晉階考核':'條件還沒達成')+'</button>':''):'<div class="co" style="margin-top:8px">已經是最高位階：賢者。</div>')
+  +'<div class="co" style="margin-top:8px">全部位階</div>'+list+'<div class="co" style="margin-top:8px">稱號：'+((p.titles||[]).join('、')||'（還沒有）')+'<br>章節進度：'+chs+' / 8　　認識的人：'+Object.keys(rel()).length+' / '+KEYS.length+'</div><button class="cl" id="spX">關閉</button><button class="cl" id="pfRl">看倫物關係圖</button>');
+ g('spX').onclick=()=>{P_.close();try{rHome()}catch(e){}};g('pfRl').onclick=()=>{P_.close();window.lunRelOpen()};
+ const r1=g('pfReg');if(r1)r1.onclick=()=>{P_.close();window.lunRegister&&window.lunRegister()};
+ const e1=g('pfEx');if(e1)e1.onclick=()=>{if(!can){toast('條件還沒達成：'+nx.need);return}exam(i+1)}};
+window.lunProfile=profile;
 })();
 
 }
