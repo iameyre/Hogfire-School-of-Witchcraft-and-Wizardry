@@ -6157,7 +6157,7 @@ const viewNotes=()=>{const a=notes();g('ntB').innerHTML='<h4>意見記錄（'+a.
   try{rToast(ok?'已複製，貼給我就好':'複製失敗，請長按文字手動複製')}catch(e){}}};
 /* ---- 體驗流程 ---- */
 const TESTS=[
- ['新版主畫面（繼續劇情、快捷磚）','home'],['倫物關係圖（全部解鎖看）','relall'],['新人物彈出（李志憲）','relnew'],['學籍・位階・考核（條件全補齊）','rank'],['三境短片（仙境／人間／地獄）','film'],['學籍・稱號（位階）','prof'],['註冊流程（填表→簽名→拍照→蓋章→學生證）','reg'],['巫師商場（預覽、穿戴）','shop:巫師商場'],['魔杖店','shop:魔杖店'],['書店（買書、借書）','shop:書店'],['雜貨鋪','shop:雜貨鋪'],['郵局（收信、註冊處）','shop:郵局'],['冰淇淋','shop:冰淇淋'],
+ ['新版主畫面（繼續劇情、快捷磚）','home'],['倫新造型實驗（開／關，會重新載入）','newlun'],['倫物關係圖（全部解鎖看）','relall'],['新人物彈出（李志憲）','relnew'],['學籍・位階・考核（條件全補齊）','rank'],['三境短片（仙境／人間／地獄）','film'],['學籍・稱號（位階）','prof'],['註冊流程（填表→簽名→拍照→蓋章→學生證）','reg'],['巫師商場（預覽、穿戴）','shop:巫師商場'],['魔杖店','shop:魔杖店'],['書店（買書、借書）','shop:書店'],['雜貨鋪','shop:雜貨鋪'],['郵局（收信、註冊處）','shop:郵局'],['冰淇淋','shop:冰淇淋'],
  ['藥店・李志憲在','shop:藥店:1'],['藥店・李志憲不在','shop:藥店:0'],['魔藥課開場（禁藥提示）','pot'],['迷途森林（方向鍵）','forest'],
  ['第 3 章孵蛋（稜彩九尾狐寶寶）','ch:3:12'],['第 6 章校長（黃衣服）','ch:6:2'],['第 6 章通關畫面（換行）','rw:6'],['第 7 章手寫日記（黑墨水）','ch:7:10'],['第 7 章暗場＋閃電＋湯姆瑞英','ch:7:11'],['第 7 章佛達魔登場（黑衣）','chq:7:墨水在地上聚成']];
 const prep=()=>{const p=P();if(!p)return false;try{A.init()}catch(e){}p.shard=Math.max(p.shard||0,500);p.ch2=p.ch2||{};p.ch4=p.ch4||{intro:0,stage:0,rec:{},done:0};try{leaveHome&&leaveHome();closeSub&&closeSub()}catch(e){}return p};
@@ -6167,6 +6167,7 @@ const runTest=k=>{if(!P()){try{rToast('請先進入遊戲再測')}catch(e){}retu
  else if(t==='relall'){p.rel=p.rel||{};['lun','yun','alu','fang','lzx','shu','peng','mom','dog','dad','tom','vol'].forEach(k=>p.rel[k]=1);sv0();window.lunRelOpen&&window.lunRelOpen()}
  else if(t==='relnew'){p.rel=p.rel||{lun:1};delete p.rel.lzx;sv0();try{rHome()}catch(e){}window.lunRelMeet&&window.lunRelMeet('lzx')}
  else if(t==='rank'){p.hog=p.hog||{house:'gry'};if(!p.card)p.card={no:'1234',ts:Date.now(),sig:''};[2,3,4,5,6,7,8].forEach(n=>{p['ch'+n]=Object.assign(p['ch'+n]||{},{done:1})});p.rankIdx=0;sv0();window.lunProfile&&window.lunProfile()}
+ else if(t==='newlun'){window.lunNewSprToggle&&window.lunNewSprToggle()}
  else if(t==='film'){window.lunFilmMenu&&window.lunFilmMenu()}
  else if(t==='prof'){window.lunProfile&&window.lunProfile()}
  else if(t==='reg'){p.hog=p.hog||{house:'gry'};if(!p.hog.house)p.hog.house='gry';delete p.card;sv0();window.lunRegister&&window.lunRegister()}
@@ -6690,6 +6691,43 @@ const profile=()=>{const p=P();if(!p)return;try{leaveHome&&leaveHome();closeSub&
  const r1=g('pfReg');if(r1)r1.onclick=()=>{P_.close();window.lunRegister&&window.lunRegister()};
  const e1=g('pfEx');if(e1)e1.onclick=()=>{if(!can){toast('條件還沒達成：'+nx.need);return}exam(i+1)}};
 window.lunProfile=profile;
+})();
+
+/* ===== v36.0 實驗：倫的新造型（Gemini 設計的格子，雅雲 2026-11-28 指定先用倫實驗）=====
+   只在 DEV 打開「倫新造型」開關時才套用（localStorage lun-newspr-1128），套用在正面圖 lunSP.d（對話頭像、商店預覽、關係圖、換裝預覽用的那張）。
+   沒打開時完全不影響遊戲。確認好看之後，再正式換進 THEATER.SPR。 */
+(()=>{
+const KEY='lun-newspr-1128';
+const ROWS=`........HHHHHH......
+......HHHHHHHHHH....
+.....HHHHHHHHHHHH...
+....HHHhhHHYYHHHhh..
+...HHHhhHHHHHHHHHhh.
+...HHHHHHHHHHHHHHH..
+..HHHHHHHHHHHHHHHH..
+..HHHSSHHHHHHSSHHH..
+..HHSSSSSSSSSSSSHH..
+..HHEEESSSSSSEEEHH..
+..HHEeISSSSSSIeEHH..
+..HHEIISSSSSSIIEHH..
+..HHPPSSSMMSSSPPHH..
+....HSSSSSSSSSSH....
+..HHSSSSSSSSSSSSHH..
+.HHRRRRRRRRRRRRRRRH.
+.HHRRRRRRRRRRRRRRRH.
+..SH.HRRRRRRRRRH.HS.
+.....HRRRRRRRRRH....
+.....HRRRRRRRRRH....
+......RR.....RR.....
+......KK.....KK.....`.split('\n');
+const PAL={H:'#4a3228',h:'#7a5444',S:'#ffe1cc',E:'#2a1a2a',e:'#ffffff',I:'#8a3a4a',P:'#ff9ab0',R:'#c82838',Y:'#ffd84d',K:'#3a2a3a'};
+const make=()=>{const rows=ROWS.map(r=>r.padEnd(20,'.').slice(0,20)),H=rows.length,W=20,c=document.createElement('canvas');c.width=W+2;c.height=H+2;const g=c.getContext('2d');
+ const fl=(i,j)=>i>=0&&i<W&&j>=0&&j<H&&rows[j][i]!=='.';
+ g.fillStyle='#2a1620';for(let j=-1;j<=H;j++)for(let i=-1;i<=W;i++){if(fl(i,j))continue;if(fl(i+1,j)||fl(i-1,j)||fl(i,j+1)||fl(i,j-1))g.fillRect(i+1,j+1,1,1)}
+ for(let j=0;j<H;j++)for(let i=0;i<W;i++){const ch=rows[j][i];if(ch==='.')continue;g.fillStyle=PAL[ch]||'#ff00ff';g.fillRect(i+1,j+1,1,1)}return c};
+window.lunNewSprOn=()=>{try{return localStorage.getItem(KEY)==='1'}catch(e){return false}};
+window.lunNewSprToggle=()=>{try{localStorage.setItem(KEY,window.lunNewSprOn()?'0':'1')}catch(e){}location.reload()};
+if(window.lunNewSprOn()&&window.lunSP){const c=make();window.lunSP.d=[c,c]}
 })();
 
 }
