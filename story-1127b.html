@@ -34,14 +34,14 @@ button{width:100%;height:54px;margin-top:10px;border:3px solid #6a4a1e;outline:2
 <div class="sub">第 4 章魔藥課通關坐騎・手機、電腦都能開<br>八隻小海狗抬著金色轎子，倫坐在裡面</div>
 
 <div class="card"><h2>A　步輦（照規劃）</h2>
-<canvas id="cA" width="76" height="52"></canvas>
+<canvas id="cA" width="76" height="58"></canvas>
 <p>八隻小海狗（近側 4 隻＋遠側 4 隻）抬著金色轎子，紅瓦屋頂四角上翹，粉紅簾子用金繩綁起，倫側坐在裡面。轎子旁邊有宮女舉著羽扇，一直輕輕搖。屋簷四個角掛小燈籠，會晃。</p>
-<div class="row"><canvas id="rA" width="76" height="52" style="height:52px"></canvas><span>↑ 實際在地圖上的大小<br>移速 ×1.4（掃帚 ×1.3）</span></div></div>
+<div class="row"><canvas id="rA" width="76" height="58" style="height:58px"></canvas><span>↑ 實際在地圖上的大小<br>移速 ×1.4（掃帚 ×1.3）</span></div></div>
 
 <div class="card"><h2>B　珠簾輦（簡潔版）</h2>
-<canvas id="cB" width="76" height="52"></canvas>
+<canvas id="cB" width="76" height="58"></canvas>
 <p>一樣是八隻小海狗，但沒有宮女。轎子四周垂珍珠簾，頂是金色蓮花蓋，後面一路飄玫瑰花瓣。比較輕巧，在地圖上比較不擋路。</p>
-<div class="row"><canvas id="rB" width="76" height="52" style="height:52px"></canvas><span>↑ 實際在地圖上的大小<br>移速 ×1.4</span></div></div>
+<div class="row"><canvas id="rB" width="76" height="58" style="height:58px"></canvas><span>↑ 實際在地圖上的大小<br>移速 ×1.4</span></div></div>
 
 <div class="card"><h2>你的選擇</h2>
 <div class="opt">
@@ -60,11 +60,11 @@ const PAL={O:'#2a1620',H:'#3a2a30',h:'#6a4a52',S:'#ffe1d0',B:'#ff9aa8',E:'#2a162
 const SIDE=['....OOOOOO....','..OOHHHHHHOO..','.OQQHHHHHHHHO.','.OQQHHHHHHHHHO','OHHHHHHHHHHHHO','OHHHHHHHHHSSSO','OHHHHHHHHSSSSO','OHHHHHHHSSSESO','OHHHHHHHSSSESO','OHHHHHHHSSBSSO','.OHHHHHHHSSSO.','.OHHHHHHRRRRO.','.OHHHHHHRRSRO.','.OHHHHHHRRRRO.','..OHHHHHrrrrO.','...OHHHOrrrO..'];
 const mkLun=()=>{const c=document.createElement('canvas');c.width=14;c.height=16;const x=c.getContext('2d');SIDE.forEach((r,j)=>{for(let i=0;i<14;i++){const ch=r[i];if(ch!=='.'){x.fillStyle=PAL[ch];x.fillRect(i,j,1,1)}}});return c};
 const LUN=mkLun();
-const W=76,H=52;
+const W=76,H=58;
 function scene(cv,variant,rt){
  const g=cv.getContext('2d');g.imageSmoothingEnabled=false;
  const R=(c,x,y,w,h)=>{g.fillStyle=c;g.fillRect(Math.round(x),Math.round(y),w,h)};
- const FY=47;
+ const FY=47;g.save();g.translate(0,6);
  /* 背景：夜色小路 */
  const gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#1a2050');gr.addColorStop(1,'#10202a');g.fillStyle=gr;g.fillRect(0,0,W,H);
  R('#2a3a30',0,FY,W,H-FY);R('#3a4a3a',0,FY,W,1);
@@ -128,12 +128,13 @@ function scene(cv,variant,rt){
  /* 星屑／花瓣 */
  for(let i=0;i<14;i++){const t=(rt*14+i*9)%60,x=62-t-(i%3)*2,y=14+((i*11)%30)+Math.sin(t*.2+i)*2;
   if(variant==='B'){R(i%2?'#ff9ac0':'#ffd0e8',x,y+t*.15,2,1)}else{R(i%2?'#ffd37a':'#fff3b0',x,y,1,1);if(i%4===0)R('#fff',x+1,y-1,1,1)}}
+ g.restore();
 }
 const CV=['cA','rA','cB','rB'].map(id=>document.getElementById(id));
 const t0=performance.now();
 const loop=ts=>{const t=(ts-t0)/1000;scene(CV[0],'A',t);scene(CV[1],'A',t);scene(CV[2],'B',t);scene(CV[3],'B',t);requestAnimationFrame(loop)};
 requestAnimationFrame(loop);
-document.getElementById('cp').onclick=()=>{const v=(document.querySelector('input[name=p]:checked')||{}).value||'（還沒選）';const txt='倫妃步輦預覽 1127a：'+v+(document.getElementById('note').value?'\n備註：'+document.getElementById('note').value:'');
+document.getElementById('cp').onclick=()=>{const v=(document.querySelector('input[name=p]:checked')||{}).value||'（還沒選）';const txt='倫妃步輦預覽 1127b：'+v+(document.getElementById('note').value?'\n備註：'+document.getElementById('note').value:'');
  document.getElementById('out').textContent=txt;try{navigator.clipboard.writeText(txt).then(()=>{document.getElementById('out').textContent='已複製：\n'+txt})}catch(e){}};
 </script>
 </body>
