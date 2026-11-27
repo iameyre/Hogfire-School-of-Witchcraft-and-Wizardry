@@ -4321,6 +4321,8 @@ $s('spRun').onclick=()=>{if(!ST||ST.over)return;ST.over=true;busy=true;finish(fa
 addEventListener('keydown',e=>{if(!root.classList.contains('on')||!ST||ST.over)return;const n=parseInt(e.key,10);if(n>=1&&n<=ST.spells.length)cast(n-1)});
 addEventListener('resize',()=>{if(root.classList.contains('on'))resize()});
 window.lunSpellFight=start;
+/* DEV 完整體驗用：自動把王打倒（等開場訊息講完、選單出來才動手）*/
+window.lunFightAuto=()=>{if(!ST||ST.over||!ST.m||ST.m.dead||busy)return false;busy=true;try{menuOn(false)}catch(e){}ST.m.hp=0;doKill();return true};
 })();
 
 /* ===== v21.0 斜角巷：進店場景（2026-11-27 雲指定）=====
@@ -5844,10 +5846,11 @@ window.lunReviewOpen=reviewOpen;
 if(location.hash==='#review')setTimeout(reviewOpen,1200);
 /* ---------- 開章 ---------- */
 const runPart=(n,which)=>{if(!P())return;try{leaveHome&&leaveHome();closeSub&&closeSub()}catch(e){}try{A.init()}catch(e){}const st=CH[n].steps(),i=st.findIndex(x=>x[0]==='mark');run(which==='A'?st.slice(0,i):st.slice(i+1),()=>{try{rHome()}catch(e){}})};
-const enterCh=n=>{const D=CH[n];if(!D||!P())return;try{leaveHome&&leaveHome();closeSub&&closeSub()}catch(e){}try{A.init()}catch(e){}
+const enterCh=(n,at)=>{const D=CH[n];if(!D||!P())return;try{leaveHome&&leaveHome();closeSub&&closeSub()}catch(e){}try{A.init()}catch(e){}
  if(!window.LUN_DEV&&!D.need()){try{rToast(D.needTx)}catch(e){}return}
  if(n===8&&!window.LUN_DEV&&Date.now()<OPEN7){const days=Math.ceil((OPEN7-Date.now())/86400000);setBg('hall');openRoot();ctx={steps:[['bg','hall'],['t','a',`開學典禮的日子是 12 月 20 日，還有 ${days} 天。`],['t','a','大禮堂還在佈置，裡面的東西，現在不能偷看。'],['t','d','我偷看了一眼。……沒什麼，我什麼都沒看到。'],['t','a','提前祝你生日快樂。典禮那天，再來吧。']],i:0,onDone:()=>{try{rHome()}catch(e){}}};loop();return}
- run(D.steps(),()=>finish(n))};
+ let sts=D.steps();if(at>0){let bg=null,nm=null;for(let j=0;j<at&&j<sts.length;j++){if(sts[j][0]==='bg')bg=sts[j];if(sts[j][0]==='name')nm=sts[j]}sts=[bg,nm].filter(Boolean).concat(sts.slice(at))}
+ run(sts,()=>finish(n))};
 const sedanLabel=()=>'步輦簾子：'+((P()&&P().sedanBead)?'珍珠簾':'粉紅綢簾')+'（點一下切換）';
 const sedanBtn=()=>{const r=(typeof rm==='function'&&rm())||{own:{}};return (window.LUN_DEV||(r.own&&r.own.sedan))?'<button class="cl" id="hb28C" style="background:#140a2c;color:#ffe9a8;outline:none;border-color:#ffe9a8;font-size:15px;letter-spacing:.1em;height:48px">'+sedanLabel()+'</button>':''};
 const hubOpen=()=>{if(!P())return;try{leaveHome&&leaveHome();closeSub&&closeSub()}catch(e){}
@@ -5859,6 +5862,10 @@ const hubOpen=()=>{if(!P())return;try{leaveHome&&leaveHome();closeSub&&closeSub(
  $$('hb28X').onclick=close;const sbb=$$('hb28C');if(sbb)sbb.onclick=()=>{const p=P();p.sedanBead=!p.sedanBead;sv();sbb.textContent=sedanLabel()};
  hub.onclick=e=>{const b=e.target.closest('.it');if(!b||b.classList.contains('lock'))return;const n=+b.dataset.n;close();setTimeout(()=>{if(n===1)window.lunAlleyOpen&&window.lunAlleyOpen();else if(n===2)window.lunForestOpen&&window.lunForestOpen();else if(n===4)window.lunPotionOpen&&window.lunPotionOpen();else enterCh(n)},320)}};
 window.lunChaptersOpen=hubOpen;
+/* DEV 新版（rpg31）用的出入口 */
+window.lunDev28={enter:enterCh,done:n=>!!R('ch'+n).done,abort:()=>{ctx=null;pendF=null;try{closeRoot()}catch(e){}},
+ now:()=>{if(!ctx)return null;const j=Math.max(0,ctx.i-1);let line='',who='';for(let k=j;k>=0;k--){const s=ctx.steps[k];if(s&&s[0]==='t'){who=WHO[s[1]]||'';line=s[2];break}}return {i:j,who,line:String(line).slice(0,80)}},
+ skip:n=>{const c=S('ch'+n);try{ctx=null;pendF=null;closeRoot()}catch(e){}const p=P();if(n>=5){p.dk=p.dk||{};p.dk.patr=1}if(!c.done){c.done=1;CH[n].reward()}sv();try{rHome()}catch(e){}}};
 const rg=$$('rhgo2');
 if(rg){rg.insertAdjacentHTML('beforeend','<button class="rq hub28" id="hbGo">章節</button>');$$('hbGo').onclick=()=>{try{A.S.tap()}catch(e){}hubOpen()}}
 const top=$$('kdTop');
@@ -6002,6 +6009,150 @@ if(cv){cv.style.cursor='pointer';cv.addEventListener('click',e=>{try{const r=cv.
   const pr=window.__petRect;if(!onPet&&pr&&window.__homeW){const lx=(e.clientX-r.left)/r.width*window.__homeW,ly=(e.clientY-r.top)/r.height*150;onPet=lx>=pr.x&&lx<=pr.x+pr.w&&ly>=pr.y&&ly<=pr.y+pr.h}
   if(onPet)petFlip=!petFlip;else window.lunHomeTurn();A.S.tap&&A.S.tap()}catch(x){}});
  document.addEventListener('click',e=>{if(e.target&&e.target.id==='rfoxM'){petFlip=!petFlip;try{A.S.tap&&A.S.tap()}catch(x){}}})}
+})();
+
+/* ===== v31.0 新版 DEV 面板（雅雲 2026-11-27 指定）=====
+   只有兩個區塊：① 完整體驗劇情（全程加速、打怪自動打贏、可存檔離開、隨時打字寫意見）② 對話審稿。
+   另外附一個「意見記錄」（看／複製／清空）。舊的 DEV 面板整個藏起來。
+   意見存在 localStorage：lun-dev-notes-1127；進度存在 lun-dev-play-1127。 */
+(()=>{
+if(window.lunDev31)return;
+const KP='lun-dev-play-1127',KN='lun-dev-notes-1127';
+const jget=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}};
+const jset=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const g=id=>document.getElementById(id);
+/* ---- 加速：短的等待（≤3 秒）除以倍率；小遊戲的長計時不動 ---- */
+const _st=window.setTimeout.bind(window),_si=window.setInterval.bind(window);
+window.__fast=1;
+window.setTimeout=(f,ms,...a)=>_st(f,(window.__fast>1&&ms>0&&ms<=3000)?ms/window.__fast:ms,...a);
+window.setInterval=(f,ms,...a)=>_si(f,(window.__fast>1&&ms>0&&ms<=3000)?Math.max(8,ms/window.__fast):ms,...a);
+/* ---- 打怪自動打贏 ---- */
+let auto=false;
+const autoFight=()=>{let n=0;const iv=_si(()=>{n++;const rr=g('rres');
+ if(rr&&rr.classList.contains('on')){clearInterval(iv);_st(()=>{const b=g('rrHome');if(b&&b.offsetParent!==null)b.click();else{const x=g('rresX');x&&x.click()}},1300);return}
+ if(n>=2&&window.lunFightAuto)window.lunFightAuto();if(n>80)clearInterval(iv)},800)};
+{const o=window.lunSpellFight;if(o)window.lunSpellFight=function(){const r=o.apply(this,arguments);if(auto)autoFight();return r}}
+/* ---- 章節 ---- */
+const enter28=(n,at)=>window.lunDev28&&window.lunDev28.enter(n,at);
+const CHS=[
+ {t:'序章　分類帽',go:()=>window.lunHogOpen&&window.lunHogOpen(()=>{try{rHome()}catch(e){}}),done:()=>{const p=P();return !!(p&&p.hog&&p.hog.house)}},
+ {t:'第 1 章　斜角巷採買',go:()=>window.lunAlleyOpen&&window.lunAlleyOpen(),done:()=>{const r=rm();return !!(r&&r.own&&r.own.broom)}},
+ {t:'第 2 章　夜間實習',go:()=>window.lunForestOpen&&window.lunForestOpen(),skip:()=>{const b=g('kdFr4');b&&b.click()},done:()=>{const p=P();return !!(p&&p.ch2&&p.ch2.done)}},
+ {t:'第 3 章　領養生物課',go:at=>enter28(3,at),n28:3},
+ {t:'第 4 章　魔藥課',go:()=>window.lunPotionOpen&&window.lunPotionOpen(),skip:()=>{const b=g('kdPt4');b&&b.click()},done:()=>{const p=P();return !!(p&&p.ch4&&p.ch4.done)}},
+ {t:'第 5 章　守護神課',go:at=>enter28(5,at),n28:5},
+ {t:'第 6 章　學院盃（金探子）',go:at=>enter28(6,at),n28:6},
+ {t:'第 7 章　日記＋佛達魔',go:at=>enter28(7,at),n28:7},
+ {t:'第 8 章　開學典禮',go:at=>enter28(8,at),n28:8}];
+CHS.forEach(c=>{if(c.n28)c.done=()=>!!(window.lunDev28&&window.lunDev28.done(c.n28))});
+/* ---- 狀態 ---- */
+let cur=-1,speed=2,collapsed=false;
+const prog=()=>jget(KP,null);
+const where=()=>{const c=CHS[cur];if(!c)return null;const d=c.n28&&window.lunDev28&&window.lunDev28.now();return d||null};
+const saveProg=()=>{if(cur<0)return;const w=where(),old=prog();jset(KP,{i:cur,at:w?Math.max(0,w.i-2):(old&&old.i===cur?old.at||0:0),speed,ts:Date.now()})};
+/* ---- 樣式 ---- */
+document.head.insertAdjacentHTML('beforeend',`<style id="dv31css">
+#kdev{display:none!important}
+.kdevb{background:#140a2c!important;border:2px solid #ffe9a8!important;color:#ffe9a8!important;border-radius:10px 0 0 10px!important;font-family:DotGothic16,sans-serif!important;opacity:.92}
+#dv31,#dv31 *,#nt31,#nt31 *,#pb31,#pb31 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+#dv31{position:fixed;inset:0;z-index:350;background:radial-gradient(ellipse at 50% 0,#2a1a4a 0,#0a0612 70%);display:none;overflow:auto;font-family:DotGothic16,sans-serif;color:#f1e8ff;padding:calc(var(--st,0px) + 14px) 14px calc(var(--sb,0px) + 24px)}
+#dv31.on{display:block}
+#dv31 .w{max-width:520px;margin:0 auto}
+#dv31 header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+#dv31 header small{display:block;font-size:10px;letter-spacing:.3em;color:#ffe9a8;opacity:.8}
+#dv31 header h2{margin:2px 0 0;font-size:24px;letter-spacing:.12em;font-weight:400}
+#dv31 .x{width:44px;height:44px;border:2px solid #ffe9a8;background:#140a2c;color:#ffe9a8;font:inherit;font-size:20px;cursor:pointer}
+#dv31 .blk{border:2px solid #ffe9a8;background:#140a2cd9;margin-bottom:14px;padding:14px;box-shadow:4px 4px 0 #000a}
+#dv31 .blk h3{margin:0 0 6px;font-size:18px;font-weight:400;letter-spacing:.08em;color:#ffe9a8}
+#dv31 .blk p{margin:0 0 10px;font-size:13px;line-height:1.7;opacity:.9}
+#dv31 .row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;align-items:center;font-size:13px}
+#dv31 button.b{flex:1 1 140px;min-height:48px;border:2px solid #ffe9a8;background:#26124a;color:#ffe9a8;font:inherit;font-size:15px;letter-spacing:.08em;cursor:pointer;padding:6px 10px}
+#dv31 button.b.pri{background:#e0102e;border-color:#fff;color:#fff}
+#dv31 button.b.sm{min-height:38px;font-size:13px;flex:0 0 auto}
+#dv31 button.b.on{background:#ffe9a8;color:#26124a}
+#dv31 button.b:disabled{opacity:.35;cursor:default}
+#dv31 .pg{font-size:13px;padding:8px 10px;background:#0006;border-left:3px solid #ffe9a8;margin:6px 0}
+#dv31 .tip{font-size:12px;opacity:.7;line-height:1.7}
+#pb31{position:fixed;top:calc(var(--st,0px) + 2px);left:50%;transform:translateX(-50%);z-index:400;display:none;gap:4px;align-items:center;background:#0a0612e6;border:2px solid #ffe9a8;padding:3px 4px;font-family:DotGothic16,sans-serif;font-size:11px;color:#ffe9a8;max-width:98vw}
+#pb31.on{display:flex}
+#pb31 button{height:30px;min-width:34px;padding:0 7px;border:1px solid #ffe9a8;background:#26124a;color:#ffe9a8;font:inherit;font-size:12px;cursor:pointer;white-space:nowrap}
+#pb31 .lb{max-width:34vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;padding:0 4px}
+#pb31.col .hid{display:none}
+#nt31{position:fixed;inset:0;z-index:420;background:#000b;display:none;align-items:center;justify-content:center;padding:14px;font-family:DotGothic16,sans-serif}
+#nt31.on{display:flex}
+#nt31 .bx{width:min(94vw,460px);max-height:92vh;overflow:auto;background:#140a2c;border:2px solid #ffe9a8;padding:14px;color:#f1e8ff}
+#nt31 h4{margin:0 0 6px;font-size:16px;font-weight:400;color:#ffe9a8}
+#nt31 .cx{font-size:12px;line-height:1.7;background:#0006;border-left:3px solid #ffe9a8;padding:6px 8px;margin-bottom:8px;white-space:pre-wrap;word-break:break-all}
+#nt31 textarea{width:100%;height:120px;background:#0a0612;color:#fff;border:2px solid #ffe9a8;font:inherit;font-size:16px;padding:8px;resize:vertical}
+#nt31 .row{display:flex;gap:8px;margin-top:8px}
+#nt31 button{flex:1;min-height:44px;border:2px solid #ffe9a8;background:#26124a;color:#ffe9a8;font:inherit;font-size:14px;cursor:pointer}
+#nt31 button.pri{background:#e0102e;color:#fff;border-color:#fff}
+#nt31 .it{font-size:12px;line-height:1.7;padding:6px 0;border-bottom:1px dashed #ffe9a855;white-space:pre-wrap;word-break:break-all}
+</style>`);
+document.body.insertAdjacentHTML('beforeend',`<div id="dv31"><div class="w">
+ <header><div><small>DEVELOPER</small><h2>劇情 DEV</h2></div><button class="x" id="dvX" aria-label="關閉">×</button></header>
+ <section class="blk"><h3>① 完整體驗劇情</h3>
+  <p>從序章玩到第 8 章，全程加速；遇到打怪會直接幫你打死。玩的時候，畫面上方有一條小工具列：💬 寫意見、💾 存檔離開、⏭ 下一章。</p>
+  <div class="row"><span>速度</span><button class="b sm" data-sp="1.5">×1.5</button><button class="b sm on" data-sp="2">×2</button><button class="b sm" data-sp="3">×3</button></div>
+  <div class="pg" id="dvPg"></div>
+  <div class="row"><button class="b pri" id="dvGo">▶ 從頭開始</button><button class="b" id="dvCon">⏯ 繼續上次</button></div>
+  <div class="row" id="dvPick"></div>
+ </section>
+ <section class="blk"><h3>② 對話審稿</h3><p>所有劇情對話，一張一張看、直接改字，改完按「複製結果」貼給我。</p><div class="row"><button class="b pri" id="dvRv">開啟審稿頁</button></div></section>
+ <section class="blk"><h3>我的意見記錄　<span id="dvNc"></span></h3><p>玩的時候寫的意見都存在這裡（這台裝置）。想交給我時，按複製，貼到對話。</p><div class="row"><button class="b" id="dvNv">查看／複製</button><button class="b sm" id="dvNx">清空</button></div></section>
+ <p class="tip">進遊戲後才能開始體驗；這個面板以外的測試按鈕都收起來了。</p>
+</div></div>
+<div id="pb31"><span class="lb" id="pbL"></span><button class="hid" id="pbN" title="寫意見">💬</button><button class="hid" id="pbS" title="存檔離開">💾</button><button class="hid" id="pbK" title="跳過這章">⏩</button><button class="hid" id="pbX" title="下一章">⏭</button></div>
+<div id="nt31"><div class="bx" id="ntB"></div></div>`);
+/* ---- 意見 ---- */
+const notes=()=>jget(KN,[]);
+const ctxNow=()=>{const c=CHS[cur];const w=where();let pos='',line='';
+ if(w){pos='第 '+(w.i+1)+' 步';line=(w.who?w.who+'：':'')+w.line}
+ else{try{const els=[...document.body.children].filter(e=>!['dv31','pb31','nt31'].includes(e.id)&&e.offsetParent!==null||(getComputedStyle(e).position==='fixed'&&getComputedStyle(e).display!=='none'));const vis=els.filter(e=>!['dv31','pb31','nt31'].includes(e.id)&&getComputedStyle(e).display!=='none'&&getComputedStyle(e).position==='fixed'&&(+getComputedStyle(e).zIndex||0)>=50);const t=vis.length?vis[vis.length-1]:null;if(t)line=t.innerText.replace(/\s+/g,' ').slice(0,100)}catch(e){}}
+ return {chap:c?c.t:'（沒在體驗中）',pos,line}};
+const updNc=()=>{const e=g('dvNc');if(e)e.textContent='（'+notes().length+' 則）'};
+const closeNt=()=>g('nt31').classList.remove('on');
+const writeNote=()=>{const c=ctxNow();g('ntB').innerHTML='<h4>寫意見</h4><div class="cx" id="ntC"></div><textarea id="ntT" placeholder="這裡覺得哪裡怪、想怎麼改，直接寫"></textarea><div class="row"><button id="ntNo">取消</button><button class="pri" id="ntOk">存起來</button></div>';
+ g('ntC').textContent=c.chap+(c.pos?'　'+c.pos:'')+(c.line?'\n「'+c.line+'」':'');g('nt31').classList.add('on');setTimeout(()=>g('ntT').focus(),50);
+ g('ntNo').onclick=closeNt;g('ntOk').onclick=()=>{const t=g('ntT').value.trim();if(!t){closeNt();return}const a=notes();a.push({ts:Date.now(),chap:c.chap,pos:c.pos,line:c.line,text:t});jset(KN,a);closeNt();updNc();try{rToast('意見已記錄（共 '+a.length+' 則）')}catch(e){}}};
+const fmtNotes=()=>notes().map((n,i)=>{const d=new Date(n.ts),tm=(d.getMonth()+1)+'/'+d.getDate()+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');return (i+1)+'. 【'+n.chap+(n.pos?'・'+n.pos:'')+'】'+tm+(n.line?'\n　原句：「'+n.line+'」':'')+'\n　意見：'+n.text}).join('\n\n');
+const viewNotes=()=>{const a=notes();g('ntB').innerHTML='<h4>意見記錄（'+a.length+' 則）</h4><div id="ntL"></div><div class="row"><button id="ntCl">關閉</button><button class="pri" id="ntCp">複製全部</button></div>';
+ const L=g('ntL');if(!a.length)L.textContent='還沒有意見。';else{const f=fmtNotes();f.split('\n\n').forEach(s=>{const d=document.createElement('div');d.className='it';d.textContent=s;L.appendChild(d)})}
+ g('nt31').classList.add('on');g('ntCl').onclick=closeNt;
+ g('ntCp').onclick=async()=>{const f='【雅雲的劇情意見 '+new Date().toLocaleDateString()+'】\n\n'+fmtNotes();let ok=false;try{await navigator.clipboard.writeText(f);ok=true}catch(e){}
+  if(!ok){const t=document.createElement('textarea');t.value=f;t.style.cssText='position:fixed;left:0;top:0;opacity:0';document.body.appendChild(t);t.select();try{ok=document.execCommand('copy')}catch(e){}t.remove()}
+  try{rToast(ok?'已複製，貼給我就好':'複製失敗，請長按文字手動複製')}catch(e){}}};
+/* ---- 體驗流程 ---- */
+const refreshHub=()=>{const pr=prog();const pg=g('dvPg'),con=g('dvCon');
+ pg.textContent=pr&&CHS[pr.i]?'上次停在：'+CHS[pr.i].t+(pr.at>0?'（約第 '+(pr.at+1)+' 步）':''):'還沒開始過。';con.disabled=!(pr&&CHS[pr.i]);
+ g('dvPick').innerHTML='<span style="font-size:12px;opacity:.8;flex:1 1 100%">或直接從某一章開始：</span>'+CHS.map((c,i)=>'<button class="b sm" data-ch="'+i+'">'+(i===0?'序':i)+'</button>').join('');
+ document.querySelectorAll('#dv31 [data-sp]').forEach(b=>b.classList.toggle('on',+b.dataset.sp===speed));updNc()};
+const showBar=()=>{const b=g('pb31'),c=CHS[cur];b.classList.add('on');b.classList.toggle('col',collapsed);const d=c&&c.done&&c.done();g('pbL').textContent=c?(d?'✓ ':'▶ ')+c.t:''};
+const startAt=(i,at)=>{if(!P()){try{rToast('請先進入遊戲再開始')}catch(e){}return}
+ cur=i;auto=true;window.__fast=speed;try{A.init()}catch(e){}
+ g('dv31').classList.remove('on');try{leaveHome&&leaveHome();closeSub&&closeSub()}catch(e){}
+ saveProg();showBar();_st(()=>{try{CHS[i].go(at||0)}catch(e){console.error(e)}},250)};
+const stopScene=()=>{try{window.lunDev28&&window.lunDev28.abort()}catch(e){}};
+const leave=()=>{saveProg();window.__fast=1;auto=false;const u=location.pathname+location.search;location.href=u};
+const openHub=()=>{try{A.init()}catch(e){}refreshHub();g('dv31').classList.add('on')};
+g('dvX').onclick=()=>g('dv31').classList.remove('on');
+g('dvGo').onclick=()=>startAt(0,0);
+g('dvCon').onclick=()=>{const pr=prog();if(!pr)return;speed=pr.speed||speed;startAt(pr.i,pr.at||0)};
+g('dvPick').onclick=e=>{const b=e.target.closest('[data-ch]');if(b)startAt(+b.dataset.ch,0)};
+g('dv31').addEventListener('click',e=>{const b=e.target.closest('[data-sp]');if(b){speed=+b.dataset.sp;refreshHub()}});
+g('dvRv').onclick=()=>{g('dv31').classList.remove('on');window.lunReviewOpen&&window.lunReviewOpen()};
+g('dvNv').onclick=viewNotes;g('dvNx').onclick=()=>{if(!notes().length)return;if(confirm('確定清空所有意見記錄？（先複製給我再清）')){jset(KN,[]);updNc()}};
+g('pbN').onclick=writeNote;g('pbS').onclick=leave;
+g('pbL').onclick=()=>{collapsed=!collapsed;showBar()};
+g('pbK').onclick=()=>{const c=CHS[cur];if(!c)return;stopScene();if(c.skip){c.skip()}else if(c.n28&&window.lunDev28){window.lunDev28.skip(c.n28)}else{try{rToast('這一章請玩完或用 ⏭ 換下一章')}catch(e){}return}_st(showBar,600)};
+g('pbX').onclick=()=>{if(cur+1>=CHS.length){try{rToast('已經是最後一章了')}catch(e){}return}stopScene();startAt(cur+1,0)};
+/* 每 2.5 秒存一次進度；離開頁面前也存 */
+_si(()=>{if(cur>=0){saveProg();showBar()}},2500);
+addEventListener('pagehide',()=>{if(cur>=0)saveProg()});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&cur>=0)saveProg()});
+/* 點 DEV 鈕開新面板（先攔掉舊面板）*/
+const db=g('kdevBtn');if(db)db.addEventListener('click',e=>{e.stopImmediatePropagation();e.preventDefault();openHub()},true);
+window.lunDev31={open:openHub};
 })();
 
 }
