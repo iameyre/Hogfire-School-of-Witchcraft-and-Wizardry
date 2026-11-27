@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>倫妃步輦・預覽 1127e</title>
+<title>倫妃步輦・預覽 1127f</title>
 <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -34,7 +34,7 @@ button{width:100%;height:54px;margin-top:10px;border:3px solid #6a4a1e;outline:2
 <body>
 <div class="wrap">
 <h1>倫妃步輦</h1>
-<div class="sub">第三版：宮人衣服改成酒紅色加金繡、米白領口與腰帶（跟轎子同色系）<br>手機、電腦都能開</div>
+<div class="sub">第四版：沒有宮人、沒有宮女。轎子浮在仙氣上（霧氣、發光魔法陣、小光球），旁邊多一隻可愛精靈<br>手機、電腦都能開</div>
 
 <div class="card"><h2>簾子（可以開關）</h2>
 <div class="tg"><label><input type="radio" name="c" value="silk" checked><span>粉紅綢簾</span></label><label><input type="radio" name="c" value="bead"><span>珍珠簾</span></label></div>
@@ -54,7 +54,7 @@ button{width:100%;height:54px;margin-top:10px;border:3px solid #6a4a1e;outline:2
 <label><input type="radio" name="p" value="還要改"><span>還要改</span></label>
 </div>
 <p style="font-size:13px;color:#cfd0ff">想改哪裡直接寫：</p>
-<textarea id="note" placeholder="例如：宮人的帽子再大一點、轎子再小一點"></textarea>
+<textarea id="note" placeholder="例如：精靈再可愛一點、霧氣再多一點、轎子再小一點"></textarea>
 <button id="cp">複製結果</button>
 <div id="out"></div></div>
 </div>
@@ -90,38 +90,31 @@ function lunFront(g,x,y,bob=0){const R=(c,a,b,w,h)=>{g.fillStyle=c;g.fillRect(x+
  R('#2a1620',3,0,6,1);R('#3a2a30',2,1,8,2);R('#2a1620',1,1,1,8);R('#3a2a30',1,2,2,9);R('#3a2a30',9,2,2,9);R('#ff3a5a',2,2,2,2);
  R('#ffe1d0',3,3,6,5);R('#3a2a30',3,3,3,1);R('#3a2a30',6,3,3,1);R('#2a1620',4,5,1,2);R('#2a1620',7,5,1,2);R('#ff9aa8',3,7,1,1);R('#ff9aa8',8,7,1,1);
  R('#d8203c',3,8,6,6);R('#fff',5,8,2,1);R('#8a1226',3,13,6,1)}
-/* 宮人（側面朝右，抬桿）：圓帽、臉有眼睛腮紅、手扶桿、有鞋 */
-function carrierSide(g,x,foot,f,far){const R=(c,a,b,w,h)=>{g.fillStyle=c;g.fillRect(Math.round(x+a),Math.round(foot+b),w,h)};
- const skin=far?'#d8b8a0':'#ffd9c0',robe=far?'#4a1230':'#9a2040',robe2=far?'#34091f':'#7a1630',trim=far?'#a08040':'#ffd37a',hat=far?'#10101a':'#1a1a2a',ol='#10101a';
- const st=Math.floor(f)%2,bob=Math.round(Math.sin(f*Math.PI)*.8);
- R(ol,2+st,-5,4,5);R(robe2,3+st,-5,2,4);R('#f4f4f4',2+st,-1,4,1);R(ol,5-st+1,-5,4,5);R(robe2,6-st+1,-5,2,4);R('#f4f4f4',5-st+1,-1,4,1);
- R(ol,2,-15+bob,10,11);R(robe,3,-14+bob,8,10);R(trim,3,-7+bob,8,1);R('#f4ead0',3,-10+bob,8,1);R('#fff6dc',6,-14+bob,3,3);R(trim,4,-12+bob,1,1);R(trim,8,-12+bob,1,1);R(trim,5,-8+bob,3,1);R(trim,6,-5+bob,2,1);
- R(ol,3,-22+bob,9,8);R(skin,4,-21+bob,7,6);R('#fff',8,-19+bob,2,2);R('#111',9,-19+bob,1,2);R('#ff9aa8',8,-16+bob,2,1);R('#c05060',10,-16+bob,1,1);
- R(ol,3,-25+bob,9,4);R(hat,4,-25+bob,7,3);R(trim,4,-22+bob,7,1);R('#e0102e',6,-27+bob,3,2);
- R(robe,8,-13+bob,3,3);R('#f4ead0',10,-13+bob,1,3);R(skin,11,-12+bob,2,2)}
-/* 宮女（側面朝右，舉羽扇，有腳）*/
-function maidSide(g,x,foot,t,face){const R=(c,a,b,w,h)=>{g.fillStyle=c;g.fillRect(Math.round(x+a),Math.round(foot+b),w,h)};
- const st=Math.floor(t*6)%2;
- R('#1a1420',2+st,-3,2,2);R('#1a1420',5-st,-3,2,2);              /* 鞋（露在裙下）*/
- R('#1a1420',1,-15,8,13);R('#ff7aa8',2,-14,6,11);R('#ffb0d0',2,-14,6,2);R('#e0508a',2,-6,6,3);   /* 長裙到腳踝 */
- R('#1a1420',2,-20,6,6);R('#ffe1d0',3,-18,4,4);R('#111',6,-17,1,1);R('#ff9aa8',3,-15,1,1);
- R('#1a1420',2,-22,6,3);R(GOLD,6,-23,1,3);R('#e0102e',3,-22,2,2);   /* 髮髻＋金釵 */
- const a=Math.sin(t*3)*.4;g.strokeStyle='#8a5a2a';g.lineWidth=1;g.beginPath();g.moveTo(x+7,foot-10);g.lineTo(x+14+a*3,foot-20);g.stroke();
- g.fillStyle='#fff';g.beginPath();g.ellipse(x+15+a*3,foot-23,5,3.5,a,0,6.3);g.fill();g.fillStyle='#ffb0d0';g.beginPath();g.ellipse(x+15+a*3,foot-23,3,2,a,0,6.3);g.fill()}
+/* ===== 仙氣驅動：沒有宮人，轎子浮在霧氣上，下面有發光的魔法陣，幾顆小光球繞著轎子飄；旁邊是可愛精靈 ===== */
+const ellp=(g,x,y,rx,ry,col)=>{g.fillStyle=col;for(let j=-ry;j<=ry;j++){const w=Math.round(rx*Math.sqrt(1-(j*j)/(ry*ry+.0001)));g.fillRect(Math.round(x-w),Math.round(y+j),w*2,1)}};
+function mist(g,x0,x1,y,rt){for(let i=0;i<12;i++){const cx=x0+(x1-x0)*i/11+Math.sin(rt*1.3+i)*2,cy=y+Math.sin(rt*2+i*1.7)*1.5,r=6+((i*5)%4);g.globalAlpha=.5;ellp(g,cx,cy,r,3,'#cfe8ff');g.globalAlpha=.55;ellp(g,cx,cy-1,r*.65,2,'#fff');g.globalAlpha=.3;ellp(g,cx+2,cy+2,r*.8,2,'#e8d0ff')}g.globalAlpha=1}
+function circle(g,cx,cy,rx,ry,rt){g.globalAlpha=.35;ellp(g,cx,cy,rx,ry,'#9ad0ff');g.globalAlpha=.55;ellp(g,cx,cy,rx-3,Math.max(1,ry-1),'#0a1a3a');g.globalAlpha=1;for(let i=0;i<16;i++){const a=rt*.8+i/16*6.283,x=cx+Math.cos(a)*(rx-1.5),y=cy+Math.sin(a)*(ry-.3);g.fillStyle=i%2?'#d8f0ff':'#ffd8f4';g.fillRect(Math.round(x),Math.round(y),1,1);if(i%3===0){g.fillStyle='#fff';g.fillRect(Math.round(x),Math.round(y)-1,1,1)}}}
+function wisps(g,pts,rt){pts.forEach((p,i)=>{const y=p[1]+Math.sin(rt*3+i*1.3)*2.5,col=['#ffd0f0','#d0f0ff','#fff0b0'][i%3];g.globalAlpha=.25;ellp(g,p[0],y,4,4,col);g.globalAlpha=.9;ellp(g,p[0],y,1.5,1.5,'#fff');g.globalAlpha=1})}
+/* 可愛精靈：大頭小身、粉色頭髮、透明翅膀、星星魔杖 */
+function fairy(g,x,y,rt){const R=(c,a,b,w,h)=>{g.fillStyle=c;g.fillRect(Math.round(x+a),Math.round(y+b),w,h)};const bob=Math.round(Math.sin(rt*3)*1.5),fl=Math.sin(rt*30)>0?1:0;
+ g.globalAlpha=.25;ellp(g,x,y+5+bob,9,9,'#ffd0f0');g.globalAlpha=.85;
+ R('#d8f0ff',-7,1+bob-fl,4,5);R('#fff',-6,2+bob-fl,2,3);R('#d8f0ff',4,1+bob+fl,4,5);R('#fff',5,2+bob+fl,2,3);g.globalAlpha=1;
+ R('#c0407a',-4,-4+bob,9,4);R('#ff7aa8',-5,-3+bob,2,7);R('#ff7aa8',4,-3+bob,2,7);R('#ff9ac0',-3,-4+bob,7,3);
+ R('#ffe1d0',-3,-1+bob,7,5);R('#111',-2,1+bob,1,2);R('#111',2,1+bob,1,2);R('#ff9aa8',-3,3+bob,1,1);R('#ff9aa8',3,3+bob,1,1);R('#e0506a',0,3+bob,1,1);
+ R('#ffb0d8',-2,4+bob,5,4);R('#fff',-2,4+bob,5,1);R('#ffe1d0',-1,8+bob,1,2);R('#ffe1d0',1,8+bob,1,2);
+ g.strokeStyle='#ffd37a';g.lineWidth=1;g.beginPath();g.moveTo(x+4,y+6+bob);g.lineTo(x+9,y+1+bob);g.stroke();R('#fff3b0',8,-1+bob,3,3);R('#fff',9,0+bob,1,1);
+ if(Math.sin(rt*5)>.3){R('#fff',12,-3+bob,1,1);R('#ffd0f0',-9,-5+bob,1,1)}}
 function roofSide(R,bx,by){R('#1a1420',bx-4,by-1,52,3);R('#b3182f',bx-3,by,50,2);R('#e0102e',bx-1,by-3,46,3);R('#b3182f',bx+3,by-6,38,3);R('#e0102e',bx+9,by-8,26,2);R(GOLD,bx+20,by-11,4,3);R('#fff3b0',bx+21,by-12,2,1);
  for(let i=0;i<42;i+=4)R('#8a1226',bx+i,by-2,1,3);R(GOLD,bx-4,by+2,52,1);R(GOLD,bx-5,by-2,2,3);R(GOLD,bx+47,by-2,2,3)}
 function drawSide(g,t,rt){
  const R=(c,a,b,w,h)=>{g.fillStyle=c;g.fillRect(Math.round(a),Math.round(b),w,h)};
- const poleY=FY-13,sway=Math.round(Math.sin(rt*3)*1);
- /* 遠側 4 位宮人 */
- for(let i=0;i<4;i++)carrierSide(g,6+i*13,FY-2,rt*3+i+.5,true);
- R('#5a3a10',6,poleY-2,58,2);
- /* 轎子 */
- const bx=14,by=14+sway,base=poleY-2;
- R('#5a3a10',bx,base-3+sway,48,4);R(GOLD,bx,base-3+sway,48,1);
- roofSide(R,bx,by);
- R(GDK,bx+1,by+3,3,base-by-6);R(GOLD,bx+1,by+3,1,base-by-6);R(GDK,bx+42,by+3,3,base-by-6);R(GOLD,bx+42,by+3,1,base-by-6);
+ const hv=Math.round(Math.sin(rt*2.2)*1.5),base=FY-17+hv,bx=14,by=base-31;
+ ellp(g,44,FY,28,3,'#0006');circle(g,44,FY-2,32,5,rt);mist(g,8,80,FY-8,rt);
+ wisps(g,[[8,FY-14],[24,FY-9],[62,FY-9],[80,FY-14],[44,FY-6]],rt);
  const ih=base-by-6;
+ R('#5a3a10',bx,base-3,48,4);R(GOLD,bx,base-3,48,1);
+ roofSide(R,bx,by);
+ R(GDK,bx+1,by+3,3,ih);R(GOLD,bx+1,by+3,1,ih);R(GDK,bx+42,by+3,3,ih);R(GOLD,bx+42,by+3,1,ih);
  R('#2a1030',bx+4,by+3,38,ih);
  g.save();g.beginPath();g.rect(bx+4,by+3,38,ih);g.clip();R('#3a1a44',bx+4,by+3,38,ih);
  seatSide(g,bx+17,base-6,Math.round(Math.sin(rt*3+1)*.5));g.restore();
@@ -129,54 +122,26 @@ function drawSide(g,t,rt){
  else{for(let i=0;i<38;i+=3){const sw=Math.round(Math.sin(rt*3+i)*.5);for(let j=0;j<ih;j+=2)R(j%4?'#fff':'#ffd0e8',bx+4+i+sw,by+4+j,1,1);R('#fff',bx+4+i+sw,by+3+ih-1,1,1)}}
  const lan=(x,y)=>{const s=Math.round(Math.sin(rt*3+x));R('#1a1420',x+s-1,y,5,6);R('#e0102e',x+s,y+1,3,4);R(GOLD,x+s+1,y+2,1,2);R('#ffe9a8',x+s,y-1,3,1)};
  lan(bx-5,by+3);lan(bx+46,by+3);
- /* 近側 4 位宮人 */
- for(let i=0;i<4;i++)carrierSide(g,3+i*13,FY,rt*3+i,false);
- R('#8a5a1e',3,poleY,58,2);R(GOLD,3,poleY,58,1);
- /* 宮女 */
- maidSide(g,66,FY,rt,'r');
- for(let i=0;i<12;i++){const tt=(rt*14+i*9)%50,x=64-tt,y=18+((i*11)%28)+Math.sin(tt*.2+i)*2;R(i%2?GOLD:'#fff3b0',x,y,1,1)}}
-/* 正面 */
-function carrierFront(g,x,foot,f,far){const R=(c,a,b,w,h)=>{g.fillStyle=c;g.fillRect(Math.round(x+a),Math.round(foot+b),w,h)};
- const skin=far?'#d8b8a0':'#ffd9c0',robe=far?'#4a1230':'#9a2040',robe2=far?'#34091f':'#7a1630',trim=far?'#a08040':'#ffd37a',hat=far?'#10101a':'#1a1a2a',ol='#10101a';
- const st=Math.floor(f)%2,bob=Math.round(Math.sin(f*Math.PI)*.8);
- R(ol,2,-5+(st?0:-1),4,5);R(robe2,3,-5+(st?0:-1),2,3);R('#f4f4f4',2,-1+(st?0:-1),4,1);R(ol,7,-5+(st?-1:0),4,5);R(robe2,8,-5+(st?-1:0),2,3);R('#f4f4f4',7,-1+(st?-1:0),4,1);
- R(ol,1,-15+bob,11,11);R(robe,2,-14+bob,9,10);R(trim,2,-7+bob,9,1);R('#f4ead0',2,-10+bob,9,1);R('#fff6dc',4,-14+bob,5,3);R(trim,3,-12+bob,1,1);R(trim,9,-12+bob,1,1);R(trim,4,-8+bob,5,1);R(trim,6,-5+bob,1,1);
- R(ol,2,-22+bob,9,8);R(skin,3,-21+bob,7,6);R('#fff',4,-19+bob,2,2);R('#fff',7,-19+bob,2,2);R('#111',5,-19+bob,1,2);R('#111',8,-19+bob,1,2);R('#ff9aa8',3,-16+bob,2,1);R('#ff9aa8',8,-16+bob,2,1);R('#c05060',6,-16+bob,1,1);
- R(ol,2,-25+bob,9,4);R(hat,3,-25+bob,7,3);R(trim,3,-22+bob,7,1);R('#e0102e',5,-27+bob,3,2);
- R(robe,0,-13+bob,3,3);R('#f4ead0',0,-11+bob,3,1);R(skin,0,-10+bob,2,2);R(robe,10,-13+bob,3,3);R('#f4ead0',10,-11+bob,3,1);R(skin,11,-10+bob,2,2)}
-function maidFront(g,x,foot,t){const R=(c,a,b,w,h)=>{g.fillStyle=c;g.fillRect(Math.round(x+a),Math.round(foot+b),w,h)};
- const st=Math.floor(t*6)%2;
- R('#1a1420',2+st,-2,3,2);R('#1a1420',7-st,-2,3,2);
- R('#1a1420',1,-15,11,13);R('#ff7aa8',2,-14,9,11);R('#ffb0d0',2,-14,9,2);R('#e0508a',2,-6,9,3);
- R('#1a1420',3,-20,7,6);R('#ffe1d0',4,-18,5,4);R('#111',5,-17,1,1);R('#111',8,-17,1,1);R('#ff9aa8',4,-15,1,1);R('#ff9aa8',8,-15,1,1);
- R('#1a1420',3,-22,7,3);R(GOLD,9,-23,1,3);R('#e0102e',4,-22,2,2);
- const a=Math.sin(t*3)*.4;g.strokeStyle='#8a5a2a';g.lineWidth=1;g.beginPath();g.moveTo(x+11,foot-10);g.lineTo(x+16+a*3,foot-19);g.stroke();
- g.fillStyle='#fff';g.beginPath();g.ellipse(x+17+a*3,foot-22,4,5,a,0,6.3);g.fill();g.fillStyle='#ffb0d0';g.beginPath();g.ellipse(x+17+a*3,foot-22,2,3,a,0,6.3);g.fill()}
+ fairy(g,72,by+8,rt);
+ for(let i=0;i<14;i++){const tt=(rt*14+i*9)%46,x=12-tt*.4+(i%3),y=FY-22+((i*7)%16)+Math.sin(tt*.3+i)*2;R(i%2?'#fff':'#ffd0f0',x,y,1,1)}}
 function drawFront(g,t,rt){
  const R=(c,a,b,w,h)=>{g.fillStyle=c;g.fillRect(Math.round(a),Math.round(b),w,h)};
- const poleY=FY-13,sway=Math.round(Math.sin(rt*3)*1);
- /* 後排（遠處兩位，只露出上半身，比較暗）*/
- carrierFront(g,6,FY-5,rt*3+.5,true);carrierFront(g,56,FY-5,rt*3+1.5,true);
- /* 轎子（正面）*/
- const bx=14,by=16+sway,base=poleY-2;
- R('#5a3a10',bx,base-3+sway,44,4);R(GOLD,bx,base-3+sway,44,1);
+ const hv=Math.round(Math.sin(rt*2.2)*1.5),base=FY-17+hv,bx=14,by=base-29;
+ ellp(g,42,FY,28,3,'#0006');circle(g,42,FY-2,32,5,rt);mist(g,6,78,FY-8,rt);
+ wisps(g,[[6,FY-14],[20,FY-8],[64,FY-8],[78,FY-14],[42,FY-6]],rt);
+ const ih=base-by-6;
+ R('#5a3a10',bx,base-3,44,4);R(GOLD,bx,base-3,44,1);
  R('#1a1420',bx-6,by-1,56,3);R('#b3182f',bx-5,by,54,2);R('#e0102e',bx-3,by-3,50,3);R('#b3182f',bx,by-6,44,3);R('#e0102e',bx+7,by-8,30,2);R(GOLD,bx+19,by-11,6,3);R('#fff3b0',bx+21,by-12,2,1);
  for(let i=0;i<48;i+=4)R('#8a1226',bx-2+i,by-2,1,3);R(GOLD,bx-6,by+2,56,1);R(GOLD,bx-7,by-2,2,4);R(GOLD,bx+49,by-2,2,4);
- const ih=base-by-6;
  R(GDK,bx+1,by+3,3,ih);R(GOLD,bx+1,by+3,1,ih);R(GDK,bx+40,by+3,3,ih);R(GOLD,bx+40,by+3,1,ih);
- R('#2a1030',bx+4,by+3,36,ih);R('#4a2050',bx+4,by+3,36,ih);
+ R('#2a1030',bx+4,by+3,36,ih);R('#3a1a44',bx+4,by+3,36,ih);
  seatFront(g,bx+16,base-6,Math.round(Math.sin(rt*3+1)*.5));
  if(CURT==='silk'){R('#ff9ac0',bx+4,by+3,9,ih);R('#e0709a',bx+4,by+3,2,ih);R('#ff9ac0',bx+31,by+3,9,ih);R('#e0709a',bx+38,by+3,2,ih);R(GOLD,bx+4,by+13,9,2);R(GOLD,bx+31,by+13,9,2);R('#fff3b0',bx+12,by+13,1,2);R('#fff3b0',bx+31,by+13,1,2)}
  else{for(let i=0;i<36;i+=3){const sw=Math.round(Math.sin(rt*3+i)*.5);for(let j=0;j<ih;j+=2)R(j%4?'#fff':'#ffd0e8',bx+4+i+sw,by+4+j,1,1);R('#fff',bx+4+i+sw,by+3+ih-1,1,1)}}
  const lan=(x,y)=>{const s=Math.round(Math.sin(rt*3+x));R('#1a1420',x+s-1,y,5,6);R('#e0102e',x+s,y+1,3,4);R(GOLD,x+s+1,y+2,1,2);R('#ffe9a8',x+s,y-1,3,1)};
  lan(bx-8,by+3);lan(bx+50,by+3);
- /* 抬桿（兩根，從前排宮人肩上往後）*/
- R('#8a5a1e',8,poleY,6,2);R('#8a5a1e',60,poleY,6,2);
- /* 前排兩位宮人 */
- carrierFront(g,2,FY,rt*3,false);carrierFront(g,60,FY,rt*3+1,false);
- R('#8a5a1e',2,poleY,22,2);R('#8a5a1e',52,poleY,22,2);R(GOLD,2,poleY,22,1);R(GOLD,52,poleY,22,1);
- maidFront(g,34,FY+1,rt);
- for(let i=0;i<12;i++){const tt=(rt*14+i*9)%50,x=10+((i*17+tt)%64),y=14+((i*11)%34)+Math.sin(tt*.2+i)*2;R(i%2?GOLD:'#fff3b0',x,y,1,1)}}
+ fairy(g,70,by+10,rt);
+ for(let i=0;i<14;i++){const tt=(rt*14+i*9)%50,x=8+((i*17+tt)%66),y=FY-26+((i*11)%22)+Math.sin(tt*.2+i)*2;R(i%2?'#fff':'#ffd0f0',x,y,1,1)}}
 function bg(g){const gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#1a2050');gr.addColorStop(1,'#10202a');g.fillStyle=gr;g.fillRect(0,0,W,H);g.fillStyle='#2a3a30';g.fillRect(0,FY,W,H-FY);g.fillStyle='#3a4a3a';g.fillRect(0,FY,W,1)}
 const C=id=>document.getElementById(id);
 const cvs={F:C('vF'),R:C('vR'),L:C('vL'),sF:C('sF'),sR:C('sR'),sN:C('sN')};
@@ -190,7 +155,7 @@ const loop=ts=>{const t=(ts-t0)/1000;
  requestAnimationFrame(loop)};
 requestAnimationFrame(loop);
 document.querySelectorAll('input[name=c]').forEach(e=>e.onchange=()=>{CURT=document.querySelector('input[name=c]:checked').value});
-C('cp').onclick=()=>{const v=(document.querySelector('input[name=p]:checked')||{}).value||'（還沒選）';const txt='倫妃步輦預覽 1127e：'+v+'　（簾子預設：'+(CURT==='silk'?'粉紅綢簾':'珍珠簾')+'）'+(C('note').value?'\n備註：'+C('note').value:'');
+C('cp').onclick=()=>{const v=(document.querySelector('input[name=p]:checked')||{}).value||'（還沒選）';const txt='倫妃步輦預覽 1127f：'+v+'　（簾子預設：'+(CURT==='silk'?'粉紅綢簾':'珍珠簾')+'）'+(C('note').value?'\n備註：'+C('note').value:'');
  C('out').textContent=txt;try{navigator.clipboard.writeText(txt).then(()=>{C('out').textContent='已複製：\n'+txt})}catch(e){}};
 </script>
 </body>
