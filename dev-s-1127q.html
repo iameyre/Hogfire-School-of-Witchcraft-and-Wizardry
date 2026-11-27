@@ -5774,7 +5774,7 @@ const drawCard=(cv,e,who,text)=>{const c=cv.getContext('2d'),CW=cv.width,CHH=cv.
  const key=(e.portrait||{})[who],im=pimg(key);if(im){const h=150,w=Math.round(im.width*h/im.height);c.drawImage(im,16,176-h,w,h)}
  const bx=10,by=174,bw=CW-20,bh=CHH-by-10;c.fillStyle='#b3182f';c.fillRect(bx-3,by-3,bw+6,bh+6);c.fillStyle='#ffe9a8';c.fillRect(bx-1,by-1,bw+2,bh+2);c.fillStyle='#140a2c';c.fillRect(bx+2,by+2,bw-4,bh-4);
  const nm=(e.names&&e.names[who])!==undefined?e.names[who]:who;c.font='15px DotGothic16, sans-serif';c.textBaseline='top';c.fillStyle='#ffe9a8';c.fillText(nm,bx+12,by+8);
- c.font='16px DotGothic16, sans-serif';c.fillStyle='#fff';const ls=wrap(c,text,bw-28);ls.slice(0,4).forEach((l,i)=>c.fillText(l+(i===3&&ls.length>4?'…':''),bx+12,by+30+i*23))};
+ c.font='16px DotGothic16, sans-serif';c.fillStyle='#fff';const ls=wrap(c,text,bw-28);ls.slice(0,6).forEach((l,i)=>c.fillText(l+(i===5&&ls.length>6?'…':''),bx+12,by+30+i*23))};
 const collect=()=>{const out=[...(window.lunDlg||[])];
  const pk={l:'lun',g:'lzx',a:'alu',p:'peng',d:'dog',f:'fang',s:'sbn',y:'yun',w:'mom',v:'dad'};
  [3,5,6,7,8].forEach(n=>{const D=CH[n];let steps;try{steps=D.steps()}catch(e){return}let bg='night',nm=D.loc,cur=null,k=0;
@@ -5789,7 +5789,7 @@ const reviewOpen=()=>{const all=collect(),ed=rvEd();const L=$$('rvL');L.innerHTM
  all.forEach(e=>{const sc=document.createElement('div');sc.className='sc';sc.dataset.chap=e.chap;sc.innerHTML='';sc.append(document.createTextNode(e.chap+'　'+e.title));L.appendChild(sc);
   e.lines.forEach((ln,i)=>{const id=e.id+'#'+(i+1),orig=ln[1],cur=ed[id]!==undefined?ed[id]:orig;
    const cd=document.createElement('div');cd.className='cd'+(ed[id]!==undefined&&ed[id]!==orig?' ed':'');cd.dataset.chap=e.chap;cd.dataset.id=id;
-   const cv2=document.createElement('canvas');cv2.width=360;cv2.height=300;
+   const cv2=document.createElement('canvas');cv2.width=360;cv2.height=340;
    const bd=document.createElement('div');bd.className='bd';
    const idd=document.createElement('div');idd.className='id';idd.textContent=id;bd.appendChild(idd);
    if(ln[2]){const ex=document.createElement('div');ex.className='ex';ex.textContent=ln[2];bd.appendChild(ex)}
