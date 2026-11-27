@@ -6026,7 +6026,7 @@ window.lunHomeDraw=(g,W,H,gy,tt,fr)=>{try{
  let im,s,flip=false;
  if(m==='sedan'&&window.lunSedanFrame){im=window.lunSedanFrame(face,tt);s=Math.min(1.5,Math.floor((gy-6)/im.height*4)/4)}
  else if(m){const rf=riderFrame(tt);if(!rf)return false;im=rf;s=Math.min(2,Math.floor((gy-6)/im.height*4)/4);flip=face==='L'}
- else if(face==='F'){im=fr[(tt*2|0)%2];s=2}
+ else if(face==='F'){im=(window.lunNewSprOn&&window.lunNewSprOn()&&window.lunNewSprImg)?window.lunNewSprImg:fr[(tt*2|0)%2];s=2}
  else{const sp=window.lunSP&&window.lunSP.s;if(!sp)return false;im=sp[Math.floor(tt*3)&1];s=3;flip=face==='L'}
  const bob=Math.round(Math.sin(tt*3)*1.2),dy=gy-im.height*s+2+bob;
  {const px=W/2-im.width*s/2-14;if(petFlip){g.save();g.translate(px,0);g.scale(-1,1);g.translate(-px,0);drawPet(g,px,gy+1,tt,2);g.restore()}else drawPet(g,px,gy+1,tt,2);window.__petRect={x:px-26,y:gy-44,w:52,h:48};window.__homeW=W;const fm=document.getElementById('rfoxM');if(fm)fm.style.transform=petFlip?'scaleX(-1)':''}
@@ -6157,7 +6157,7 @@ const viewNotes=()=>{const a=notes();g('ntB').innerHTML='<h4>意見記錄（'+a.
   try{rToast(ok?'已複製，貼給我就好':'複製失敗，請長按文字手動複製')}catch(e){}}};
 /* ---- 體驗流程 ---- */
 const TESTS=[
- ['新版主畫面（繼續劇情、快捷磚）','home'],['倫新造型實驗（開／關，會重新載入）','newlun'],['倫物關係圖（全部解鎖看）','relall'],['新人物彈出（李志憲）','relnew'],['學籍・位階・考核（條件全補齊）','rank'],['三境短片（仙境／人間／地獄）','film'],['學籍・稱號（位階）','prof'],['註冊流程（填表→簽名→拍照→蓋章→學生證）','reg'],['巫師商場（預覽、穿戴）','shop:巫師商場'],['魔杖店','shop:魔杖店'],['書店（買書、借書）','shop:書店'],['雜貨鋪','shop:雜貨鋪'],['郵局（收信、註冊處）','shop:郵局'],['冰淇淋','shop:冰淇淋'],
+ ['新版主畫面（繼續劇情、快捷磚）','home'],['倫新造型實驗（開／關，立刻看得到）','newlun'],['倫物關係圖（全部解鎖看）','relall'],['新人物彈出（李志憲）','relnew'],['學籍・位階・考核（條件全補齊）','rank'],['三境短片（仙境／人間／地獄）','film'],['學籍・稱號（位階）','prof'],['註冊流程（填表→簽名→拍照→蓋章→學生證）','reg'],['巫師商場（預覽、穿戴）','shop:巫師商場'],['魔杖店','shop:魔杖店'],['書店（買書、借書）','shop:書店'],['雜貨鋪','shop:雜貨鋪'],['郵局（收信、註冊處）','shop:郵局'],['冰淇淋','shop:冰淇淋'],
  ['藥店・李志憲在','shop:藥店:1'],['藥店・李志憲不在','shop:藥店:0'],['魔藥課開場（禁藥提示）','pot'],['迷途森林（方向鍵）','forest'],
  ['第 3 章孵蛋（稜彩九尾狐寶寶）','ch:3:12'],['第 6 章校長（黃衣服）','ch:6:2'],['第 6 章通關畫面（換行）','rw:6'],['第 7 章手寫日記（黑墨水）','ch:7:10'],['第 7 章暗場＋閃電＋湯姆瑞英','ch:7:11'],['第 7 章佛達魔登場（黑衣）','chq:7:墨水在地上聚成']];
 const prep=()=>{const p=P();if(!p)return false;try{A.init()}catch(e){}p.shard=Math.max(p.shard||0,500);p.ch2=p.ch2||{};p.ch4=p.ch4||{intro:0,stage:0,rec:{},done:0};try{leaveHome&&leaveHome();closeSub&&closeSub()}catch(e){}return p};
@@ -6725,9 +6725,16 @@ const make=()=>{const rows=ROWS.map(r=>r.padEnd(20,'.').slice(0,20)),H=rows.leng
  const fl=(i,j)=>i>=0&&i<W&&j>=0&&j<H&&rows[j][i]!=='.';
  g.fillStyle='#2a1620';for(let j=-1;j<=H;j++)for(let i=-1;i<=W;i++){if(fl(i,j))continue;if(fl(i+1,j)||fl(i-1,j)||fl(i,j+1)||fl(i,j-1))g.fillRect(i+1,j+1,1,1)}
  for(let j=0;j<H;j++)for(let i=0;i<W;i++){const ch=rows[j][i];if(ch==='.')continue;g.fillStyle=PAL[ch]||'#ff00ff';g.fillRect(i+1,j+1,1,1)}return c};
+const NEW=make();let OLD=null;
+window.lunNewSprImg=NEW;
 window.lunNewSprOn=()=>{try{return localStorage.getItem(KEY)==='1'}catch(e){return false}};
-window.lunNewSprToggle=()=>{try{localStorage.setItem(KEY,window.lunNewSprOn()?'0':'1')}catch(e){}location.reload()};
-if(window.lunNewSprOn()&&window.lunSP){const c=make();window.lunSP.d=[c,c]}
+const apply=()=>{if(!window.lunSP)return;if(!OLD)OLD=window.lunSP.d;window.lunSP.d=window.lunNewSprOn()?[NEW,NEW]:OLD};
+window.lunNewSprToggle=()=>{try{localStorage.setItem(KEY,window.lunNewSprOn()?'0':'1')}catch(e){}apply();
+ const P_=window.lunPanel;if(!P_)return;const on=window.lunNewSprOn();
+ P_.open('<h3>倫新造型實驗</h3><div class="co">目前：<b style="color:#ffe9a8">'+(on?'已開啟（新倫）':'已關閉（舊倫）')+'</b></div><div class="pv"><div><canvas id="nsA" width="176" height="208"></canvas>舊倫</div><div><canvas id="nsB" width="176" height="208"></canvas>新倫（Gemini）</div></div><p class="tp">開啟之後：主畫面站著的倫、商店試戴、倫物關係圖立刻換成新倫；對話頭像要重新進入那段劇情才會換。<br>再按一次這顆按鈕就會關掉。</p><button class="cl" id="spX">關閉</button>');
+ const dr=(id,im)=>{const c=document.getElementById(id).getContext('2d');c.imageSmoothingEnabled=false;if(!im)return;const s=Math.floor(Math.min(176/im.width,208/im.height));c.drawImage(im,Math.round((176-im.width*s)/2),Math.round(208-im.height*s),im.width*s,im.height*s)};
+ dr('nsA',OLD&&OLD[0]);dr('nsB',NEW);document.getElementById('spX').onclick=()=>{P_.close();try{rHome()}catch(e){}}};
+apply();
 })();
 
 }
