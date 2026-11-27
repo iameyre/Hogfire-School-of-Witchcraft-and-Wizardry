@@ -3713,7 +3713,7 @@ $('rmN').addEventListener('click',e=>{const b=e.target.closest('.rtrv');if(!b)re
    效能：背景星星用 CSS（不用 canvas 每幀重畫）、打字音效 110ms 才響一次、帽子只在嘴形改變時才重畫。 */
 (()=>{
 /* 鄧布嚕多校長的衣服改黃色（雲 2026-11-27 指定）*/
-try{THEATER.PAL.f='#f2c230';THEATER.PAL.j='#c8901a'}catch(e){}
+try{THEATER.PAL.f='#f4f0ff';THEATER.PAL.j='#e0b84a';/* 鄧布嚕多：白色長袍金邊（雅雲 2026-11-28 定案，取代黃色）*/THEATER.SPR.lzx[0]='....................';THEATER.SPR.lzx[1]='.....tttttttttt.....';/* 李志憲：女，雅雲的另一個型態；去掉頭上的紅色頭帶 */}catch(e){}
 const HS=[{id:'gry',n:'葛來倫多',c:'#ff5a3a',d:'勇敢、衝第一，輸了再來一場。'},{id:'huf',n:'赫倫帕夫',c:'#ffd040',d:'善良、慢慢來，先放空一下。'},{id:'rav',n:'雷倫克勞',c:'#4a8aff',d:'聰明、愛檢討，有計畫。'},{id:'sly',n:'史萊哲倫',c:'#4ac26a',d:'有野心、有朋友，有朋友就有梗。'}];
 const QS=[
  ['LOL 輸了一場，你的第一個反應？',['再來一場！','先喝水放空','開回放檢討','找朋友聊聊']],
@@ -5101,7 +5101,7 @@ const shade=(hex,k)=>{const n=parseInt(hex.slice(1),16);const f=v=>Math.max(0,Ma
 const icon=(i,px=3)=>{const I=ING[i],c=document.createElement('canvas');c.width=c.height=8*px;const g=c.getContext('2d');SH[I.s].forEach((r,y)=>{for(let x=0;x<8;x++){const ch=r[x];if(ch==='.')continue;g.fillStyle=ch==='o'?shade(I.c,1.25):shade(I.c,.82);g.fillRect(x*px,y*px,px,px)}});return c};
 /* 配方：key = 排序後的材料編號。hint 是第 2、3 堂給的提示 */
 const REC=[
- {id:'sleep',n:'安眠藥水',k:'0,1,6',c:'#7a8cff',d:'喝了立刻想睡午覺。李志憲說這是他自己最常用的藥。'},
+ {id:'sleep',n:'安眠藥水',k:'0,1,6',c:'#7a8cff',d:'喝了立刻想睡午覺。李志憲說這是她自己最常用的藥。'},
  {id:'wake',n:'提神藥水',k:'1,4,7',c:'#ff6a4a',d:'整個人醒到眼睛會發光，連夢都醒了。'},
  {id:'invis',n:'隱形藥水',k:'0,3,6',c:'#c8e8ff',d:'喝了就看不到你，但看得到你的鞋。'},
  {id:'brave',n:'勇氣藥水',k:'2,3,7',c:'#ff9a3a',d:'敢對老師說「這題我不會」。'},
@@ -5346,7 +5346,7 @@ const azkaban=()=>{const c=ch(),q=pot();let lost=0;REC.filter(R=>R.ban).forEach(
  $$('azOk').onclick=()=>{run=false;clearInterval(iv);clearInterval(tm);az.classList.remove('vis');setTimeout(()=>{az.classList.remove('on');if(on)talk([['g','……我什麼都沒看到。禁藥不要再做了。'],['l','好。（下次要小心一點）']])},300)}};
 /* ---------- 開關 ---------- */
 let where='school',backTo='home';
-const TITLE={school:'魔藥課',shop:'李志憲的藥店（他不在）',shopT:'李志憲的藥店（他在看）',dark:'暗巷・偷偷調藥'};
+const TITLE={school:'魔藥課',shop:'李志憲的藥店（她不在）',shopT:'李志憲的藥店（她在看）',dark:'暗巷・偷偷調藥'};
 const open=async(opt={})=>{if(!P())return;where=opt.where||'school';backTo=opt.back||'home';if(backTo!=='alley'){try{leaveHome&&leaveHome();closeSub&&closeSub()}catch(e){}}try{A.init()}catch(e){}
  const c=ch();if(!$$('ptI').children.length)buildIng();slots=[];liquid='#3a6a4a';renderSlots();resize();setGoal();$$('ptTi').textContent=TITLE[where]||'魔藥課';root.classList.add('on');on=true;t0=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(tick);
  if(!c.intro){await talk(INTRO);c.intro=1;sv()}else if(where==='dark'&&!c.darkSeen){c.darkSeen=1;sv();await talk([['x','暗巷的角落有一口小鍋，沒有人看。'],['l','這裡做的東西，不會被李志憲看到。'],['x','（做禁藥還是有被發現的機會，只是比較小。）']])}};
@@ -5396,7 +5396,7 @@ const spImgO=(k,ov)=>spImg(k,ov);
 const spImg=(k,ov)=>{try{const Sx=THEATER.SPR[k],P0=ov?Object.assign({},THEATER.PAL,ov):THEATER.PAL;if(!Sx)return null;const rows=Sx.map(r=>r.padEnd(20,'.')),H=rows.length,W=Math.max(...rows.map(r=>r.length));const c=document.createElement('canvas');c.width=W+2;c.height=H+2;const g=c.getContext('2d');const fl=(i,j)=>i>=0&&i<W&&j>=0&&j<H&&rows[j][i]!=='.';
  g.fillStyle=P0.O||'#2a1620';for(let j=-1;j<=H;j++)for(let i=-1;i<=W;i++){if(fl(i,j))continue;if(fl(i+1,j)||fl(i-1,j)||fl(i,j+1)||fl(i,j-1))g.fillRect(i+1,j+1,1,1)}
  for(let j=0;j<H;j++)for(let i=0;i<W;i++){const c2=rows[j][i];if(c2==='.')continue;g.fillStyle=P0[c2]||'#fff';g.fillRect(i+1,j+1,1,1)}return c}catch(e){return null}};
-try{THEATER.PAL.f='#f2c230';THEATER.PAL.j='#c8901a'}catch(e){}
+try{THEATER.PAL.f='#f4f0ff';THEATER.PAL.j='#e0b84a';/* 鄧布嚕多：白色長袍金邊（雅雲 2026-11-28 定案，取代黃色）*/THEATER.SPR.lzx[0]='....................';THEATER.SPR.lzx[1]='.....tttttttttt.....';/* 李志憲：女，雅雲的另一個型態；去掉頭上的紅色頭帶 */}catch(e){}
 /* 湯姆瑞英和佛達魔：黑色情侶裝，小設計不同（湯姆瑞英：紫銀領口＋銀色腰帶；佛達魔：藍紫腰帶＋銀白領口）*/
 const TOM={X:'#17121f',v:'#c9b0ff',q:'#c9b0ff',u:'#2a1a14',o:'#4a3a52'},VOL={b:'#17121f',d:'#6a4ac0',W:'#d8d0e8'};
 const silh=()=>{const b=spImg('dad',VOL);if(!b)return null;const c=document.createElement('canvas');c.width=b.width;c.height=b.height;const x=c.getContext('2d');x.drawImage(b,0,0);x.globalCompositeOperation='source-in';x.fillStyle='#06030c';x.fillRect(0,0,c.width,c.height);x.globalCompositeOperation='source-over';x.fillStyle='#b8a0ff';const ey=Math.floor(c.height*.22);x.fillRect(Math.floor(c.width*.38),ey,1,1);x.fillRect(Math.floor(c.width*.6),ey,1,1);return c};
@@ -6592,10 +6592,10 @@ const toast=t=>{try{rToast(t)}catch(e){}};
 /* ================= ① 人物關係圖 ================= */
 const NODES={
  lun:{n:'倫',r:'你（主角）',x:.5,y:.44},yun:{n:'雅雲',r:'巫師商場老闆',x:.5,y:.07},alu:{n:'鄧布嚕多',r:'校長（不會只是校長）',x:.17,y:.11},fang:{n:'芳教授',r:'領養生物課',x:.83,y:.11},
- lzx:{n:'李志憲',r:'魔藥課教授',x:.14,y:.29},shu:{n:'鼠內普',r:'黑魔法教學',x:.86,y:.29},peng:{n:'彭董',r:'年鑑攝影師',x:.14,y:.47},mom:{n:'文英',r:'媽媽',x:.86,y:.47},
+ lzx:{n:'李志憲',r:'魔藥課教授（雅雲的另一型態）',x:.14,y:.29},shu:{n:'鼠內普',r:'黑魔法教學',x:.86,y:.29},peng:{n:'彭董',r:'年鑑攝影師',x:.14,y:.47},mom:{n:'文英',r:'媽媽',x:.86,y:.47},
  dog:{n:'海狗',r:'守護神・郵差',x:.16,y:.65},dad:{n:'金達',r:'爸爸',x:.86,y:.65},tom:{n:'湯姆瑞英',r:'日記裡的人',x:.34,y:.84},vol:{n:'佛達魔',r:'黑斗篷的男人',x:.66,y:.84}};
 const EDGES=[['lun','dog','夥伴・守護神'],['lun','lzx','學生・魔藥課'],['lun','fang','學生・小狐狸'],['lun','alu','校長'],['lun','peng','森林嚮導'],['lun','yun','巫師商場'],['lun','shu','黑魔法課'],['lun','mom','家人'],['lun','dad','家人'],
- ['shu','fang','情侶'],['mom','dad','夫妻'],['tom','mom','日記裡的影子'],['vol','dad','黑暗的另一面'],['tom','vol','黑衣情侶'],['lun','tom','吃掉字的日記'],['lun','vol','宿敵'],['alu','lzx','同事'],['alu','vol','追查多年']];
+ ['shu','fang','情侶'],['mom','dad','夫妻'],['tom','mom','日記裡的影子'],['vol','dad','黑暗的另一面'],['tom','vol','黑衣情侶'],['lun','tom','吃掉字的日記'],['lun','vol','宿敵'],['alu','lzx','同事'],['yun','lzx','另一個型態'],['alu','vol','追查多年']];
 const KEYS=Object.keys(NODES);
 const rel=()=>{const p=P();if(!p)return {};p.rel=p.rel||{lun:1};return p.rel};
 const nImg=k=>{try{const S=window.lunDev28;if(k==='lun')return window.lunSP&&window.lunSP.d&&window.lunSP.d[0];if(k==='tom')return S.spr('mom',S.TOM);if(k==='vol')return S.spr('dad',S.VOL);return S.spr(k)}catch(e){return null}};
