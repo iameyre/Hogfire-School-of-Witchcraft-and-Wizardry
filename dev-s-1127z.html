@@ -6477,7 +6477,10 @@ if(sm){sm.insertAdjacentHTML('afterbegin','<div id="bd34"></div>');
  document.head.insertAdjacentHTML('beforeend','<style id="bd34css">#bd34{position:absolute;inset:0;z-index:5;background:#0b0a12;opacity:0;pointer-events:none;transition:opacity .12s}#bd34.on{opacity:1}#rrMap{display:none!important}</style>');
  const OV=['shop21','al19','sc28','sn28','fr26','pt27','dr28','hb28','rw28','rv28','sp32','pf32','rg32','rhog','az27','br23','dk22','pa26','rw26','rw27','sp20','fm34','dv31'].map(s=>'#'+s+'.on').join(',');
  let to=0,pend=false;
- const upd=()=>{pend=false;const h=g('rhome'),act=document.querySelector(OV)||(h&&h.classList.contains('on'));clearTimeout(to);if(act)g('bd34').classList.add('on');else to=setTimeout(()=>g('bd34').classList.remove('on'),450)};
+ let intent=false;
+ /* 所有劇情畫面都關了、主畫面也沒開：除非是玩家自己點去抽卡等頁面，否則回主畫面（不要停在下面的舊頁面）*/
+ document.addEventListener('click',e=>{const b=e.target.closest('#rsub button[data-a]');if(b&&['card','look','eq','tal','ach','shop','dex','log','info','get','call','code','goal','pet','claw','ward','house'].includes(b.dataset.a))intent=true},true);
+ const upd=()=>{pend=false;const h=g('rhome'),hon=h&&h.classList.contains('on'),act=document.querySelector(OV)||hon;clearTimeout(to);if(hon)intent=false;if(act)g('bd34').classList.add('on');else to=setTimeout(()=>{if(document.querySelector(OV))return;if(!intent&&P()){try{rHome()}catch(x){}}g('bd34').classList.remove('on')},450)};
  new MutationObserver(()=>{if(!pend){pend=true;requestAnimationFrame(upd)}}).observe(document.body,{subtree:true,attributes:true,attributeFilter:['class']});
  upd()}
 /* ---------- ③ 導覽列 ---------- */
