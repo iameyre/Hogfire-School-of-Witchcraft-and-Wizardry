@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>倫妃步輦・預覽（前左右）</title>
+<title>倫妃步輦・預覽 1127d</title>
 <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -34,7 +34,7 @@ button{width:100%;height:54px;margin-top:10px;border:3px solid #6a4a1e;outline:2
 <body>
 <div class="wrap">
 <h1>倫妃步輦</h1>
-<div class="sub">雅雲選了 A，換成宮人在抬，並畫出前、左、右<br>手機、電腦都能開</div>
+<div class="sub">第二版：宮人不再像殭屍（圓帽、有臉、有鞋），倫改成坐在椅子上<br>手機、電腦都能開</div>
 
 <div class="card"><h2>簾子（可以開關）</h2>
 <div class="tg"><label><input type="radio" name="c" value="silk" checked><span>粉紅綢簾</span></label><label><input type="radio" name="c" value="bead"><span>珍珠簾</span></label></div>
@@ -68,23 +68,37 @@ let CURT='silk';
 const GOLD='#ffd37a',GDK='#b07a30';
 function ctx(cv){const g=cv.getContext('2d');g.imageSmoothingEnabled=false;return g}
 /* 一般的倫（正面，比大小用／轎子裡面用）*/
+/* 倫坐在椅子上（側面朝右）：椅背、紅坐墊、扶手、腳踩腳踏 */
+function seatSide(g,x,seat,bob){const R=(c,a,b,w,h)=>{g.fillStyle=c;g.fillRect(Math.round(x+a),Math.round(seat+b),w,h)};
+ R('#5a2e12',-3,-17,3,17);R(GOLD,-3,-17,1,17);R('#7a4a22',-2,-16,1,14);          /* 椅背 */
+ R('#1a1420',-1,-2,14,3);R('#b3182f',0,-2,12,2);R(GOLD,0,-1,12,1);R('#5a2e12',0,1,12,2);  /* 坐墊與椅座 */
+ /* 身體（坐直）*/
+ R('#1a1420',1,-12+bob,9,10);R('#d8203c',2,-11+bob,7,9);R('#fff',6,-11+bob,2,2);R('#8a1226',2,-4+bob,7,2);
+ R('#d8203c',8,-4,6,3);R('#ffe1d0',13,-3,2,2);R('#1a1420',13,-1,4,2);R('#5a2e12',12,1,6,2);   /* 腿往前、腳踩腳踏 */
+ /* 頭髮與臉 */
+ R('#2a1620',-1,-23+bob,11,12);R('#3a2a30',0,-22+bob,9,11);R('#3a2a30',-2,-14+bob,3,9);R('#3a2a30',-1,-6+bob,3,3);
+ R('#ffe1d0',5,-19+bob,5,6);R('#3a2a30',5,-20+bob,5,2);R('#2a1620',8,-17+bob,1,2);R('#ff9aa8',7,-14+bob,2,1);R('#ff3a5a',2,-20+bob,2,2);
+ R('#ffe1d0',9,-9+bob,2,2);R('#5a2e12',8,-9,5,1)}                                     /* 手搭扶手 */
+/* 倫坐在椅子上（正面）*/
+function seatFront(g,x,seat,bob){const R=(c,a,b,w,h)=>{g.fillStyle=c;g.fillRect(Math.round(x+a),Math.round(seat+b),w,h)};
+ R('#5a2e12',-2,-19,16,19);R(GOLD,-2,-19,16,1);R('#7a4a22',-1,-18,14,17);for(let i=0;i<14;i+=3)R('#5a2e12',-1+i,-18,1,17);   /* 椅背（格子）*/
+ R('#5a2e12',-4,-8,3,9);R(GOLD,-4,-8,3,1);R('#5a2e12',13,-8,3,9);R(GOLD,13,-8,3,1);                                     /* 兩邊扶手 */
+ R('#1a1420',0,-3,12,4);R('#b3182f',1,-3,10,3);R(GOLD,1,-1,10,1);
+ lunFront(g,x,seat-14,bob);R('#1a1420',2,0+Math.round(seat-seat),0,0);
+ R('#1a1420',2,1,3,2);R('#1a1420',7,1,3,2)}
 function lunFront(g,x,y,bob=0){const R=(c,a,b,w,h)=>{g.fillStyle=c;g.fillRect(x+a,y+b+bob,w,h)};
  R('#2a1620',3,0,6,1);R('#3a2a30',2,1,8,2);R('#2a1620',1,1,1,8);R('#3a2a30',1,2,2,9);R('#3a2a30',9,2,2,9);R('#ff3a5a',2,2,2,2);
  R('#ffe1d0',3,3,6,5);R('#3a2a30',3,3,3,1);R('#3a2a30',6,3,3,1);R('#2a1620',4,5,1,2);R('#2a1620',7,5,1,2);R('#ff9aa8',3,7,1,1);R('#ff9aa8',8,7,1,1);
  R('#d8203c',3,8,6,6);R('#fff',5,8,2,1);R('#8a1226',3,13,6,1)}
-/* 宮人（側面朝右，抬桿）*/
+/* 宮人（側面朝右，抬桿）：圓帽、臉有眼睛腮紅、手扶桿、有鞋 */
 function carrierSide(g,x,foot,f,far){const R=(c,a,b,w,h)=>{g.fillStyle=c;g.fillRect(Math.round(x+a),Math.round(foot+b),w,h)};
- const robe=far?'#3a4258':'#6a7a9a',robe2=far?'#2a3248':'#56668a',hat=far?'#0a0810':'#1a1420',skin=far?'#c8a898':'#ffe1d0',shoe=far?'#0a0810':'#1a1420';
+ const skin=far?'#d8b8a0':'#ffd9c0',robe=far?'#2c6a6a':'#3a9a94',robe2=far?'#1c4a4a':'#2a7a76',trim=far?'#a08040':'#ffd37a',hat=far?'#10101a':'#1a1a2a',ol='#10101a';
  const st=Math.floor(f)%2,bob=Math.round(Math.sin(f*Math.PI)*.8);
- /* 腳（有穿鞋，輪流踏）*/
- R(robe2,3+st,-4,2,3);R(shoe,2+st,-1,4,1);R(robe2,6-st,-4,2,3);R(shoe,5-st,-1,4,1);
- /* 身體 */
- R('#1a1420',2,-13+bob,9,9);R(robe,3,-12+bob,7,8);R(robe2,3,-6+bob,7,2);R(GOLD,3,-8+bob,7,1);
- /* 頭＋帽 */
- R('#1a1420',3,-18+bob,7,6);R(skin,4,-16+bob,5,4);R('#111',7,-15+bob,1,1);R('#ff9aa8',4,-13+bob,1,1);
- R(hat,3,-19+bob,7,3);R('#e0102e',6,-21+bob,1,2);
- /* 手臂扶桿 */
- R(robe,7,-12+bob,3,2);R(skin,9,-12+bob,2,2)}
+ R(ol,2+st,-5,4,5);R(robe2,3+st,-5,2,4);R('#f4f4f4',2+st,-1,4,1);R(ol,5-st+1,-5,4,5);R(robe2,6-st+1,-5,2,4);R('#f4f4f4',5-st+1,-1,4,1);
+ R(ol,2,-15+bob,10,11);R(robe,3,-14+bob,8,10);R(trim,3,-7+bob,8,1);R('#e0102e',3,-10+bob,8,1);R('#fff',6,-14+bob,2,2);
+ R(ol,3,-22+bob,9,8);R(skin,4,-21+bob,7,6);R('#fff',8,-19+bob,2,2);R('#111',9,-19+bob,1,2);R('#ff9aa8',8,-16+bob,2,1);R('#c05060',10,-16+bob,1,1);
+ R(ol,3,-25+bob,9,4);R(hat,4,-25+bob,7,3);R(trim,4,-22+bob,7,1);R('#e0102e',6,-27+bob,3,2);
+ R(robe,8,-13+bob,3,3);R(skin,10,-13+bob,2,2)}
 /* 宮女（側面朝右，舉羽扇，有腳）*/
 function maidSide(g,x,foot,t,face){const R=(c,a,b,w,h)=>{g.fillStyle=c;g.fillRect(Math.round(x+a),Math.round(foot+b),w,h)};
  const st=Math.floor(t*6)%2;
@@ -109,8 +123,8 @@ function drawSide(g,t,rt){
  R(GDK,bx+1,by+3,3,base-by-6);R(GOLD,bx+1,by+3,1,base-by-6);R(GDK,bx+42,by+3,3,base-by-6);R(GOLD,bx+42,by+3,1,base-by-6);
  const ih=base-by-6;
  R('#2a1030',bx+4,by+3,38,ih);
- g.save();g.beginPath();g.rect(bx+4,by+3,38,ih);g.clip();R('#4a2050',bx+4,by+3,38,ih);
- g.drawImage(SD,bx+15,by+5+Math.round(Math.sin(rt*3+1)*.5));R('#3a2a30',bx+13,by+13+Math.round(Math.sin(rt*4)),2,1);g.restore();
+ g.save();g.beginPath();g.rect(bx+4,by+3,38,ih);g.clip();R('#3a1a44',bx+4,by+3,38,ih);
+ seatSide(g,bx+17,base-6,Math.round(Math.sin(rt*3+1)*.5));g.restore();
  if(CURT==='silk'){R('#ff9ac0',bx+4,by+3,8,ih);R('#e0709a',bx+4,by+3,2,ih);R('#ff9ac0',bx+34,by+3,8,ih);R('#e0709a',bx+40,by+3,2,ih);R(GOLD,bx+4,by+13,8,2);R(GOLD,bx+34,by+13,8,2);R('#fff3b0',bx+11,by+13,1,2);R('#fff3b0',bx+34,by+13,1,2)}
  else{for(let i=0;i<38;i+=3){const sw=Math.round(Math.sin(rt*3+i)*.5);for(let j=0;j<ih;j+=2)R(j%4?'#fff':'#ffd0e8',bx+4+i+sw,by+4+j,1,1);R('#fff',bx+4+i+sw,by+3+ih-1,1,1)}}
  const lan=(x,y)=>{const s=Math.round(Math.sin(rt*3+x));R('#1a1420',x+s-1,y,5,6);R('#e0102e',x+s,y+1,3,4);R(GOLD,x+s+1,y+2,1,2);R('#ffe9a8',x+s,y-1,3,1)};
@@ -123,12 +137,13 @@ function drawSide(g,t,rt){
  for(let i=0;i<12;i++){const tt=(rt*14+i*9)%50,x=64-tt,y=18+((i*11)%28)+Math.sin(tt*.2+i)*2;R(i%2?GOLD:'#fff3b0',x,y,1,1)}}
 /* 正面 */
 function carrierFront(g,x,foot,f,far){const R=(c,a,b,w,h)=>{g.fillStyle=c;g.fillRect(Math.round(x+a),Math.round(foot+b),w,h)};
- const robe=far?'#3a4258':'#6a7a9a',robe2=far?'#2a3248':'#56668a',hat=far?'#0a0810':'#1a1420',skin=far?'#c8a898':'#ffe1d0';
+ const skin=far?'#d8b8a0':'#ffd9c0',robe=far?'#2c6a6a':'#3a9a94',robe2=far?'#1c4a4a':'#2a7a76',trim=far?'#a08040':'#ffd37a',hat=far?'#10101a':'#1a1a2a',ol='#10101a';
  const st=Math.floor(f)%2,bob=Math.round(Math.sin(f*Math.PI)*.8);
- R('#1a1420',2,-1+(st?0:-1),3,2);R('#1a1420',7,-1+(st?-1:0),3,2);R(robe2,3,-4,2,3);R(robe2,7,-4,2,3);
- R('#1a1420',1,-14+bob,10,11);R(robe,2,-13+bob,8,10);R(robe2,2,-6+bob,8,2);R(GOLD,2,-8+bob,8,1);
- R('#1a1420',2,-19+bob,8,6);R(skin,3,-17+bob,6,4);R('#111',4,-16+bob,1,2);R('#111',7,-16+bob,1,2);R('#ff9aa8',3,-14+bob,1,1);R('#ff9aa8',8,-14+bob,1,1);
- R(hat,2,-20+bob,8,3);R('#e0102e',5,-22+bob,2,2)}
+ R(ol,2,-5+(st?0:-1),4,5);R(robe2,3,-5+(st?0:-1),2,3);R('#f4f4f4',2,-1+(st?0:-1),4,1);R(ol,7,-5+(st?-1:0),4,5);R(robe2,8,-5+(st?-1:0),2,3);R('#f4f4f4',7,-1+(st?-1:0),4,1);
+ R(ol,1,-15+bob,11,11);R(robe,2,-14+bob,9,10);R(trim,2,-7+bob,9,1);R('#e0102e',2,-10+bob,9,1);R('#fff',5,-14+bob,3,2);
+ R(ol,2,-22+bob,9,8);R(skin,3,-21+bob,7,6);R('#fff',4,-19+bob,2,2);R('#fff',7,-19+bob,2,2);R('#111',5,-19+bob,1,2);R('#111',8,-19+bob,1,2);R('#ff9aa8',3,-16+bob,2,1);R('#ff9aa8',8,-16+bob,2,1);R('#c05060',6,-16+bob,1,1);
+ R(ol,2,-25+bob,9,4);R(hat,3,-25+bob,7,3);R(trim,3,-22+bob,7,1);R('#e0102e',5,-27+bob,3,2);
+ R(robe,0,-13+bob,3,3);R(skin,0,-11+bob,2,2);R(robe,10,-13+bob,3,3);R(skin,11,-11+bob,2,2)}
 function maidFront(g,x,foot,t){const R=(c,a,b,w,h)=>{g.fillStyle=c;g.fillRect(Math.round(x+a),Math.round(foot+b),w,h)};
  const st=Math.floor(t*6)%2;
  R('#1a1420',2+st,-2,3,2);R('#1a1420',7-st,-2,3,2);
@@ -150,7 +165,7 @@ function drawFront(g,t,rt){
  const ih=base-by-6;
  R(GDK,bx+1,by+3,3,ih);R(GOLD,bx+1,by+3,1,ih);R(GDK,bx+40,by+3,3,ih);R(GOLD,bx+40,by+3,1,ih);
  R('#2a1030',bx+4,by+3,36,ih);R('#4a2050',bx+4,by+3,36,ih);
- lunFront(g,bx+15,by+5,Math.round(Math.sin(rt*3+1)*.5));
+ seatFront(g,bx+16,base-6,Math.round(Math.sin(rt*3+1)*.5));
  if(CURT==='silk'){R('#ff9ac0',bx+4,by+3,9,ih);R('#e0709a',bx+4,by+3,2,ih);R('#ff9ac0',bx+31,by+3,9,ih);R('#e0709a',bx+38,by+3,2,ih);R(GOLD,bx+4,by+13,9,2);R(GOLD,bx+31,by+13,9,2);R('#fff3b0',bx+12,by+13,1,2);R('#fff3b0',bx+31,by+13,1,2)}
  else{for(let i=0;i<36;i+=3){const sw=Math.round(Math.sin(rt*3+i)*.5);for(let j=0;j<ih;j+=2)R(j%4?'#fff':'#ffd0e8',bx+4+i+sw,by+4+j,1,1);R('#fff',bx+4+i+sw,by+3+ih-1,1,1)}}
  const lan=(x,y)=>{const s=Math.round(Math.sin(rt*3+x));R('#1a1420',x+s-1,y,5,6);R('#e0102e',x+s,y+1,3,4);R(GOLD,x+s+1,y+2,1,2);R('#ffe9a8',x+s,y-1,3,1)};
@@ -175,7 +190,7 @@ const loop=ts=>{const t=(ts-t0)/1000;
  requestAnimationFrame(loop)};
 requestAnimationFrame(loop);
 document.querySelectorAll('input[name=c]').forEach(e=>e.onchange=()=>{CURT=document.querySelector('input[name=c]:checked').value});
-C('cp').onclick=()=>{const v=(document.querySelector('input[name=p]:checked')||{}).value||'（還沒選）';const txt='倫妃步輦預覽 1127c：'+v+'　（簾子預設：'+(CURT==='silk'?'粉紅綢簾':'珍珠簾')+'）'+(C('note').value?'\n備註：'+C('note').value:'');
+C('cp').onclick=()=>{const v=(document.querySelector('input[name=p]:checked')||{}).value||'（還沒選）';const txt='倫妃步輦預覽 1127d：'+v+'　（簾子預設：'+(CURT==='silk'?'粉紅綢簾':'珍珠簾')+'）'+(C('note').value?'\n備註：'+C('note').value:'');
  C('out').textContent=txt;try{navigator.clipboard.writeText(txt).then(()=>{C('out').textContent='已複製：\n'+txt})}catch(e){}};
 </script>
 </body>
