@@ -6267,7 +6267,7 @@ const wearDraw=(c,im,dx,dy,s,W)=>{W=W||wear();const w=im.width*s,h=im.height*s;c
  if(W.waist)put(W.waist,w*.06,h*.64,w*.3);
  if(W.chest)put(W.chest,w*.5-w*.15,h*.6,w*.3);
  if(W.hair)put(W.hair,w*.56,h*.0,w*.38);
- if(W.hat)put(W.hat,w*.5-w*.5,h*.02-w*1.0*10/16+h*.1,w*1.0);
+ if(W.hat)put(W.hat,w*.5-w*.6,h*.15-w*1.2*11/16,w*1.2);
  if(W.hand){const id=W.hand,wand=/^w\d/.test(id);if(wand)put(id,w*.62,h*.18,w*.95);else put(id,w*.7,h*.5,w*.52)}};
 window.lunWearDraw=(c,im,dx,dy,s)=>{try{if(P()&&P().wear)wearDraw(c,im,dx,dy,s)}catch(e){}};
 const charCv=(cv,sz,W,sc)=>{const im=window.lunSP&&window.lunSP.d&&window.lunSP.d[0];const c=cv.getContext('2d');c.clearRect(0,0,cv.width,cv.height);if(!im)return;c.imageSmoothingEnabled=false;const s=sc||Math.floor(Math.min(cv.width/(im.width*1.7),cv.height/(im.height*1.35)));const dx=Math.round((cv.width-im.width*s)/2),dy=Math.round(cv.height-im.height*s-4);c.drawImage(im,dx,dy,im.width*s,im.height*s);wearDraw(c,im,dx,dy,s,W)};
@@ -6310,7 +6310,7 @@ document.head.insertAdjacentHTML('beforeend',`<style id="sp32css">
 #rg32 canvas.sg{width:100%;height:110px;background:#fff8ec;border:2px solid #ffe9a8;touch-action:none;display:block}
 #rg32 .fl{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity .5s}
 </style>`);
-document.body.insertAdjacentHTML('beforeend','<div id="sp32"><div class="bx" id="spB"></div></div><div id="rg32"><div class="bx" id="rgB"></div><div class="fl" id="rgF"></div></div>');
+document.body.insertAdjacentHTML('beforeend','<div id="sp32"><div class="bx" id="spB"></div></div><div id="rg32"><div class="bx" id="rzB"></div><div class="fl" id="rzF"></div></div>');
 const B=()=>g('spB');
 const closeP=()=>g('sp32').classList.remove('on');
 const openP=h=>{B().innerHTML=h;g('sp32').classList.add('on');B().querySelectorAll('[data-ic]').forEach(e=>{const c=document.createElement('canvas');c.width=c.height=16;c.getContext('2d').drawImage(icon(e.dataset.ic),0,0);e.replaceWith(c)})};
@@ -6341,23 +6341,23 @@ const faceURL=()=>{const im=window.lunSP&&window.lunSP.d&&window.lunSP.d[0];cons
 const cardHTML=()=>{const p=P(),c=p.card||{};return '<div class="card32"><div class="t">火格華茲魔法學院　學生證</div><img class="ph" src="'+faceURL()+'"><div class="n">'+(p.name||'倫')+'</div><div class="s">學院：'+(HN[p.hog&&p.hog.house]||'（尚未分院）')+'<br>位階：'+rank().n+'<br>簽名：'+(c.sig?'<img class="sg" src="'+c.sig+'">':'')+'</div><div class="st">已註冊</div><div class="no">No.'+(c.no||'0000')+'</div></div>'};
 const regOpen=()=>{const p=P();if(!p)return;
  if(p.card){openP('<h3>學生證</h3>'+cardHTML()+'<button class="cl" id="spX">關閉</button>');g('spX').onclick=closeP;return}
- closeP();const bx=g('rgB'),o=g('rg32');o.classList.add('on');
+ closeP();const bx=g('rzB'),o=g('rg32');o.classList.add('on');
  const S={sig:''};
- const s1=()=>{bx.innerHTML='<h3 style="margin:0 0 6px;font-weight:400;color:#ffe9a8">入學註冊（1／4）填表</h3><p class="lt" style="font-size:15px;line-height:2">姓名：<b>'+(p.name||'倫')+'</b>\n學院：<b>'+(HN[p.hog&&p.hog.house]||'（還沒分院，先去見分類帽）')+'</b>\n入學日：<b>12 月 20 日</b>\n緊急聯絡人：<b>海狗（嗷）</b></p><button class="bt pri" id="rgN" style="width:100%;height:48px;border:2px solid #fff;background:#e0102e;color:#fff;font:inherit;font-size:16px;letter-spacing:.2em">確認無誤，下一步</button><button id="rgC" style="width:100%;height:44px;margin-top:6px;border:2px solid #ffe9a8;background:#140a2c;color:#ffe9a8;font:inherit">先不要</button>';
-  g('rgC').onclick=()=>o.classList.remove('on');g('rgN').onclick=()=>{if(!(p.hog&&p.hog.house)){toast('先去見分類帽（序章）再來註冊');return}s2()}};
- const s2=()=>{bx.innerHTML='<h3 style="margin:0 0 6px;font-weight:400;color:#ffe9a8">入學註冊（2／4）簽名</h3><p class="co" style="font-size:13px">在下面用手指簽下你的名字。</p><canvas class="sg" id="rgS" width="400" height="160"></canvas><div style="display:flex;gap:8px;margin-top:8px"><button id="rgX" style="flex:1;height:46px;border:2px solid #ffe9a8;background:#140a2c;color:#ffe9a8;font:inherit">重簽</button><button id="rgO" style="flex:2;height:46px;border:2px solid #fff;background:#e0102e;color:#fff;font:inherit;letter-spacing:.2em">簽好了</button></div>';
-  const cv=g('rgS'),c=cv.getContext('2d');c.lineCap='round';c.lineJoin='round';c.strokeStyle='#14203a';c.lineWidth=5;let dr=false,lx=0,ly=0,any=false;
+ const s1=()=>{bx.innerHTML='<h3 style="margin:0 0 6px;font-weight:400;color:#ffe9a8">入學註冊（1／4）填表</h3><p class="lt" style="font-size:15px;line-height:2">姓名：<b>'+(p.name||'倫')+'</b>\n學院：<b>'+(HN[p.hog&&p.hog.house]||'（還沒分院，先去見分類帽）')+'</b>\n入學日：<b>12 月 20 日</b>\n緊急聯絡人：<b>海狗（嗷）</b></p><button class="bt pri" id="rzN" style="width:100%;height:48px;border:2px solid #fff;background:#e0102e;color:#fff;font:inherit;font-size:16px;letter-spacing:.2em">確認無誤，下一步</button><button id="rzC" style="width:100%;height:44px;margin-top:6px;border:2px solid #ffe9a8;background:#140a2c;color:#ffe9a8;font:inherit">先不要</button>';
+  g('rzC').onclick=()=>o.classList.remove('on');g('rzN').onclick=()=>{if(!(p.hog&&p.hog.house)){toast('先去見分類帽（序章）再來註冊');return}s2()}};
+ const s2=()=>{bx.innerHTML='<h3 style="margin:0 0 6px;font-weight:400;color:#ffe9a8">入學註冊（2／4）簽名</h3><p class="co" style="font-size:13px">在下面用手指簽下你的名字。</p><canvas class="sg" id="rzS" width="400" height="160"></canvas><div style="display:flex;gap:8px;margin-top:8px"><button id="rzX" style="flex:1;height:46px;border:2px solid #ffe9a8;background:#140a2c;color:#ffe9a8;font:inherit">重簽</button><button id="rzO" style="flex:2;height:46px;border:2px solid #fff;background:#e0102e;color:#fff;font:inherit;letter-spacing:.2em">簽好了</button></div>';
+  const cv=g('rzS'),c=cv.getContext('2d');c.lineCap='round';c.lineJoin='round';c.strokeStyle='#14203a';c.lineWidth=5;let dr=false,lx=0,ly=0,any=false;
   const pos=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width*cv.width,(e.clientY-r.top)/r.height*cv.height]};
   cv.onpointerdown=e=>{e.preventDefault();dr=true;[lx,ly]=pos(e);try{cv.setPointerCapture(e.pointerId)}catch(x){}c.beginPath();c.arc(lx,ly,2.5,0,7);c.fillStyle='#14203a';c.fill();any=true};
   cv.onpointermove=e=>{if(!dr)return;e.preventDefault();const[x,y]=pos(e);c.beginPath();c.moveTo(lx,ly);c.lineTo(x,y);c.stroke();lx=x;ly=y};
   cv.onpointerup=cv.onpointercancel=()=>{dr=false};
-  g('rgX').onclick=()=>{c.clearRect(0,0,cv.width,cv.height);any=false};
-  g('rgO').onclick=()=>{if(!any){toast('先簽名');return}const t=document.createElement('canvas');t.width=200;t.height=80;const tc=t.getContext('2d');tc.drawImage(cv,0,0,200,80);S.sig=t.toDataURL();s3()}};
- const s3=()=>{bx.innerHTML='<h3 style="margin:0 0 6px;font-weight:400;color:#ffe9a8">入學註冊（3／4）拍照</h3><p class="co" style="font-size:13px">站好，看鏡頭。</p><div class="pv"><div><canvas id="rgP" width="120" height="120" style="width:100%;image-rendering:pixelated;background:radial-gradient(#3a2060,#140a2c);border:2px solid #ffe9a8"></canvas></div></div><button id="rgK" style="width:100%;height:52px;border:2px solid #fff;background:#e0102e;color:#fff;font:inherit;font-size:18px;letter-spacing:.3em">喀嚓</button>';
-  charCv(g('rgP'),120,{});g('rgK').onclick=()=>{const f=g('rgF');f.style.transition='none';f.style.opacity='1';try{A.tone(1200,.08,'square',.05);A.tone(600,.1,'square',.05,.06)}catch(e){}setTimeout(()=>{f.style.transition='opacity .6s';f.style.opacity='0'},60);setTimeout(s4,700)}};
- const s4=()=>{bx.innerHTML='<h3 style="margin:0 0 6px;font-weight:400;color:#ffe9a8">入學註冊（4／4）蓋章</h3><p class="co" style="font-size:13px">校長要親手蓋章。（點下面的按鈕）</p><button id="rgS4" style="width:100%;height:64px;border:3px solid #fff;background:#b3182f;color:#fff;font:inherit;font-size:22px;letter-spacing:.4em">蓋章！</button>';
-  g('rgS4').onclick=()=>{try{A.tone(120,.2,'square',.08);A.tone(80,.3,'sawtooth',.06,.08)}catch(e){}p.card={no:String(1000+Math.floor(Math.random()*9000)),ts:Date.now(),sig:S.sig};sv();syncTitles();
-   bx.innerHTML='<h3 style="margin:0 0 6px;font-weight:400;color:#ffe9a8">註冊完成！</h3><div id="rgCd"></div><p class="co" style="text-align:center">學生證發下來了。位階：'+rank().n+'。借書、進圖書館都能用。</p><button id="rgDn" style="width:100%;height:48px;border:2px solid #ffe9a8;background:#140a2c;color:#ffe9a8;font:inherit;letter-spacing:.2em">收好</button>';g('rgCd').innerHTML=cardHTML();g('rgDn').onclick=()=>o.classList.remove('on')}};
+  g('rzX').onclick=()=>{c.clearRect(0,0,cv.width,cv.height);any=false};
+  g('rzO').onclick=()=>{if(!any){toast('先簽名');return}const t=document.createElement('canvas');t.width=200;t.height=80;const tc=t.getContext('2d');tc.drawImage(cv,0,0,200,80);S.sig=t.toDataURL();s3()}};
+ const s3=()=>{bx.innerHTML='<h3 style="margin:0 0 6px;font-weight:400;color:#ffe9a8">入學註冊（3／4）拍照</h3><p class="co" style="font-size:13px">站好，看鏡頭。</p><div class="pv"><div><canvas id="rzP" width="120" height="120" style="width:100%;image-rendering:pixelated;background:radial-gradient(#3a2060,#140a2c);border:2px solid #ffe9a8"></canvas></div></div><button id="rzK" style="width:100%;height:52px;border:2px solid #fff;background:#e0102e;color:#fff;font:inherit;font-size:18px;letter-spacing:.3em">喀嚓</button>';
+  charCv(g('rzP'),120,{});g('rzK').onclick=()=>{const f=g('rzF');f.style.transition='none';f.style.opacity='1';try{A.tone(1200,.08,'square',.05);A.tone(600,.1,'square',.05,.06)}catch(e){}setTimeout(()=>{f.style.transition='opacity .6s';f.style.opacity='0'},60);setTimeout(s4,700)}};
+ const s4=()=>{bx.innerHTML='<h3 style="margin:0 0 6px;font-weight:400;color:#ffe9a8">入學註冊（4／4）蓋章</h3><p class="co" style="font-size:13px">校長要親手蓋章。（點下面的按鈕）</p><button id="rzS4" style="width:100%;height:64px;border:3px solid #fff;background:#b3182f;color:#fff;font:inherit;font-size:22px;letter-spacing:.4em">蓋章！</button>';
+  g('rzS4').onclick=()=>{try{A.tone(120,.2,'square',.08);A.tone(80,.3,'sawtooth',.06,.08)}catch(e){}p.card={no:String(1000+Math.floor(Math.random()*9000)),ts:Date.now(),sig:S.sig};sv();syncTitles();
+   bx.innerHTML='<h3 style="margin:0 0 6px;font-weight:400;color:#ffe9a8">註冊完成！</h3><div id="rzCd"></div><p class="co" style="text-align:center">學生證發下來了。位階：'+rank().n+'。借書、進圖書館都能用。</p><button id="rzDn" style="width:100%;height:48px;border:2px solid #ffe9a8;background:#140a2c;color:#ffe9a8;font:inherit;letter-spacing:.2em">收好</button>';g('rzCd').innerHTML=cardHTML();g('rzDn').onclick=()=>o.classList.remove('on')}};
  s1()};
 /* ---------- 位階與稱號 ---------- */
 const done=k=>{const p=P();return !!(p&&p[k]&&p[k].done)};
@@ -6527,11 +6527,11 @@ const play=k=>{const R=REALMS[k];if(!R)return;g('fmM').style.display='none';g('f
   const gy=drawScene(c,W,H,A0,T,H-70);
   const mk=boss?A0.boss:A0.m[0],im=mSprite(mk,boss),ms=Math.max(1,Math.floor(56/Math.max(im.width,im.height)*(boss?1.5:1)));
   /* 倫 */
-  let lx=W*.14+Math.min(a,4)/4*W*.18;const wk=a<4;const lf=SPs?SPs[wk?Math.floor(a*5)&1:0]:null;const ls=4;
+  let lx=W*.14+Math.min(a,4)/4*W*.18;const wk=a<4;const lf=SPs?SPs[wk?Math.floor(a*5)&1:0]:null;const ls=3;
   if(lf)c.drawImage(lf,Math.round(lx),Math.round(gy-lf.height*ls+2),lf.width*ls,lf.height*ls);
   const hx=lx+lf.width*ls-6,hy=gy-lf.height*ls*.55;
   /* 怪物 */
-  let mx=W*.74-im.width*ms/2,alive=a<10,hurt=0;
+  let mx=W*.78-im.width*ms/2,alive=a<10,hurt=0;
   if(a>=4&&a<6)mx=W*.74-im.width*ms/2+(1-(a-4)/2)*(W*.5);
   const casts=[6.2,7.2,8.2,9.1];
   if(a>=4&&a<10){const bob=Math.sin(T*4)*2;if(alive){c.save();if(casts.some(t=>a>t+.12&&a<t+.4)){c.globalAlpha=.5}c.drawImage(im,Math.round(mx),Math.round(gy-im.height*ms-4+bob),im.width*ms,im.height*ms);c.restore()}}
