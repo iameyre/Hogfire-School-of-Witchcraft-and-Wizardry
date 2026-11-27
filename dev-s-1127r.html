@@ -2339,7 +2339,7 @@ const renderHome=()=>{const p=P();if(!p)return;const S=rStats();
   const nx=AREAS.find(a=>!rp().clear[a.id]);try{window.lunHomeCard&&window.lunHomeCard()}catch(e){}$('rhTip').textContent=nx?(areaOK(nx)?`下一站：${nx.n}。打完 ${nx.k} 隻怪會出現王。`:`下一站：${nx.n}，Lv${nx.lv} 開放。`):'六個地區都通關了，你就是倫生巔峰。';
   const cv=$('rhcv'),W=Math.round(cv.clientWidth/2)||195,H=150,g=pxCanvas(cv,W,H);const eq=ensureAv().eq;const fr=[avCanvas(eq,1,0),avCanvas(eq,1,1)];
   cancelAnimationFrame(homeRaf);const t0=performance.now();
-  let lastF=0;const tk=t=>{if(!homeOn)return;const tt=(t-t0)/1000;if(lzxOn()&&t-lastF>120){lastF=t;fr[0]=avCanvas(eq,1,0);fr[1]=avCanvas(eq,1,1)}const gy=drawScene(g,W,H,homeArea(),tt);const rf=mountOn()&&riderFrame(tt),im=rf||fr[(tt*2|0)%2],bob=Math.round(Math.sin(tt*3)*1.2),s=rf?Math.min(2,Math.floor((gy-6)/im.height*4)/4):2;drawPet(g,W/2-im.width*s/2-14,gy+1,tt,2);
+  let lastF=0;const tk=t=>{if(!homeOn)return;const tt=(t-t0)/1000;if(lzxOn()&&t-lastF>120){lastF=t;fr[0]=avCanvas(eq,1,0);fr[1]=avCanvas(eq,1,1)}const gy=drawScene(g,W,H,homeArea(),tt);if(window.lunHomeDraw&&window.lunHomeDraw(g,W,H,gy,tt,fr)){homeRaf=requestAnimationFrame(tk);return}const rf=mountOn()&&riderFrame(tt),im=rf||fr[(tt*2|0)%2],bob=Math.round(Math.sin(tt*3)*1.2),s=rf?Math.min(2,Math.floor((gy-6)/im.height*4)/4):2;drawPet(g,W/2-im.width*s/2-14,gy+1,tt,2);
     g.fillStyle='rgba(0,0,0,.25)';g.fillRect(W/2-18,gy-2,36,3);g.drawImage(im,W/2-im.width*s/2,gy-im.height*s+2+bob,im.width*s,im.height*s);homeRaf=requestAnimationFrame(tk)};homeRaf=requestAnimationFrame(tk)};
 const rHome=()=>{if(kbusy){rToast('抽卡中，等一下。<button class="rtub" onclick="rUnstick()">卡住了？解除</button>');return}closeSub();['rmap','rgach','rres'].forEach(rClose);showTab('draw');$('s-main').classList.add('rh');$('rhome').classList.add('on');homeOn=true;renderHome();setNavOn('home');giveStarter()};
 const leaveHome=()=>{homeOn=false;cancelAnimationFrame(homeRaf);$('rhome').classList.remove('on');$('s-main').classList.remove('rh')};
@@ -4716,9 +4716,10 @@ document.head.insertAdjacentHTML('beforeend',`<style id="cl24">
 .rnode.cave{display:none!important}
 #kquest{display:none!important}
 </style>`);
-const KEEP=['kdFr','kdFr2','kdFr3','kdFr4','kdPt','kdPt2','kdPt3','kdPt4','kdPt5','kdPt6','kdSc','kdSc3','kdSc5','kdSc6','kdSc7','kdSc8','kdScA','kdScR','kdRv','kdSd','kdSd2'];/* 雲 2026-11-27 規則：DEV 一律只顯示「這次要測的」東西，其他全收掉；這次要測的是各選單有沒有因為刪功能而壞掉，不需要按鈕 */
+const KEEP=['kdSc','kdSc7a','kdSc7b','kdScA','kdScR','kdRv','kdSd','kdSd2','kdPt4','kdPt6','kdFr4'];/* 雲 2026-11-27 規則：DEV 一律只顯示「這次要測的」東西，其他全收掉；這次要測的是各選單有沒有因為刪功能而壞掉，不需要按鈕 */
 const clean=()=>{const top=document.getElementById('kdTop');if(!top)return;[...top.querySelectorAll('button')].forEach(b=>{if(!KEEP.includes(b.id))b.remove()})};
-clean();setTimeout(clean,0);setTimeout(clean,1500);
+const hideRest=()=>{const kdi=document.querySelector('#kdev .kdi');if(!kdi)return;const keep=new Set(['kdevN','kdevGate','kdQ','kdNoHit','kdTopH','kdTop']);let keepNext=false;[...kdi.children].forEach(el=>{if(el.tagName==='HEADER'||keep.has(el.id))return;if(el.tagName==='H4'&&el.textContent.trim()==='重來'){keepNext=true;return}if(keepNext&&el.classList.contains('kdg')){keepNext=false;return}el.style.display='none'})};
+clean();hideRest();setTimeout(()=>{clean();hideRest()},0);setTimeout(()=>{clean();hideRest()},1500);
 {const h=document.getElementById('kdTopH');if(h)h.textContent='本次值得測試：第 2 章夜間實習＋第 4 章魔藥課（有「直接通關」鈕）';}
 })();
 
@@ -5588,21 +5589,25 @@ const snitch=(round,rk,rn)=>new Promise(res=>{
   if(f){g2.save();g2.translate(Math.round(Pl.x),Math.round(Pl.y));g2.scale(face,1);g2.drawImage(f,-20,-17);g2.restore()}else{g2.fillStyle='#e0102e';g2.fillRect(Math.round(Pl.x-5),Math.round(Pl.y-5),10,10)}
   raf2=requestAnimationFrame(tick)};
  raf2=requestAnimationFrame(tick)});
-/* ---------- 日記（互動寫字：倫在書上寫字→字被書吃掉→被拉進回憶）----------
-   2026-11-27 雲回饋：字體改點陣字（DotGothic16）；字消失用粒子（把字畫成點陣粒子，旋轉吸進書頁中心）；
-   手機點輸入框不要跳位置：輸入框放在畫面上半部（鍵盤不會蓋到）、版面一直固定（輸入列只隱藏不收合）、focus 不捲動。 */
+/* ---------- 日記（互動寫字：倫用手指在紙上「手寫」→字被書吃掉，像灰燼隨風散去→被拉進回憶）----------
+   2026-11-27 雲回饋：寫字要真人手寫（不要打字）；粒子消散要有「隨風消失」的感覺；字體點陣字；手機不要跳位置（現在沒有輸入框，沒有鍵盤）。
+   書自己寫的字用點陣字 DotGothic16；玩家的字是在畫布上用手指／滑鼠畫出來的筆跡（深藍墨水，快慢會影響粗細）。 */
 document.head.insertAdjacentHTML('beforeend',`<style id="dr28css">
-#dr28,#dr28 *{-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
-#dr28{position:fixed;inset:0;z-index:143;background:radial-gradient(ellipse at 50% 40%,#2a1a10 0,#050302 80%);display:none;flex-direction:column;align-items:center;justify-content:flex-start;padding:calc(var(--st) + 14px) 14px 14px;gap:10px;font-family:DotGothic16,sans-serif;color:#3a0a0a;overflow:hidden;overscroll-behavior:none;touch-action:manipulation}
+#dr28,#dr28 *{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+#dr28{position:fixed;inset:0;z-index:143;background:radial-gradient(ellipse at 50% 40%,#2a1a10 0,#050302 80%);display:none;flex-direction:column;align-items:center;justify-content:flex-start;padding:calc(var(--st) + 14px) 14px 14px;gap:10px;font-family:DotGothic16,sans-serif;color:#3a0a0a;overflow:hidden;overscroll-behavior:none;touch-action:none}
 #dr28.on{display:flex}
 #dr28 .ti{font:400 16px DotGothic16,sans-serif;letter-spacing:.3em;color:#ffe9a8;text-shadow:0 2px 0 #000}
-#dr28 .in{display:flex;gap:8px;width:min(92vw,400px);flex:0 0 auto}
+#dr28 .pg{position:relative;width:min(92vw,400px);height:56vh;max-height:500px;flex:0 0 auto;background:linear-gradient(180deg,#efe0b8,#d8c28c);border:3px solid #5a3a1a;box-shadow:0 0 0 3px #2a1a0a,0 12px 40px #000c,inset 0 0 40px #8a6a3a66;overflow:hidden}
+#dr28 .bk{position:absolute;left:0;right:0;top:0;padding:16px 18px;font-size:19px;line-height:1.8;letter-spacing:.08em;min-height:90px}
+#dr28 .wr{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair;pointer-events:none}
+#dr28 .wr.on{pointer-events:auto}
+#dr28 .hn{position:absolute;left:0;right:0;bottom:10px;text-align:center;font-size:14px;letter-spacing:.15em;color:#5a3a1a99;pointer-events:none;transition:opacity .3s}
+#dr28 .pp{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#dr28 .in{display:flex;gap:10px;width:min(92vw,400px);flex:0 0 auto}
 #dr28 .in.off{visibility:hidden}
-#dr28 input{flex:1;min-width:0;height:52px;border:2px solid #ffe9a8;background:#140a0a;color:#ffe9a8;font:400 18px DotGothic16,sans-serif;padding:0 12px;border-radius:0;outline:none}
-#dr28 .in button{width:96px;height:52px;border:3px solid #6a4a1e;background:linear-gradient(180deg,#fff3d2,#d9ad5e);color:#4a2a10;font:400 17px DotGothic16,sans-serif;letter-spacing:.2em;border-radius:0;padding:0}
-#dr28 .pg{position:relative;width:min(92vw,400px);height:46vh;max-height:420px;flex:0 0 auto;background:linear-gradient(180deg,#efe0b8,#d8c28c);border:3px solid #5a3a1a;box-shadow:0 0 0 3px #2a1a0a,0 12px 40px #000c,inset 0 0 40px #8a6a3a66;padding:20px 20px;overflow:hidden;font-size:20px;line-height:1.9;letter-spacing:.08em}
-#dr28 .pg p{margin:0 0 10px;min-height:1.9em}
-#dr28 .pg p.me{color:#1a2a6a}
+#dr28 .in button{flex:1;height:52px;border:3px solid #6a4a1e;background:linear-gradient(180deg,#fff3d2,#d9ad5e);color:#4a2a10;font:400 18px DotGothic16,sans-serif;letter-spacing:.2em;border-radius:0;padding:0}
+#dr28 .in button.g{background:#140a0a;color:#ffe9a8;border-color:#ffe9a8;flex:0 0 96px}
+#dr28 .in button:disabled{opacity:.4}
 #dr28 .sw{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 50%,#fff 0,#fff0 70%);opacity:0}
 #dr28.sp .pg{animation:drsp 2.2s ease-in forwards}
 #dr28.sp .sw{animation:drsw 2.2s ease-in forwards}
@@ -5610,36 +5615,54 @@ document.head.insertAdjacentHTML('beforeend',`<style id="dr28css">
 @keyframes drsw{0%{opacity:0}60%{opacity:.2}100%{opacity:1}}
 </style>`);
 const dr=document.createElement('div');dr.id='dr28';
-dr.innerHTML='<div class="ti">湯姆瑞英的日記</div><div class="in off" id="drI"><input id="drT" maxlength="24" placeholder="在這裡寫字" autocomplete="off" enterkeyhint="done"><button id="drB">寫下去</button></div><div class="pg" id="drP"></div><div class="sw"></div>';
+dr.innerHTML='<div class="ti">湯姆瑞英的日記</div><div class="pg" id="drP"><div class="bk" id="drK"></div><canvas class="wr" id="drW"></canvas><div class="hn" id="drH"></div></div><div class="in off" id="drI"><button class="g" id="drC">重寫</button><button id="drB" disabled>寫好了</button></div><div class="sw"></div>';
 document.body.appendChild(dr);
 const diary=()=>new Promise(res=>{
- const P1=$$('drP'),I=$$('drI'),T=$$('drT');dr.classList.remove('sp');dr.classList.add('on');P1.innerHTML='';
- const R1=[['你好。這裡……好久沒有人寫字了。','請寫下你的名字。'],['好名字。我是湯姆瑞英。你相信，這所學校有一間沒人找得到的密室嗎？','寫下你的想法。'],['你寫得很好，繼續。你最害怕的是什麼？','寫下你害怕的事。'],['再多寫一點，我就能讓你看見我的記憶……','隨便寫些什麼都可以。']];
+ const P1=$$('drP'),K1=$$('drK'),Wc=$$('drW'),I=$$('drI'),H1=$$('drH');dr.classList.remove('sp');dr.classList.add('on');K1.innerHTML='';
+ const R1=[['你好。這裡……好久沒有人寫字了。','用手指在紙上，寫下你的名字。'],['好名字。我是湯姆瑞英。你相信，這所學校有一間沒人找得到的密室嗎？','寫下你的想法。'],['你寫得很好，繼續。你最害怕的是什麼？','寫下你害怕的事。'],['再多寫一點，我就能讓你看見我的記憶……','隨便寫些什麼都可以。']];
  const sl2=ms=>new Promise(r=>setTimeout(r,ms));
- const ink=(txt,cls)=>new Promise(r=>{const p=document.createElement('p');if(cls)p.className=cls;const a=document.createTextNode(''),sp=document.createElement('span');sp.style.visibility='hidden';const b=document.createTextNode(txt);sp.appendChild(b);p.append(a,sp);P1.appendChild(p);let i=0;const iv=setInterval(()=>{i++;a.data=txt.slice(0,i);b.data=txt.slice(i);if(i%4===1)sfx(500+Math.random()*80,.03,'triangle',.012);if(i>=txt.length){clearInterval(iv);r(p)}},cls==='me'?35:65)});
- /* 字消失：把這一段字畫成點陣粒子，旋轉吸進書頁中心 */
- const eat=p=>new Promise(res2=>{const pr=P1.getBoundingClientRect(),W=Math.round(pr.width),H=Math.round(pr.height),cs=getComputedStyle(p);
-  const node=p.firstChild;const off=document.createElement('canvas');off.width=W;off.height=H;const og=off.getContext('2d');og.font=cs.fontSize+' DotGothic16, sans-serif';og.fillStyle=cs.color;og.textBaseline='middle';
-  const rg=document.createRange();for(let i=0;i<node.data.length;i++){rg.setStart(node,i);rg.setEnd(node,i+1);const rc=rg.getBoundingClientRect();if(rc.width<1)continue;og.fillText(node.data[i],rc.left-pr.left,rc.top-pr.top+rc.height/2)}
-  const id=og.getImageData(0,0,W,H).data,pts=[];const step=2;
-  for(let y=0;y<H;y+=step)for(let x=0;x<W;x+=step){const k=(y*W+x)*4;if(id[k+3]>120)pts.push({x,y,r:id[k],g:id[k+1],b:id[k+2]})}
-  const cap=3600;if(pts.length>cap){const f=Math.ceil(pts.length/cap);for(let i=pts.length-1;i>=0;i--)if(i%f)pts.splice(i,1)}
-  const cv3=document.createElement('canvas');cv3.width=W;cv3.height=H;cv3.style.cssText='position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;image-rendering:pixelated';P1.appendChild(cv3);const g3=cv3.getContext('2d');
-  p.style.visibility='hidden';const cx=W/2,cy=H/2;
-  pts.forEach(q=>{const dx=q.x-cx,dy=q.y-cy;q.r0=Math.hypot(dx,dy);q.a0=Math.atan2(dy,dx);q.d=(q.x/W)*.7+Math.random()*.5;q.dur=1.0+Math.random()*.7;q.spin=(Math.random()<.5?-1:1)*(2.5+Math.random()*3);q.lift=(Math.random()-.5)*14});
-  sfx(120,1.2,'sine',.05);sfx(90,1.4,'sawtooth',.03,.2);
+ const dpr=Math.min(2,window.devicePixelRatio||1);
+ const sizeW=()=>{Wc.width=Math.round(P1.clientWidth*dpr);Wc.height=Math.round(P1.clientHeight*dpr)};
+ const wg=()=>Wc.getContext('2d');
+ /* 書寫字（點陣字，逐字）*/
+ const ink=txt=>new Promise(r=>{K1.innerHTML='';const p=document.createElement('div');const a=document.createTextNode(''),sp=document.createElement('span');sp.style.visibility='hidden';const b=document.createTextNode(txt);sp.appendChild(b);p.append(a,sp);K1.appendChild(p);let i=0;const iv=setInterval(()=>{i++;a.data=txt.slice(0,i);b.data=txt.slice(i);if(i%4===1)sfx(500+Math.random()*80,.03,'triangle',.012);if(i>=txt.length){clearInterval(iv);r(p)}},65)});
+ /* 手寫：指標事件畫筆跡（快慢影響粗細，用二次曲線平滑）*/
+ let pts=0;
+ const writing=()=>new Promise(r=>{sizeW();const g=wg();g.clearRect(0,0,Wc.width,Wc.height);Wc.classList.add('on');I.classList.remove('off');pts=0;$$('drB').disabled=true;
+  let drawing=false,lx=0,ly=0,mx=0,my=0,lt=0,lw=3;
+  const pos=e=>{const rc=Wc.getBoundingClientRect();return [(e.clientX-rc.left)*dpr,(e.clientY-rc.top)*dpr]};
+  const dn=e=>{e.preventDefault();drawing=true;[lx,ly]=pos(e);mx=lx;my=ly;lt=performance.now();lw=3*dpr;try{Wc.setPointerCapture(e.pointerId)}catch(x){}g.fillStyle='#1a2a6a';g.beginPath();g.arc(lx,ly,1.6*dpr,0,6.3);g.fill();pts+=2;H1.style.opacity='0'};
+  const mv=e=>{if(!drawing)return;e.preventDefault();const [x,y]=pos(e),now=performance.now(),d=Math.hypot(x-lx,y-ly),sp=d/Math.max(1,now-lt)/dpr;const w=Math.max(1.6,Math.min(4.6,4.6-sp*1.7))*dpr;lw=lw*.6+w*.4;
+   const cx=(lx+x)/2,cy=(ly+y)/2;g.strokeStyle='#1a2a6a';g.lineCap='round';g.lineJoin='round';g.lineWidth=lw;g.beginPath();g.moveTo(mx,my);g.quadraticCurveTo(lx,ly,cx,cy);g.stroke();mx=cx;my=cy;lx=x;ly=y;lt=now;pts+=1;if(pts>14)$$('drB').disabled=false};
+  const up=e=>{if(!drawing)return;drawing=false;g.strokeStyle='#1a2a6a';g.lineWidth=lw;g.beginPath();g.moveTo(mx,my);g.lineTo(lx,ly);g.stroke();sfx(220,.04,'triangle',.01)};
+  Wc.onpointerdown=dn;Wc.onpointermove=mv;Wc.onpointerup=up;Wc.onpointercancel=up;
+  $$('drC').onclick=()=>{g.clearRect(0,0,Wc.width,Wc.height);pts=0;$$('drB').disabled=true;H1.style.opacity='1'};
+  $$('drB').onclick=()=>{if(pts<=14)return;Wc.onpointerdown=Wc.onpointermove=Wc.onpointerup=Wc.onpointercancel=null;Wc.classList.remove('on');I.classList.add('off');$$('drB').onclick=null;$$('drC').onclick=null;r()}});
+ /* 字消失：把筆跡／文字變成小粒子，像灰燼被風一陣一陣吹走 */
+ const windOff=(pts2,W,H,keepDraw)=>new Promise(res2=>{
+  const cv3=document.createElement('canvas');cv3.className='pp';cv3.width=W;cv3.height=H;P1.appendChild(cv3);const g3=cv3.getContext('2d');
+  pts2.forEach(q=>{q.d=(q.x/W)*1.2+Math.random()*.5;q.dur=1.3+Math.random()*1.3;q.vx=45+Math.random()*110;q.vy=-(6+Math.random()*28);q.ph=Math.random()*6.3;q.sw=8+Math.random()*16;q.s=q.s||2});
+  sfx(260,1.6,'sine',.03);sfx(180,2,'triangle',.02,.2);
   const t0=performance.now();const tk=now=>{const t=(now-t0)/1000;g3.clearRect(0,0,W,H);let alive=0;
-   for(const q of pts){const u=(t-q.d)/q.dur;if(u>=1)continue;alive++;let x=q.x,y=q.y,a=1,s=2;
-    if(u>0){const e=u*u*(3-2*u),rr=q.r0*(1-e),aa=q.a0+q.spin*e;x=cx+Math.cos(aa)*rr;y=cy+Math.sin(aa)*rr+q.lift*Math.sin(u*3.14);a=1-Math.pow(u,2.2);s=2-u*1.2}
-    g3.globalAlpha=Math.max(0,a);g3.fillStyle='rgb('+q.r+','+q.g+','+q.b+')';g3.fillRect(Math.round(x),Math.round(y),Math.max(1,Math.round(s)),Math.max(1,Math.round(s)));
-    if(u>0&&u<.9&&(q.x+q.y)%7===0){g3.globalAlpha=.35*(1-u);g3.fillStyle='#fff3b0';g3.fillRect(Math.round(x)-1,Math.round(y)-1,1,1)}}
-   g3.globalAlpha=1;if(alive>0&&t<3.5)requestAnimationFrame(tk);else{cv3.remove();p.remove();res2()}};
+   for(const q of pts2){const u=t-q.d;if(u>=q.dur)continue;alive++;
+    if(u<=0){g3.globalAlpha=1;g3.fillStyle='rgb('+q.r+','+q.g+','+q.b+')';g3.fillRect(q.x,q.y,q.s,q.s);continue}
+    const k=u/q.dur,x=q.x+q.vx*u*(1+u*.9),y=q.y+q.vy*u+q.sw*Math.sin(u*4+q.ph)*Math.min(1,u*2)-12*u*u;
+    g3.globalAlpha=Math.max(0,1-Math.pow(k,1.5));g3.fillStyle='rgb('+q.r+','+q.g+','+q.b+')';const sz=Math.max(1,q.s*(1-k*.55));g3.fillRect(x,y,sz,sz);
+    if(k>.15&&k<.85){g3.globalAlpha*=.35;g3.fillRect(x-q.vx*.018,y+q.vy*.01,sz,sz);g3.globalAlpha*=.6;g3.fillRect(x-q.vx*.034,y+q.vy*.02,Math.max(1,sz-1),Math.max(1,sz-1))}}
+   g3.globalAlpha=1;if(alive>0&&t<5)requestAnimationFrame(tk);else{cv3.remove();res2()}};
   requestAnimationFrame(tk)});
- const ask=()=>new Promise(r=>{I.classList.remove('off');T.value='';try{T.focus({preventScroll:true})}catch(e){T.focus()}const go=()=>{const v=(T.value||'').trim()||'……';I.classList.add('off');T.blur();$$('drB').onclick=null;T.onkeydown=null;r(v)};$$('drB').onclick=go;T.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();go()}}});
+ const sample=(src,W,H,step,ox,oy)=>{const d=src.getContext('2d').getImageData(0,0,W,H).data,out=[];for(let y=0;y<H;y+=step)for(let x=0;x<W;x+=step){const k=(y*W+x)*4;if(d[k+3]>110)out.push({x:x/(src===null?1:1)+ox,y:y+oy,r:d[k],g:d[k+1],b:d[k+2]})}return out};
+ const eatInk=async()=>{const W=Wc.width,H=Wc.height,step=Math.max(2,Math.round(2*dpr));let pp=sample(Wc,W,H,step,0,0);if(pp.length>4200){const f=Math.ceil(pp.length/4200);pp=pp.filter((_,i)=>i%f===0)}
+  const sc=1/dpr;pp.forEach(q=>{q.x*=sc;q.y*=sc;q.s=step*sc});wg().clearRect(0,0,W,H);
+  /* 粒子畫布用 css 像素 */await windOff(pp,P1.clientWidth,P1.clientHeight)};
+ const eatBook=async()=>{const rr=P1.getBoundingClientRect(),L0=rr.left+P1.clientLeft,T0=rr.top+P1.clientTop,W=P1.clientWidth,H=P1.clientHeight,node=K1.firstChild&&K1.firstChild.firstChild;if(!node)return;
+  const off=document.createElement('canvas');off.width=W;off.height=H;const og=off.getContext('2d');const cs=getComputedStyle(K1);og.font=cs.fontSize+' DotGothic16, sans-serif';og.fillStyle=cs.color;og.textBaseline='middle';
+  const rg=document.createRange();for(let i=0;i<node.data.length;i++){rg.setStart(node,i);rg.setEnd(node,i+1);const rc=rg.getBoundingClientRect();if(rc.width<1)continue;og.fillText(node.data[i],rc.left-L0,rc.top-T0+rc.height/2)}
+  const step=2;let pp=sample(off,W,H,step,0,0);pp.forEach(q=>{q.s=step});K1.style.visibility='hidden';await windOff(pp,W,H);K1.innerHTML='';K1.style.visibility=''};
  (async()=>{
-  for(const [bk,hint] of R1){const bp=await ink(bk);T.placeholder=hint;const v=await ask();const mp=await ink(v,'me');await sl2(700);await eat(mp);await eat(bp)}
+  for(const [bk,hint] of R1){await ink(bk);H1.textContent=hint;H1.style.opacity='1';await writing();await sl2(600);await eatInk();await eatBook()}
   await ink('謝謝。你的字，我都收下了。');await sl2(900);
-  sfx(80,2,'sawtooth',.05);dr.classList.add('sp');await sl2(2300);dr.classList.remove('on','sp');P1.innerHTML='';res()})()});
+  sfx(80,2,'sawtooth',.05);dr.classList.add('sp');await sl2(2300);dr.classList.remove('on','sp');K1.innerHTML='';res()})()});
 /* ---------- 引擎 ---------- */
 let ctx=null,pendF=null;
 const setBg=k=>{BG=k;fxk='';fxt=0};
@@ -5702,7 +5725,7 @@ const CH={
    ['bg','memory'],['name','回憶・五十年前'],['t','x','眼前不是圖書館了。是一間老舊的教室，窗外下著雨。'],
    ['t','w','……你終於來了。我等了五十年，才等到一個願意寫字的人。'],['t','l','你是……湯姆瑞英？'],['t','w','我是這所學校最優秀的學生，也是最孤單的。大家怕我，因為我什麼都做得到。'],
    ['t','w','我把心事寫在日記裡，因為只有它不會離開我。'],['t','l','那你為什麼要吃掉我寫的字？'],['t','w','字，是靈魂的碎片。你寫得越多，我就越像一個活人。'],['t','w','謝謝你。你的字，很好吃。'],
-   ['bg','library'],['name','圖書館・深夜'],['t','x','回到圖書館。日記懸在半空，翻開的頁面滲出黑色的墨水。'],['t','d','我就說不要翻！'],
+   ['mark','B'],['bg','library'],['name','圖書館・深夜'],['t','x','回到圖書館。日記懸在半空，翻開的頁面滲出黑色的墨水。'],['t','d','我就說不要翻！'],
    ['t','x','墨水在地上聚成一個人影。一個披著黑斗篷的男人，從日記裡走了出來。'],['t','v','我是佛達魔。是他等了五十年的人，也是他想變成的人。'],
    ['t','v','阿茲卡班的紙條，是我留的。禁藥讓你寫字更快，也讓這本日記更餓。'],['t','l','原來那是陷阱……'],['t','v','把你的守護神交出來。那是最乾淨的魔力。'],['t','d','倫，後退！'],['t','l','我不會交的。'],['t','v','那就用搶的。'],
    ['do',async()=>{gotPots()}],['fight','voldy'],
@@ -5818,6 +5841,7 @@ const reviewOpen=()=>{const all=collect(),ed=rvEd();const L=$$('rvL');L.innerHTM
 window.lunReviewOpen=reviewOpen;
 if(location.hash==='#review')setTimeout(reviewOpen,1200);
 /* ---------- 開章 ---------- */
+const runPart=(n,which)=>{if(!P())return;try{leaveHome&&leaveHome();closeSub&&closeSub()}catch(e){}try{A.init()}catch(e){}const st=CH[n].steps(),i=st.findIndex(x=>x[0]==='mark');run(which==='A'?st.slice(0,i):st.slice(i+1),()=>{try{rHome()}catch(e){}})};
 const enterCh=n=>{const D=CH[n];if(!D||!P())return;try{leaveHome&&leaveHome();closeSub&&closeSub()}catch(e){}try{A.init()}catch(e){}
  if(!window.LUN_DEV&&!D.need()){try{rToast(D.needTx)}catch(e){}return}
  if(n===8&&!window.LUN_DEV&&Date.now()<OPEN7){const days=Math.ceil((OPEN7-Date.now())/86400000);setBg('hall');openRoot();ctx={steps:[['bg','hall'],['t','a',`開學典禮的日子是 12 月 20 日，還有 ${days} 天。`],['t','a','大禮堂還在佈置，裡面的東西，現在不能偷看。'],['t','d','我偷看了一眼。……沒什麼，我什麼都沒看到。'],['t','a','提前祝你生日快樂。典禮那天，再來吧。']],i:0,onDone:()=>{try{rHome()}catch(e){}}};loop();return}
@@ -5836,10 +5860,11 @@ window.lunChaptersOpen=hubOpen;
 const rg=$$('rhgo2');
 if(rg){rg.insertAdjacentHTML('beforeend','<button class="rq hub28" id="hbGo">章節</button>');$$('hbGo').onclick=()=>{try{A.S.tap()}catch(e){}hubOpen()}}
 const top=$$('kdTop');
-if(top){top.insertAdjacentHTML('afterbegin','<button id="kdSc">⑦ 章節總覽（第 1～8 章）</button><button id="kdSc3">⑦a 第 3 章領養生物課：進去玩</button><button id="kdSc5">⑦b 第 5 章守護神課（崔狂魔）：進去玩</button><button id="kdSc6">⑦c 第 6 章學院盃（金探子）：進去玩</button><button id="kdSc7">⑦d 第 7 章日記（湯姆瑞英＆佛達魔）：進去玩</button><button id="kdSc8">⑦e 第 8 章開學典禮：進去玩</button><button id="kdScA">⑦f 第 3、5、6、7、8 章：全部直接通關</button><button id="kdScR">⑦g 清掉第 3、5、6、7、8 章進度</button><button id="kdRv">⑨ 對話審稿（所有劇情對話一張一張，可改字）</button>');
+if(top){top.insertAdjacentHTML('afterbegin','<button id="kdSc">⑦ 章節總覽（第 1～8 章，可以跳著玩）</button><button id="kdSc7a">⑦h 第 7 章（一）日記：手寫→被吃掉→回憶→湯姆瑞英</button><button id="kdSc7b">⑦i 第 7 章（二）直接面對佛達魔：墨水滲出→戰鬥→結尾</button><button id="kdScA">⑦f 第 3、5、6、7、8 章：全部直接通關</button><button id="kdScR">⑦g 清掉第 3、5、6、7、8 章進度</button><button id="kdRv">⑨ 對話審稿（所有劇情對話一張一張，可改字）</button>');
  $$('kdSc').onclick=()=>{try{devClose()}catch(e){}hubOpen()};
+ $$('kdSc7a').onclick=()=>{try{devClose()}catch(e){}runPart(7,'A')};
+ $$('kdSc7b').onclick=()=>{try{devClose()}catch(e){}runPart(7,'B')};
  $$('kdRv').onclick=()=>{try{devClose()}catch(e){}reviewOpen()};
- [3,5,6,7,8].forEach(n=>{$$('kdSc'+n).onclick=()=>{try{devClose()}catch(e){}enterCh(n)}});
  $$('kdScA').onclick=()=>{const p=P();if(!p)return;try{devClose()}catch(e){}p.dk=p.dk||{};p.dk.patr=1;[3,5,6,7,8].forEach(n=>{const c=S('ch'+n);if(!c.done){c.done=1;CH[n].reward()}});sv();try{rToast('第 3、5、6、7、8 章已全部通關')}catch(e){}};
  $$('kdScR').onclick=()=>{const p=P();if(!p)return;[3,5,6,7,8].forEach(n=>{delete p['ch'+n]});if(p.dk)delete p.dk.patr;if(p.titles)p.titles=p.titles.filter(t=>!['領養員','守護神使','學院盃冠軍','日記破解者','壽星'].includes(t));sv();try{rToast('已清掉第 3、5、6、7、8 章進度')}catch(e){}}}
 })();
@@ -5940,6 +5965,32 @@ const top=document.getElementById('kdTop');
 if(top){top.insertAdjacentHTML('afterbegin','<button id="kdSd">⑧ 直接拿到倫妃步輦並騎上</button><button id="kdSd2">⑧b 步輦換簾子（綢簾／珍珠簾）</button>');
  document.getElementById('kdSd').onclick=()=>{if(!P())return;try{devClose()}catch(e){}window.lunSedanGrant();try{rToast('已拿到倫妃步輦')}catch(e){}};
  document.getElementById('kdSd2').onclick=()=>{const p=P();if(!p)return;p.sedanBead=!p.sedanBead;try{save()}catch(e){}try{rToast('步輦簾子：'+(p.sedanBead?'珍珠簾':'粉紅綢簾'))}catch(e){}}}
+})();
+
+/* ===== v30.0 主畫面點人物（或人物加坐騎）會轉向：正面→右→左（雲 2026-11-27 指定）=====
+   坐騎是倫妃步輦：有前／右／左三個方向；其他坐騎只有側面（右、左）；沒騎坐騎：正面（原本的裝備小人）、右、左（側面小人，沒有裝備外觀）。
+   做法：主畫面的重畫迴圈（renderHome 的 tk）在畫角色前呼叫 window.lunHomeDraw（要在主檔加一行掛勾，見 交接紀錄），回傳 true 代表已經畫好。 */
+(()=>{
+if(window.lunHomeDraw)return;
+let face='',lastM='#';
+const cyc=m=>m==='sedan'?['F','R','L']:m?['R','L']:['F','R','L'];
+const defFace=m=>m?'R':'F';
+window.lunHomeTurn=()=>{const m=(typeof mountOn==='function'&&mountOn())||'';const c=cyc(m),i=c.indexOf(face);face=c[(i+1)%c.length]};
+window.lunHomeDraw=(g,W,H,gy,tt,fr)=>{try{
+ const m=(typeof mountOn==='function'&&mountOn())||'';if(m!==lastM){lastM=m;face=defFace(m)}if(!face)face=defFace(m);
+ let im,s,flip=false;
+ if(m==='sedan'&&window.lunSedanFrame){im=window.lunSedanFrame(face,tt);s=Math.min(1.5,Math.floor((gy-6)/im.height*4)/4)}
+ else if(m){const rf=riderFrame(tt);if(!rf)return false;im=rf;s=Math.min(2,Math.floor((gy-6)/im.height*4)/4);flip=face==='L'}
+ else if(face==='F'){im=fr[(tt*2|0)%2];s=2}
+ else{const sp=window.lunSP&&window.lunSP.s;if(!sp)return false;im=sp[Math.floor(tt*3)&1];s=3;flip=face==='L'}
+ const bob=Math.round(Math.sin(tt*3)*1.2),dy=gy-im.height*s+2+bob;
+ drawPet(g,W/2-im.width*s/2-14,gy+1,tt,2);
+ g.fillStyle='rgba(0,0,0,.25)';g.fillRect(W/2-18,gy-2,36,3);
+ if(flip){g.save();g.translate(W/2,0);g.scale(-1,1);g.drawImage(im,-im.width*s/2,dy,im.width*s,im.height*s);g.restore()}
+ else g.drawImage(im,W/2-im.width*s/2,dy,im.width*s,im.height*s);
+ return true}catch(e){return false}};
+const cv=document.getElementById('rhcv');
+if(cv){cv.style.cursor='pointer';cv.addEventListener('click',()=>{try{window.lunHomeTurn();A.S.tap&&A.S.tap()}catch(e){}})}
 })();
 
 }
