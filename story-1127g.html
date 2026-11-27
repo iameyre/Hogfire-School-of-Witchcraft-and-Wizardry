@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>倫妃步輦・預覽 1127f</title>
+<title>倫妃步輦・預覽 1127g</title>
 <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -94,10 +94,10 @@ function lunFront(g,x,y,bob=0){const R=(c,a,b,w,h)=>{g.fillStyle=c;g.fillRect(x+
 const ellp=(g,x,y,rx,ry,col)=>{g.fillStyle=col;for(let j=-ry;j<=ry;j++){const w=Math.round(rx*Math.sqrt(1-(j*j)/(ry*ry+.0001)));g.fillRect(Math.round(x-w),Math.round(y+j),w*2,1)}};
 function mist(g,x0,x1,y,rt){for(let i=0;i<12;i++){const cx=x0+(x1-x0)*i/11+Math.sin(rt*1.3+i)*2,cy=y+Math.sin(rt*2+i*1.7)*1.5,r=6+((i*5)%4);g.globalAlpha=.5;ellp(g,cx,cy,r,3,'#cfe8ff');g.globalAlpha=.55;ellp(g,cx,cy-1,r*.65,2,'#fff');g.globalAlpha=.3;ellp(g,cx+2,cy+2,r*.8,2,'#e8d0ff')}g.globalAlpha=1}
 function circle(g,cx,cy,rx,ry,rt){g.globalAlpha=.35;ellp(g,cx,cy,rx,ry,'#9ad0ff');g.globalAlpha=.55;ellp(g,cx,cy,rx-3,Math.max(1,ry-1),'#0a1a3a');g.globalAlpha=1;for(let i=0;i<16;i++){const a=rt*.8+i/16*6.283,x=cx+Math.cos(a)*(rx-1.5),y=cy+Math.sin(a)*(ry-.3);g.fillStyle=i%2?'#d8f0ff':'#ffd8f4';g.fillRect(Math.round(x),Math.round(y),1,1);if(i%3===0){g.fillStyle='#fff';g.fillRect(Math.round(x),Math.round(y)-1,1,1)}}}
-function wisps(g,pts,rt){pts.forEach((p,i)=>{const y=p[1]+Math.sin(rt*3+i*1.3)*2.5,col=['#ffd0f0','#d0f0ff','#fff0b0'][i%3];g.globalAlpha=.25;ellp(g,p[0],y,4,4,col);g.globalAlpha=.9;ellp(g,p[0],y,1.5,1.5,'#fff');g.globalAlpha=1})}
+function wisps(g,pts,rt){pts.forEach((p,i)=>{const y=p[1]+Math.sin(rt*3+i*1.3)*2.5,col=['#ffd0f0','#d0f0ff','#fff0b0'][i%3];g.globalCompositeOperation='lighter';g.globalAlpha=.35;ellp(g,p[0],y,4,4,col);g.globalCompositeOperation='source-over';g.globalAlpha=.9;ellp(g,p[0],y,1.5,1.5,'#fff');g.globalAlpha=1})}
 /* 可愛精靈：大頭小身、粉色頭髮、透明翅膀、星星魔杖 */
 function fairy(g,x,y,rt){const R=(c,a,b,w,h)=>{g.fillStyle=c;g.fillRect(Math.round(x+a),Math.round(y+b),w,h)};const bob=Math.round(Math.sin(rt*3)*1.5),fl=Math.sin(rt*30)>0?1:0;
- g.globalAlpha=.25;ellp(g,x,y+5+bob,9,9,'#ffd0f0');g.globalAlpha=.85;
+ g.globalCompositeOperation='lighter';g.globalAlpha=.3;ellp(g,x,y+5+bob,9,9,'#ffb0e0');g.globalCompositeOperation='source-over';g.globalAlpha=.85;
  R('#d8f0ff',-7,1+bob-fl,4,5);R('#fff',-6,2+bob-fl,2,3);R('#d8f0ff',4,1+bob+fl,4,5);R('#fff',5,2+bob+fl,2,3);g.globalAlpha=1;
  R('#c0407a',-4,-4+bob,9,4);R('#ff7aa8',-5,-3+bob,2,7);R('#ff7aa8',4,-3+bob,2,7);R('#ff9ac0',-3,-4+bob,7,3);
  R('#ffe1d0',-3,-1+bob,7,5);R('#111',-2,1+bob,1,2);R('#111',2,1+bob,1,2);R('#ff9aa8',-3,3+bob,1,1);R('#ff9aa8',3,3+bob,1,1);R('#e0506a',0,3+bob,1,1);
@@ -155,7 +155,7 @@ const loop=ts=>{const t=(ts-t0)/1000;
  requestAnimationFrame(loop)};
 requestAnimationFrame(loop);
 document.querySelectorAll('input[name=c]').forEach(e=>e.onchange=()=>{CURT=document.querySelector('input[name=c]:checked').value});
-C('cp').onclick=()=>{const v=(document.querySelector('input[name=p]:checked')||{}).value||'（還沒選）';const txt='倫妃步輦預覽 1127f：'+v+'　（簾子預設：'+(CURT==='silk'?'粉紅綢簾':'珍珠簾')+'）'+(C('note').value?'\n備註：'+C('note').value:'');
+C('cp').onclick=()=>{const v=(document.querySelector('input[name=p]:checked')||{}).value||'（還沒選）';const txt='倫妃步輦預覽 1127g：'+v+'　（簾子預設：'+(CURT==='silk'?'粉紅綢簾':'珍珠簾')+'）'+(C('note').value?'\n備註：'+C('note').value:'');
  C('out').textContent=txt;try{navigator.clipboard.writeText(txt).then(()=>{C('out').textContent='已複製：\n'+txt})}catch(e){}};
 </script>
 </body>
