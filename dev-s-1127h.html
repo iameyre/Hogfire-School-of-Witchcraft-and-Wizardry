@@ -4220,7 +4220,7 @@ const upd=()=>{const e=ST.m,p=ST.p;$s('spEn').textContent=(e.boss?'王・':'')+e
  $s('spMp').innerHTML=Array.from({length:MPMAX},(_,i)=>`<i class="${i<p.mp?'o':''}"></i>`).join('');
  $s('spWave').textContent=ST.a.n+'　首領戰';
  const ch=[];if(e.stunT>0)ch.push('<span>昏迷</span>');if(e.weak>0)ch.push('<span>攻擊變弱 '+e.weak+'</span>');if(e.laugh>0)ch.push('<span>笑到打偏 '+e.laugh+'</span>');if(e.shrink>0)ch.push('<span>縮小 '+e.shrink+'</span>');if(p.shield)ch.push('<span class="g">護盾</span>');if(p.atkB>0)ch.push('<span class="g">攻擊強化 '+p.atkB+'</span>');if(p.luck>0)ch.push('<span class="g">必定暴擊 '+p.luck+'</span>');if(p.def>0)ch.push('<span class="g">受傷減半 '+p.def+'</span>');$s('spChips').innerHTML=ch.join('');
- const mn=$s('spMenu');[...mn.children].forEach((b,i)=>{b.classList.toggle('no',ST.spells[i].cost>p.mp)})};
+ const mn=$s('spMenu');[...mn.children].forEach((b,i)=>{if(ST.spells[i]&&!b.dataset.p&&!b.dataset.back)b.classList.toggle('no',ST.spells[i].cost>p.mp)})};
 const buildMenu=()=>{$s('spMenu').innerHTML=ST.spells.map((s,i)=>`<button data-i="${i}" style="--c:${s.c}"><span class="sp-r1"><b>${s.n}</b><span class="sp-cp">${s.cost?'<i></i>'.repeat(s.cost):'<em>免費</em>'}</span></span><small>${s.s||s.d}</small></button>`).join('')};
 const menuOn=v=>$s('spMenu').classList.toggle('off',!v);
 /* ---------- 出怪 ---------- */

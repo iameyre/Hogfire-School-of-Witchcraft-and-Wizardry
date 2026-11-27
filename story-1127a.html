@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>倫妃步輦・預覽</title>
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:#0a0612;color:#fff;font-family:'Noto Serif TC',serif;line-height:1.7;padding:0 0 60px}
+.wrap{max-width:460px;margin:0 auto;padding:18px 14px}
+h1{font:400 24px DotGothic16,sans-serif;letter-spacing:.2em;color:#ffe9a8;text-align:center;margin:10px 0 4px;text-shadow:0 3px 0 #b3182f}
+.sub{text-align:center;font-size:13px;color:#cfd0ff;margin-bottom:14px}
+.card{border:2px solid #ffe9a8;background:#140a2c;padding:12px;margin:14px 0;box-shadow:0 0 0 3px #b3182f}
+.card h2{font:400 20px DotGothic16,sans-serif;letter-spacing:.15em;color:#ffe9a8;margin:0 0 6px}
+.card canvas{display:block;width:100%;image-rendering:pixelated;background:#10202a;border:2px solid #ffffff33}
+.card p{font-size:14px;margin:8px 0}
+.row{display:flex;gap:10px;align-items:center;justify-content:center;margin-top:8px;background:#1a1030;padding:8px;border:1px solid #ffffff22}
+.row canvas{width:auto!important;border:none;background:none}
+.row span{font-size:12px;color:#cfd0ff}
+.opt{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.opt label{flex:1 1 40%;border:2px solid #ffffff55;padding:10px 8px;text-align:center;font:400 16px DotGothic16,sans-serif;letter-spacing:.1em;cursor:pointer}
+.opt input{display:none}
+.opt input:checked+span{color:#4a2a10}
+.opt label:has(input:checked){background:linear-gradient(180deg,#fff3d2,#d9ad5e);border-color:#6a4a1e;color:#4a2a10}
+textarea{width:100%;min-height:70px;background:#0a0618;color:#fff;border:2px solid #ffffff55;padding:8px;font:14px 'Noto Serif TC',serif}
+button{width:100%;height:54px;margin-top:10px;border:3px solid #6a4a1e;outline:2px solid #ffe9a8;outline-offset:2px;background:linear-gradient(180deg,#fff3d2,#d9ad5e);color:#4a2a10;font:400 19px DotGothic16,sans-serif;letter-spacing:.3em;border-radius:0}
+#out{font-size:13px;color:#6aff9a;margin-top:8px;white-space:pre-wrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>倫妃步輦</h1>
+<div class="sub">第 4 章魔藥課通關坐騎・手機、電腦都能開<br>八隻小海狗抬著金色轎子，倫坐在裡面</div>
+
+<div class="card"><h2>A　步輦（照規劃）</h2>
+<canvas id="cA" width="76" height="52"></canvas>
+<p>八隻小海狗（近側 4 隻＋遠側 4 隻）抬著金色轎子，紅瓦屋頂四角上翹，粉紅簾子用金繩綁起，倫側坐在裡面。轎子旁邊有宮女舉著羽扇，一直輕輕搖。屋簷四個角掛小燈籠，會晃。</p>
+<div class="row"><canvas id="rA" width="76" height="52" style="height:52px"></canvas><span>↑ 實際在地圖上的大小<br>移速 ×1.4（掃帚 ×1.3）</span></div></div>
+
+<div class="card"><h2>B　珠簾輦（簡潔版）</h2>
+<canvas id="cB" width="76" height="52"></canvas>
+<p>一樣是八隻小海狗，但沒有宮女。轎子四周垂珍珠簾，頂是金色蓮花蓋，後面一路飄玫瑰花瓣。比較輕巧，在地圖上比較不擋路。</p>
+<div class="row"><canvas id="rB" width="76" height="52" style="height:52px"></canvas><span>↑ 實際在地圖上的大小<br>移速 ×1.4</span></div></div>
+
+<div class="card"><h2>你的選擇</h2>
+<div class="opt">
+<label><input type="radio" name="p" value="A"><span>選 A</span></label>
+<label><input type="radio" name="p" value="B"><span>選 B</span></label>
+<label><input type="radio" name="p" value="改"><span>都要改</span></label>
+</div>
+<p style="font-size:13px;color:#cfd0ff">想改哪裡（海狗的樣子、顏色、轎子大小、宮女…）直接寫：</p>
+<textarea id="note" placeholder="例如：海狗要更像海狗、轎子金色再亮一點"></textarea>
+<button id="cp">複製結果</button>
+<div id="out"></div></div>
+</div>
+<script>
+/* 倫的側面（跟飛天掃帚同一張圖）*/
+const PAL={O:'#2a1620',H:'#3a2a30',h:'#6a4a52',S:'#ffe1d0',B:'#ff9aa8',E:'#2a1620',R:'#d8203c',r:'#8a1226',W:'#fff',K:'#2a1620',Q:'#ff3a5a'};
+const SIDE=['....OOOOOO....','..OOHHHHHHOO..','.OQQHHHHHHHHO.','.OQQHHHHHHHHHO','OHHHHHHHHHHHHO','OHHHHHHHHHSSSO','OHHHHHHHHSSSSO','OHHHHHHHSSSESO','OHHHHHHHSSSESO','OHHHHHHHSSBSSO','.OHHHHHHHSSSO.','.OHHHHHHRRRRO.','.OHHHHHHRRSRO.','.OHHHHHHRRRRO.','..OHHHHHrrrrO.','...OHHHOrrrO..'];
+const mkLun=()=>{const c=document.createElement('canvas');c.width=14;c.height=16;const x=c.getContext('2d');SIDE.forEach((r,j)=>{for(let i=0;i<14;i++){const ch=r[i];if(ch!=='.'){x.fillStyle=PAL[ch];x.fillRect(i,j,1,1)}}});return c};
+const LUN=mkLun();
+const W=76,H=52;
+function scene(cv,variant,rt){
+ const g=cv.getContext('2d');g.imageSmoothingEnabled=false;
+ const R=(c,x,y,w,h)=>{g.fillStyle=c;g.fillRect(Math.round(x),Math.round(y),w,h)};
+ const FY=47;
+ /* 背景：夜色小路 */
+ const gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#1a2050');gr.addColorStop(1,'#10202a');g.fillStyle=gr;g.fillRect(0,0,W,H);
+ R('#2a3a30',0,FY,W,H-FY);R('#3a4a3a',0,FY,W,1);
+ for(let i=0;i<10;i++)R('#ffffff44',(i*17+Math.floor(rt*3))%W,(i*13)%24,1,1);
+ /* 海狗 */
+ const seal=(x,foot,f,far)=>{const k=far?.65:1,body=far?'#6a7488':'#9aa4b8',belly=far?'#b8bcd0':'#f4f4ff',ear=far?'#2a2f40':'#3a4258';
+  const bob=Math.round(Math.sin(rt*8+f)*1),st=Math.floor(rt*6+f)%2;
+  R('#1a1420',x-1,foot-9+bob,13,9);R(body,x,foot-8+bob,11,7);R(belly,x+1,foot-4+bob,9,3);
+  R('#1a1420',x+9,foot-11+bob,6,7);R(body,x+10,foot-10+bob,4,5);R(ear,x+9,foot-11+bob,2,3);R('#111',x+12,foot-9+bob,1,1);R('#ff9aa8',x+14,foot-8+bob,1,1);
+  R('#1a1420',x+2,foot-1,3,2);R('#1a1420',x+7,foot-1,3,2);R('#6a7488',x+2+st,foot-1,2,1);R('#6a7488',x+7+(1-st),foot-1,2,1);
+  R(body,x+3,foot-12+bob,2,5);R('#1a1420',x+2,foot-13+bob,4,1)};/* 舉到桿子的鰭 */
+ const poleY=30;
+ /* 遠側 4 隻 */
+ for(let i=0;i<4;i++)seal(11+i*14,FY-1,i+.5,true);
+ /* 轎子 */
+ const sway=Math.round(Math.sin(rt*3)*1);
+ const bx=17,by=9+sway;
+ R('#8a5a1e',8,poleY,60,2);R('#ffd37a',8,poleY,60,1);   /* 抬桿 */
+ R('#5a3a10',bx,26+sway,42,5);R('#ffd37a',bx,26+sway,42,1);   /* 轎底 */
+ const gold='#ffd37a',gdk='#b07a30';
+ if(variant==='A'){
+  /* 屋頂：紅瓦、金邊、四角上翹 */
+  R('#1a1420',bx-4,by-1,50,3);R('#b3182f',bx-3,by,48,2);R('#e0102e',bx-1,by-3,44,3);R('#b3182f',bx+3,by-6,36,3);R('#e0102e',bx+9,by-8,24,2);R(gold,bx+19,by-11,4,3);R('#fff3b0',bx+20,by-12,2,1);
+  for(let i=0;i<40;i+=4)R('#8a1226',bx+i,by-2,1,3);
+  R(gold,bx-4,by+2,50,1);R(gold,bx-5,by-2,2,3);R(gold,bx+45,by-2,2,3);
+ }else{
+  /* 蓮花蓋 */
+  R('#1a1420',bx-2,by,46,3);R(gold,bx-1,by+1,44,2);R('#ffe9a8',bx+1,by-3,40,3);R(gold,bx+5,by-6,32,3);R('#ffe9a8',bx+12,by-8,18,2);
+  for(let i=0;i<5;i++){R('#fff3b0',bx+6+i*7,by-5,3,3)}R('#fff',bx+20,by-11,2,3);R(gold,bx+19,by-9,4,2);
+ }
+ /* 柱子 */
+ R(gdk,bx+1,by+3,3,23);R(gold,bx+1,by+3,1,23);R(gdk,bx+37,by+3,3,23);R(gold,bx+37,by+3,1,23);
+ /* 裡面：暗色底＋倫 */
+ R('#2a1030',bx+4,by+3,33,23);
+ g.save();g.beginPath();g.rect(bx+4,by+3,33,23);g.clip();
+ R('#4a2050',bx+4,by+3,33,23);
+ g.drawImage(LUN,bx+13,by+9+Math.round(Math.sin(rt*3+1)*.5));
+ /* 髮尾飄 */
+ R('#3a2a30',bx+11,by+17+Math.round(Math.sin(rt*4)),2,1);
+ g.restore();
+ /* 簾子 */
+ if(variant==='A'){
+  R('#ff9ac0',bx+4,by+3,8,23);R('#e0709a',bx+4,by+3,2,23);R('#ff9ac0',bx+29,by+3,8,23);R('#e0709a',bx+35,by+3,2,23);
+  R(gold,bx+4,by+14,8,2);R(gold,bx+29,by+14,8,2);R('#fff3b0',bx+11,by+14,1,2);R('#fff3b0',bx+29,by+14,1,2);
+  for(let i=0;i<8;i+=2){R('#ffffff44',bx+5+i,by+4,1,9);R('#ffffff44',bx+30+i,by+4,1,9)}
+ }else{
+  for(let i=0;i<33;i+=3){const sw=Math.round(Math.sin(rt*3+i)*.5);for(let j=0;j<10;j++){R(j%2?'#fff':'#ffd0e8',bx+4+i+sw,by+4+j*2,1,1)}R('#fff',bx+4+i+sw,by+24,1,1)}
+ }
+ /* 燈籠 */
+ const lan=(x,y)=>{const s=Math.round(Math.sin(rt*3+x));R('#1a1420',x+s-1,y,5,6);R('#e0102e',x+s,y+1,3,4);R('#ffd37a',x+s+1,y+2,1,2);R('#ffe9a8',x+s,y-1,3,1)};
+ lan(bx-4,by+4);lan(bx+45,by+4);
+ /* 近側 4 隻 */
+ for(let i=0;i<4;i++)seal(8+i*14,FY,i,false);
+ /* 宮女＋羽扇（A）*/
+ if(variant==='A'){
+  const ex=66;
+  R('#1a1420',ex-1,FY-17,7,17);R('#ff7aa8',ex,FY-12,5,12);R('#ffd0e0',ex+1,FY-12,3,2);R('#ffe1d0',ex+1,FY-17,4,4);R('#1a1420',ex,FY-19,6,3);R('#ffd37a',ex+4,FY-20,1,2);R('#111',ex+4,FY-15,1,1);
+  const a=Math.sin(rt*3)*.5;g.strokeStyle='#8a5a2a';g.lineWidth=1;g.beginPath();g.moveTo(ex+1,FY-9);g.lineTo(ex-8+a*3,FY-20);g.stroke();
+  g.fillStyle='#fff';g.beginPath();g.ellipse(ex-9+a*3,FY-23,5,3.5,a,0,6.3);g.fill();g.fillStyle='#ffb0d0';g.beginPath();g.ellipse(ex-9+a*3,FY-23,3,2,a,0,6.3);g.fill();
+ }
+ /* 星屑／花瓣 */
+ for(let i=0;i<14;i++){const t=(rt*14+i*9)%60,x=62-t-(i%3)*2,y=14+((i*11)%30)+Math.sin(t*.2+i)*2;
+  if(variant==='B'){R(i%2?'#ff9ac0':'#ffd0e8',x,y+t*.15,2,1)}else{R(i%2?'#ffd37a':'#fff3b0',x,y,1,1);if(i%4===0)R('#fff',x+1,y-1,1,1)}}
+}
+const CV=['cA','rA','cB','rB'].map(id=>document.getElementById(id));
+const t0=performance.now();
+const loop=ts=>{const t=(ts-t0)/1000;scene(CV[0],'A',t);scene(CV[1],'A',t);scene(CV[2],'B',t);scene(CV[3],'B',t);requestAnimationFrame(loop)};
+requestAnimationFrame(loop);
+document.getElementById('cp').onclick=()=>{const v=(document.querySelector('input[name=p]:checked')||{}).value||'（還沒選）';const txt='倫妃步輦預覽 1127a：'+v+(document.getElementById('note').value?'\n備註：'+document.getElementById('note').value:'');
+ document.getElementById('out').textContent=txt;try{navigator.clipboard.writeText(txt).then(()=>{document.getElementById('out').textContent='已複製：\n'+txt})}catch(e){}};
+</script>
+</body>
+</html>
